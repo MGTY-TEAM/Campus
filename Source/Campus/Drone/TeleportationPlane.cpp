@@ -12,6 +12,8 @@ ATeleportationPlane::ATeleportationPlane()
 	
 	RobotPlane = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RobotPlane"));
 	PlayerPlane = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerPlane"));
+	RobotPlane->SetupAttachment(RootComponent);
+	PlayerPlane->SetupAttachment(RobotPlane);
 }
 
 // Called when the game starts or when spawned

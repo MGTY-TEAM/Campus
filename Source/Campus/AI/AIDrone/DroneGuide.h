@@ -37,11 +37,6 @@ public:
 	TSubclassOf<UUserWidget> BlueprintDarkeningClass;
 	UPROPERTY(EditDefaultsOnly,Category="Widget")
 	UDarkeningScreen* DarkWidget;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
-	TArray<FString> KeyWordsForTeleportation;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
-	TArray<FString> KeyWordsPlaces;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
 	FString BotURL;

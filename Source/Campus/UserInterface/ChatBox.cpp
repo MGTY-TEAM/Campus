@@ -21,8 +21,12 @@ void UChatBox::StartTeleport(int index)
 bool UChatBox::Initialize()
 {
 	Super::Initialize();
-
-	Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
+	
+	
+	if(Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass())))
+	{
+		Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
+	}
 	
 		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest([this](const FString& Message, const FString& ActionType, const int ActionID)
 		{
@@ -106,30 +110,5 @@ void UChatBox::BotResponse(const FString& Message, const FString& ActionType, co
 	{
 		
 	}
-	
-	/*if (bCanRobotMoveToLocation)
-	{
-		for (int i = 0; i < Drone->KeyWordsPlaces.Num(); i++)
-		{
-			if (Message.Find(Drone->KeyWordsPlaces[i],ESearchCase::CaseSensitive) != INDEX_NONE)
-			{
-				UE_LOG(LogRequests, Error, TEXT("GET Request Result: %s"), *Drone->KeyWordsPlaces[i]);
-				TimerDel.BindUObject(this, &UChatBox::StartTeleport, i);
-				GetWorld()->GetTimerManager().SetTimer(TeleportTimer, TimerDel, 1.f, false);
-				//TeleportationEvent.Broadcast(i);
-				DarkeningEvent.Broadcast();
-				bCanRobotMoveToLocation = false;
-			}
-		}
-	}
-	
-	for (int i = 0; i < Drone->KeyWordsForTeleportation.Num(); i++)
-	{
-		if (Message.Find(Drone->KeyWordsForTeleportation[i],ESearchCase::CaseSensitive) != INDEX_NONE)
-		{
-			UE_LOG(LogRequests, Error, TEXT("GET Request Result: %s"), *Drone->KeyWordsForTeleportation[i]);
-			bCanRobotMoveToLocation = true;
-		}
-	}*/
 }
 

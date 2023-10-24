@@ -16,9 +16,7 @@ class CAMPUS_API ABaseFirstPersonCharacter : public ACharacter
 
 public:
 	ABaseFirstPersonCharacter();
-
-	UPROPERTY(Category="Movement", EditDefaultsOnly)
-	float Speed;
+	
 	UPROPERTY(Category="Movement", EditDefaultsOnly)
 	float MouseSpeed;
 
