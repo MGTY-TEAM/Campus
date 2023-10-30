@@ -14,7 +14,6 @@ void UHTTPGameAPIRequestsLib::GameAPILoginRequest(
 	TFunction<void(const bool&, const FLoginResponse&, const FErrorResponse&)> CallBack,
 	const FLoginRequest& LoginRequest)
 {
-	
 	FString URL = "http://localhost:3000/api/login";
 
 	FHttpModule* Module = &FHttpModule::Get();
@@ -22,38 +21,49 @@ void UHTTPGameAPIRequestsLib::GameAPILoginRequest(
 	TSharedRef<IHttpRequest> Request = Module->CreateRequest();
 
 	Request->OnProcessRequestComplete().BindLambda(
-		[=](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+		[CallBack](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 		{
-			const int32 ResponseCode = Response->GetResponseCode();
-			const FString JsonString = Response->GetContentAsString();
-			
-			switch (ResponseCode)
+			if (bConnectedSuccessfully)
 			{
-			case 200:
+				const int32 ResponseCode = Response->GetResponseCode();
+				const FString JsonString = Response->GetContentAsString();
+				switch (ResponseCode)
 				{
-					FLoginResponse LoginResponse;
-					GetStructFromJsonString(JsonString, LoginResponse);
-					UE_LOG(HTTPGameApiLog, Warning, TEXT("Login Response Token: %s"), *LoginResponse.Token);
-
-					CallBack(true, LoginResponse, FErrorResponse());
-					break;
+				case 200:
+					{
+						FLoginResponse LoginResponse;
+						GetStructFromJsonString(JsonString, LoginResponse);
+						UE_LOG(HTTPGameApiLog, Warning, TEXT("Login Response Token: %s"), *LoginResponse.Token);
+						CallBack(true, LoginResponse, FErrorResponse());
+						break;
+					}
+				default:
+					{
+						FErrorResponse LoginErrorResponse;
+						GetStructFromJsonString(JsonString, LoginErrorResponse);
+						UE_LOG(HTTPGameApiLog, Warning, TEXT("Login Error: %s"), *LoginErrorResponse.Error)
+						CallBack(false, FLoginResponse(), LoginErrorResponse);
+						break;
+					}
 				}
-			case 400:
-				{
-					FErrorResponse LoginErrorResponse;
-					GetStructFromJsonString(JsonString, LoginErrorResponse);
-					UE_LOG(HTTPGameApiLog, Warning, TEXT("Login Error: %s"), *LoginErrorResponse.Error)
-					CallBack(false, FLoginResponse(), LoginErrorResponse);
-					break;
-				}
-			default:
-					UE_LOG(HTTPGameApiLog, Warning, TEXT("Undefined Response Code: %d"), ResponseCode);
-				break;
 			}
+			else
+			{
+				FErrorResponse LoginErrorResponse;
+				CallBack(false, FLoginResponse(), LoginErrorResponse);
+			}
+		});
+
+	Request->OnRequestWillRetry().BindLambda(
+		[CallBack](FHttpRequestPtr Request, FHttpResponsePtr Response, float SecondsToRetry)
+		{
+			FErrorResponse LoginErrorResponse;
+			LoginErrorResponse.Error = "ConnectionError";
+			CallBack(false, FLoginResponse(), LoginErrorResponse);
 		});
 	
 	FString RequestString;
-	if (GetJsonStringFromStruct(LoginRequest,RequestString))
+	if (GetJsonStringFromStruct(LoginRequest, RequestString))
 	{
 		Request->SetURL(URL);
 		Request->SetVerb(TEXT("Post"));
@@ -87,7 +97,7 @@ void UHTTPGameAPIRequestsLib::GameAPIRegisterRequest(
 					CallBack(true, RegisterResponse, FErrorResponse());
 				}
 				break;
-			case 400:
+			default:
 				{
 					FErrorResponse ErrorResponse;
 					GetStructFromJsonString(Response->GetContentAsString(), ErrorResponse);
@@ -95,14 +105,12 @@ void UHTTPGameAPIRequestsLib::GameAPIRegisterRequest(
 					CallBack(false, FRegisterResponse(), ErrorResponse);
 					break;
 				}
-			default:
-				UE_LOG(HTTPGameApiLog, Error, TEXT("Unknown response code: %d"), ResponseCode);
-				break;
 			}
 		});
 
+
 	FString RequestString;
-	if(GetJsonStringFromStruct(RegisterRequest, RequestString))
+	if (GetJsonStringFromStruct(RegisterRequest, RequestString))
 	{
 		Request->SetURL(URL);
 		Request->SetVerb(TEXT("Post"));
@@ -120,7 +128,6 @@ void UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
 	FHttpModule* Module = &FHttpModule::Get();
 
 	TSharedRef<IHttpRequest> Request = Module->CreateRequest();
-
 	Request->OnProcessRequestComplete().BindLambda(
 		[CallBack](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 		{
@@ -131,26 +138,24 @@ void UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
 				{
 					FUserInfoResponse UserInfoResponse;
 					GetStructFromJsonString(Response->GetContentAsString(), UserInfoResponse);
-					UE_LOG(HTTPGameApiLog, Log, TEXT("User Info Response Nickname: %s, And Email: %s"), *UserInfoResponse.Nickname, *UserInfoResponse.Email);
+					UE_LOG(HTTPGameApiLog, Log, TEXT("User Info Response Nickname: %s, And Email: %s"),
+					       *UserInfoResponse.Nickname, *UserInfoResponse.Email);
 					CallBack(true, UserInfoResponse, FErrorResponse());
 				}
 				break;
-			case 400:
+			default:
 				{
 					FErrorResponse ErrorResponse;
 					GetStructFromJsonString(Response->GetContentAsString(), ErrorResponse);
 					UE_LOG(HTTPGameApiLog, Error, TEXT("User Info Response Error: %s"), *ErrorResponse.Error);
-					CallBack(true, FUserInfoResponse(), ErrorResponse); 
+					CallBack(true, FUserInfoResponse(), ErrorResponse);
 					break;
 				}
-			default:
-				UE_LOG(HTTPGameApiLog, Error, TEXT("Unknown response code: %d"), ResponseCode);
-				break;
 			}
 		});
 
 	FString RequestString;
-	if(GetJsonStringFromStruct(UserInfoRequest, RequestString))
+	if (GetJsonStringFromStruct(UserInfoRequest, RequestString))
 	{
 		Request->SetURL(URL);
 		Request->SetVerb(TEXT("Post"));
@@ -159,6 +164,7 @@ void UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
 		Request->ProcessRequest();
 	}
 }
+
 void UHTTPGameAPIRequestsLib::GameApiServerInfoRequest(
 	TFunction<void(const bool&, const TArray<FServerInfo>&, const FErrorResponse&)> CallBack)
 {
@@ -177,7 +183,7 @@ void UHTTPGameAPIRequestsLib::GameApiServerInfoRequest(
 				{
 					UE_LOG(HTTPGameApiLog, Warning, TEXT("ServersInfo: %s"), *Response->GetContentAsString());
 					FString YourJsonString = Response->GetContentAsString();
-					
+
 					TArray<TSharedPtr<FJsonValue>> JsonValues;
 					TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(YourJsonString);
 
@@ -192,7 +198,7 @@ void UHTTPGameAPIRequestsLib::GameApiServerInfoRequest(
 								FServerInfo ServerInfo;
 								FString Port = FString::FromInt(JsonObject->GetIntegerField("port"));
 								int32 ConnectedPlayers = JsonObject->GetIntegerField("connectedPlayers");
-								
+
 								ServerInfo.Port = Port;
 								ServerInfo.ConnectedClients = ConnectedPlayers;
 								ServerInfos.Add(ServerInfo);
@@ -200,7 +206,6 @@ void UHTTPGameAPIRequestsLib::GameApiServerInfoRequest(
 						}
 						CallBack(true, ServerInfos, FErrorResponse());
 					}
-
 				}
 				break;
 			default:
@@ -215,7 +220,6 @@ void UHTTPGameAPIRequestsLib::GameApiServerInfoRequest(
 	Request->SetVerb(TEXT("Get"));
 	Request->SetHeader(TEXT("Content-Type"),TEXT("application/json"));
 	Request->ProcessRequest();
-
 }
 
 

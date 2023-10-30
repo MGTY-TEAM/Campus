@@ -34,14 +34,15 @@ void ABaseFirstPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	// Set up timers for robot interaction functions
-	GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
+	
+	/*GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
 	Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
 
 	
 	if (Drone->ChatWidget)
 	{
 		Drone->ChatWidget->TeleportationEvent.AddDynamic(this, &ABaseFirstPersonCharacter::TeleportToLocation);
-	}
+	}*/
 
 }
 
@@ -124,7 +125,7 @@ void ABaseFirstPersonCharacter::MoveForward(float value)
 	
 	if (bIsEnableInput)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("MoveForward, %f"), value);
+		/*UE_LOG(LogTemp, Warning, TEXT("MoveForward, %f"), value);*/
 		AddMovementInput(GetActorForwardVector() * value);
 	}
 }

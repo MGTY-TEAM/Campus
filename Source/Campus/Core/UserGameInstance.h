@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "OnlineSessionSettings.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "Engine/GameInstance.h"
 #include "UserGameInstance.generated.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogSession, Log, Log);
 /**
  * 
  */
@@ -37,10 +40,21 @@ public:
 	void SetUserToken(const FString& Token);
 	
 	bool TryToGetAndFillUserInfoAndOpenMainMenu();
-	bool TryConnectToGameServerAndOpenMultiplayerMap(const FString& Port);
 
+	UFUNCTION(BlueprintCallable, Category="CustomSession")
+	void CreateSession(const FName& SessionName);
+	UFUNCTION(BlueprintCallable, Category="CustomSession")
+	void JoinSession();
+	
+protected:
+	void OnSessionCreated(FName SessionName, bool Succeeded);
+	void OnSessionsFind(bool Succeeded);
+	void OnJoinSessionComplete(FName Name, EOnJoinSessionCompleteResult::Type Arg);
+	virtual void Init() override;
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 private:
-
+	IOnlineSessionPtr M_SessionInterface;
+	
 	FUserInfo M_UserInfo;
 	
 	FString M_UserToken;
