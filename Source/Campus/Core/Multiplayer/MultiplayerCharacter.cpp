@@ -14,8 +14,7 @@ AMultiplayerCharacter::AMultiplayerCharacter()
 // Called when the game starts or when spawned
 void AMultiplayerCharacter::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	ACharacter::BeginPlay();
 }
 
 // Called every frame

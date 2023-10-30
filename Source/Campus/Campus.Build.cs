@@ -8,7 +8,7 @@ public class Campus : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem", "OnlineSubsystemUtils"});
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
@@ -18,7 +18,8 @@ public class Campus : ModuleRules
 			"HTTP",
 			"Json",
 			"JsonUtilities",
-			"UMG"
+			"UMG",
+			"OnlineSubsystemNull", 
 		});
 
 		// Uncomment if you are using Slate UI

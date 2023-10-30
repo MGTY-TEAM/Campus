@@ -3,18 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameMode.h"
-#include "MultiplayerGameMode.generated.h"
+#include "GameFramework/PlayerController.h"
+#include "MultiplayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAMPUS_API AMultiplayerGameMode : public AGameMode
+class CAMPUS_API AMultiplayerController : public APlayerController
 {
 	GENERATED_BODY()
 
 protected:
+	UFUNCTION()
+	void SetupPlayerName();
 	virtual void BeginPlay() override;
-	virtual void OnPostLogin(AController* NewPlayer) override;
 };
