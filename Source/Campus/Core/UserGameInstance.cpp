@@ -3,9 +3,13 @@
 
 #include "UserGameInstance.h"
 
+#include "OnlineSubsystem.h"
+#include "OnlineSessionSettings.h"
+#include "Online/OnlineSessionNames.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Libraries/Requests/GameAPI/HTTPGameAPIRequestsLib.h"
 #include "../Libraries/Requests/GameAPI/HTTPGameAPIStructures.h"
+#include "GameFramework/PlayerState.h"
 
 
 const FString& UUserGameInstance::GetUserID() const
@@ -33,7 +37,7 @@ const FString& UUserGameInstance::GetGameServerPort() const
 	return M_GameServerPort;
 }
 
-void UUserGameInstance::SetUserToken(const FString& Token) 
+void UUserGameInstance::SetUserToken(const FString& Token)
 {
 	if (M_UserToken.IsEmpty())
 	{
@@ -45,37 +49,110 @@ bool UUserGameInstance::TryToGetAndFillUserInfoAndOpenMainMenu()
 {
 	FUserInfoRequest UserInfoRequest;
 	UserInfoRequest.Token = GetUserToken();
-
 	UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
-		[this](const bool& bSuccess, const FUserInfoResponse& UserInfoResponse, const FErrorResponse& UserInfoErrorResponse)
+		[this](const bool& bSuccess, const FUserInfoResponse& UserInfoResponse,
+		       const FErrorResponse& UserInfoErrorResponse)
 		{
 			if (bSuccess)
 			{
 				M_UserInfo.Email = UserInfoResponse.Email;
 				M_UserInfo.Nickname = UserInfoResponse.Nickname;
 				M_UserInfo.ID = UserInfoResponse.UserID;
-				
+
 				UE_LOG(LogTemp, Warning, TEXT("User info is filled. UserID: %s"), *UserInfoResponse.UserID);
-				
+
 				UGameplayStatics::OpenLevel(this, "L_MainMenu");
 				return true;
-
 			}
 			return false;
 		}, UserInfoRequest);
-	
+
 	return false;
 }
 
-bool UUserGameInstance::TryConnectToGameServerAndOpenMultiplayerMap(const FString& Port)
+void UUserGameInstance::Init()
 {
-	if (!Port.IsEmpty())
+	if (IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get())
 	{
-		M_GameServerPort = Port;
-		UGameplayStatics::OpenLevel(this, "L_MultiplayerSession");
-		return true;
+		M_SessionInterface = Subsystem->GetSessionInterface();
+		if (M_SessionInterface.IsValid())
+		{
+			M_SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UUserGameInstance::OnSessionCreated);
+			M_SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UUserGameInstance::OnSessionsFind);
+			M_SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UUserGameInstance::OnJoinSessionComplete);
+		}
 	}
-	return false;
 }
 
+void UUserGameInstance::CreateSession(const FName& SessionName)
+{
+	UE_LOG(LogSession, Warning, TEXT("CreateSession"))
+	if (M_SessionInterface)
+	{
+		M_SessionInterface->DestroySession(FName("My Session"));
 
+		FOnlineSessionSettings SessionSettings;
+		SessionSettings.bAllowJoinInProgress = true;
+		SessionSettings.bIsDedicated = false;
+		SessionSettings.bIsLANMatch = true;
+		SessionSettings.bUsesPresence = true;
+		SessionSettings.bShouldAdvertise = true;
+		SessionSettings.NumPublicConnections = 25;
+
+		M_SessionInterface->CreateSession(0, FName("My Session"), SessionSettings);
+	}
+}
+
+void UUserGameInstance::JoinSession()
+{
+	UE_LOG(LogSession, Warning, TEXT("JoinSession"))
+	if (M_SessionInterface)
+	{
+		SessionSearch = MakeShareable(new FOnlineSessionSearch());
+		SessionSearch->bIsLanQuery = true;
+		SessionSearch->MaxSearchResults = 10000;
+		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE,true, EOnlineComparisonOp::Equals);
+		M_SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	}
+}
+
+void UUserGameInstance::OnSessionCreated(FName SessionName, bool Succeeded)
+{
+	UE_LOG(LogSession, Warning, TEXT("OnCreateSessionComplete, Succeded: %d"), Succeeded);
+	
+	if (Succeeded)
+	{
+		UE_LOG(LogSession, Warning, TEXT("Join Sesssion"))
+		GetWorld()->ServerTravel("/Game/Levels/L_MultiplayerMap?listen");
+	}
+}
+
+void UUserGameInstance::OnSessionsFind(bool Succeeded)
+{
+	UE_LOG(LogSession, Warning, TEXT("OnFindSessionComplete, Succeded: %d"), Succeeded);
+	if (Succeeded)
+	{
+		TArray<FOnlineSessionSearchResult> SearchResults = SessionSearch->SearchResults;
+		UE_LOG(LogSession, Warning, TEXT("SearchResults, Server Count: %d"), SearchResults.Num());
+		if (SearchResults.Num())
+		{
+			M_SessionInterface->JoinSession(0,"My Session", SearchResults[0]);
+		}
+	}
+}
+
+void UUserGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+	UE_LOG(LogSession, Warning, TEXT("OnJoinSessionComplete"))
+
+	if (APlayerController* PController = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+	{
+		FString JoinAddress = "";
+		M_SessionInterface->GetResolvedConnectString(SessionName, JoinAddress);
+		if (!JoinAddress.IsEmpty())
+		{
+			JoinAddress;  
+			PController->ClientTravel(JoinAddress, TRAVEL_Absolute);
+		}
+	}
+}

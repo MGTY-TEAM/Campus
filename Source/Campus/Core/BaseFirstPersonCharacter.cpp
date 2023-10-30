@@ -34,14 +34,15 @@ void ABaseFirstPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	// Set up timers for robot interaction functions
-	GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
+	
+	/*GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
 	Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
 
 	
 	if (Drone->ChatWidget)
 	{
 		Drone->ChatWidget->TeleportationEvent.AddDynamic(this, &ABaseFirstPersonCharacter::TeleportToLocation);
-	}
+	}*/
 
 }
 
@@ -102,21 +103,30 @@ void ABaseFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* Playe
 	PlayerInputComponent->BindAxis("RightAxis", this, &ABaseFirstPersonCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("MouseX", this, &ABaseFirstPersonCharacter::LookRight);
 	PlayerInputComponent->BindAxis("MouseY", this, &ABaseFirstPersonCharacter::LookUp);
+
+	UE_LOG(LogTemp, Warning, TEXT("BindAxis"));
 }
 
 void ABaseFirstPersonCharacter::TeleportToLocation(int index)
 {
-	PlayerTeleportationPlace = Cast<ATeleportationPlane>(Drone->TeleportationPlaces[index]);
-	SetActorLocation(PlayerTeleportationPlace->PlayerPlane->GetComponentLocation());
+	
+	if(Cast<ATeleportationPlane>(Drone->TeleportationPlaces[index]))
+	{
+		PlayerTeleportationPlace = Cast<ATeleportationPlane>(Drone->TeleportationPlaces[index]);
+		SetActorLocation(PlayerTeleportationPlace->PlayerPlane->GetComponentLocation());
+	}
+	
 }
 
 // Movement and look functions
 void ABaseFirstPersonCharacter::MoveForward(float value)
 {
 	// Add movement input in the forward direction
+	
 	if (bIsEnableInput)
 	{
-		AddMovementInput(GetActorForwardVector() * Speed * value);
+		/*UE_LOG(LogTemp, Warning, TEXT("MoveForward, %f"), value);*/
+		AddMovementInput(GetActorForwardVector() * value);
 	}
 }
 
@@ -125,7 +135,7 @@ void ABaseFirstPersonCharacter::MoveRight(float value)
 	// Add movement input in the right direction
 	if (bIsEnableInput)
 	{
-		AddMovementInput(GetActorRightVector() * Speed * value);
+		AddMovementInput(GetActorRightVector() * value);
 	}
 }
 
