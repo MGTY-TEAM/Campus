@@ -8,10 +8,10 @@ void UServerItemWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	ConnectButton->OnClicked.AddDynamic(this, &UServerItemWidget::OnConnectButtonClicked);
+	ConnectButton->OnClicked.AddDynamic(this, &UServerItemWidget::OnButtonClicked);
 }
 
-void UServerItemWidget::OnConnectButtonClicked()
+void UServerItemWidget::OnButtonClicked()
 {
-		
+	OnConnectButtonClicked.Execute(this);
 }

@@ -9,6 +9,7 @@
 /**
  * 
  */
+DECLARE_DELEGATE_OneParam(FOnConnectButtonClicked, UServerItemWidget*);
 
 class UTextBlock;
 class UButton;
@@ -18,6 +19,9 @@ class CAMPUS_API UServerItemWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+
+	
+public:
 	UPROPERTY(meta = (BindWidget))
 	UButton* ConnectButton;
 	
@@ -29,10 +33,11 @@ class CAMPUS_API UServerItemWidget : public UUserWidget
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ServerName;
-
-public:
+	
 	UFUNCTION()
-	void OnConnectButtonClicked();
+	void OnButtonClicked();
+	
+	FOnConnectButtonClicked OnConnectButtonClicked;
 	virtual void NativeOnInitialized() override;
 	
 };

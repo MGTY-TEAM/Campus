@@ -116,6 +116,18 @@ void UUserGameInstance::JoinSession()
 	}
 }
 
+void UUserGameInstance::FindSessions()
+{
+	if (M_SessionInterface)
+	{
+		SessionSearch = MakeShareable(new FOnlineSessionSearch());
+		SessionSearch->bIsLanQuery = true;
+		SessionSearch->MaxSearchResults = 10000;
+		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE,true, EOnlineComparisonOp::Equals);
+		M_SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	}
+}
+
 void UUserGameInstance::OnSessionCreated(FName SessionName, bool Succeeded)
 {
 	UE_LOG(LogSession, Warning, TEXT("OnCreateSessionComplete, Succeded: %d"), Succeeded);
@@ -136,7 +148,8 @@ void UUserGameInstance::OnSessionsFind(bool Succeeded)
 		UE_LOG(LogSession, Warning, TEXT("SearchResults, Server Count: %d"), SearchResults.Num());
 		if (SearchResults.Num())
 		{
-			M_SessionInterface->JoinSession(0,"My Session", SearchResults[0]);
+			OnSearchComplete.Execute(SearchResults);
+			/*M_SessionInterface->JoinSession(0,"My Session", SearchResults[0]);*/
 		}
 	}
 }

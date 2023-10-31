@@ -9,6 +9,8 @@
 #include "UserGameInstance.generated.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSession, Log, Log);
+
+DECLARE_DELEGATE_OneParam(FOnSearchComplete, TArray<FOnlineSessionSearchResult>)
 /**
  * 
  */
@@ -41,10 +43,14 @@ public:
 	
 	bool TryToGetAndFillUserInfoAndOpenMainMenu();
 
-	UFUNCTION(BlueprintCallable, Category="CustomSession")
+	UFUNCTION(BlueprintCallable, Category="Custom Session")
 	void CreateSession(const FName& SessionName);
-	UFUNCTION(BlueprintCallable, Category="CustomSession")
+	UFUNCTION(BlueprintCallable, Category="Custom Session")
 	void JoinSession();
+	UFUNCTION(BlueprintCallable, Category="Custom Session")
+	void FindSessions();
+	
+	FOnSearchComplete OnSearchComplete;
 	
 protected:
 	void OnSessionCreated(FName SessionName, bool Succeeded);
@@ -52,6 +58,8 @@ protected:
 	void OnJoinSessionComplete(FName Name, EOnJoinSessionCompleteResult::Type Arg);
 	virtual void Init() override;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
+	
 private:
 	IOnlineSessionPtr M_SessionInterface;
 	
