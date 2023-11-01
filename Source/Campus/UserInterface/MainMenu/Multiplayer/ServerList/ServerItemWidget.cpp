@@ -4,6 +4,19 @@
 #include "ServerItemWidget.h"
 
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
+
+
+
+void UServerItemWidget::SetServerItemInfo(const FString& MaxPlayersCount, const FString& PlayersCount,
+										  const FString& SessionID, const FString& SessionPing)
+{
+	PlayersCountText->SetText(FText::FromString(PlayersCount));
+	MaxPlayersCountText->SetText(FText::FromString(MaxPlayersCount));
+	SessionIDText->SetText(FText::FromString(SessionID));
+	PingText->SetText(FText::FromString(SessionPing));
+}
+
 void UServerItemWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -13,5 +26,6 @@ void UServerItemWidget::NativeOnInitialized()
 
 void UServerItemWidget::OnButtonClicked()
 {
-	OnConnectButtonClicked.Execute(this);
+	OnConnectButtonClicked.Execute(SessionIDText->GetText().ToString());
 }
+

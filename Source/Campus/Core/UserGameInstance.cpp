@@ -90,7 +90,6 @@ void UUserGameInstance::CreateSession(const FName& SessionName)
 	if (M_SessionInterface)
 	{
 		M_SessionInterface->DestroySession(FName("My Session"));
-
 		FOnlineSessionSettings SessionSettings;
 		SessionSettings.bAllowJoinInProgress = true;
 		SessionSettings.bIsDedicated = false;
@@ -103,16 +102,11 @@ void UUserGameInstance::CreateSession(const FName& SessionName)
 	}
 }
 
-void UUserGameInstance::JoinSession()
+void UUserGameInstance::JoinSession(const FString& SessionID)
 {
 	UE_LOG(LogSession, Warning, TEXT("JoinSession"))
 	if (M_SessionInterface)
 	{
-		SessionSearch = MakeShareable(new FOnlineSessionSearch());
-		SessionSearch->bIsLanQuery = true;
-		SessionSearch->MaxSearchResults = 10000;
-		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE,true, EOnlineComparisonOp::Equals);
-		M_SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	}
 }
 
@@ -149,7 +143,7 @@ void UUserGameInstance::OnSessionsFind(bool Succeeded)
 		if (SearchResults.Num())
 		{
 			OnSearchComplete.Execute(SearchResults);
-			/*M_SessionInterface->JoinSession(0,"My Session", SearchResults[0]);*/
+			
 		}
 	}
 }

@@ -9,7 +9,7 @@
 /**
  * 
  */
-DECLARE_DELEGATE_OneParam(FOnConnectButtonClicked, UServerItemWidget*);
+DECLARE_DELEGATE_OneParam(FOnConnectButtonClicked, const FString&);
 
 class UTextBlock;
 class UButton;
@@ -18,26 +18,29 @@ UCLASS()
 class CAMPUS_API UServerItemWidget : public UUserWidget
 {
 	GENERATED_BODY()
-
-
-	
-public:
 	UPROPERTY(meta = (BindWidget))
 	UButton* ConnectButton;
-	
+
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* PlayersCountText;
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* PlayersMaxCountText;
+	UTextBlock* MaxPlayersCountText;
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* ServerName;
-	
+	UTextBlock* SessionIDText;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* PingText;
+
+public:
 	UFUNCTION()
 	void OnButtonClicked();
-	
+
+	UFUNCTION()
+	void SetServerItemInfo(const FString& MaxPlayersCount, const FString& PlayersCount, const FString& SessionID,
+	                       const FString& SessionPing);
 	FOnConnectButtonClicked OnConnectButtonClicked;
-	virtual void NativeOnInitialized() override;
 	
+	virtual void NativeOnInitialized() override;
 };

@@ -46,7 +46,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Custom Session")
 	void CreateSession(const FName& SessionName);
 	UFUNCTION(BlueprintCallable, Category="Custom Session")
-	void JoinSession();
+	void JoinSession(const FString& SessionID);
 	UFUNCTION(BlueprintCallable, Category="Custom Session")
 	void FindSessions();
 	

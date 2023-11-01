@@ -19,19 +19,20 @@ class CAMPUS_API UServerListWidget : public UUserWidget
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UServerItemWidget> M_ServerItemWidgetClass;
+	TSubclassOf<UServerItemWidget> ServerItemWidgetClass;
 	
 	UPROPERTY(meta = (BindWidget))
-	UVerticalBox* M_ServersVerticalBox;
+	UVerticalBox* ServersVerticalBox;
 
 	UPROPERTY(meta = (BindWidget))
-	UButton* M_UpdateServerListButton;
+	UButton* UpdateServerListButton;
 
 	UFUNCTION()
 	void OnUpdateServerListButtonClicked();
 
 	UUserGameInstance* M_UserGameInstance;
 protected:
+	void OnServerButtonClicked(const FString& SessionId);
 	void OnSearchComplete(TArray<FOnlineSessionSearchResult> OnlineSessionSearchResults);
 	virtual void NativeOnInitialized() override;
 };
