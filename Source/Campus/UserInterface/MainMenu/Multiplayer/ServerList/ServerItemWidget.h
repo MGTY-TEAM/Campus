@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "OnlineSessionSettings.h"
 #include "Blueprint/UserWidget.h"
 #include "ServerItemWidget.generated.h"
 
 /**
  * 
  */
-DECLARE_DELEGATE_OneParam(FOnConnectButtonClicked, const FString&);
+DECLARE_DELEGATE_OneParam(FOnConnectButtonClicked, FOnlineSessionSearchResult SessionSearchResult);
 
 class UTextBlock;
 class UButton;
@@ -39,8 +40,10 @@ public:
 
 	UFUNCTION()
 	void SetServerItemInfo(const FString& MaxPlayersCount, const FString& PlayersCount, const FString& SessionID,
-	                       const FString& SessionPing);
+	                       const FString& SessionPing, FOnlineSessionSearchResult SessionSearchResult);
 	FOnConnectButtonClicked OnConnectButtonClicked;
 	
 	virtual void NativeOnInitialized() override;
+	
+	FOnlineSessionSearchResult SessionSearchResult;
 };

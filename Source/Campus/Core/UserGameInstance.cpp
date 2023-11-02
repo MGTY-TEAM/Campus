@@ -98,15 +98,18 @@ void UUserGameInstance::CreateSession(const FName& SessionName)
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.NumPublicConnections = 25;
 
-		M_SessionInterface->CreateSession(0, FName("My Session"), SessionSettings);
+		SessionSettings.Set(FName("SERVER_NAME_KEY"), SessionName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
+		M_SessionInterface->CreateSession(0, SessionName, SessionSettings);
 	}
 }
 
-void UUserGameInstance::JoinSession(const FString& SessionID)
+void UUserGameInstance::JoinSession(const FName& SessionName, FOnlineSessionSearchResult SearchResult)
 {
 	UE_LOG(LogSession, Warning, TEXT("JoinSession"))
 	if (M_SessionInterface)
 	{
+		M_SessionInterface->JoinSession(0, SessionName, SearchResult);
 	}
 }
 

@@ -31,11 +31,16 @@ void UServerListWidget::OnUpdateServerListButtonClicked()
 
 }
 
-void UServerListWidget::OnServerButtonClicked(const FString& SessionId)
+void UServerListWidget::OnServerButtonClicked(FOnlineSessionSearchResult SessionSearchResult)
 {
 	if (M_UserGameInstance)
 	{
-		M_UserGameInstance->JoinSession(TODO);
+		FName SessionName;
+		SessionSearchResult.Session.SessionSettings.Get("SERVER_NAME_KEY",SessionName);
+		if (SessionName.IsValid())
+		{
+			M_UserGameInstance->JoinSession(SessionName, SessionSearchResult);
+		}
 	}
 
 }
@@ -54,7 +59,7 @@ void UServerListWidget::OnSearchComplete(TArray<FOnlineSessionSearchResult> Onli
 				ItemWidget->SetServerItemInfo(FString::FromInt(SessionSearchResult.Session.NumOpenPublicConnections),
 				                              FString::FromInt(SessionSearchResult.Session.NumOpenPrivateConnections),
 				                              SessionSearchResult.Session.GetSessionIdStr(),
-				                              FString::FromInt(SessionSearchResult.PingInMs));
+				                              FString::FromInt(SessionSearchResult.PingInMs), SessionSearchResult);
 				
 				ItemWidget->OnConnectButtonClicked.BindUObject(this, &UServerListWidget::OnServerButtonClicked);
 				ServersVerticalBox->AddChild(ItemWidget);

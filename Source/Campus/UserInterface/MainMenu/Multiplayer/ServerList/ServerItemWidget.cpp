@@ -9,12 +9,16 @@
 
 
 void UServerItemWidget::SetServerItemInfo(const FString& MaxPlayersCount, const FString& PlayersCount,
-										  const FString& SessionID, const FString& SessionPing)
+										  const FString& SessionID, const FString& SessionPing, FOnlineSessionSearchResult SessionSearchResult)
 {
 	PlayersCountText->SetText(FText::FromString(PlayersCount));
 	MaxPlayersCountText->SetText(FText::FromString(MaxPlayersCount));
-	SessionIDText->SetText(FText::FromString(SessionID));
 	PingText->SetText(FText::FromString(SessionPing));
+
+	FString SessionName;
+	SessionSearchResult.Session.SessionSettings.Get("SERVER_NAME_KEY",SessionName);
+
+	SessionIDText->SetText(FText::FromString(SessionName));
 }
 
 void UServerItemWidget::NativeOnInitialized()
@@ -26,6 +30,6 @@ void UServerItemWidget::NativeOnInitialized()
 
 void UServerItemWidget::OnButtonClicked()
 {
-	OnConnectButtonClicked.Execute(SessionIDText->GetText().ToString());
+	OnConnectButtonClicked.Execute(SessionSearchResult);
 }
 

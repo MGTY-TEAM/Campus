@@ -32,7 +32,10 @@ class CAMPUS_API UServerListWidget : public UUserWidget
 
 	UUserGameInstance* M_UserGameInstance;
 protected:
-	void OnServerButtonClicked(const FString& SessionId);
+	void OnServerButtonClicked(FOnlineSessionSearchResult SessionSearchResult);
 	void OnSearchComplete(TArray<FOnlineSessionSearchResult> OnlineSessionSearchResults);
 	virtual void NativeOnInitialized() override;
+
+public:
+
 };
