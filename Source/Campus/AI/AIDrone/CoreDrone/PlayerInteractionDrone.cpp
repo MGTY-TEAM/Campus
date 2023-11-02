@@ -8,13 +8,13 @@ void APlayerInteractionDrone::BeginPlay()
 	Super::BeginPlay();
 }
 
-void APlayerInteractionDrone::Interact()
+void APlayerInteractionDrone::UnPickupOn(AActor* Character)
 {
-	UE_LOG(LogTemp, Warning, TEXT("NewInteract"));
+
 }
 
-void APlayerInteractionDrone::EndInteract()
+void APlayerInteractionDrone::UnPickupOff()
 {
-	UE_LOG(LogTemp, Warning, TEXT("NewEndInteract"));
+
 }
 

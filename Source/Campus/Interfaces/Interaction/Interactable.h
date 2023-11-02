@@ -18,8 +18,8 @@ class CAMPUS_API IInteractable
 	GENERATED_BODY()
 
 public:
-	virtual void Interact() = 0;
+	virtual void Interact(AActor* InteractedActor, AActor* SelfCharacter) = 0;
 	bool bCanInteract;
 
-	virtual void EndInteract() = 0;
+	virtual void EndInteract(AActor* FocusActor, AActor* SelfCharacter) = 0;
 };

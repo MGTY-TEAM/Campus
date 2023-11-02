@@ -3,14 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../AI/AIDrone/DroneGuide.h"
-#include "Camera/CameraComponent.h"
+#include "Campus/Interfaces/Interaction/UnPickupableObject.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "BaseFirstPersonCharacter.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
+class UBasePickup;
+
 UCLASS()
-class CAMPUS_API ABaseFirstPersonCharacter : public ACharacter
+class CAMPUS_API ABaseFirstPersonCharacter : public ACharacter, public IUnPickupableObject
 {
 	GENERATED_BODY()
 
@@ -26,29 +28,22 @@ public:
 	UPROPERTY(Category="Interaction", EditDefaultsOnly)
 	AActor* FocusActor;
 
-	FTimerHandle OnFocusTimer;
+	UBasePickup* PickupClass;
 
 	UPROPERTY(Category="Input", EditDefaultsOnly)
 	bool bIsEnableInput = true;
-	UPROPERTY(Category="RobotInteraction", EditDefaultsOnly)
-	bool bIsRobotInteracts = false;
 
 	UPROPERTY(Category="Character", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComponent;
 	UPROPERTY(Category="Character", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category="Drone")
-	ADroneGuide* Drone;
-	UPROPERTY(EditDefaultsOnly, Category="Drone")
-	ATeleportationPlane* PlayerTeleportationPlace;
+	FTimerHandle OnFocusTimer;
 
+	bool bIsFirstInteraction = true;
 	
-	void AILogicCallBack(const FString& Answer);
-
 protected:
 	virtual void BeginPlay() override;
-	void AILogicCallBack(FString Answer);
 
 	virtual void Interact();
 
@@ -57,16 +52,14 @@ protected:
 	virtual void LookUp(float value);
 	virtual void LookRight(float value);
 
-	void InteractOnWithRobot();
-	void InteractOffWithRobot();
 	void FocusOnInteractableActor();
-
 
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void UnPickupOn(AActor* Character) override;
+	virtual void UnPickupOff() override;
 	
-	UFUNCTION()
-	void TeleportToLocation(int index);
 	
 };

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CoreDrone.h"
-#include "../../../Interfaces/Interaction/Interactable.h"
+#include "Campus/Interfaces/Interaction/UnPickupableObject.h"
 #include "PlayerInteractionDrone.generated.h"
 
 /**
@@ -12,13 +12,13 @@
  */
 
 UCLASS()
-class CAMPUS_API APlayerInteractionDrone : public ACoreDrone, public IInteractable
+class CAMPUS_API APlayerInteractionDrone : public ACoreDrone, public IUnPickupableObject
 {
 	GENERATED_BODY()
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void Interact() override;
-	virtual void EndInteract() override;
+	virtual void UnPickupOn(AActor* Character) override;
+	virtual void UnPickupOff() override;
 	
 };

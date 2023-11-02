@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Campus/Core/BaseFirstPersonCharacter.h"
+#include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
 #include "MultiplayerCharacter.generated.h"
 
 UCLASS()

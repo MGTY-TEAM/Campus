@@ -4,15 +4,12 @@
 // Include necessary headers and dependencies.
 #include "BaseFirstPersonCharacter.h"
 
+#include "BasePickup.h"
 #include "DrawDebugHelpers.h"
-#include "TimerManager.h"
-#include "../AI/AIDrone/DroneGuide.h"
-#include "../UserInterface/ChatBox.h"
+#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
-#include "Components/StaticMeshComponent.h"
-#include "Engine/Engine.h"
-#include "GameFramework/PlayerController.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -32,17 +29,7 @@ ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
 void ABaseFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Set up timers for robot interaction functions
-	GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
-	Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
-
-	
-	if (Drone->ChatWidget)
-	{
-		Drone->ChatWidget->TeleportationEvent.AddDynamic(this, &ABaseFirstPersonCharacter::TeleportToLocation);
-	}
-
+	PickupClass = NewObject<UBasePickup>(this, UBasePickup::StaticClass());
 }
 
 // Function for interaction
@@ -61,25 +48,16 @@ void ABaseFirstPersonCharacter::Interact()
 	{
 		if (OutHit.bBlockingHit)
 		{
-			// Check if the object hit by the line trace implements the IInteractable interface
-			IInteractable* InteractableObject = Cast<IInteractable>(OutHit.GetActor()); 
-			if (InteractableObject)
+			if(PickupClass)
 			{
-				// If the object is interactable, interact with it
-				FocusActor = OutHit.GetActor();
-				InteractableObject->Interact();
-				if (Cast<ADroneGuide>(OutHit.GetActor()))
+				if (bIsFirstInteraction)
 				{
-					// If the object is a drone, check whether the character is already interacting with the robot
-					if (bIsRobotInteracts)
-					{
-						InteractOffWithRobot();
-						InteractableObject->EndInteract();
-					}
-					else
-					{
-						InteractOnWithRobot();
-					}
+					FocusActor = OutHit.GetActor();
+					PickupClass->Interact(OutHit.GetActor(), this);
+				}
+				else
+				{
+					PickupClass->EndInteract(FocusActor, this);
 				}
 			}
 		}
@@ -102,19 +80,23 @@ void ABaseFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* Playe
 	PlayerInputComponent->BindAxis("RightAxis", this, &ABaseFirstPersonCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("MouseX", this, &ABaseFirstPersonCharacter::LookRight);
 	PlayerInputComponent->BindAxis("MouseY", this, &ABaseFirstPersonCharacter::LookUp);
-
-	UE_LOG(LogTemp, Warning, TEXT("BindAxis"));
+	
 }
 
-void ABaseFirstPersonCharacter::TeleportToLocation(int index)
+void ABaseFirstPersonCharacter::UnPickupOn(AActor* Character)
 {
-	
-	if(Cast<ATeleportationPlane>(Drone->TeleportationPlaces[index]))
-	{
-		PlayerTeleportationPlace = Cast<ATeleportationPlane>(Drone->TeleportationPlaces[index]);
-		SetActorLocation(PlayerTeleportationPlace->PlayerPlane->GetComponentLocation());
-	}
-	
+	GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
+	bIsEnableInput = false;
+	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
+	CameraComponent->bUsePawnControlRotation = false;
+}
+
+void ABaseFirstPersonCharacter::UnPickupOff()
+{
+	GetWorldTimerManager().ClearTimer(OnFocusTimer);
+	bIsEnableInput = true;
+	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = false;
+	CameraComponent->bUsePawnControlRotation = true;
 }
 
 // Movement and look functions
@@ -124,7 +106,6 @@ void ABaseFirstPersonCharacter::MoveForward(float value)
 	
 	if (bIsEnableInput)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("MoveForward, %f"), value);
 		AddMovementInput(GetActorForwardVector() * value);
 	}
 }
@@ -156,34 +137,8 @@ void ABaseFirstPersonCharacter::LookRight(float value)
 	}
 }
 
-// Robot interaction functions
-void ABaseFirstPersonCharacter::InteractOnWithRobot()
-{
-	// Start interaction with robot
-	bIsEnableInput = false;
-	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
-
-	CameraComponent->bUsePawnControlRotation = false;
-	
-	bIsRobotInteracts = true;
-}
-
-void ABaseFirstPersonCharacter::InteractOffWithRobot()
-{
-	// Stop interaction with robot
-	bIsEnableInput = true;
-	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = false;
-
-	CameraComponent->bUsePawnControlRotation = true;
-
-	bIsRobotInteracts = false;
-}
-
 void ABaseFirstPersonCharacter::FocusOnInteractableActor()
 {
-	// Rotate towards robot
-	if (bIsRobotInteracts)
-	{
 		FVector StartLocation = this->GetCapsuleComponent()->GetComponentLocation();
 		FVector TargetLocation = FocusActor->GetActorLocation();
 
@@ -216,7 +171,6 @@ void ABaseFirstPersonCharacter::FocusOnInteractableActor()
 
 			SetActorLocation(InterpolatedVector,false);
 		}
-	}
 }
 
 void ABaseFirstPersonCharacter::Tick(float DeltaTime)
