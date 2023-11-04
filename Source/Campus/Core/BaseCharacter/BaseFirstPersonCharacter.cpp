@@ -29,7 +29,7 @@ ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
 void ABaseFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	PickupClass = NewObject<UBasePickup>(this, UBasePickup::StaticClass());
+	
 }
 
 // Function for interaction
@@ -48,23 +48,27 @@ void ABaseFirstPersonCharacter::Interact()
 	{
 		if (OutHit.bBlockingHit)
 		{
-			if(PickupClass)
+			PickupClass = NewObject<UBasePickup>(this, UBasePickup::StaticClass());
+			IInteractable* PickUp = Cast<IInteractable>(PickupClass);
+			if(PickUp != nullptr)
 			{
 				if (bIsFirstInteraction)
 				{
 					FocusActor = OutHit.GetActor();
-					PickupClass->Interact(OutHit.GetActor(), this);
+					PickUp->Interact(OutHit.GetActor(), this);
+					PickupClass->ConditionalBeginDestroy();
 				}
 				else
 				{
-					PickupClass->EndInteract(FocusActor, this);
+					PickUp->EndInteract(OutHit.GetActor(), this);
+					PickupClass->ConditionalBeginDestroy();
 				}
 			}
 		}
 	}
 
 	// Draw a debug line to visualize the line trace
-	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5, 0, 1);
+	//DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5, 0, 1);
 }
 
 // Function to set up player input
@@ -98,6 +102,7 @@ void ABaseFirstPersonCharacter::UnPickupOff()
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = false;
 	CameraComponent->bUsePawnControlRotation = true;
 }
+
 
 // Movement and look functions
 void ABaseFirstPersonCharacter::MoveForward(float value)

@@ -15,6 +15,8 @@ class CAMPUS_API UBasePickup : public UObject, public IInteractable
 {
 	GENERATED_BODY()
 
+	UBasePickup();
+
 public:
 	virtual void Interact(AActor* InteractedActor, AActor* SelfCharacter) override;
 	virtual void EndInteract(AActor* FocusActor, AActor* SelfCharacter) override;
