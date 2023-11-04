@@ -4,7 +4,13 @@
 #include "BasePickup.h"
 
 #include "BaseFirstPersonCharacter.h"
+#include "Campus/Interfaces/Interaction/InteractableObject.h"
 #include "Campus/Interfaces/Interaction/UnPickupableObject.h"
+
+UBasePickup::UBasePickup()
+{
+	
+}
 
 void UBasePickup::Interact(AActor* InteractedActor, AActor* SelfCharacter)
 {
@@ -17,13 +23,18 @@ void UBasePickup::Interact(AActor* InteractedActor, AActor* SelfCharacter)
 		UE_LOG(LogTemp, Error, TEXT("BaseInteractOn"));
 		Cast<ABaseFirstPersonCharacter>(SelfCharacter)->bIsFirstInteraction = false;
 	}
+	else if(Cast<IInteractableObject>(InteractedActor))
+	{
+		IInteractableObject* InteractableObject = Cast<IInteractableObject>(InteractedActor);
+		InteractableObject->InteractableObjectOn();
+	}
 }
 
 void UBasePickup::EndInteract(AActor* FocusActor, AActor* SelfCharacter)
 {
 	IUnPickupableObject* InteractableActor = Cast<IUnPickupableObject>(FocusActor);
 	IUnPickupableObject* InteractableCharacter = Cast<IUnPickupableObject>(SelfCharacter);
-	if(InteractableActor && InteractableCharacter)
+	if(InteractableActor != nullptr && InteractableCharacter != nullptr)
 	{
 		InteractableActor->UnPickupOff();
 		InteractableCharacter->UnPickupOff();

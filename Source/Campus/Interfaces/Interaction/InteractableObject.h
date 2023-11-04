@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "PickupableObject.generated.h"
+#include "InteractableObject.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()
-class UPickupableObject : public UInterface
+class UInteractableObject : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,12 +16,12 @@ class UPickupableObject : public UInterface
 /**
  * 
  */
-class CAMPUS_API IPickupableObject
+class CAMPUS_API IInteractableObject
 {
 	GENERATED_BODY()
 
 public:
-	virtual void PickupOn() = 0;
+	virtual void InteractableObjectOn() = 0;
 
-	virtual void PickupOff() = 0;
+	virtual void InteractableObjectOff() = 0;
 };

@@ -60,6 +60,4 @@ public:
 
 	virtual void UnPickupOn(AActor* Character) override;
 	virtual void UnPickupOff() override;
-	
-	
 };
