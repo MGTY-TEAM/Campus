@@ -11,4 +11,7 @@ class CAMPUS_API AAIDroneController : public AAIController
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void OnPossess(APawn* InPawn) override;
+
 };
