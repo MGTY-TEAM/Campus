@@ -17,9 +17,9 @@ class CAMPUS_API UOpenChatTask : public UBTTaskNode
 public:
 	UOpenChatTask();
 
+protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
-protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector DroneActorKey;
 

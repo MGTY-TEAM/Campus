@@ -39,8 +39,6 @@ void AAIAnimDrone::UnPickupOn(AActor* Character)
 
 	InInteraction = true;
 	InteractingCharacter = Character;
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Interaction");
 }
 
 void AAIAnimDrone::UnPickupOff()
@@ -51,8 +49,6 @@ void AAIAnimDrone::UnPickupOff()
 	InteractingCharacter = nullptr;
 	StopRotateToPlayerAnim();
 	CloseChat();
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Not Interaction");
 }
 
 void AAIAnimDrone::StartRotateToPlayerAnim()

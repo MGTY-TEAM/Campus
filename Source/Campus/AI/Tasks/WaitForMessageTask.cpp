@@ -28,18 +28,16 @@ EBTNodeResult::Type UWaitForMessageTask::ExecuteTask(UBehaviorTreeComponent& Own
 		ChatWidget->TeleportationEvent.AddDynamic(this, &UWaitForMessageTask::MessageSent);
 		TeleportationEventExist = true;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Create Event");
+
 	return EBTNodeResult::InProgress;
 }
 
 void UWaitForMessageTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Tick");
 	if (IsSend) FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 }
 
 void UWaitForMessageTask::MessageSent(int i)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Message Sent");
 	IsSend = true;
 }

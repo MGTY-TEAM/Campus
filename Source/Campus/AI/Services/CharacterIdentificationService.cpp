@@ -5,7 +5,6 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
-#include "Engine/Engine.h"
 
 UCharacterIdentificationService::UCharacterIdentificationService()
 {
@@ -21,7 +20,6 @@ void UCharacterIdentificationService::TickNode(UBehaviorTreeComponent& OwnerComp
 	if (Drone && Drone->DoesHeInteract())
 	{
 		Blackboard->SetValueAsObject(CharacterActorKey.SelectedKeyName, Drone->GetInteractingCharacter());
-		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Drone->GetInteractingCharacter()->GetFullName());
 	}
 	else if (Drone && !Drone->DoesHeInteract())
 	{

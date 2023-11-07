@@ -14,8 +14,9 @@ class CAMPUS_API UCharacterFocusTask : public UBTTaskNode
 public:
 	UCharacterFocusTask();
 
-	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 protected:
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector CharacterActorKey;
 };

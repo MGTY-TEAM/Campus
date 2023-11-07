@@ -26,7 +26,6 @@ EBTNodeResult::Type UTeleportTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 
 	TimerDel.BindUObject(Drone, &AAIAnimDrone::TeleportToLocation, ChatWidget->ActionPlace);
 	GetWorld()->GetTimerManager().SetTimer(TeleportTimer, TimerDel, 1.f, false);
-	//Drone->TeleportToLocation(ChatWidget->ActionPlace);
 	Drone->DarkeningScreen();
 
 	return EBTNodeResult::Succeeded;
