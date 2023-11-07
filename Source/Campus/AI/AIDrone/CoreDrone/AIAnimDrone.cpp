@@ -3,6 +3,9 @@
 
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 #include "Campus/AI/AIDroneController.h"
+#include "Campus/Drone/TeleportationPlane.h"
+#include "Campus/UserInterface/ChatBox.h"
+#include "Campus/UserInterface/DarkeningScreen.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Engine/Engine.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -14,14 +17,21 @@ AAIAnimDrone::AAIAnimDrone()
 {
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AAIDroneController::StaticClass();
+}
 
-	/*bUseControllerRotationYaw = false;
-	if (GetCharacterMovement())
+void AAIAnimDrone::BeginPlay()
+{
+	Super::BeginPlay();
+
+	ChatWidget = CreateWidget<UChatBox>(GetWorld()->GetFirstPlayerController(), BlueprintChatClass);
+
+	/*if (ChatWidget)
 	{
-		GetCharacterMovement()->bUseControllerDesiredRotation = true;
-		GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);
+		ChatWidget->TeleportationEvent.AddDynamic(this, &AAIAnimDrone::TeleportToLocation);
+		ChatWidget->DarkeningEvent.AddDynamic(this, &AAIAnimDrone::DarkeningScreen);
 	}*/
 }
+
 
 void AAIAnimDrone::UnPickupOn(AActor* Character)
 {
@@ -29,7 +39,6 @@ void AAIAnimDrone::UnPickupOn(AActor* Character)
 
 	InInteraction = true;
 	InteractingCharacter = Character;
-	StopRotateToPlayerAnim();
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Interaction");
 }
@@ -41,6 +50,7 @@ void AAIAnimDrone::UnPickupOff()
 	InInteraction = false;
 	InteractingCharacter = nullptr;
 	StopRotateToPlayerAnim();
+	CloseChat();
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Not Interaction");
 }
@@ -64,4 +74,47 @@ void AAIAnimDrone::StartRotateToPlayerAnim()
 void AAIAnimDrone::StopRotateToPlayerAnim()
 {
 	GetWorldTimerManager().ClearTimer(RotateToPlayerTimer);
+}
+
+UChatBox* AAIAnimDrone::OpenChat()
+{
+	if (!ChatWidget->IsInViewport())
+	{
+		ChatWidget->AddToPlayerScreen();
+		UE_LOG(LogTemp, Warning, TEXT("AddToScreen"));
+	}
+	ChatWidget->SetVisibility(ESlateVisibility::Visible);
+	return ChatWidget;
+}
+
+void AAIAnimDrone::CloseChat()
+{
+	ChatWidget->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void AAIAnimDrone::TeleportToLocation(int index)
+{
+	TeleportationPlace = Cast<ATeleportationPlane>(TeleportationPlaces[index]);
+	UE_LOG(LogTemp, Warning, TEXT("DroneTeleport"));
+	if (TeleportationPlace)
+	{
+		if (InteractingCharacter)
+		{
+			InteractingCharacter->SetActorLocation(TeleportationPlace->PlayerPlane->GetComponentLocation());
+			SetActorLocation(TeleportationPlace->RobotPlane->GetComponentLocation());
+		}
+	}
+}
+
+void AAIAnimDrone::DarkeningScreen()
+{
+	DarkWidget = CreateWidget<UDarkeningScreen>(GetWorld()->GetFirstPlayerController(), BlueprintDarkeningClass);
+	DarkWidget->AddToPlayerScreen();
+	GetWorld()->GetTimerManager().SetTimer(EndDarkeningTimer, this, &AAIAnimDrone::EndDarkeningScreen, 1.5f, false);
+	UE_LOG(LogTemp, Warning, TEXT("Daaark"));
+}
+
+void AAIAnimDrone::EndDarkeningScreen()
+{
+	DarkWidget->RemoveFromParent();
 }

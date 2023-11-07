@@ -18,10 +18,10 @@ EBTNodeResult::Type UCharacterFocusTask::ExecuteTask(UBehaviorTreeComponent& Own
 	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	if (!Blackboard) return EBTNodeResult::Failed;
 
-	AAIAnimDrone* AimActor = Cast<AAIAnimDrone>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
-	if (!AimActor) return EBTNodeResult::Failed;
+	AAIAnimDrone* Drone = Cast<AAIAnimDrone>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
+	if (!Drone) return EBTNodeResult::Failed;
 		
-	AimActor->StartRotateToPlayerAnim();
+	if (Drone->DoesHeInteract()) Drone->StartRotateToPlayerAnim();
 		
 	return EBTNodeResult::Succeeded;
 }

@@ -21,7 +21,7 @@ void UCharacterIdentificationService::TickNode(UBehaviorTreeComponent& OwnerComp
 	if (Drone && Drone->DoesHeInteract())
 	{
 		Blackboard->SetValueAsObject(CharacterActorKey.SelectedKeyName, Drone->GetInteractingCharacter());
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Drone->GetInteractingCharacter()->GetFullName());
+		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Drone->GetInteractingCharacter()->GetFullName());
 	}
 	else if (Drone && !Drone->DoesHeInteract())
 	{
