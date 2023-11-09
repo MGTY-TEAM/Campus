@@ -17,6 +17,13 @@ AAIAnimDrone::AAIAnimDrone()
 {
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AAIDroneController::StaticClass();
+
+	bUseControllerRotationYaw = false;
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);
+	}
 }
 
 void AAIAnimDrone::BeginPlay()

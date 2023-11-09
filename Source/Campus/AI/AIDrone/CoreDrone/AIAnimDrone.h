@@ -10,6 +10,7 @@ class UBehaviorTree;
 class UChatBox;
 class UDarkeningScreen;
 class ATeleportationPlane;
+class UAIPerceptionStimuliSourceComponent;
 
 UCLASS()
 class CAMPUS_API AAIAnimDrone : public APlayerInteractionDrone
