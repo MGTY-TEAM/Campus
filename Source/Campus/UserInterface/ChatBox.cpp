@@ -98,9 +98,8 @@ void UChatBox::BotResponse(const FString& Message, const FString& ActionType, co
 	SendMessage_Button->SetIsEnabled(true);
 	if(ActionType == "Teleport")
 	{
-		TimerDel.BindUObject(this, &UChatBox::StartTeleport, ActionID);
-		GetWorld()->GetTimerManager().SetTimer(TeleportTimer, TimerDel, 1.f, false);
-		DarkeningEvent.Broadcast();
+		ActionPlace = ActionID;
+		TeleportationEvent.Broadcast(ActionPlace);
 	}
 	else if(ActionType == "Walk")
 	{

@@ -61,7 +61,7 @@ public:
 	FTimerDelegate TimerDel;
 
 	void StartTeleport(int index);
-	
+	int ActionPlace = 0;
 protected:
 	UFUNCTION()
 	virtual bool Initialize();
