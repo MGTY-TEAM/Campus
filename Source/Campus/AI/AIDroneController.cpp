@@ -33,7 +33,7 @@ void AAIDroneController::Tick(float DeltaTime)
 	if (Drone->DoesHeInteract())
 	{
 		const auto AimCharacter = AIDronePerceptionComponent->GetInteractionCharacter();
-		SetFocus(AimCharacter);
+		// SetFocus(AimCharacter);
 	}
 }
 

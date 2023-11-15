@@ -18,11 +18,14 @@ AAIAnimDrone::AAIAnimDrone()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AAIDroneController::StaticClass();
 
+	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
+	SceneComponent->SetupAttachment(GetRootComponent());
+
 	bUseControllerRotationYaw = false;
 	if (GetCharacterMovement())
 	{
 		GetCharacterMovement()->bUseControllerDesiredRotation = true;
-		GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 50.0f, 0.0f);
 	}
 }
 
@@ -56,6 +59,9 @@ void AAIAnimDrone::UnPickupOff()
 	InteractingCharacter = nullptr;
 	StopRotateToPlayerAnim();
 	CloseChat();
+
+	// AAIDroneController* AController = Cast<AAIDroneController>(GetController());
+	// AController->ClearFocus(EAIFocusPriority::Gameplay);
 }
 
 void AAIAnimDrone::StartRotateToPlayerAnim()

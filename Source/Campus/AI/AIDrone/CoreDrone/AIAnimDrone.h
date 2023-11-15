@@ -11,6 +11,7 @@ class UChatBox;
 class UDarkeningScreen;
 class ATeleportationPlane;
 class UAIPerceptionStimuliSourceComponent;
+class USceneComponent;
 
 UCLASS()
 class CAMPUS_API AAIAnimDrone : public APlayerInteractionDrone
@@ -55,6 +56,8 @@ public:
 	UChatBox* OpenChat();
 	void CloseChat();
 
+	USceneComponent* GetSceneComponent() { return SceneComponent; }
+
 	UFUNCTION()
 	void TeleportToLocation(int index);
 	UFUNCTION()
@@ -65,6 +68,9 @@ protected:
 
 	virtual void UnPickupOn(AActor* Character) override;
 	virtual void UnPickupOff() override;
+
+	UPROPERTY(EditDefaultsOnly)
+	USceneComponent* SceneComponent;
 
 	FTimerHandle IdleAnimTimer;
 	FTimerHandle RotateToPlayerTimer;

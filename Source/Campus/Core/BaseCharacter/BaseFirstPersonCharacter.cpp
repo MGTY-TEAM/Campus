@@ -109,6 +109,7 @@ void ABaseFirstPersonCharacter::MoveForward(float value)
 {
 	// Add movement input in the forward direction
 	
+	IsMoving = value > 0.0f;
 	if (bIsEnableInput)
 	{
 		AddMovementInput(GetActorForwardVector() * value);
@@ -118,6 +119,8 @@ void ABaseFirstPersonCharacter::MoveForward(float value)
 void ABaseFirstPersonCharacter::MoveRight(float value)
 {
 	// Add movement input in the right direction
+
+	IsMoving = value > 0.0f;
 	if (bIsEnableInput)
 	{
 		AddMovementInput(GetActorRightVector() * value);
@@ -127,6 +130,8 @@ void ABaseFirstPersonCharacter::MoveRight(float value)
 void ABaseFirstPersonCharacter::LookUp(float value)
 {
 	// Add controller pitch input
+
+	IsMoving = value > 0.0f;
 	if (bIsEnableInput)
 	{
 		AddControllerPitchInput(value * MouseSpeed * -1);
@@ -136,6 +141,8 @@ void ABaseFirstPersonCharacter::LookUp(float value)
 void ABaseFirstPersonCharacter::LookRight(float value)
 {
 	// Add controller yaw input
+
+	IsMoving = value > 0.0f;
 	if (bIsEnableInput)
 	{
 		AddControllerYawInput(value * MouseSpeed);
