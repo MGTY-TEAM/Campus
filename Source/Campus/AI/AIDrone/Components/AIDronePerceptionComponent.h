@@ -13,4 +13,5 @@ class CAMPUS_API UAIDronePerceptionComponent : public UAIPerceptionComponent
 
 public:
 	AActor* GetInteractionCharacter() const;
+	bool CanISee(AActor* Actor);
 };

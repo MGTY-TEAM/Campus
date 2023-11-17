@@ -12,6 +12,7 @@ class UDarkeningScreen;
 class ATeleportationPlane;
 class UAIPerceptionStimuliSourceComponent;
 class USceneComponent;
+class USplineComponent;
 
 UCLASS()
 class CAMPUS_API AAIAnimDrone : public APlayerInteractionDrone
@@ -71,6 +72,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	USceneComponent* SceneComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	USplineComponent* SplineComponent;
 
 	FTimerHandle IdleAnimTimer;
 	FTimerHandle RotateToPlayerTimer;

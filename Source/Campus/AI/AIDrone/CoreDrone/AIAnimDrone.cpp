@@ -12,6 +12,7 @@
 #include "TimerManager.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/SplineComponent.h"
 
 AAIAnimDrone::AAIAnimDrone()
 {
@@ -20,6 +21,9 @@ AAIAnimDrone::AAIAnimDrone()
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
 	SceneComponent->SetupAttachment(GetRootComponent());
+
+	SplineComponent = CreateDefaultSubobject<USplineComponent>("SplineComponent");
+	SplineComponent->SetupAttachment(GetRootComponent());
 
 	bUseControllerRotationYaw = false;
 	if (GetCharacterMovement())

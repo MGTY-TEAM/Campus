@@ -28,12 +28,14 @@ void AAIDroneController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// GetPathFollowingComponent()->RequestMove();
+
 	// фокус остаётся после окончания взаимодействия, придумать, где это заканчивать
 	const AAIAnimDrone* Drone = Cast< AAIAnimDrone>(GetPawn());
 	if (Drone->DoesHeInteract())
 	{
 		const auto AimCharacter = AIDronePerceptionComponent->GetInteractionCharacter();
-		// SetFocus(AimCharacter);
+		SetFocus(AimCharacter);
 	}
 }
 
