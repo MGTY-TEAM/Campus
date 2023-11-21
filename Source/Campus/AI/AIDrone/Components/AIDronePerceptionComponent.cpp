@@ -46,9 +46,15 @@ bool UAIDronePerceptionComponent::CanISee(AActor* Actor)
 	{
 		if (PerceiveActor == Actor)
 		{
+			SetLastLocationOf(Actor);
 			return true;
 		}
 	}
 
 	return false;
+}
+
+void UAIDronePerceptionComponent::SetLastLocationOf(AActor* Actor)
+{
+	LastLocationOfInteractionCharacter = Actor->GetActorLocation();
 }

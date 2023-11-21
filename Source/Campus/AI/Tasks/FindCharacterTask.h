@@ -5,17 +5,17 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "Navigation/PathFollowingComponent.h"
-#include "MoveAlongThePathTask.generated.h"
+#include "FindCharacterTask.generated.h"
 
 class UNavigationSystemV1;
 
 UCLASS()
-class CAMPUS_API UMoveAlongThePathTask : public UBTTaskNode
+class CAMPUS_API UFindCharacterTask : public UBTTaskNode
 {
 	GENERATED_BODY()
-
+	
 public:
-	UMoveAlongThePathTask();
+	UFindCharacterTask();
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
@@ -25,7 +25,7 @@ protected:
 	FBlackboardKeySelector SelfActorKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
-	FBlackboardKeySelector DestinationPointKey;
+	FBlackboardKeySelector LastLocationKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector ISeeYouKey;
@@ -39,11 +39,9 @@ private:
 	FAIRequestID MainRequestID;
 
 	bool IsMove = false;
-	bool IsMoving() const  { return IsMove; }
+	bool IsMoving() const { return IsMove; }
 	void FinishMove(const FAIRequestID RequestID, const FPathFollowingResult& Result);
 
 	EBTNodeResult::Type RequestMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
 	void AbortMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
-
-	bool CharacterIsGone = false;
 };

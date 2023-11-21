@@ -14,4 +14,9 @@ class CAMPUS_API UAIDronePerceptionComponent : public UAIPerceptionComponent
 public:
 	AActor* GetInteractionCharacter() const;
 	bool CanISee(AActor* Actor);
+
+	void SetLastLocationOf(AActor* Actor);
+	FVector GetLastLocationOfInteractionCharacter() { return LastLocationOfInteractionCharacter; }
+private:
+	FVector LastLocationOfInteractionCharacter = FVector();
 };

@@ -28,6 +28,7 @@ void UCanISeeYouService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	if (PerceptionComponent->CanISee(Character))
 	{
 		Blackboard->SetValueAsBool(ISeeYouKey.SelectedKeyName, true);
+		Blackboard->SetValueAsVector(LastLocationKey.SelectedKeyName, PerceptionComponent->GetLastLocationOfInteractionCharacter());
 	}
 	else
 	{
