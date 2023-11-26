@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Campus/Interfaces/Interaction/UnPickupableObject.h"
+#include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"
 #include "GameFramework/Character.h"
 #include "BaseFirstPersonCharacter.generated.h"
 
@@ -12,7 +13,7 @@ class UCameraComponent;
 class UBasePickup;
 
 UCLASS()
-class CAMPUS_API ABaseFirstPersonCharacter : public ACharacter, public IUnPickupableObject
+class CAMPUS_API ABaseFirstPersonCharacter : public ACharacter, public IUnPickupableObject , public IBinaryFruit
 {
 	GENERATED_BODY()
 
@@ -60,4 +61,6 @@ public:
 
 	virtual void UnPickupOn(AActor* Character) override;
 	virtual void UnPickupOff() override;
+
+
 };

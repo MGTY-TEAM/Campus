@@ -7,6 +7,8 @@
 #include "BasePickup.h"
 #include "DrawDebugHelpers.h"
 #include "Camera/CameraComponent.h"
+#include "Campus/MiniGames/BinaryTree/Panal.h"
+#include "Campus/MiniGames/BinaryTree/PanalRandom.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -48,8 +50,25 @@ void ABaseFirstPersonCharacter::Interact()
 	{
 		if (OutHit.bBlockingHit)
 		{
+			//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, OutHit.GetComponent()->GetName());
 			PickupClass = NewObject<UBasePickup>(this, UBasePickup::StaticClass());
 			IInteractable* PickUp = Cast<IInteractable>(PickupClass);
+			IInteractable* InteractableObject = Cast<IInteractable>(OutHit.GetActor());
+			if (InteractableObject)
+			{
+				if(Cast<APanalRandom>(OutHit.GetActor()))
+				{
+					InteractableObject->Interact(OutHit.GetActor(),this);
+					UE_LOG(LogTemp, Warning, TEXT("Interact Random Panal") );
+				}
+				if (Cast<APanal>(OutHit.GetActor()))
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Interact Panal") );
+					InteractableObject->Interact(OutHit.GetComponent(),this);
+					
+				}
+
+			}
 			if(PickUp != nullptr)
 			{
 				if (bIsFirstInteraction)
@@ -64,11 +83,12 @@ void ABaseFirstPersonCharacter::Interact()
 					PickupClass->ConditionalBeginDestroy();
 				}
 			}
+
 		}
 	}
 
 	// Draw a debug line to visualize the line trace
-	//DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5, 0, 1);
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5, 0, 1);
 }
 
 // Function to set up player input
@@ -102,6 +122,7 @@ void ABaseFirstPersonCharacter::UnPickupOff()
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = false;
 	CameraComponent->bUsePawnControlRotation = true;
 }
+
 
 
 // Movement and look functions
