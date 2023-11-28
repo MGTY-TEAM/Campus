@@ -37,11 +37,14 @@ void UInventory::SelectPrevItem()
 
 void UInventory::AddItemAndSelect(UInventoryItem* Item)
 {
-	Items.AddTail(Item);
-	SelectedItem = Item;
+	if (Item)
+	{
+		Items.AddTail(Item);
+		SelectedItem = Item;
 	
-	OnInventoryItemAdded.Broadcast(Item);
-	OnSelectedItemChanged.Broadcast(Item);
+		OnInventoryItemAdded.Broadcast(Item);
+		OnSelectedItemChanged.Broadcast(Item);
+	}
 }
 
 void UInventory::RemoveSelectedItem()
