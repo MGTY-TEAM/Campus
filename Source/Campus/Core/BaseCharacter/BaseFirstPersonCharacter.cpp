@@ -7,6 +7,9 @@
 #include "BasePickup.h"
 #include "DrawDebugHelpers.h"
 #include "Camera/CameraComponent.h"
+#include "Campus/Inventory/Inventory.h"
+#include "Campus/Inventory/InventoryItemVisual.h"
+#include "Campus/UserInterface/HUD/Inventory/InventoryWidget.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -23,12 +26,24 @@ ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
 	SpringArmComponent->SetupAttachment(RootComponent);
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	Inventory = NewObject<UInventory>();
 }
 
 // BeginPlay function
 void ABaseFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	if (Inventory && IsValid(InventoryWidgetClass))
+	{
+		UInventoryWidget* InventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), InventoryWidgetClass);
+		if (InventoryWidget)
+		{
+			InventoryWidget->AddToViewport();
+			Inventory->ConnectInventoryWidgetWithInventory(InventoryWidget);
+		}
+	}
 	
 }
 
@@ -52,16 +67,27 @@ void ABaseFirstPersonCharacter::Interact()
 			IInteractable* PickUp = Cast<IInteractable>(PickupClass);
 			if(PickUp != nullptr)
 			{
-				if (bIsFirstInteraction)
+				AInventoryItemVisual* InventoryItemVisual = Cast<AInventoryItemVisual>(OutHit.GetActor());
+				if (InventoryItemVisual)
 				{
-					FocusActor = OutHit.GetActor();
-					PickUp->Interact(OutHit.GetActor(), this);
-					PickupClass->ConditionalBeginDestroy();
+					if(Inventory)
+					{
+						Inventory->AddItemAndSelect(InventoryItemVisual->PickUp());
+					}
 				}
 				else
 				{
-					PickUp->EndInteract(OutHit.GetActor(), this);
-					PickupClass->ConditionalBeginDestroy();
+					if (bIsFirstInteraction)
+					{
+						FocusActor = OutHit.GetActor();
+						PickUp->Interact(OutHit.GetActor(), this);
+						PickupClass->ConditionalBeginDestroy();
+					}
+					else
+					{
+						PickUp->EndInteract(OutHit.GetActor(), this);
+						PickupClass->ConditionalBeginDestroy();
+					}
 				}
 			}
 		}

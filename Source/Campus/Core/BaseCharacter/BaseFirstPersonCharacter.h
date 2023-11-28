@@ -7,6 +7,9 @@
 #include "GameFramework/Character.h"
 #include "BaseFirstPersonCharacter.generated.h"
 
+class UInventoryItemWidget;
+class UInventoryWidget;
+class UInventory;
 class USpringArmComponent;
 class UCameraComponent;
 class UBasePickup;
@@ -43,6 +46,11 @@ public:
 	bool bIsFirstInteraction = true;
 	
 protected:
+	UInventory* Inventory;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory Class")
+	TSubclassOf<UInventoryWidget> InventoryWidgetClass;
+	
 	virtual void BeginPlay() override;
 
 	virtual void Interact();
