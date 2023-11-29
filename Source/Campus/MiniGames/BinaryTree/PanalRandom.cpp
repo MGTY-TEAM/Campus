@@ -53,8 +53,6 @@ void APanalRandom::Interact(AActor* InteractedActor, AActor* SelfCharacter)
 		ThirdAnsw = GenerateNum();
 	}
 	
-
-
 	FirstAnswString = AllAnswString[FMath::RandRange(0,7)];
 	SecondAnswString = AllAnswString[FMath::RandRange(0,7)];
 	ThirdAnswString = AllAnswString[FMath::RandRange(0,7)];
@@ -67,14 +65,15 @@ void APanalRandom::Interact(AActor* InteractedActor, AActor* SelfCharacter)
 	{
 		ThirdAnswString = AllAnswString[FMath::RandRange(0,7)];
 	}
-
-	//ABinaryTree* PanelR = NewObject<ABinaryTree>(GetWorld() , TEXT("PanalR"));
-
-//	ABinaryTree PanelR = Cast<ABinaryTree>(GetWorld()->GetCurrentLevel()->GetAc); 
 	
-	PanelR->BinaryTreeI(FirstAnsw,SecondAnsw,ThirdAnsw ,FirstAnswString ,SecondAnswString ,ThirdAnswString);
+
+	ABinaryTree* PanalRR = Cast<ABinaryTree>(UGameplayStatics::GetActorOfClass(GetWorld(), ABinaryTree::StaticClass()));
 	
-	APanal* Panal = NewObject<APanal>(GetWorld(), TEXT("Apnal"));
+	PanalRR->BinaryTreeI(FirstAnsw,SecondAnsw,ThirdAnsw ,FirstAnswString ,SecondAnswString ,ThirdAnswString);
+
+
+
+	APanal* Panal = Cast<APanal>(UGameplayStatics::GetActorOfClass(GetWorld(), APanal::StaticClass()));
 	
 	Panal->PanalI( FirstAnswString ,SecondAnswString ,ThirdAnswString);
 	

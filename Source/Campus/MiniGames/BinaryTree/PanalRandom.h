@@ -9,7 +9,6 @@
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"  
-#include "Kismet/GameplayStatics.h"
 #include "PanalRandom.generated.h"
 
 UCLASS()

@@ -67,6 +67,10 @@ public:
 
 	TArray<FString> AllAnswString {"apple","banana","blue","cherry","grape","orange","pine","straw"};
 	TArray<FString> AnswString ;
+	TArray<int32> AllInt {0,1,2,3,4,5,6,7};
+	TArray<int32> Int;
+
+	
 	TArray<UStaticMesh*> MeshesObj ;
 	TArray<UStaticMeshComponent*> Meshes ;
 

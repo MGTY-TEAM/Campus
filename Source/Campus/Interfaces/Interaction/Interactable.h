@@ -23,6 +23,7 @@ public:
 	virtual void Interact(AActor* InteractedActor, AActor* SelfCharacter) {}
 	
 	virtual void Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharacter* SelfCharacter) {}
+	
 	bool bCanInteract;
 
 	virtual void EndInteract(AActor* FocusActor, AActor* SelfCharacter) {};

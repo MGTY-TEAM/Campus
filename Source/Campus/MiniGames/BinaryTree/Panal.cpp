@@ -52,26 +52,49 @@ APanal::APanal()
 	// Zero->SetRelativeLocation(FVector(0,200,650));
 	//
 	Zero->SetNotifyRigidBodyCollision(true);
-	Zero->SetCollisionProfileName(TEXT("BlockAll"));  
-	Zero->SetGenerateOverlapEvents(true);  
-	// RightA.Add("apple");
+	Zero->SetCollisionProfileName(TEXT("BlockAll"));
+	One->SetNotifyRigidBodyCollision(true);
+	One->SetCollisionProfileName(TEXT("BlockAll"));
+	Two->SetNotifyRigidBodyCollision(true);
+	Two->SetCollisionProfileName(TEXT("BlockAll"));
+	Three->SetNotifyRigidBodyCollision(true);
+	Three->SetCollisionProfileName(TEXT("BlockAll"));
+	Four->SetNotifyRigidBodyCollision(true);
+	Four->SetCollisionProfileName(TEXT("BlockAll"));
+	Five->SetNotifyRigidBodyCollision(true);
+	Five->SetCollisionProfileName(TEXT("BlockAll"));
+	Six->SetNotifyRigidBodyCollision(true);
+	Six->SetCollisionProfileName(TEXT("BlockAll"));
+	Seven->SetNotifyRigidBodyCollision(true);
+	Seven->SetCollisionProfileName(TEXT("BlockAll"));
+	Eight->SetNotifyRigidBodyCollision(true);
+	Eight->SetCollisionProfileName(TEXT("BlockAll"));
+
+	Meshes.Add(Zero);
+	Meshes.Add(One);
+	Meshes.Add(Two);
+	Meshes.Add(Three);
+	Meshes.Add(Four);
+	Meshes.Add(Five);
+	Meshes.Add(Six);
+	Meshes.Add(Seven);
+	Meshes.Add(Eight);
 }
 
 // Called when the game starts or when spawned
 void APanal::BeginPlay()
 {
 	Super::BeginPlay();
-	RightA.Add("apple");
 }
 
 
 
 void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharacter* SelfCharacter)
 {
-	
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, RightA[0]);
 	if (GetComponent == Zero)
 	{
-		if (AnswerN < RightA.Num() && RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
+		if (RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
 		 {
 			RAnswers-=-1;
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, GetComponent->GetMaterial(0)->GetName());
@@ -79,7 +102,7 @@ void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharact
 	}
 	if (GetComponent == One)
 	{
-		if (AnswerN < RightA.Num() && RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
+		if (AnswerN < RightA.Num() and RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
 		{
 			RAnswers-=-1;
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, GetComponent->GetMaterial(0)->GetName());
@@ -87,7 +110,7 @@ void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharact
 	}
 	if (GetComponent == Two)
 	{
-		if (AnswerN < RightA.Num() && RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
+		if (AnswerN < RightA.Num() and RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
 		{
 			RAnswers-=-1;
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, GetComponent->GetMaterial(0)->GetName());
@@ -95,7 +118,7 @@ void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharact
 	}
 	if (GetComponent == Three)
 	{
-		if (AnswerN < RightA.Num() && RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
+		if (AnswerN < RightA.Num() and RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
 		{
 			RAnswers-=-1;
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, GetComponent->GetMaterial(0)->GetName());
@@ -103,7 +126,7 @@ void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharact
 	}
 	if (GetComponent == Four)
 	{
-		if (AnswerN < RightA.Num() && RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
+		if (AnswerN < RightA.Num() and RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
 		{
 			RAnswers-=-1;
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, GetComponent->GetMaterial(0)->GetName());
@@ -111,7 +134,7 @@ void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharact
 	}
 	if (GetComponent == Five)
 	{
-		if (AnswerN < RightA.Num() && RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
+		if (AnswerN < RightA.Num() and RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
 		{
 			RAnswers-=-1;
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, GetComponent->GetMaterial(0)->GetName());
@@ -119,7 +142,7 @@ void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharact
 	}
 	if (GetComponent == Six)
 	{
-		if (AnswerN < RightA.Num() && RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
+		if (AnswerN < RightA.Num() and RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
 		{
 			RAnswers-=-1;
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, GetComponent->GetMaterial(0)->GetName());
@@ -127,7 +150,7 @@ void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharact
 	}
 	if (GetComponent == Seven)
 	{
-		if (AnswerN < RightA.Num() && RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
+		if (AnswerN < RightA.Num() and RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
 		{
 			RAnswers-=-1;
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, GetComponent->GetMaterial(0)->GetName());
@@ -135,13 +158,13 @@ void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharact
 	}
 	if (GetComponent == Eight)
 	{
-		if (AnswerN < RightA.Num() && RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
+		if (AnswerN < RightA.Num() and RightA[AnswerN] == GetComponent->GetMaterial(0)->GetName())
 		{
 			RAnswers-=-1;
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, GetComponent->GetMaterial(0)->GetName());
 		}
 	}
-
+	AnswerN++;
 	if (AnswerN==3)
 	{
 		if (RAnswers==3)
@@ -153,14 +176,24 @@ void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharact
 			UE_LOG(LogTemp, Warning, TEXT("You lose"));
 		}
 	}
+
 }
 
 void APanal::PanalI(FString a, FString b, FString c)
 {
-	// RightA.Empty();
-	// RightA.Add(a);
-	// RightA.Add(b);
-	IBinaryFruit::PanalI(a, b, c);
+	RightA.Empty();
+	RightA.Add(a);
+	RightA.Add(b);
+	RightA.Add(c);
+	
+	for (int i = 0; i < Meshes.Num(); ++i)
+	{
+		k = FMath::RandRange(0,Meshes.Num()-1);
+		OldTransform = Meshes[i]->GetComponentTransform();
+		Meshes[i]->SetWorldTransform(Meshes[k]->GetComponentTransform());
+		Meshes[k]->SetWorldTransform(OldTransform);
+	}
+	
 }
 
 

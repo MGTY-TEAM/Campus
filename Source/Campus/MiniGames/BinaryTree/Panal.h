@@ -57,6 +57,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 AnswerN = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TArray<UStaticMeshComponent*> Meshes;
+
+	FTransform OldTransform;
+
+	int32 k = 0;
+
 
 protected:
 	// Called when the game starts or when spawned

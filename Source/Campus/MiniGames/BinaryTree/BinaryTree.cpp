@@ -54,7 +54,6 @@ ABinaryTree::ABinaryTree()
 		MeshesObj.Add(Orange.Object);
 		MeshesObj.Add(Pine.Object);
 		MeshesObj.Add(Straw.Object);
-
 	}
 	Meshes.Add(Zero);
 	Meshes.Add(One);
@@ -66,7 +65,7 @@ ABinaryTree::ABinaryTree()
 	Meshes.Add(Seven);
 
 	
-	
+	FRandomStream(time(0));
 	// Array.Add(MeshAsset);
 	//
 	// Zero->SetStaticMesh(Array[0].Object);
@@ -80,10 +79,7 @@ void ABinaryTree::BeginPlay()
 	// APanalRandom* PanelR = NewObject<APanalRandom>(GetWorld(), TEXT("GRE"));
 	// GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::SanitizeFloat(PanelR->FirstAnsw));
 	// PanelR->GetFirst();
-	RightAnswString.Add("Apple");
-	RightAnswString.Add("Banana");
-	RightAnswString.Add("Straw");
-	Meshes[0]->SetStaticMesh(MeshesObj[3]);
+
 	
 }
 
@@ -110,8 +106,36 @@ void ABinaryTree::Work()
 
 void ABinaryTree::BinaryTreeI(int32 a, int32 b, int32 c, FString F, FString S, FString T)
 {
-	Work();
-	IBinaryFruit::BinaryTreeI(a, b, c, F, S, T);
+	Meshes[a]->SetStaticMesh(MeshesObj[AllAnswString.Find(F)]);
+	Meshes[b]->SetStaticMesh(MeshesObj[AllAnswString.Find(S)]);
+	Meshes[c]->SetStaticMesh(MeshesObj[AllAnswString.Find(T)]);
+	
+	// Set int array by AllInt
+	for (int i = 0; i < AllInt.Num() ; ++i)
+	{
+		Int.Add(AllInt[i]);
+	}
+	// Remove using item
+	Int.Remove(AllAnswString.Find(F));
+	Int.Remove(AllAnswString.Find(S));
+	Int.Remove(AllAnswString.Find(T));
+	// Random int array
+	for (int i = 0; i < Int.Num(); ++i)
+	{
+		Int.Swap(i,FMath::RandRange(0,Int.Num()-1));
+	}
+
+	int k = 0;
+	
+	for (int i = 0; i < Meshes.Num() ; ++i)
+	{
+		if (i!=a and  i!=b and i!=c)
+		{
+
+			Meshes[i]->SetStaticMesh(MeshesObj[Int[k]]);
+			k++;
+		}
+	}
 }
 
 // void ABinaryTree::BinaryTreeI(int32 a, int32 b, int32 c,  FString F, FString S, FString T)
