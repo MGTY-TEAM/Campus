@@ -6,6 +6,7 @@
 #include "BinaryTree.h"
 #include "GPUSkinCache.h"
 #include "NavigationSystemTypes.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -29,28 +30,25 @@ APanalRandom::APanalRandom()
 void APanalRandom::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Interact(this , this);
 }
 
 
 void APanalRandom::Interact(AActor* InteractedActor, AActor* SelfCharacter)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Generate Numbers") );
+	UE_LOG(LogTemp, Warning, TEXT("Generate Numbers"));
 
-	FirstAnsw = GenerateNum();
-	SecondAnsw = GenerateNum();
-	ThirdAnsw = GenerateNum();
-	
-	UE_LOG(LogTemp, Warning, TEXT("Give") );
-	
+	FirstAnsw =  FMath::RandRange(0, 7);
+	SecondAnsw =  FMath::RandRange(0, 7);
+	ThirdAnsw =  FMath::RandRange(0, 7);
 	
 	while (FirstAnsw == SecondAnsw)
 	{
-		SecondAnsw = GenerateNum();
+		SecondAnsw =  FMath::RandRange(0, 7);
 	}
 	while (SecondAnsw == ThirdAnsw || FirstAnsw == ThirdAnsw)
 	{
-		ThirdAnsw = GenerateNum();
+		ThirdAnsw =  FMath::RandRange(0, 7);
 	}
 	
 	FirstAnswString = AllAnswString[FMath::RandRange(0,7)];
@@ -66,33 +64,16 @@ void APanalRandom::Interact(AActor* InteractedActor, AActor* SelfCharacter)
 		ThirdAnswString = AllAnswString[FMath::RandRange(0,7)];
 	}
 	
-
-	ABinaryTree* PanalRR = Cast<ABinaryTree>(UGameplayStatics::GetActorOfClass(GetWorld(), ABinaryTree::StaticClass()));
-	
-	PanalRR->BinaryTreeI(FirstAnsw,SecondAnsw,ThirdAnsw ,FirstAnswString ,SecondAnswString ,ThirdAnswString);
-
-
-
+	ABinaryTree* Tree = Cast<ABinaryTree>(UGameplayStatics::GetActorOfClass(GetWorld(), ABinaryTree::StaticClass()));
 	APanal* Panal = Cast<APanal>(UGameplayStatics::GetActorOfClass(GetWorld(), APanal::StaticClass()));
 	
+	Tree->BinaryTreeI(FirstAnsw,SecondAnsw,ThirdAnsw ,FirstAnswString ,SecondAnswString ,ThirdAnswString);
 	Panal->PanalI( FirstAnswString ,SecondAnswString ,ThirdAnswString);
-	
-	
 	
 	
 	TextRender->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) + " " + FirstAnswString + " "  + SecondAnswString + " " + ThirdAnswString));
 	
 }
-
-
-
-
-int32 APanalRandom::GenerateNum()
-{
-	int32 num = FMath::RandRange(0, 7);
-	return num;
-}
-
 
 
 FString APanalRandom::ToBinary(int32 num)
@@ -106,6 +87,7 @@ FString APanalRandom::ToBinary(int32 num)
 		k *= 10;
 		num /= 2;
 	}
+	
 	if (numOrg==1 || numOrg==0)
 	{
 		stringbin = "00"  + FString::FromInt(bin);
@@ -118,7 +100,6 @@ FString APanalRandom::ToBinary(int32 num)
 	{
 		stringbin = FString::FromInt(bin);
 	}
-
 	return stringbin;
 }
 

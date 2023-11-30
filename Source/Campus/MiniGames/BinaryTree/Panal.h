@@ -4,12 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Campus/Interfaces/Interaction/Interactable.h"
-#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Panal.generated.h"
 
 UCLASS()
-class CAMPUS_API APanal : public AActor , public IInteractable ,public IBinaryFruit
+class CAMPUS_API APanal : public AActor , public IInteractable , public IBinaryFruit
 {
 	GENERATED_BODY()
 
@@ -45,30 +44,33 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* Eight;
-	
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<FString> RightA;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 RAnswers = 0;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 AnswerN = 0;
+	UStaticMeshComponent* DeleteButton;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<UStaticMeshComponent*> Meshes;
-
-	FTransform OldTransform;
-
-	int32 k = 0;
+	UStaticMeshComponent* AnswerButton;
 
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	TArray<FString> RightAnsw;
+	
+	int32 RightAnswers = 0;
+	
+	int32 AnswerNum = 0;
+	
+	TArray<UStaticMeshComponent*> Meshes;
+	
+	FTransform OldTransform;
+	
+	int32 k = 0;
 
+	TArray<UPrimitiveComponent*> UsedMeshes;
+	void SetupOldLocationAndAnsw();
+	
 public:
 	
 	virtual  void Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharacter* SelfCharacter) override;

@@ -30,27 +30,21 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-
-	virtual void Interact(AActor* InteractedActor, AActor* SelfCharacter) override;
 	
-	int32 GenerateNum();
-
-
 	TArray<FString> AllAnswString {"apple","banana","blue","cherry","grape","orange","pine","straw"}; 
 	
 	int32 FirstAnsw = 0;
 	int32 SecondAnsw = 0;
 	int32 ThirdAnsw = 0;
-
+	
 	FString FirstAnswString = "";
 	FString SecondAnswString = "";
 	FString ThirdAnswString = "";
 	
-
 	FString ToBinary(int32 num);
 
+public:
+
+	virtual void Interact(AActor* InteractedActor, AActor* SelfCharacter) override;
 	
 };

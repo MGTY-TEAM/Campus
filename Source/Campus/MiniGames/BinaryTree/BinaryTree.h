@@ -47,34 +47,21 @@ public:
 
 	UPROPERTY(EditAnywhere);
 	UStaticMeshComponent* Seven;
-
-
-
-	TArray<int32> RightAnswers;
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
+	TArray<FString> AllAnswString {"apple","banana","blue","cherry","grape","orange","pine","straw"};
+	TArray<FString> AnswString;
+
+	TArray<int32> AllIntForRandom {0,1,2,3,4,5,6,7};
+	TArray<int32> IntForRandom;
+	
+	TArray<UStaticMesh*> MeshesObj;
+	TArray<UStaticMeshComponent*> Meshes;
 
 public:
-
-	TArray<ConstructorHelpers::FObjectFinder<UStaticMesh>> Array;
-	
-	int64 ToBinary(int32 num);
-
-	TArray<FString> RightAnswString;
-
-	TArray<FString> AllAnswString {"apple","banana","blue","cherry","grape","orange","pine","straw"};
-	TArray<FString> AnswString ;
-	TArray<int32> AllInt {0,1,2,3,4,5,6,7};
-	TArray<int32> Int;
-
-	
-	TArray<UStaticMesh*> MeshesObj ;
-	TArray<UStaticMeshComponent*> Meshes ;
-
-	void Work();
 	
 	virtual void BinaryTreeI(int32 a, int32 b, int32 c, FString F, FString S, FString T) override;
 

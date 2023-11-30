@@ -31,7 +31,8 @@ ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
 void ABaseFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//Cast<APanal>(UGameplayStatics::GetActorOfClass(GetWorld(), APanal::StaticClass()))->Execute.BindUObject(this , &ABaseFirstPersonCharacter::DelegateWorks);
+	Execute.BindUObject(this , &ABaseFirstPersonCharacter::DelegateWorks);
 }
 
 // Function for interaction
@@ -50,7 +51,6 @@ void ABaseFirstPersonCharacter::Interact()
 	{
 		if (OutHit.bBlockingHit)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, OutHit.GetComponent()->GetName());
 			PickupClass = NewObject<UBasePickup>(this, UBasePickup::StaticClass());
 			IInteractable* PickUp = Cast<IInteractable>(PickupClass);
 			IInteractable* InteractableObject = Cast<IInteractable>(OutHit.GetActor());
@@ -59,15 +59,11 @@ void ABaseFirstPersonCharacter::Interact()
 				if(Cast<APanalRandom>(OutHit.GetActor()))
 				{
 					InteractableObject->Interact(OutHit.GetActor(),this);
-					UE_LOG(LogTemp, Warning, TEXT("Interact Random Panal") );
 				}
 				if (Cast<APanal>(OutHit.GetActor()))
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Interact Panal") );
 					InteractableObject->Interact(OutHit.GetComponent(),this);
-					
 				}
-
 			}
 			if(PickUp != nullptr)
 			{
@@ -123,7 +119,10 @@ void ABaseFirstPersonCharacter::UnPickupOff()
 	CameraComponent->bUsePawnControlRotation = true;
 }
 
-
+void ABaseFirstPersonCharacter::DelegateWorks()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Delegate"));
+}
 
 // Movement and look functions
 void ABaseFirstPersonCharacter::MoveForward(float value)

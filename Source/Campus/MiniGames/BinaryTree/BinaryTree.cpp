@@ -9,9 +9,6 @@
 // Sets default values
 ABinaryTree::ABinaryTree()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
-
 	Tree = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tree"));
 	
 	Zero = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Zero"));
@@ -22,9 +19,6 @@ ABinaryTree::ABinaryTree()
 	Five = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Five"));
 	Six = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Six"));
 	Seven = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Seven"));
-
-	
-
 	
 	Zero->SetupAttachment(Tree);
 	One->SetupAttachment(Tree);
@@ -55,6 +49,7 @@ ABinaryTree::ABinaryTree()
 		MeshesObj.Add(Pine.Object);
 		MeshesObj.Add(Straw.Object);
 	}
+	
 	Meshes.Add(Zero);
 	Meshes.Add(One);
 	Meshes.Add(Two);
@@ -63,12 +58,8 @@ ABinaryTree::ABinaryTree()
 	Meshes.Add(Five);
 	Meshes.Add(Six);
 	Meshes.Add(Seven);
-
 	
 	FRandomStream(time(0));
-	// Array.Add(MeshAsset);
-	//
-	// Zero->SetStaticMesh(Array[0].Object);
 	
 }
 
@@ -76,32 +67,6 @@ ABinaryTree::ABinaryTree()
 void ABinaryTree::BeginPlay()
 {
 	Super::BeginPlay();
-	// APanalRandom* PanelR = NewObject<APanalRandom>(GetWorld(), TEXT("GRE"));
-	// GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::SanitizeFloat(PanelR->FirstAnsw));
-	// PanelR->GetFirst();
-
-	
-}
-
-
-
-int64 ABinaryTree::ToBinary(int32 num)
-{
-	int bin = 0, k = 1;
-
-	while (num)
-	{
-		bin += (num % 2) * k;
-		k *= 10;
-		num /= 2;
-	}
-
-	return bin;
-}
-
-void ABinaryTree::Work()
-{
-	Meshes[1]->SetStaticMesh(MeshesObj[0]);
 }
 
 void ABinaryTree::BinaryTreeI(int32 a, int32 b, int32 c, FString F, FString S, FString T)
@@ -109,44 +74,37 @@ void ABinaryTree::BinaryTreeI(int32 a, int32 b, int32 c, FString F, FString S, F
 	Meshes[a]->SetStaticMesh(MeshesObj[AllAnswString.Find(F)]);
 	Meshes[b]->SetStaticMesh(MeshesObj[AllAnswString.Find(S)]);
 	Meshes[c]->SetStaticMesh(MeshesObj[AllAnswString.Find(T)]);
+
+	IntForRandom.Empty();
 	
-	// Set int array by AllInt
-	for (int i = 0; i < AllInt.Num() ; ++i)
+	// Set Int array by AllInt
+	for (int i = 0; i < AllIntForRandom.Num() ; ++i)
 	{
-		Int.Add(AllInt[i]);
+		IntForRandom.Add(AllIntForRandom[i]);
 	}
 	// Remove using item
-	Int.Remove(AllAnswString.Find(F));
-	Int.Remove(AllAnswString.Find(S));
-	Int.Remove(AllAnswString.Find(T));
+	IntForRandom.Remove(AllAnswString.Find(F));
+	IntForRandom.Remove(AllAnswString.Find(S));
+	IntForRandom.Remove(AllAnswString.Find(T));
 	// Random int array
-	for (int i = 0; i < Int.Num(); ++i)
+	for (int i = 0; i < IntForRandom.Num(); ++i)
 	{
-		Int.Swap(i,FMath::RandRange(0,Int.Num()-1));
+		IntForRandom.Swap(i,FMath::RandRange(0,IntForRandom.Num()-1));
 	}
 
 	int k = 0;
-	
+	// Set static Meshes by array Int 	
 	for (int i = 0; i < Meshes.Num() ; ++i)
 	{
 		if (i!=a and  i!=b and i!=c)
 		{
 
-			Meshes[i]->SetStaticMesh(MeshesObj[Int[k]]);
+			Meshes[i]->SetStaticMesh(MeshesObj[IntForRandom[k]]);
 			k++;
 		}
 	}
 }
 
-// void ABinaryTree::BinaryTreeI(int32 a, int32 b, int32 c,  FString F, FString S, FString T)
-// {
-// 	
-// 	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, Meshes[1]->GetName());
-//
-// 	Work();
-// 	Meshes[b]->SetStaticMesh(MeshesObj[AllAnswString.Find(F)]);
-// 	Meshes[c]->SetStaticMesh(MeshesObj[AllAnswString.Find(F)]);
-// }
 
 
 
