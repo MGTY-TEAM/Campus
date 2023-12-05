@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "TimerManager.h"
-#include "../AI/AIDrone/DroneGuide.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "ChatBox.generated.h"
@@ -12,6 +11,8 @@
 /**
  * 
  */
+
+class AAIAnimDrone;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTeleportationDelegate, int, index);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDarkeningDelegate);
@@ -27,7 +28,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
 	TSubclassOf<UUserWidget> BlueprintWidgetClass;
 
-	ADroneGuide* Drone;
+	AAIAnimDrone* Drone;
 
 	bool bCanRobotMoveToLocation = false;
 	

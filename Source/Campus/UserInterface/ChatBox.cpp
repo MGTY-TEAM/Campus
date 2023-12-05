@@ -2,8 +2,9 @@
 
 
 #include "ChatBox.h"
+
+#include "AIAnimDrone.h"
 #include "Chat_Message.h"
-#include "TimerManager.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"
@@ -23,9 +24,9 @@ bool UChatBox::Initialize()
 	Super::Initialize();
 	
 	
-	if(Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass())))
+	if(Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass())))
 	{
-		Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
+		Drone = Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass()));
 	}
 	
 		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest([this](const FString& Message, const FString& ActionType, const int ActionID)
