@@ -20,15 +20,25 @@ class CAMPUS_API ABaseFirstPersonCharacter : public ACharacter, public IUnPickup
 public:
 	ABaseFirstPersonCharacter();
 	
+	bool IsMovingNow() const { return IsMoving; }
+	bool CanInteract() const { return bCanInteract; }
+
+	void SetArrivalValue(bool value) { bArrived = value; }
+	bool GetArrivalValue() const { return bArrived; }
+	
 	UPROPERTY(Category="Movement", EditDefaultsOnly)
 	float MouseSpeed;
 
 	UPROPERTY(Category="Interaction", EditDefaultsOnly)
 	float InteractionDistance;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> InteractionWidgetClass;
+	
 	UPROPERTY(Category="Interaction", EditDefaultsOnly)
 	AActor* FocusActor;
-
+	
+	
 	UBasePickup* PickupClass;
 
 	UPROPERTY(Category="Input", EditDefaultsOnly)
@@ -54,7 +64,7 @@ protected:
 	virtual void LookRight(float value);
 
 	void FocusOnInteractableActor();
-
+	
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -64,4 +74,9 @@ public:
 
 	void DelegateWorks();
 
+	 
+private:
+	bool IsMoving = false;
+	bool bCanInteract = false;
+	bool bArrived = false;
 };

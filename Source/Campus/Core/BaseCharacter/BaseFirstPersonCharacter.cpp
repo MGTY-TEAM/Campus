@@ -4,11 +4,13 @@
 // Include necessary headers and dependencies.
 #include "BaseFirstPersonCharacter.h"
 
+#include "AIAnimDrone.h"
 #include "BasePickup.h"
 #include "DrawDebugHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "Campus/MiniGames/BinaryTree/Panal.h"
 #include "Campus/MiniGames/BinaryTree/PanalRandom.h"
+#include "Campus/Widgets/InteractionWidget.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -33,6 +35,10 @@ void ABaseFirstPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 	//Cast<APanal>(UGameplayStatics::GetActorOfClass(GetWorld(), APanal::StaticClass()))->Execute.BindUObject(this , &ABaseFirstPersonCharacter::DelegateWorks);
 	Execute.BindUObject(this , &ABaseFirstPersonCharacter::DelegateWorks);
+	
+	if (!GetWorld()) return;
+	auto InteractionWidget = CreateWidget<UInteractionWidget>(GetWorld(), InteractionWidgetClass);
+	if (InteractionWidget) InteractionWidget->AddToViewport();
 }
 
 // Function for interaction
@@ -129,6 +135,7 @@ void ABaseFirstPersonCharacter::DelegateWorks()
 void ABaseFirstPersonCharacter::MoveForward(float value)
 {
 	// Add movement input in the forward direction
+	IsMoving = value > 0.0f;
 	
 	if (bIsEnableInput)
 	{
@@ -138,6 +145,7 @@ void ABaseFirstPersonCharacter::MoveForward(float value)
 
 void ABaseFirstPersonCharacter::MoveRight(float value)
 {
+	IsMoving = value > 0.0f;
 	// Add movement input in the right direction
 	if (bIsEnableInput)
 	{
@@ -202,5 +210,34 @@ void ABaseFirstPersonCharacter::FocusOnInteractableActor()
 void ABaseFirstPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	FVector Start = CameraComponent->GetComponentLocation();
+	FVector ForwardVector = CameraComponent->GetForwardVector();
+	FVector End = ((ForwardVector * InteractionDistance) + Start);
+
+	FHitResult OutHit;
+	FCollisionQueryParams CollisionParams;
+
+	// Perform a line trace
+	if (GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams))
+	{
+		if (OutHit.bBlockingHit)
+		{
+			if (OutHit.GetActor()->IsA<AAIAnimDrone>())
+			{
+				bCanInteract = true;
+				// GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, "Can Interact");
+			}
+			else
+			{
+				bCanInteract = false;
+				// GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, "Can't Interact");
+			}
+		}
+	}
+	else
+	{
+		bCanInteract = false;
+	}
 }
 
