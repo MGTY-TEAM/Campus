@@ -7,6 +7,8 @@
 #include "BasePickup.h"
 #include "DrawDebugHelpers.h"
 #include "Camera/CameraComponent.h"
+#include "Campus/MiniGames/BinaryTree/Panal.h"
+#include "Campus/MiniGames/BinaryTree/PanalRandom.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -29,7 +31,8 @@ ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
 void ABaseFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//Cast<APanal>(UGameplayStatics::GetActorOfClass(GetWorld(), APanal::StaticClass()))->Execute.BindUObject(this , &ABaseFirstPersonCharacter::DelegateWorks);
+	Execute.BindUObject(this , &ABaseFirstPersonCharacter::DelegateWorks);
 }
 
 // Function for interaction
@@ -50,6 +53,18 @@ void ABaseFirstPersonCharacter::Interact()
 		{
 			PickupClass = NewObject<UBasePickup>(this, UBasePickup::StaticClass());
 			IInteractable* PickUp = Cast<IInteractable>(PickupClass);
+			IInteractable* InteractableObject = Cast<IInteractable>(OutHit.GetActor());
+			if (InteractableObject)
+			{
+				if(Cast<APanalRandom>(OutHit.GetActor()))
+				{
+					InteractableObject->Interact(OutHit.GetActor(),this);
+				}
+				if (Cast<APanal>(OutHit.GetActor()))
+				{
+					InteractableObject->Interact(OutHit.GetComponent(),this);
+				}
+			}
 			if(PickUp != nullptr)
 			{
 				if (bIsFirstInteraction)
@@ -64,11 +79,12 @@ void ABaseFirstPersonCharacter::Interact()
 					PickupClass->ConditionalBeginDestroy();
 				}
 			}
+
 		}
 	}
 
 	// Draw a debug line to visualize the line trace
-	//DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5, 0, 1);
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5, 0, 1);
 }
 
 // Function to set up player input
@@ -103,6 +119,10 @@ void ABaseFirstPersonCharacter::UnPickupOff()
 	CameraComponent->bUsePawnControlRotation = true;
 }
 
+void ABaseFirstPersonCharacter::DelegateWorks()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Delegate"));
+}
 
 // Movement and look functions
 void ABaseFirstPersonCharacter::MoveForward(float value)
