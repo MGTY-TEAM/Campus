@@ -12,17 +12,24 @@
 #include "TimerManager.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/SplineComponent.h"
 
 AAIAnimDrone::AAIAnimDrone()
 {
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AAIDroneController::StaticClass();
 
+	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
+	SceneComponent->SetupAttachment(GetRootComponent());
+
+	SplineComponent = CreateDefaultSubobject<USplineComponent>("SplineComponent");
+	SplineComponent->SetupAttachment(GetRootComponent());
+
 	bUseControllerRotationYaw = false;
 	if (GetCharacterMovement())
 	{
 		GetCharacterMovement()->bUseControllerDesiredRotation = true;
-		GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, DroneRotationSpeed, 0.0f);
 	}
 }
 
@@ -32,6 +39,7 @@ void AAIAnimDrone::BeginPlay()
 
 	ChatWidget = CreateWidget<UChatBox>(GetWorld()->GetFirstPlayerController(), BlueprintChatClass);
 
+	StartLocationOfDrone = GetActorLocation();
 	/*if (ChatWidget)
 	{
 		ChatWidget->TeleportationEvent.AddDynamic(this, &AAIAnimDrone::TeleportToLocation);
@@ -56,6 +64,9 @@ void AAIAnimDrone::UnPickupOff()
 	InteractingCharacter = nullptr;
 	StopRotateToPlayerAnim();
 	CloseChat();
+
+	// AAIDroneController* AController = Cast<AAIDroneController>(GetController());
+	// AController->ClearFocus(EAIFocusPriority::Gameplay);
 }
 
 void AAIAnimDrone::StartRotateToPlayerAnim()

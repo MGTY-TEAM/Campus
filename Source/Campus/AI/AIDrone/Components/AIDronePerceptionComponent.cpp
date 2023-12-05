@@ -35,3 +35,26 @@ AActor* UAIDronePerceptionComponent::GetInteractionCharacter() const
 
 	return OurPawn;
 }
+
+bool UAIDronePerceptionComponent::CanISee(AActor* Actor)
+{
+	TArray<AActor*> PerceiveActors;
+	GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceiveActors);
+	if (PerceiveActors.Num() == 0) return false;
+
+	for (const auto PerceiveActor : PerceiveActors)
+	{
+		if (PerceiveActor == Actor)
+		{
+			SetLastLocationOf(Actor);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void UAIDronePerceptionComponent::SetLastLocationOf(AActor* Actor)
+{
+	LastLocationOfInteractionCharacter = Actor->GetActorLocation();
+}

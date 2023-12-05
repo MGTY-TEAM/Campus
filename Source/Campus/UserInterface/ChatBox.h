@@ -15,6 +15,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTeleportationDelegate, int, index);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDarkeningDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageDelegate, int, index);
 
 
 UCLASS()
@@ -56,6 +57,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category="Dispatcher")
 	FDarkeningDelegate DarkeningEvent;
+
+	UPROPERTY(BlueprintAssignable, Category = "Dispatcher")
+	FMessageDelegate SendMessageEvent;
 
 	FTimerHandle TeleportTimer;
 	FTimerDelegate TimerDel;

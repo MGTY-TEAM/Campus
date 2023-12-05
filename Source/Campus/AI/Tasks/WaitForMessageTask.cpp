@@ -6,11 +6,13 @@
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 #include "Campus/UserInterface/ChatBox.h"
 #include "Engine/Engine.h"
+#include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
 
 UWaitForMessageTask::UWaitForMessageTask()
 {
 	NodeName = "Wait For Message";
 	bNotifyTick = true;
+	bNotifyTaskFinished = true;
 }
 
 EBTNodeResult::Type UWaitForMessageTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -25,11 +27,28 @@ EBTNodeResult::Type UWaitForMessageTask::ExecuteTask(UBehaviorTreeComponent& Own
 	
 	if (ChatWidget && !TeleportationEventExist)
 	{
-		ChatWidget->TeleportationEvent.AddDynamic(this, &UWaitForMessageTask::MessageSent);
+		ChatWidget->SendMessageEvent.AddDynamic(this, &UWaitForMessageTask::MessageSent);
 		TeleportationEventExist = true;
 	}
 
 	return EBTNodeResult::InProgress;
+}
+
+void UWaitForMessageTask::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
+{
+	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
+	if (!Blackboard) return;
+
+	AAIAnimDrone* Drone = Cast<AAIAnimDrone>(Blackboard->GetValueAsObject(DroneActorKey.SelectedKeyName));
+	if (!Drone) return;
+
+	ABaseFirstPersonCharacter* Character = Cast<ABaseFirstPersonCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
+	if (!Character) return;
+
+	// Drone->CloseChat();
+	Drone->UnPickupOff();
+	Character->UnPickupOff();
+	Drone->LeadingTheCharacter = true;
 }
 
 void UWaitForMessageTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)

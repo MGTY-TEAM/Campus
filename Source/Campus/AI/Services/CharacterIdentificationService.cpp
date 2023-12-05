@@ -21,9 +21,9 @@ void UCharacterIdentificationService::TickNode(UBehaviorTreeComponent& OwnerComp
 	{
 		Blackboard->SetValueAsObject(CharacterActorKey.SelectedKeyName, Drone->GetInteractingCharacter());
 	}
-	else if (Drone && !Drone->DoesHeInteract())
+	else if (Drone && !Drone->DoesHeInteract() && !Drone->LeadingTheCharacter)
 	{
-		// Blackboard->ClearValue(CharacterActorKey.SelectedKeyName);
+		Blackboard->ClearValue(CharacterActorKey.SelectedKeyName);
 	}
 	
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);

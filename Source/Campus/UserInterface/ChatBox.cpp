@@ -99,7 +99,8 @@ void UChatBox::BotResponse(const FString& Message, const FString& ActionType, co
 	if(ActionType == "Teleport")
 	{
 		ActionPlace = ActionID;
-		TeleportationEvent.Broadcast(ActionPlace);
+		// TeleportationEvent.Broadcast(ActionPlace);
+		SendMessageEvent.Broadcast(ActionPlace);
 	}
 	else if(ActionType == "Walk")
 	{
