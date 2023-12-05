@@ -34,6 +34,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	AActor* GetInteractingCharacter() const { return InteractingCharacter; }
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rotation")
+	float DroneRotationSpeed = 100.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
 	TSubclassOf<UUserWidget> BlueprintChatClass;
 	UPROPERTY(EditDefaultsOnly, Category = "Widget")
@@ -64,11 +67,17 @@ public:
 	UFUNCTION()
 	void DarkeningScreen();
 	void EndDarkeningScreen();
+
+	FVector GetStartLocation() const { return StartLocationOfDrone; }
+
+	virtual void UnPickupOff() override;
+
+	bool LeadingTheCharacter = false;
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void UnPickupOn(AActor* Character) override;
-	virtual void UnPickupOff() override;
+	// virtual void UnPickupOff() override;
 
 	UPROPERTY(EditDefaultsOnly)
 	USceneComponent* SceneComponent;
@@ -83,4 +92,6 @@ protected:
 private:
 	bool InInteraction = false;
 	AActor* InteractingCharacter;
+
+	FVector StartLocationOfDrone = FVector();
 };

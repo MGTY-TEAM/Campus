@@ -4,34 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "WaitForMessageTask.generated.h"
+#include "CheckFirstRequest.generated.h"
 
 UCLASS()
-class CAMPUS_API UWaitForMessageTask : public UBTTaskNode
+class CAMPUS_API UCheckFirstRequest : public UBTTaskNode
 {
 	GENERATED_BODY()
-	
+
 public:
-	UWaitForMessageTask();
+	UCheckFirstRequest();
 
 private:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	virtual void OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult) override;
 
-	bool TeleportationEventExist = false;
-	bool IsSend = false;
-
-	UFUNCTION()
-	void MessageSent(int i = 0);
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
-	FBlackboardKeySelector DroneActorKey;
+	FBlackboardKeySelector SelfActorKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
-	FBlackboardKeySelector CharacterActorKey;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
-	FBlackboardKeySelector ChatWidgetKey;
+	FBlackboardKeySelector BoolNotTheFirstKey;
 
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

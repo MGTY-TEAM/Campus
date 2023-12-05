@@ -12,6 +12,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Engine/Engine.h"
+#include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
+#include "Campus/Widgets/InteractionWidget.h"
 
 // Constructor
 ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
@@ -30,6 +33,9 @@ void ABaseFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (!GetWorld()) return;
+	auto InteractionWidget = CreateWidget<UInteractionWidget>(GetWorld(), InteractionWidgetClass);
+	if (InteractionWidget) InteractionWidget->AddToViewport();
 }
 
 // Function for interaction
@@ -71,6 +77,24 @@ void ABaseFirstPersonCharacter::Interact()
 	//DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5, 0, 1);
 }
 
+void ABaseFirstPersonCharacter::UnInteract()
+{
+	if (!GetArrivalValue()) return;
+
+	PickupClass = NewObject<UBasePickup>(this, UBasePickup::StaticClass());
+	IInteractable* PickUp = Cast<IInteractable>(PickupClass);
+
+	PickUp->EndInteract(FocusActor, this);
+	PickupClass->ConditionalBeginDestroy();
+
+	AAIAnimDrone* const Drone = Cast<AAIAnimDrone>(FocusActor);
+	if (!Drone) return;
+
+	Drone->LeadingTheCharacter = false;
+
+	SetArrivalValue(false);
+}
+
 // Function to set up player input
 void ABaseFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -78,6 +102,7 @@ void ABaseFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* Playe
 
 	// Bind interaction function to an action mapping
 	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &ABaseFirstPersonCharacter::Interact);
+	PlayerInputComponent->BindAction("UnInteraction", IE_Pressed, this, &ABaseFirstPersonCharacter::UnInteract);
 
 	// Bind movement and look functions to axis mappings
 	PlayerInputComponent->BindAxis("ForwardAxis", this, &ABaseFirstPersonCharacter::MoveForward);
@@ -188,5 +213,34 @@ void ABaseFirstPersonCharacter::FocusOnInteractableActor()
 void ABaseFirstPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	FVector Start = CameraComponent->GetComponentLocation();
+	FVector ForwardVector = CameraComponent->GetForwardVector();
+	FVector End = ((ForwardVector * InteractionDistance) + Start);
+
+	FHitResult OutHit;
+	FCollisionQueryParams CollisionParams;
+
+	// Perform a line trace
+	if (GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams))
+	{
+		if (OutHit.bBlockingHit)
+		{
+			if (OutHit.GetActor()->IsA<AAIAnimDrone>())
+			{
+				bCanInteract = true;
+				// GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, "Can Interact");
+			}
+			else
+			{
+				bCanInteract = false;
+				// GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, "Can't Interact");
+			}
+		}
+	}
+	else
+	{
+		bCanInteract = false;
+	}
 }
 

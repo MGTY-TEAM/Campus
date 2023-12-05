@@ -7,6 +7,7 @@
 #include "NavigationSystem.h"
 #include "AI/Navigation/NavAgentInterface.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
+#include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
 #include "Engine/Engine.h"
 
 UMoveAlongThePathTask::UMoveAlongThePathTask()
@@ -17,18 +18,25 @@ UMoveAlongThePathTask::UMoveAlongThePathTask()
 
 EBTNodeResult::Type UMoveAlongThePathTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	MyOwnerComp = &OwnerComp;
 	return RequestMove(OwnerComp, NodeMemory);
 }
 
 void UMoveAlongThePathTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-	if (!IsMoving()) FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	if (!IsMoving())
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
 
 	AAIDroneController* const Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
 	if (!Controller) return;
 
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	if (!Blackboard) return;
+
+	// ABaseFirstPersonCharacter* Character = Cast<ABaseFirstPersonCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
+	// if (!Character) return;
 
 	bool ISeeYou = Blackboard->GetValueAsBool(ISeeYouKey.SelectedKeyName);
 	if (!ISeeYou && !CharacterIsGone)
@@ -39,7 +47,6 @@ void UMoveAlongThePathTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
 	else if (ISeeYou && CharacterIsGone)
 	{
 		RequestMove(OwnerComp, NodeMemory);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, MainRequestID.ToString());
 		CharacterIsGone = false;
 	}
 }
@@ -57,8 +64,20 @@ ANavigationData* UMoveAlongThePathTask::FindNavigationData(UNavigationSystemV1& 
 
 void UMoveAlongThePathTask::FinishMove(const FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
-	if (!Result.IsSuccess()) return;
-	else if (RequestID == MainRequestID) IsMove = false;
+	// if (Result.IsInterrupted()) return;
+	// else if (RequestID == MainRequestID) IsMove = false;
+	if (Result.IsSuccess() && RequestID == MainRequestID)
+	{
+		IsMove = false;
+
+		UBlackboardComponent* Blackboard = MyOwnerComp->GetBlackboardComponent();
+		if (!Blackboard) return;
+
+		ABaseFirstPersonCharacter* Character = Cast<ABaseFirstPersonCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
+		if (!Character) return;
+
+		Character->SetArrivalValue(true);
+	}
 }
 
 EBTNodeResult::Type UMoveAlongThePathTask::RequestMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)

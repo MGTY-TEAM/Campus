@@ -8,16 +8,30 @@
 #include "NavigationSystem.h"
 #include "AI/Navigation/NavAgentInterface.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
+#include "TimerManager.h"
+#include "Engine/World.h"
 #include "Engine/Engine.h"
 
 UFindCharacterTask::UFindCharacterTask()
 {
 	NodeName = "Find Character";
 	bNotifyTick = true;
+	bNotifyTaskFinished = true;
 }
 
 EBTNodeResult::Type UFindCharacterTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	if (!GetWorld()) return EBTNodeResult::Failed;
+
+	OwnerComponent = &OwnerComp;
+	NodeMem = NodeMemory;
+	GetWorld()->GetTimerManager().SetTimer(CharacterLossHandle, this, &UFindCharacterTask::OnTimerFired, WaitingTime, false);
+
+	AAIDroneController* const Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
+	if (!Controller) return EBTNodeResult::Failed;
+
+	Controller->ClearFocus(EAIFocusPriority::Gameplay);
+
 	return RequestMove(OwnerComp, NodeMemory);
 }
 
@@ -25,7 +39,6 @@ void UFindCharacterTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 {
 	if (!IsMoving())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, "ggg");
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 		
@@ -38,9 +51,15 @@ void UFindCharacterTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	bool ISeeYou = Blackboard->GetValueAsBool(ISeeYouKey.SelectedKeyName);
 	if (ISeeYou)
 	{
-		AbortMove(OwnerComp, NodeMemory);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
+}
+
+void UFindCharacterTask::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
+{
+	GetWorld()->GetTimerManager().ClearTimer(CharacterLossHandle);
+	AbortMove(OwnerComp, NodeMemory);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, "ClearTimer");
 }
 
 void UFindCharacterTask::FinishMove(const FAIRequestID RequestID, const FPathFollowingResult& Result)
@@ -105,4 +124,13 @@ ANavigationData* UFindCharacterTask::FindNavigationData(UNavigationSystemV1& Nav
 	}
 
 	return NavSys.GetDefaultNavDataInstance(FNavigationSystem::DontCreate);
+}
+
+void UFindCharacterTask::OnTimerFired()
+{
+	UBlackboardComponent* const Blackboard = OwnerComponent->GetBlackboardComponent();
+	if (!Blackboard) return;
+
+	AbortMove(*OwnerComponent, NodeMem);
+	Blackboard->ClearValue(CharacterActorKey.SelectedKeyName);
 }

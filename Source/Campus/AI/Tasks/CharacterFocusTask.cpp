@@ -2,11 +2,10 @@
 
 
 #include "Campus/AI/Tasks/CharacterFocusTask.h"
-#include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
 #include "Campus/AI/AIDroneController.h"
-#include "Engine/Engine.h"
+#include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
 
 UCharacterFocusTask::UCharacterFocusTask()
 {
@@ -18,10 +17,13 @@ EBTNodeResult::Type UCharacterFocusTask::ExecuteTask(UBehaviorTreeComponent& Own
 	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	if (!Blackboard) return EBTNodeResult::Failed;
 
-	AAIAnimDrone* Drone = Cast<AAIAnimDrone>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
-	if (!Drone) return EBTNodeResult::Failed;
+	AAIDroneController* const Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
+	if (!Controller) return EBTNodeResult::Failed;
+
+	ABaseFirstPersonCharacter* Character = Cast<ABaseFirstPersonCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
+	if (!Character) return EBTNodeResult::Failed;
 		
-	if (Drone->DoesHeInteract()) Drone->StartRotateToPlayerAnim();
+	if (Character) Controller->SetFocus(Character);
 		
 	return EBTNodeResult::Succeeded;
 }

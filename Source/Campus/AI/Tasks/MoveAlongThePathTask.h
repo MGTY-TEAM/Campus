@@ -25,6 +25,9 @@ protected:
 	FBlackboardKeySelector SelfActorKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector CharacterActorKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector DestinationPointKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
@@ -46,4 +49,5 @@ private:
 	void AbortMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
 
 	bool CharacterIsGone = false;
+	UBehaviorTreeComponent* MyOwnerComp;
 };

@@ -38,14 +38,18 @@ public:
 	UPROPERTY(Category="Character", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> InteractionWidgetClass;
+
 	FTimerHandle OnFocusTimer;
 
 	bool bIsFirstInteraction = true;
-	
+
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void Interact();
+	virtual void UnInteract();
 
 	virtual void MoveForward(float value);
 	virtual void MoveRight(float value);
@@ -62,6 +66,13 @@ public:
 	virtual void UnPickupOff() override;
 
 	bool IsMovingNow() const { return IsMoving; }
+	bool CanInteract() const { return bCanInteract; }
+
+	void SetArrivalValue(bool value) { bArrived = value; }
+	bool GetArrivalValue() const { return bArrived; }
+	
 private:
 	bool IsMoving = false;
+	bool bCanInteract = false;
+	bool bArrived = false;
 };
