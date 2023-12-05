@@ -54,15 +54,16 @@ void ABaseFirstPersonCharacter::Interact()
 			PickupClass = NewObject<UBasePickup>(this, UBasePickup::StaticClass());
 			IInteractable* PickUp = Cast<IInteractable>(PickupClass);
 			IInteractable* InteractableObject = Cast<IInteractable>(OutHit.GetActor());
+			
 			if (InteractableObject)
 			{
-				if(Cast<APanalRandom>(OutHit.GetActor()))
+				if(Cast<APanalRandom>(OutHit.GetActor())) ///////////////////////////
 				{
-					InteractableObject->Interact(OutHit.GetActor(),this);
+					InteractableObject->Interact(OutHit.GetActor(),this);///////////////////////////
 				}
-				if (Cast<APanal>(OutHit.GetActor()))
+				if (Cast<APanal>(OutHit.GetActor()))///////////////////////////
 				{
-					InteractableObject->Interact(OutHit.GetComponent(),this);
+					InteractableObject->Interact(OutHit.GetComponent(),this);///////////////////////////
 				}
 			}
 			if(PickUp != nullptr)

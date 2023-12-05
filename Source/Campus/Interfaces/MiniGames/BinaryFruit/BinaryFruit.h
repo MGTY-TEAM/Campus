@@ -10,7 +10,7 @@
 
 // This class does not need to be modified.
 UINTERFACE(BlueprintType)
-class UBinaryFruit : public UInterface 
+class UBinaryFruit : public UInterface ///////////////////////////
 {
 	GENERATED_BODY()
 };
