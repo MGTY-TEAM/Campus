@@ -18,7 +18,9 @@ public class Campus : ModuleRules
 			"HTTP",
 			"Json",
 			"JsonUtilities",
-			"UMG"
+			"UMG",
+			"SlateCore",
+			"Slate"
 		});
 
         PublicIncludePaths.AddRange(new string[]

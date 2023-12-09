@@ -4,15 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "TimerManager.h"
+#include "Types/SlateEnums.h"
 #include "Blueprint/UserWidget.h"
-#include "Kismet/GameplayStatics.h"
+#include "Campus/Chat/MessageInstance.h"
 #include "ChatBox.generated.h"
 
 /**
  * 
  */
 
+class UChatUserComponent;
 class AAIAnimDrone;
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTeleportationDelegate, int, index);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDarkeningDelegate);
@@ -25,6 +28,9 @@ class CAMPUS_API UChatBox : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	void ReceiveMessage(UMessageInstance* MessageInstance);
+	void ConnectChatComponent(UChatUserComponent* ChatUserComponent);
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
 	TSubclassOf<UUserWidget> BlueprintWidgetClass;
 
@@ -67,10 +73,16 @@ public:
 
 	void StartTeleport(int index);
 	int ActionPlace = 0;
+
+	void SetFocusOnTextInput();
 protected:
 	UFUNCTION()
 	virtual bool Initialize();
 
+	
+	UFUNCTION()
+	void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+	
 	UFUNCTION()
 	virtual void NativeConstruct() override;
 
@@ -78,6 +90,7 @@ protected:
 
 	
 	void SendMessageButtonClicked();
+	
 
 	//UFUNCTION()
 	//void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);

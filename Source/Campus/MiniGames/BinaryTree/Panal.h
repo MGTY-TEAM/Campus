@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Campus/Interfaces/Interaction/Interactable.h"
+#include "Campus/Interfaces/Interaction/SubInteractable.h"
 #include "GameFramework/Actor.h"
 #include "Panal.generated.h"
 
 UCLASS()
-class CAMPUS_API APanal : public AActor , public IInteractable , public IBinaryFruit
+class CAMPUS_API APanal : public AActor , public ISubInteractable , public IBinaryFruit
 {
 	GENERATED_BODY()
 
@@ -73,7 +74,7 @@ protected:
 	
 public:
 	
-	virtual  void Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharacter* SelfCharacter) override;
+	virtual  void Interact(UActorComponent* GetComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
 
 	virtual void PanalI(FString a, FString b, FString c) override;;
 };

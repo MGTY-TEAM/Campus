@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "SinglePlayerGameMode.generated.h"
 
+class UChatManager;
 /**
  * 
  */
@@ -16,4 +17,7 @@ class CAMPUS_API ASinglePlayerGameMode : public AGameModeBase
 
 protected:
 	virtual void BeginPlay() override;;
+
+public:
+	UChatManager* MessageManager;
 };

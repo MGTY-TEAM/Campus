@@ -83,66 +83,70 @@ void APanal::SetupOldLocationAndAnsw()
 	UsedMeshes.Empty();
 }
 
-void APanal::Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharacter* SelfCharacter)
+void APanal::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal)
 {
-	// Set Location For Button
-	if (GetComponent != AnswerButton and GetComponent != DeleteButton)
+	if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(InteractComponent))
 	{
-		if (UsedMeshes.Contains(GetComponent))
+		if (PrimitiveComponent != AnswerButton and PrimitiveComponent != DeleteButton)
 		{
-		}
-		else
-		{
-			FVector ComponentLocation = GetComponent->GetComponentLocation();
-			ComponentLocation.X = ComponentLocation.X + 3;
-			GetComponent->SetWorldLocation(ComponentLocation);
-			// Get Component what have vew location
-			UsedMeshes.Add(GetComponent);
-		}
-	}
-	
-	// Add Answer when Answer True
-	if (AnswerNum<=2)
-	{
-		if (Meshes.Contains(GetComponent))
-		{
-			if (RightAnsw[AnswerNum] == GetComponent->GetMaterial(0)->GetName())
+			if (UsedMeshes.Contains(PrimitiveComponent))
 			{
-				RightAnswers++;
-				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::FromInt(AnswerNum));
+			}
+			else
+			{
+				FVector ComponentLocation = PrimitiveComponent->GetComponentLocation();
+				ComponentLocation.X = ComponentLocation.X + 3;
+				PrimitiveComponent->SetWorldLocation(ComponentLocation);
+				// Get Component what have vew location
+				UsedMeshes.Add(PrimitiveComponent);
 			}
 		}
+	
+		// Add Answer when Answer True
+		if (AnswerNum<=2)
+		{
+			if (Meshes.Contains(PrimitiveComponent))
+			{
+				if (RightAnsw[AnswerNum] == PrimitiveComponent->GetMaterial(0)->GetName())
+				{
+					RightAnswers++;
+					GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::FromInt(AnswerNum));
+				}
+			}
+		}
+
+		AnswerNum++;
+	
+		if (PrimitiveComponent == AnswerButton)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("AnswerButton works %d ") , RightAnswers );
+			if (RightAnswers == 3)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("You win"));
+				Execute.ExecuteIfBound();
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("You lose"));
+			}
+			// Setup Buttons on right plase
+			SetupOldLocationAndAnsw();
+		}
+	
+		if (PrimitiveComponent == DeleteButton)
+		{
+			SetupOldLocationAndAnsw();
+		}
+
+		// Reset if Answer too much
+		if (AnswerNum==4)
+		{
+			SetupOldLocationAndAnsw();
+		}
 	}
 
-	AnswerNum++;
-	
-	if (GetComponent == AnswerButton)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AnswerButton works %d ") , RightAnswers );
-		if (RightAnswers == 3)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("You win"));
-			Execute.ExecuteIfBound();
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("You lose"));
-		}
-		// Setup Buttons on right plase
-		SetupOldLocationAndAnsw();
-	}
-	
-	if (GetComponent == DeleteButton)
-	{
-		SetupOldLocationAndAnsw();
-	}
-
-	// Reset if Answer too much
-	if (AnswerNum==4)
-	{
-		SetupOldLocationAndAnsw();
-	}
 }
+
 
 void APanal::PanalI(FString a, FString b, FString c)
 {

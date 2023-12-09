@@ -3,14 +3,21 @@
 
 #include "SinglePlayerGameMode.h"
 
+#include "Campus/Chat/ChatManager.h"
 #include "Engine/World.h"
 
 
 void ASinglePlayerGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	PlayerController->SetInputMode(FInputModeGameOnly());
-	PlayerController->bShowMouseCursor = false;
+	
+	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	{
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		PlayerController->bShowMouseCursor = false;
+		
+		MessageManager = NewObject<UChatManager>();
+	}
+	
+	
 }

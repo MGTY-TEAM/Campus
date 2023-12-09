@@ -24,7 +24,7 @@ public:
 	
 	virtual void Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharacter* SelfCharacter) {}
 	
-	bool bCanInteract;
+	bool bCanInteract = true;
 
 	virtual void EndInteract(AActor* FocusActor, AActor* SelfCharacter) {};
 };

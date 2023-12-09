@@ -16,18 +16,20 @@ AMainMenuGameMode::AMainMenuGameMode()
 void AMainMenuGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UWorld * World = GetWorld();
-	World->GetFirstPlayerController()->bShowMouseCursor = true;
-	World->GetFirstPlayerController()->SetInputMode(FInputModeUIOnly());
-
-	UGameplayStatics::GetGameInstance(World);
-
-	MainMenuWidget = CreateWidget<UUserWidget>(World, MainMenuWidgetClass);
-
-	if (MainMenuWidget)
+	
+	if (UWorld * World = GetWorld())
 	{
-		MainMenuWidget->AddToViewport();
+		World->GetFirstPlayerController()->bShowMouseCursor = true;
+		World->GetFirstPlayerController()->SetInputMode(FInputModeUIOnly());
+
+		UGameplayStatics::GetGameInstance(World);
+
+		MainMenuWidget = CreateWidget<UUserWidget>(World, MainMenuWidgetClass);
+
+		if (MainMenuWidget)
+		{
+			MainMenuWidget->AddToViewport();
+		}
 	}
 }
 
