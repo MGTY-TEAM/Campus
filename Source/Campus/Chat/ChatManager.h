@@ -14,15 +14,14 @@ UCLASS()
 class CAMPUS_API UChatManager : public UObject
 {
 	GENERATED_BODY()
+
+	static TMap<FName, UChatUserComponent*> RegisteredUsers;
+	static bool ValidateUserID(const FName& UserID);
 	
-	UChatManager();
-	
-	TMap<FName, UChatUserComponent*> RegisteredUsers;
 public:
-	static UChatManager& Get();
 	
-	bool RegisterUser(const FName& UserID, UChatUserComponent* User);
-	bool ValidateUserID(const FName& UserID) const;
-	void SendChatMessage(const FName& SenderID, const FName& ReceiverID, const FText& MessageContent);
-	TArray<FName> GetUserListWithoutSelf(const FName& SelfUserID) const;
+	static bool RegisterUser(const FName& UserID, UChatUserComponent* User);
+
+	static void SendChatMessage(const FName& SenderID, const FName& ReceiverID, const FText& MessageContent);
+	static TArray<FName> GetUserListWithoutSelf(const FName& SelfUserID);
 };

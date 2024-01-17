@@ -5,6 +5,7 @@
 
 #include "AIAnimDrone.h"
 #include "Chat_Message.h"
+#include "Campus/Chat/ChatManager.h"
 #include "Campus/Chat/ChatUserComponent.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Components/Button.h"
@@ -59,11 +60,11 @@ bool UChatBox::Initialize()
 
 void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
-	if (CommitMethod == ETextCommit::OnEnter)
+	if (CommitMethod == ETextCommit::OnEnter && !Text.IsEmpty())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Button pressed"));
+		UChatManager::SendChatMessage("Bot", "DefaultCharacterName", Text);
+		SendMessage(Text, FText::FromString("DefaultCharacterName"));
 	}
-	
 }
 
 void UChatBox::NativeConstruct()
@@ -89,7 +90,7 @@ void UChatBox::SendMessageButtonClicked()
 			}, StringRequest, Drone->BotURL);
 		SendMessage(SendMessage_TextBox->GetText(), FText::FromString("User"));
 		SendMessage_Button->SetIsEnabled(false);
-	};
+	}
 }
 
 
@@ -109,6 +110,8 @@ void UChatBox::SendMessage(FText Message, FText Sender)
 		WidgetInstance->Message->SetText(Message);
 		WidgetInstance->Sender->SetText(Sender);
 		SendMessage_TextBox->SetText(FText::GetEmpty());
+
+		UChatManager::SendChatMessage("DefaultCharacterName", "Bot", Message);
 	}
 }
 

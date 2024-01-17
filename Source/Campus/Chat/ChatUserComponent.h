@@ -7,7 +7,7 @@
 #include "Components/ActorComponent.h"
 #include "ChatUserComponent.generated.h"
 
-DECLARE_DELEGATE_OneParam(FOnMessageReceived, UMessageInstance*, Message)
+DECLARE_DELEGATE_OneParam(FOnMessageReceived, UMessageInstance*)
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CAMPUS_API UChatUserComponent : public UActorComponent

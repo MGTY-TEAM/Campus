@@ -10,21 +10,31 @@
 #include "Engine/Engine.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TimerManager.h"
+#include "Campus/Chat/ChatManager.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SplineComponent.h"
+#include "Campus/Chat/ChatUserComponent.h"
+#include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 
 AAIAnimDrone::AAIAnimDrone()
 {
+
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AAIDroneController::StaticClass();
 
+	if (!ChatUserComponent)
+	{
+		ChatUserComponent = CreateDefaultSubobject<UChatUserComponent>("ChatUserComponent");
+	}
+	
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
 	SceneComponent->SetupAttachment(GetRootComponent());
 
 	SplineComponent = CreateDefaultSubobject<USplineComponent>("SplineComponent");
 	SplineComponent->SetupAttachment(GetRootComponent());
-
+	
+	
 	bUseControllerRotationYaw = false;
 	if (GetCharacterMovement())
 	{
@@ -33,6 +43,7 @@ AAIAnimDrone::AAIAnimDrone()
 	}
 }
 
+
 void AAIAnimDrone::BeginPlay()
 {
 	Super::BeginPlay();
@@ -40,6 +51,13 @@ void AAIAnimDrone::BeginPlay()
 	ChatWidget = CreateWidget<UChatBox>(GetWorld()->GetFirstPlayerController(), BlueprintChatClass);
 
 	StartLocationOfDrone = GetActorLocation();
+	
+	if (UChatManager::RegisterUser("Bot", ChatUserComponent))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BotRegistered"));
+		ChatUserComponent->OnMessageReceived.BindUObject(this, &AAIAnimDrone::ReceiveMessage);
+	}
+	
 	/*if (ChatWidget)
 	{
 		ChatWidget->TeleportationEvent.AddDynamic(this, &AAIAnimDrone::TeleportToLocation);
@@ -47,6 +65,11 @@ void AAIAnimDrone::BeginPlay()
 	}*/
 }
 
+
+void AAIAnimDrone::ReceiveMessage(UMessageInstance* MessageInstance)
+{
+	MessageInstance->GetMessageInfo().Get<2>();
+}
 
 void AAIAnimDrone::UnPickupOn(AActor* Character)
 {
@@ -68,6 +91,16 @@ void AAIAnimDrone::UnPickupOff()
 	// AAIDroneController* AController = Cast<AAIDroneController>(GetController());
 	// AController->ClearFocus(EAIFocusPriority::Gameplay);
 }
+
+
+TTuple<FString, FString, int> AAIAnimDrone::GetResponceMessage(UMessageInstance* MessageInstance)
+{
+	
+
+	return TTuple<FString, FString, int>();
+}
+
+
 
 void AAIAnimDrone::StartRotateToPlayerAnim()
 {

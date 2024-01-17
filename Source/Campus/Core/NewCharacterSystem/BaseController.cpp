@@ -10,35 +10,60 @@
 ABaseController::ABaseController()
 {
 	ChatUserComponent = CreateDefaultSubobject<UChatUserComponent>("ChatUserComponent");
-
-	UChatManager& ChatManager = UChatManager::Get();
-	ChatUserComponent->SetUserID("DefaultCharacterName");
-	if (ChatManager.RegisterUser("DefaultCharacterName", ChatUserComponent)){}
-	
-	if (ABaseHUD* BaseHUD = Cast<ABaseHUD>(MyHUD))
+	if (ChatUserComponent)
 	{
-		BaseHUD->SetupChat(ChatUserComponent);	
+		ChatUserComponent->SetUserID("DefaultCharacterName");
 	}
 }
 
 void ABaseController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetInputMode(FInputModeGameOnly());
 	
-	SetInputMode(FInputModeGameAndUI());
+	if (ChatUserComponent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Chat user component "));
+		if (UChatManager::RegisterUser("DefaultCharacterName", ChatUserComponent))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("User Registered"));
+			if (MyHUD)
+			{
+				BaseHUD = Cast<ABaseHUD>(MyHUD);
+				BaseHUD->SetupChat(ChatUserComponent);
+
+				UE_LOG(LogTemp, Warning, TEXT("Setup Hud"));
+			}
+		}
+
+		ChatUserComponent->OnMessageReceived.BindUObject(this, &ABaseController::ReceiveMessage);
+	}
+}
+
+void ABaseController::ReceiveMessage(UMessageInstance* MessageInstance)
+{
+	
+}
+
+void ABaseController::SpawnDefaultHUD()
+{
+	Super::SpawnDefaultHUD();
 }
 
 void ABaseController::OnChatButtonClicked()
 {
-	if(ABaseHUD* BaseHUD = Cast<ABaseHUD>(MyHUD))
+	if (BaseHUD)
 	{
 		BaseHUD->SwitchChatState();
+
+		UE_LOG(LogTemp, Warning, TEXT("BaseHudSwitch"));
 	}
 }
 
 void ABaseController::OnEscapeMenuButtonClicked()
 {
-	if (ABaseHUD* BaseHUD = Cast<ABaseHUD>(MyHUD))
+	if (BaseHUD)
 	{
 		BaseHUD->SwitchEscapeMenuState();
 	}

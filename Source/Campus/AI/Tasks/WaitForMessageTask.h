@@ -6,6 +6,9 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "WaitForMessageTask.generated.h"
 
+class AAIAnimDrone;
+class UMessageInstance;
+
 UCLASS()
 class CAMPUS_API UWaitForMessageTask : public UBTTaskNode
 {
@@ -22,7 +25,10 @@ private:
 	bool IsSend = false;
 
 	UFUNCTION()
-	void MessageSent(int i = 0);
+	void MessageSent(UMessageInstance* MessageInstance);
+
+	AAIAnimDrone* Drone;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector DroneActorKey;

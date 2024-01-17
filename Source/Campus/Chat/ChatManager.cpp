@@ -6,26 +6,19 @@
 #include "MessageInstance.h"
 #include "ChatUserComponent.h"
 
-UChatManager::UChatManager() {}
-
-UChatManager& UChatManager::Get()
-{
-	// Статический экземпляр класса
-	static UChatManager Instance;
-	return Instance;
-}
+TMap<FName, UChatUserComponent*> UChatManager::RegisteredUsers = TMap<FName, UChatUserComponent*>();
 
 bool UChatManager::RegisterUser(const FName& UserID, UChatUserComponent* User)
 {
-	if (!UserID.IsNone() && User)
+	if (!UserID.IsNone() && !ValidateUserID(UserID) && User)
 	{
-		RegisteredUsers[UserID] = User;
+		RegisteredUsers.Add(UserID, User);
 		return true;
 	}
 	return false;
 }
 
-bool UChatManager::ValidateUserID(const FName& UserID) const
+bool UChatManager::ValidateUserID(const FName& UserID) 
 {
 	return RegisteredUsers.Contains(UserID);
 }
@@ -45,10 +38,9 @@ void UChatManager::SendChatMessage(const FName& SenderID, const FName& ReceiverI
 	}
 }
 
-TArray<FName> UChatManager::GetUserListWithoutSelf(const FName& SelfUserID) const
+TArray<FName> UChatManager::GetUserListWithoutSelf(const FName& SelfUserID) 
 {
 	TArray<FName> UserID;
 	RegisteredUsers.GetKeys(UserID);
-	// TO:DO
 	return UserID;
 }

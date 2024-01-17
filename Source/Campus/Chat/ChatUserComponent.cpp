@@ -30,9 +30,7 @@ void UChatUserComponent::ReceiveMessage(UMessageInstance* MessageInstance)
 
 void UChatUserComponent::SendMessage(const FName& ReceiverID, const FText& Message)
 {
-	UChatManager& ChatManager = UChatManager::Get();
-	
-	ChatManager.SendChatMessage(UserID, ReceiverID, Message);
+	UChatManager::SendChatMessage(UserID, ReceiverID, Message);
 }
 
 

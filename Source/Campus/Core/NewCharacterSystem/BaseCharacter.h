@@ -40,6 +40,7 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category="Mouse Settings")
 	float MouseSens = 0.4f;
+	
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Campus/AI/AIDrone/CoreDrone/PlayerInteractionDrone.h"
+#include "Campus/Chat/MessageInstance.h"
 #include "AIAnimDrone.generated.h"
 
 class UBehaviorTree;
@@ -13,6 +14,8 @@ class ATeleportationPlane;
 class UAIPerceptionStimuliSourceComponent;
 class USceneComponent;
 class USplineComponent;
+class UChatUserComponent;
+
 
 UCLASS()
 class CAMPUS_API AAIAnimDrone : public APlayerInteractionDrone
@@ -22,6 +25,10 @@ class CAMPUS_API AAIAnimDrone : public APlayerInteractionDrone
 public:
 	AAIAnimDrone();
 
+
+	UPROPERTY(EditDefaultsOnly)
+	UChatUserComponent* ChatUserComponent;
+	
 	UPROPERTY(EditAnywhere, Category = "RobotAnimation")
 	float RotationSpeed = 1;
 
@@ -71,9 +78,14 @@ public:
 	FVector GetStartLocation() const { return StartLocationOfDrone; }
 
 	virtual void UnPickupOff() override;
+	TTuple<FString, FString, int> GetResponceMessage(UMessageInstance* MessageInstance);
 
 	bool LeadingTheCharacter = false;
 protected:
+
+	UFUNCTION()
+	void ReceiveMessage(UMessageInstance* MessageInstance);
+	
 	virtual void BeginPlay() override;
 
 	virtual void UnPickupOn(AActor* Character) override;
