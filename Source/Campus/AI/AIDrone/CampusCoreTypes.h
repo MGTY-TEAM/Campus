@@ -3,7 +3,7 @@
 UENUM(BlueprintType)
 enum class EActionType : uint8
 {
-	Idle			UMETA(DisplayName = "Idle"),
-	GoHome			UMETA(DisplayName = "GoHome"),
-	Pickup			UMETA(DisplayName = "Pickup")
+	Teleport		UMETA(DisplayName = "Teleport"),
+	Walk			UMETA(DisplayName = "Walk"),
+	ViewInfo		UMETA(DisplayName = "ViewInfo")
 };
