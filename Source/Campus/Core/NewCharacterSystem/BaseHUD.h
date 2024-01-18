@@ -21,8 +21,7 @@ public:
 	
 	void SwitchChatState();
 	void SwitchEscapeMenuState();
-
-	void MessageReceived(UMessageInstance* MessageInstance);
+	
 	void SetupChat(UChatUserComponent* ChatUserComponent);
 protected:
 	

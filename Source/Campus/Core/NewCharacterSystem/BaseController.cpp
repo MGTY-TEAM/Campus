@@ -21,6 +21,7 @@ void ABaseController::BeginPlay()
 	Super::BeginPlay();
 
 	SetInputMode(FInputModeGameOnly());
+
 	
 	if (ChatUserComponent)
 	{
@@ -36,15 +37,10 @@ void ABaseController::BeginPlay()
 				UE_LOG(LogTemp, Warning, TEXT("Setup Hud"));
 			}
 		}
-
-		ChatUserComponent->OnMessageReceived.BindUObject(this, &ABaseController::ReceiveMessage);
+		
 	}
 }
 
-void ABaseController::ReceiveMessage(UMessageInstance* MessageInstance)
-{
-	
-}
 
 void ABaseController::SpawnDefaultHUD()
 {

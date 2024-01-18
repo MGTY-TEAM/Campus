@@ -69,12 +69,17 @@ void UWaitForMessageTask::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint
 
 void UWaitForMessageTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-	if (IsSend) FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	if (IsSend)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		IsSend = false;
+	}
+	
 }
 
 void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 {
-	if (Drone)
+	/*if (Drone)
 	{
 		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
 			[this](const FString& Message, const FString& ActionType, const int& ActionID)
@@ -90,5 +95,5 @@ void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 					IsSend = true;
 				}
 			}, MessageInstance->GetMessageInfo().Get<2>().ToString(), Drone->BotURL);
-	}
+	}*/
 }

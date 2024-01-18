@@ -17,7 +17,7 @@ void UCatchMessageService::OnSearchStart(FBehaviorTreeSearchData& SearchData)
 	{
 		Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, (uint8)SActionType);
 	}
-	// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "OnSearchStart");
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "OnSearchStart");
 	AAIController* Controller = SearchData.OwnerComp.GetAIOwner();
 	if (Controller)
 	{
@@ -27,11 +27,12 @@ void UCatchMessageService::OnSearchStart(FBehaviorTreeSearchData& SearchData)
 			Drone->ChatUserComponent->OnMessageReceived.BindUObject(this, &UCatchMessageService::MessageSent);
 		}
 	}
+	
 }
 
 void UCatchMessageService::MessageSent(UMessageInstance* MessageInstance)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, MessageInstance->GetMessageInfo().Get<2>().ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Message to bot : %s "), *MessageInstance->GetMessageInfo().Get<2>().ToString());
 	if (Drone)
 	{
 		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
@@ -39,14 +40,15 @@ void UCatchMessageService::MessageSent(UMessageInstance* MessageInstance)
 			{
 				if (!Message.IsEmpty())
 				{
+					UE_LOG(LogTemp, Warning,TEXT("API Message : %s"), *Message);
 					if (ActionType == "Teleport")
 					{
 						int ActionPlace = ActionID;
-						// Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, (uint8)EActionType::Teleport);
-						// SActionType = EActionType::Teleport;
+						Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Teleport));
+						SActionType = EActionType::Teleport;
 					}
 
-					UChatManager::SendChatMessage("Bot", "DefaultCharacterName", FText::FromString(Message));
+					Drone->ChatUserComponent->SendMessage("Bot", FText::FromString(Message));
 				}
 			}, MessageInstance->GetMessageInfo().Get<2>().ToString(), Drone->BotURL);
 	}

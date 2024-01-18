@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+class USpringArmComponent;
 class UChatUserComponent;
 class UCameraComponent;
 class UInteractionComponent;
@@ -34,8 +35,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	UInteractionComponent* InteractionComponent;
 
+	UPROPERTY(EditDefaultsOnly)
+	USpringArmComponent* SpringArmComponent;
 	
-	UPROPERTY(EditDefaultsOnly, Category="Camera")
+	UPROPERTY(BlueprintReadWrite, Category="Camera")
 	UCameraComponent* CameraComponent;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Mouse Settings")

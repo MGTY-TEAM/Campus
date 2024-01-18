@@ -28,6 +28,9 @@ class CAMPUS_API UChatBox : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	
+	UChatUserComponent* OwnerChatUserComponent;
+	
 	void ReceiveMessage(UMessageInstance* MessageInstance);
 	void ConnectChatComponent(UChatUserComponent* ChatUserComponent);
 	
@@ -86,16 +89,10 @@ protected:
 	UFUNCTION()
 	virtual void NativeConstruct() override;
 
-	UFUNCTION()
-
-	
-	void SendMessageButtonClicked();
-	
-
 	//UFUNCTION()
 	//void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 
-	void SendMessage(FText Message, FText Sender);
+	void UpdateChatMessages(FText Message, FText Sender);
 
 	void BotResponse(const FString& Message, const FString& ActionType, const int& ActionID);
 

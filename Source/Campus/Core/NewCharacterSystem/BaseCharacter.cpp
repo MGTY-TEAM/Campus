@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Campus/Chat/ChatManager.h"
 #include "Campus/Chat/ChatUserComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "LocalComponents/InteractionComponent.h"
 
 
@@ -16,11 +17,13 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
-	
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 
-	CameraComponent->SetupAttachment(RootComponent);
+	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	SpringArmComponent->SetupAttachment(RootComponent);
 	
 
 }

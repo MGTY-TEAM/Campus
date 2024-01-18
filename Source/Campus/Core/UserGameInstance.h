@@ -51,6 +51,7 @@ protected:
 	void OnSessionsFind(bool Succeeded);
 	void OnJoinSessionComplete(FName Name, EOnJoinSessionCompleteResult::Type Arg);
 	virtual void Init() override;
+	
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 private:
 	IOnlineSessionPtr M_SessionInterface;

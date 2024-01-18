@@ -24,12 +24,11 @@ class CAMPUS_API ABaseController : public APlayerController
 
 	UPROPERTY(EditDefaultsOnly, Category = "Classes")
 	TSubclassOf<ABaseHUD> BaseHudClass;
+	
 public :
 
 	ABaseController();
 protected:
-	UFUNCTION()
-	void ReceiveMessage(UMessageInstance* MessageInstance);
 	virtual void BeginPlay() override;
 	virtual void SpawnDefaultHUD() override;
 

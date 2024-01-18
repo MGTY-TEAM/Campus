@@ -19,14 +19,18 @@
 void UChatBox::ConnectChatComponent(UChatUserComponent* ChatUserComponent)
 {
 	ChatUserComponent->OnMessageReceived.BindUObject(this, &UChatBox::ReceiveMessage);
+
+	OwnerChatUserComponent = ChatUserComponent;
 }
 
 void UChatBox::ReceiveMessage(UMessageInstance* MessageInstance)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Catch Chat from bot message : %s"), *MessageInstance->GetMessageInfo().Get<2>().ToString());
+	
 	TTuple<FName, FName, FText> MessageInfo = MessageInstance->GetMessageInfo();
-	MessageInfo.Get<0>();// Получение имени отправителя
-	MessageInfo.Get<1>();// Имя Получателя
-	MessageInfo.Get<2>();// Сообщение
+
+	UpdateChatMessages(MessageInfo.Get<2>(),FText::FromName(MessageInfo.Get<0>()));
+	
 }
 ////////////////////
 void UChatBox::StartTeleport(int index)
@@ -42,8 +46,7 @@ void UChatBox::SetFocusOnTextInput()
 bool UChatBox::Initialize()
 {
 	Super::Initialize();
-
-
+	
 	if (Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass())))
 	{
 		Drone = Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass()));
@@ -51,50 +54,33 @@ bool UChatBox::Initialize()
 		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
 			[this](const FString& Message, const FString& ActionType, const int ActionID)
 			{
-				SendMessage(FText::FromString(Message), FText::FromString("AI"));
+				UpdateChatMessages(FText::FromString(Message), FText::FromString("Bot"));
 				UE_LOG(LogTemp, Warning, TEXT("SetRequest"));
 			}, "/start", Drone->BotURL);
 	}
 	return true;
 }
 
-void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
-{
-	if (CommitMethod == ETextCommit::OnEnter && !Text.IsEmpty())
-	{
-		UChatManager::SendChatMessage("Bot", "DefaultCharacterName", Text);
-		SendMessage(Text, FText::FromString("DefaultCharacterName"));
-	}
-}
+
 
 void UChatBox::NativeConstruct()
 {
 	//SendMessage_TextBox->OnTextCommitted.AddDynamic(this, &UChatBox::OnTextBoxTextCommitted);
-	SendMessage_Button->OnClicked.AddDynamic(this, &UChatBox::SendMessageButtonClicked);
 	SendMessage_TextBox->OnTextCommitted.AddDynamic(this, &UChatBox::OnTextBoxTextCommitted);
 	
 	Super::NativeConstruct();
 }
 
-void UChatBox::SendMessageButtonClicked()
+void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Button pressed"));
-
-	FString StringRequest = SendMessage_TextBox->GetText().ToString();
-	if (!StringRequest.IsEmpty())
+	if (CommitMethod == ETextCommit::OnEnter && !Text.IsEmpty())
 	{
-		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
-			[this](const FString& Message, const FString& ActionType, const int& ActionID)
-			{
-				BotResponse(Message, ActionType, ActionID);
-			}, StringRequest, Drone->BotURL);
-		SendMessage(SendMessage_TextBox->GetText(), FText::FromString("User"));
-		SendMessage_Button->SetIsEnabled(false);
+		OwnerChatUserComponent->SendMessage("Bot", Text);
+		UpdateChatMessages(Text, FText::FromString("DefaultCharacterName"));
 	}
 }
 
-
-void UChatBox::SendMessage(FText Message, FText Sender)
+void UChatBox::UpdateChatMessages(FText Message, FText Sender)
 {
 	UChat_Message* WidgetInstance = CreateWidget<UChat_Message>(GetWorld()->GetFirstPlayerController(),
 	                                                            BlueprintWidgetClass);
@@ -110,30 +96,6 @@ void UChatBox::SendMessage(FText Message, FText Sender)
 		WidgetInstance->Message->SetText(Message);
 		WidgetInstance->Sender->SetText(Sender);
 		SendMessage_TextBox->SetText(FText::GetEmpty());
-
-		UChatManager::SendChatMessage("DefaultCharacterName", "Bot", Message);
 	}
 }
 
-void UChatBox::BotResponse(const FString& Message, const FString& ActionType, const int& ActionID)
-{
-	UE_LOG(LogRequests, Log, TEXT("GET Request Result: %s"), *Message);
-
-	SendMessage(FText::FromString(Message), FText::FromString("AI"));
-	
-	Chat_ScrollBox->ScrollToEnd();
-	SendMessage_Button->SetIsEnabled(true);
-	
-	if (ActionType == "Teleport")
-	{
-		ActionPlace = ActionID;
-		// TeleportationEvent.Broadcast(ActionPlace);
-		SendMessageEvent.Broadcast(ActionPlace);
-	}
-	else if (ActionType == "Walk")
-	{
-	}
-	else if (ActionType == "ViewInfo")
-	{
-	}
-}

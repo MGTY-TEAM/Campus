@@ -55,7 +55,6 @@ void AAIAnimDrone::BeginPlay()
 	if (UChatManager::RegisterUser("Bot", ChatUserComponent))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("BotRegistered"));
-		ChatUserComponent->OnMessageReceived.BindUObject(this, &AAIAnimDrone::ReceiveMessage);
 	}
 	
 	/*if (ChatWidget)
@@ -63,12 +62,6 @@ void AAIAnimDrone::BeginPlay()
 		ChatWidget->TeleportationEvent.AddDynamic(this, &AAIAnimDrone::TeleportToLocation);
 		ChatWidget->DarkeningEvent.AddDynamic(this, &AAIAnimDrone::DarkeningScreen);
 	}*/
-}
-
-
-void AAIAnimDrone::ReceiveMessage(UMessageInstance* MessageInstance)
-{
-	MessageInstance->GetMessageInfo().Get<2>();
 }
 
 void AAIAnimDrone::UnPickupOn(AActor* Character)
@@ -91,16 +84,6 @@ void AAIAnimDrone::UnPickupOff()
 	// AAIDroneController* AController = Cast<AAIDroneController>(GetController());
 	// AController->ClearFocus(EAIFocusPriority::Gameplay);
 }
-
-
-TTuple<FString, FString, int> AAIAnimDrone::GetResponceMessage(UMessageInstance* MessageInstance)
-{
-	
-
-	return TTuple<FString, FString, int>();
-}
-
-
 
 void AAIAnimDrone::StartRotateToPlayerAnim()
 {

@@ -78,14 +78,9 @@ public:
 	FVector GetStartLocation() const { return StartLocationOfDrone; }
 
 	virtual void UnPickupOff() override;
-	TTuple<FString, FString, int> GetResponceMessage(UMessageInstance* MessageInstance);
 
 	bool LeadingTheCharacter = false;
 protected:
-
-	UFUNCTION()
-	void ReceiveMessage(UMessageInstance* MessageInstance);
-	
 	virtual void BeginPlay() override;
 
 	virtual void UnPickupOn(AActor* Character) override;
