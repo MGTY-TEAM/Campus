@@ -30,6 +30,6 @@ void UEnvQueryTest_ChooseAPlace::RunTest(FEnvQueryInstance& QueryInstance) const
 
 	for (FEnvQueryInstance::ItemIterator It(this, QueryInstance); It; ++It)
 	{
-		It.SetScore(TestPurpose, FilterType, It.GetIndex() == Drone->ChatWidget->ActionPlace, Switch);
+		It.SetScore(TestPurpose, FilterType, It.GetIndex() == 1, Switch);
 	}
 }

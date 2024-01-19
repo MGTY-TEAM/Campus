@@ -20,7 +20,7 @@ void ABaseHUD::BeginPlay()
 
 void ABaseHUD::SwitchChatState()
 {
-	if (ChatBox)
+	/*if (ChatBox)
 	{
 		if (ChatBox->IsInViewport())
 		{
@@ -32,7 +32,7 @@ void ABaseHUD::SwitchChatState()
 			
 			ChatBox->SetFocusOnTextInput();
 		}
-	}
+	}*/
 }
 
 void ABaseHUD::SwitchEscapeMenuState()
@@ -47,6 +47,7 @@ void ABaseHUD::SetupChat(UChatUserComponent* ChatUserComponent)
 	if (!ChatBox)
 	{
 		ChatBox = Cast<UChatBox>(CreateWidget(GetWorld(), ChatBoxClass));
+		ChatBox->AddToViewport();
 		ChatBox->ConnectChatComponent(ChatUserComponent);
 	}
 }

@@ -20,8 +20,9 @@ class CAMPUS_API IInteractable
 	GENERATED_BODY()
 
 public:
-	virtual void Interact(AActor* InteractedActor, AActor* SelfCharacter) {}
 	
+	virtual void Interact(AActor* InteractedActor, AActor* SelfCharacter) {}
+
 	virtual void Interact(UPrimitiveComponent* GetComponent, ABaseFirstPersonCharacter* SelfCharacter) {}
 	
 	bool bCanInteract = true;

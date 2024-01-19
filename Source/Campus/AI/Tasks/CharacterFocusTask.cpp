@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "Campus/AI/AIDroneController.h"
 #include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
+#include "Campus/Core/NewCharacterSystem/BaseCharacter.h"
 
 UCharacterFocusTask::UCharacterFocusTask()
 {
@@ -20,7 +21,7 @@ EBTNodeResult::Type UCharacterFocusTask::ExecuteTask(UBehaviorTreeComponent& Own
 	AAIDroneController* const Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
 	if (!Controller) return EBTNodeResult::Failed;
 
-	ABaseFirstPersonCharacter* Character = Cast<ABaseFirstPersonCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
+	ABaseCharacter* Character = Cast<ABaseCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
 	if (!Character) return EBTNodeResult::Failed;
 		
 	if (Character) Controller->SetFocus(Character);

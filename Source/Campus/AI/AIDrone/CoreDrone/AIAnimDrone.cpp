@@ -16,6 +16,7 @@
 #include "Components/SplineComponent.h"
 #include "Campus/Chat/ChatUserComponent.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
+#include "Kismet/GameplayStatics.h"
 
 AAIAnimDrone::AAIAnimDrone()
 {

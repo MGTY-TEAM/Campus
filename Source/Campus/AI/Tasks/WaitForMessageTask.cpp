@@ -4,6 +4,7 @@
 #include "Campus/AI/Tasks/WaitForMessageTask.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
+#include "Campus/AI/Services/CatchMessageService.h"
 #include "Campus/Chat/ChatManager.h"
 #include "Campus/Chat/ChatUserComponent.h"
 #include "Campus/UserInterface/ChatBox.h"
@@ -15,25 +16,22 @@
 UWaitForMessageTask::UWaitForMessageTask()
 {
 	NodeName = "Wait For Message";
-	bNotifyTick = true;
+	bNotifyTick = false;
 	bNotifyTaskFinished = true;
+	IsSend = false;
 }
 
 EBTNodeResult::Type UWaitForMessageTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	IsSend = false;
 
-	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
-	if (!Blackboard) EBTNodeResult::Failed;
-
-	UChatBox* ChatWidget = Cast<UChatBox>(Blackboard->GetValueAsObject(ChatWidgetKey.SelectedKeyName));
-	if (!ChatWidget) return EBTNodeResult::Failed;
-
-	if (ChatWidget && !TeleportationEventExist)
+	Blackboard = OwnerComp.GetBlackboardComponent();
+	if (Blackboard)
 	{
-		/*ChatWidget->SendMessageEvent.AddDynamic(this, &UWaitForMessageTask::MessageSent);*/
-		TeleportationEventExist = true;
+		Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(SActionType));
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, "OnSearchStart");
+	
 	Drone = Cast<AAIAnimDrone>(Blackboard->GetValueAsObject(DroneActorKey.SelectedKeyName));
 
 	if (Drone)
@@ -47,53 +45,35 @@ EBTNodeResult::Type UWaitForMessageTask::ExecuteTask(UBehaviorTreeComponent& Own
 void UWaitForMessageTask::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
                                          EBTNodeResult::Type TaskResult)
 {
-	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
-	if (!Blackboard) return;
 
-	if (!Drone) return;
-
-	ABaseFirstPersonCharacter* Character = Cast<ABaseFirstPersonCharacter>(
-		Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
-	if (!Character) return;
-
-	// Drone->CloseChat();
-	Drone->UnPickupOff();
-	Character->UnPickupOff();
-	Drone->LeadingTheCharacter = true;
-
-	if (Drone)
-	{
-		Drone->ChatUserComponent->OnMessageReceived.BindUObject(this, &UWaitForMessageTask::MessageSent);
-	}
 }
 
 void UWaitForMessageTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-	if (IsSend)
-	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-		IsSend = false;
-	}
 	
 }
 
 void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 {
-	/*if (Drone)
+	UE_LOG(LogTemp, Warning, TEXT("Message to bot : %s "), *MessageInstance->GetMessageInfo().Get<2>().ToString());
+	if (Drone)
 	{
 		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
 			[this](const FString& Message, const FString& ActionType, const int& ActionID)
 			{
 				if (!Message.IsEmpty())
 				{
-					if(ActionType == "Teleport")
+					UE_LOG(LogTemp, Warning,TEXT("API Message : %s"), *Message);
+					Drone->ChatUserComponent->SendMessage("DefaultCharacterName", FText::FromString(Message));
+					if (ActionType == "Teleport")
 					{
 						int ActionPlace = ActionID;
+						Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Teleport));
+						SActionType = EActionType::Teleport;
 					}
+
 					
-					UChatManager::SendChatMessage("Bot", "DefaultCharacterName", FText::FromString(Message));
-					IsSend = true;
 				}
 			}, MessageInstance->GetMessageInfo().Get<2>().ToString(), Drone->BotURL);
-	}*/
+	}
 }

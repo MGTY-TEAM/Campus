@@ -24,8 +24,6 @@ ABaseCharacter::ABaseCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	SpringArmComponent->SetupAttachment(RootComponent);
-	
-
 }
 
 // Called when the game starts or when spawned

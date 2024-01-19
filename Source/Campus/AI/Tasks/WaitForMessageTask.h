@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
+#include "Campus/AI/AIDrone/CampusCoreTypes.h"
 #include "WaitForMessageTask.generated.h"
 
 class AAIAnimDrone;
@@ -29,7 +30,20 @@ private:
 
 	AAIAnimDrone* Drone;
 
+
+	
+	UBlackboardComponent* Blackboard;
 protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	EActionType SActionType = EActionType::Walk;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector SelfActorKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector ActionTypeKey;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector DroneActorKey;
 

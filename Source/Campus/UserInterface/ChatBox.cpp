@@ -65,10 +65,14 @@ bool UChatBox::Initialize()
 
 void UChatBox::NativeConstruct()
 {
-	//SendMessage_TextBox->OnTextCommitted.AddDynamic(this, &UChatBox::OnTextBoxTextCommitted);
 	SendMessage_TextBox->OnTextCommitted.AddDynamic(this, &UChatBox::OnTextBoxTextCommitted);
-	
 	Super::NativeConstruct();
+}
+
+void UChatBox::NativeDestruct()
+{
+	Super::NativeDestruct();
+	UE_LOG(LogTemp, Warning, TEXT("WidgetDestroyed"));
 }
 
 void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
@@ -84,11 +88,10 @@ void UChatBox::UpdateChatMessages(FText Message, FText Sender)
 {
 	UChat_Message* WidgetInstance = CreateWidget<UChat_Message>(GetWorld()->GetFirstPlayerController(),
 	                                                            BlueprintWidgetClass);
-
+	Chat_ScrollBox->ScrollToEnd();
+	
 	if (WidgetInstance)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SendMessage"));
-		
 		WidgetInstance->AddToViewport();
 		
 		Chat_ScrollBox->AddChild(WidgetInstance);

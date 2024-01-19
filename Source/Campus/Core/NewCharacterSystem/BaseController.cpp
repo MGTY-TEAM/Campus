@@ -51,7 +51,7 @@ void ABaseController::OnChatButtonClicked()
 {
 	if (BaseHUD)
 	{
-		BaseHUD->SwitchChatState();
+		/*BaseHUD->SwitchChatState();*/
 
 		UE_LOG(LogTemp, Warning, TEXT("BaseHudSwitch"));
 	}
@@ -59,10 +59,6 @@ void ABaseController::OnChatButtonClicked()
 
 void ABaseController::OnEscapeMenuButtonClicked()
 {
-	if (BaseHUD)
-	{
-		BaseHUD->SwitchEscapeMenuState();
-	}
 }
 
 void ABaseController::SetupInputComponent()

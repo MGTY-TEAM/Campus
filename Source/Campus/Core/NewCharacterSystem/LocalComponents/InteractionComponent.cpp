@@ -22,9 +22,12 @@ void UInteractionComponent::TryInteract()
 	FHitResult HitResult = GetHitResultByTraceChannel();
 	if (AActor* HitActor = HitResult.GetActor())
 	{
+		UE_LOG(LogInteraction, Warning, TEXT("BeginInteraction"));
 		if (ISubInteractable* Interactable = Cast<ISubInteractable>(HitActor))
 		{
+			UE_LOG(LogInteraction, Warning, TEXT("BeginInteractionWith"));
 			Interactable->Interact(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
+			Interactable->BPInteract(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
 			OnSimpleInteract.Broadcast();
 		}
 	}

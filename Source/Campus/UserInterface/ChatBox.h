@@ -89,6 +89,8 @@ protected:
 	UFUNCTION()
 	virtual void NativeConstruct() override;
 
+	virtual void NativeDestruct() override;
+
 	//UFUNCTION()
 	//void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 

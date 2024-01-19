@@ -14,12 +14,13 @@ UCanISeeYouService::UCanISeeYouService()
 void UCanISeeYouService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	const AAIController* Controller = OwnerComp.GetAIOwner();
-
+	
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	if (!Blackboard) return;
 	
 	UActorComponent* const Component = Controller->GetComponentByClass(UAIDronePerceptionComponent::StaticClass());
-	UAIDronePerceptionComponent* const PerceptionComponent = Cast< UAIDronePerceptionComponent>(Component);
+	
+	UAIDronePerceptionComponent* const PerceptionComponent = Cast<UAIDronePerceptionComponent>(Component);
 	if (!PerceptionComponent) return;
 
 	AActor* const Character = Cast<AActor>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));

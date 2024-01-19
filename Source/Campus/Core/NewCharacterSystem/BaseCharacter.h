@@ -35,13 +35,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	UInteractionComponent* InteractionComponent;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USpringArmComponent* SpringArmComponent;
 	
-	UPROPERTY(BlueprintReadWrite, Category="Camera")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
 	UCameraComponent* CameraComponent;
 	
-	UPROPERTY(EditDefaultsOnly, Category="Mouse Settings")
+	UPROPERTY(EditAnywhere,  BlueprintReadWrite ,Category="Mouse Settings")
 	float MouseSens = 0.4f;
 	
 public:
