@@ -1,13 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
+
 #include "InteractionComponent.h"
 
 #include "Camera/CameraComponent.h"
-#include "Campus/Core/NewCharacterSystem/BaseCharacter.h"
-#include "Campus/Interfaces/Interaction/Interactable.h"
-#include "..\..\..\Interfaces\Interaction\SubInteractable.h"
+#include "..\..\..\Interfaces\Interaction\Interactable.h"
 
+DECLARE_LOG_CATEGORY_CLASS(LogInteractionCompoent, Log, Log);
 
 // Sets default values for this component's properties
 UInteractionComponent::UInteractionComponent()
@@ -22,10 +22,10 @@ void UInteractionComponent::TryInteract()
 	FHitResult HitResult = GetHitResultByTraceChannel();
 	if (AActor* HitActor = HitResult.GetActor())
 	{
-		UE_LOG(LogInteraction, Warning, TEXT("BeginInteraction"));
-		if (ISubInteractable* Interactable = Cast<ISubInteractable>(HitActor))
+		UE_LOG(LogInteractionCompoent, Warning, TEXT("BeginInteraction"));
+		if (IInteractable* Interactable = Cast<IInteractable>(HitActor))
 		{
-			UE_LOG(LogInteraction, Warning, TEXT("BeginInteractionWith"));
+			UE_LOG(LogInteractionCompoent, Warning, TEXT("BeginInteractionWith"));
 			Interactable->Interact(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
 			Interactable->BPInteract(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
 			OnSimpleInteract.Broadcast();

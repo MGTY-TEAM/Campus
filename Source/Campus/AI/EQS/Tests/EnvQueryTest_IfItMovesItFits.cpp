@@ -3,9 +3,9 @@
 
 #include "Campus/AI/EQS/Tests/EnvQueryTest_IfItMovesItFits.h"
 #include "EnvironmentQuery/Items/EnvQueryItemType_VectorBase.h"
-#include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Campus/Core/CharacterSystem/BaseCharacter.h"
 #include "Engine/Engine.h"
 
 UEnvQueryTest_IfItMovesItFits::UEnvQueryTest_IfItMovesItFits(const FObjectInitializer& ObjectInitializer) 
@@ -25,7 +25,7 @@ void UEnvQueryTest_IfItMovesItFits::RunTest(FEnvQueryInstance& QueryInstance) co
 	UBlackboardComponent* const Blackboard = UAIBlueprintHelperLibrary::GetBlackboard(DataOwner);
 	if (!Blackboard) return;
 
-	const auto Character = Cast<ABaseFirstPersonCharacter>(Blackboard->GetValueAsObject(CharacterActorKeyName));
+	const auto Character = Cast<ABaseCharacter>(Blackboard->GetValueAsObject(CharacterActorKeyName));
 
 	if (!Character)
 	{
@@ -35,6 +35,6 @@ void UEnvQueryTest_IfItMovesItFits::RunTest(FEnvQueryInstance& QueryInstance) co
 
 	for (FEnvQueryInstance::ItemIterator It(this, QueryInstance); It; ++It)
 	{
-		It.SetScore(TestPurpose, FilterType, Character->IsMovingNow(), Switch);
+		It.SetScore(TestPurpose, FilterType, Character->GetVelocity().Length() > 0.f, Switch);
 	}
 }

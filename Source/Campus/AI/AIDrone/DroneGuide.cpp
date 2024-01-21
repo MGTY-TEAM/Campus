@@ -7,7 +7,6 @@
 #include "../../UserInterface/ChatBox.h"
 #include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
-#include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
 #include "Components/StaticMeshComponent.h"
 
 
@@ -53,20 +52,6 @@ void ADroneGuide::BeginPlay()
 	
 }
 
-void ADroneGuide::UnPickupOn(AActor* Character)
-{
-	Super::UnPickupOn(Character);
-	InteractCharacter = Cast<ABaseFirstPersonCharacter>(Character);
-	ChangeState(EDroneGuide::Drone_PlayerInteract);
-	OpenChat();
-}
-
-void ADroneGuide::UnPickupOff()
-{
-	Super::UnPickupOff();
-	ChangeState(EDroneGuide::Drone_Idle);
-	CloseChat();
-}
 
 void ADroneGuide::ChangeState(EDroneGuide State, float Duration)
 {

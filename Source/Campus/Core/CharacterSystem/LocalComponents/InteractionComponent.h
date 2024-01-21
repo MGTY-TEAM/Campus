@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "InteractionComponent.generated.h"
-class ISubInteractable;
+class IInteractable;
 class IInteractable;
 DECLARE_LOG_CATEGORY_CLASS(InteractionComponentLog, Log, Log);
 

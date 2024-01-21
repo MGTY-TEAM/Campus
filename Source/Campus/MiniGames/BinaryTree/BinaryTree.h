@@ -3,17 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ActorReferencesUtils.h"
-#include "PanalRandom.h"
-#include "Panal.h"
-#include "Campus/Interfaces/Interaction/Interactable.h"
 #include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"
 #include "GameFramework/Actor.h"
 #include "UObject/UObjectGlobals.h"
 #include "BinaryTree.generated.h"
 
 UCLASS()
-class CAMPUS_API ABinaryTree : public AActor  , public IInteractable , public IBinaryFruit
+class CAMPUS_API ABinaryTree : public AActor , public IBinaryFruit
 {
 	GENERATED_BODY()
 

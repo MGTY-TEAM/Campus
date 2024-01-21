@@ -6,6 +6,7 @@
 #include "BinaryTree.h"
 #include "GPUSkinCache.h"
 #include "NavigationSystemTypes.h"
+#include "Panal.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -30,11 +31,10 @@ APanalRandom::APanalRandom()
 void APanalRandom::BeginPlay()
 {
 	Super::BeginPlay();
-	Interact(this , this);
 }
 
 
-void APanalRandom::Interact(AActor* InteractedActor, AActor* SelfCharacter)
+void APanalRandom::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Generate Numbers"));
 

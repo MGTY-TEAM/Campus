@@ -45,6 +45,6 @@ protected:
 
 public:
 
-	virtual void Interact(AActor* InteractedActor, AActor* SelfCharacter) override;
+	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
 	
 };

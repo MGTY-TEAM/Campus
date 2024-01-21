@@ -5,8 +5,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
 #include "Campus/AI/AIDroneController.h"
-#include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
-#include "Campus/Core/NewCharacterSystem/BaseCharacter.h"
+#include "Campus/Core/CharacterSystem/BaseCharacter.h"
 
 UCharacterFocusTask::UCharacterFocusTask()
 {

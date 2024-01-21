@@ -4,7 +4,7 @@
 #include "SetCharacter.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Campus/Core/NewCharacterSystem/BaseCharacter.h"
+#include "Campus/Core/CharacterSystem/BaseCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 USetCharacter::USetCharacter()

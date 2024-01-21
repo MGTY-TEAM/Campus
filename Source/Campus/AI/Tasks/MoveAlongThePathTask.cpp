@@ -7,7 +7,7 @@
 #include "NavigationSystem.h"
 #include "AI/Navigation/NavAgentInterface.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
-#include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
+#include "Campus/Core/CharacterSystem/BaseCharacter.h"
 #include "Engine/Engine.h"
 
 UMoveAlongThePathTask::UMoveAlongThePathTask()
@@ -68,15 +68,15 @@ void UMoveAlongThePathTask::FinishMove(const FAIRequestID RequestID, const FPath
 	// else if (RequestID == MainRequestID) IsMove = false;
 	if (Result.IsSuccess() && RequestID == MainRequestID)
 	{
-		IsMove = false;
+		/*IsMove = false;
 
 		UBlackboardComponent* Blackboard = MyOwnerComp->GetBlackboardComponent();
 		if (!Blackboard) return;
 
-		ABaseFirstPersonCharacter* Character = Cast<ABaseFirstPersonCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
+		ABaseCharacter* Character = Cast<ABaseCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
 		if (!Character) return;
 
-		Character->SetArrivalValue(true);
+		Character->SetArrivalValue(true);*/
 	}
 }
 

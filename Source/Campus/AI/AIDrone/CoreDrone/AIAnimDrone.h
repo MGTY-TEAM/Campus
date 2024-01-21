@@ -77,13 +77,11 @@ public:
 
 	FVector GetStartLocation() const { return StartLocationOfDrone; }
 
-	virtual void UnPickupOff() override;
 
 	bool LeadingTheCharacter = false;
 protected:
 	virtual void BeginPlay() override;
-
-	virtual void UnPickupOn(AActor* Character) override;
+	
 	// virtual void UnPickupOff() override;
 
 	UPROPERTY(EditDefaultsOnly)

@@ -65,27 +65,6 @@ void AAIAnimDrone::BeginPlay()
 	}*/
 }
 
-void AAIAnimDrone::UnPickupOn(AActor* Character)
-{
-	Super::UnPickupOn(Character);
-
-	InInteraction = true;
-	InteractingCharacter = Character;
-}
-
-void AAIAnimDrone::UnPickupOff()
-{
-	Super::UnPickupOff();
-
-	InInteraction = false;
-	InteractingCharacter = nullptr;
-	StopRotateToPlayerAnim();
-	CloseChat();
-
-	// AAIDroneController* AController = Cast<AAIDroneController>(GetController());
-	// AController->ClearFocus(EAIFocusPriority::Gameplay);
-}
-
 void AAIAnimDrone::StartRotateToPlayerAnim()
 {
 	GetWorld()->GetTimerManager().SetTimer(RotateToPlayerTimer, this, &AAIAnimDrone::StartRotateToPlayerAnim, 0.01f, true);

@@ -8,13 +8,5 @@ void APlayerInteractionDrone::BeginPlay()
 	Super::BeginPlay();
 }
 
-void APlayerInteractionDrone::UnPickupOn(AActor* Character)
-{
 
-}
-
-void APlayerInteractionDrone::UnPickupOff()
-{
-
-}
 

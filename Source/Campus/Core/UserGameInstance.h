@@ -41,20 +41,10 @@ public:
 	
 	bool TryToGetAndFillUserInfoAndOpenMainMenu();
 
-	UFUNCTION(BlueprintCallable, Category="CustomSession")
-	void CreateSession(const FName& SessionName);
-	UFUNCTION(BlueprintCallable, Category="CustomSession")
-	void JoinSession();
 	
 protected:
-	void OnSessionCreated(FName SessionName, bool Succeeded);
-	void OnSessionsFind(bool Succeeded);
-	void OnJoinSessionComplete(FName Name, EOnJoinSessionCompleteResult::Type Arg);
-	virtual void Init() override;
-	
-	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
 private:
-	IOnlineSessionPtr M_SessionInterface;
 	
 	FUserInfo M_UserInfo;
 	

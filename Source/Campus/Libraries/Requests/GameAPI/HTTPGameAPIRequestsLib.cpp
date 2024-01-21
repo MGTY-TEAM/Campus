@@ -165,63 +165,6 @@ void UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
 	}
 }
 
-void UHTTPGameAPIRequestsLib::GameApiServerInfoRequest(
-	TFunction<void(const bool&, const TArray<FServerInfo>&, const FErrorResponse&)> CallBack)
-{
-	FString URL = "http://localhost:3000/api/servers-info";
-	FHttpModule* Module = &FHttpModule::Get();
-
-	TSharedRef<IHttpRequest> Request = Module->CreateRequest();
-
-	Request->OnProcessRequestComplete().BindLambda(
-		[CallBack](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
-		{
-			int32 ResponseCode = Response->GetResponseCode();
-			switch (ResponseCode)
-			{
-			case 200:
-				{
-					UE_LOG(HTTPGameApiLog, Warning, TEXT("ServersInfo: %s"), *Response->GetContentAsString());
-					FString YourJsonString = Response->GetContentAsString();
-
-					TArray<TSharedPtr<FJsonValue>> JsonValues;
-					TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(YourJsonString);
-
-					if (FJsonSerializer::Deserialize(Reader, JsonValues))
-					{
-						TArray<FServerInfo> ServerInfos;
-						for (auto& Value : JsonValues)
-						{
-							TSharedPtr<FJsonObject> JsonObject = Value->AsObject();
-							if (JsonObject.IsValid())
-							{
-								FServerInfo ServerInfo;
-								FString Port = FString::FromInt(JsonObject->GetIntegerField("port"));
-								int32 ConnectedPlayers = JsonObject->GetIntegerField("connectedPlayers");
-
-								ServerInfo.Port = Port;
-								ServerInfo.ConnectedClients = ConnectedPlayers;
-								ServerInfos.Add(ServerInfo);
-							}
-						}
-						CallBack(true, ServerInfos, FErrorResponse());
-					}
-				}
-				break;
-			default:
-				CallBack(false, TArray<FServerInfo>(), FErrorResponse());
-				UE_LOG(HTTPGameApiLog, Error, TEXT("Unknown response code: %d"), ResponseCode);
-				break;
-			}
-		});
-
-
-	Request->SetURL(URL);
-	Request->SetVerb(TEXT("Get"));
-	Request->SetHeader(TEXT("Content-Type"),TEXT("application/json"));
-	Request->ProcessRequest();
-}
-
 
 template <typename TStruct>
 bool UHTTPGameAPIRequestsLib::GetJsonStringFromStruct(TStruct FilledStruct, FString& StringOutput)

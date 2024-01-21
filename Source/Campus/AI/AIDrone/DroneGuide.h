@@ -65,8 +65,6 @@ protected:
 
 	virtual void BeginPlay() override;
 	
-	virtual void UnPickupOn(AActor* Character) override;
-	virtual void UnPickupOff() override;
 	void ChangeState(EDroneGuide State, float Duration = 0);
 
 	void StartRotateCharacter(ACharacter* InteractedCharacter);

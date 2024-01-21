@@ -9,7 +9,6 @@
 #include "Campus/Chat/ChatUserComponent.h"
 #include "Campus/UserInterface/ChatBox.h"
 #include "Engine/Engine.h"
-#include "Campus/Core/BaseCharacter/BaseFirstPersonCharacter.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Microsoft/AllowMicrosoftPlatformTypes.h"
 
