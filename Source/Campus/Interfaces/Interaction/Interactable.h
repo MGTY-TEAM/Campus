@@ -34,4 +34,7 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Interaction System")
 	void BPEndInteract();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Interaction System")
+	void BP_DragInteract(const FVector& StartTrace, const FVector& EndTrace);
 };

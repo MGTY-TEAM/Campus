@@ -1,7 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-
 #include "InteractionComponent.h"
 
 #include "Camera/CameraComponent.h"
@@ -37,7 +36,6 @@ void UInteractionComponent::TryInteract()
 	}
 }
 
-
 void UInteractionComponent::SetHoldStatus(bool bStatus)
 {
 	bInteractHold = bStatus;
@@ -67,13 +65,29 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 	FHitResult HitResult = GetHitResultByTraceChannel();
 	
-	FocusActor = HitResult.GetActor();
-
-	if (FocusActor && bInteractHold)
+	if (!bInteractHold)
 	{
-		if (FocusActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+		FocusActor = HitResult.GetActor();
+		UE_LOG(InteractionComponentLog, Warning, TEXT("SwitchFocus Actor"));
+	}
+	else
+	{
+		if (FocusActor)
 		{
-			IInteractable::Execute_BPTickInteract(FocusActor,HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
+			if (FocusActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+			{
+				if (FocusActor == HitResult.GetActor())
+				{
+					UE_LOG(InteractionComponentLog, Warning, TEXT("TickInteract"));
+					IInteractable::Execute_BPTickInteract(FocusActor, HitResult.GetComponent(), HitResult.Location,
+									  HitResult.Normal);
+				}
+				else
+				{
+					UE_LOG(InteractionComponentLog, Warning, TEXT("TickHold"));
+					IInteractable::Execute_BP_DragInteract(FocusActor, HitResult.TraceStart, HitResult.TraceEnd);
+				}
+			}
 		}
 	}
 }
