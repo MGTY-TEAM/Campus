@@ -45,6 +45,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Interaction", IE_Pressed,this, &ABaseCharacter::Interact);
+	PlayerInputComponent->BindAction("Interaction", IE_Released, this, &ABaseCharacter::EndInteract);
 
 	PlayerInputComponent->BindAxis("ForwardAxis", this, &ABaseCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("RightAxis", this, &ABaseCharacter::MoveRight);
@@ -55,6 +56,12 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void ABaseCharacter::Interact()
 {
 	InteractionComponent->TryInteract();
+	InteractionComponent->SetHoldStatus(true);
+}
+
+void ABaseCharacter::EndInteract()
+{
+	InteractionComponent->SetHoldStatus(false);
 }
 
 void ABaseCharacter::MoveForward(float value)

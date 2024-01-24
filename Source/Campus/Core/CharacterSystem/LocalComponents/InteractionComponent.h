@@ -38,9 +38,14 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnSimpleInteract OnSimpleInteract;
+
+	UFUNCTION()
+	void SetHoldStatus(bool bStatus);
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
 	
 public:
 	// Called every frame
@@ -55,5 +60,5 @@ private:
 	UPROPERTY(/*EditDefaultsOnly, Category = "Interaction Component Settings"*/)
 	UCameraComponent* OwnedCameraComponent;
 
-	
+	bool bInteractHold = false;
 };

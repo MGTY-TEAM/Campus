@@ -22,17 +22,26 @@ void UInteractionComponent::TryInteract()
 	FHitResult HitResult = GetHitResultByTraceChannel();
 	if (AActor* HitActor = HitResult.GetActor())
 	{
-		UE_LOG(LogInteractionCompoent, Warning, TEXT("BeginInteraction"));
+		UE_LOG(LogInteractionCompoent, Warning, TEXT("%s"), *HitResult.GetActor()->GetName());
 		if (IInteractable* Interactable = Cast<IInteractable>(HitActor))
 		{
-			UE_LOG(LogInteractionCompoent, Warning, TEXT("BeginInteractionWith"));
+			UE_LOG(LogInteractionCompoent, Warning, TEXT("Interact  %s"), *HitActor->GetName());
 			Interactable->Interact(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
-			Interactable->BPInteract(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
+			OnSimpleInteract.Broadcast();
+		}
+		if (HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+		{
+			IInteractable::Execute_BPInteract(HitActor, HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
 			OnSimpleInteract.Broadcast();
 		}
 	}
 }
 
+
+void UInteractionComponent::SetHoldStatus(bool bStatus)
+{
+	bInteractHold = bStatus;
+}
 
 // Called when the game starts
 void UInteractionComponent::BeginPlay()
@@ -56,7 +65,17 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	FocusActor = GetHitResultByTraceChannel().GetActor();
+	FHitResult HitResult = GetHitResultByTraceChannel();
+	
+	FocusActor = HitResult.GetActor();
+
+	if (FocusActor && bInteractHold)
+	{
+		if (FocusActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+		{
+			IInteractable::Execute_BPTickInteract(FocusActor,HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
+		}
+	}
 }
 
 FHitResult UInteractionComponent::GetHitResultByTraceChannel()
