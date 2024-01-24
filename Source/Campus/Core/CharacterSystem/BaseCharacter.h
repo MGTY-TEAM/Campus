@@ -25,7 +25,8 @@ protected:
 	virtual void BeginPlay() override;
 	
 	virtual void Interact();
-
+	virtual void EndInteract();
+	
 	virtual void MoveForward(float value);
 	virtual void MoveRight(float value);
 	virtual void LookUp(float value);
@@ -47,6 +48,7 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

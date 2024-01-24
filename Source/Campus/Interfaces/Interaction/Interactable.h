@@ -7,7 +7,7 @@
 #include "Interactable.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE()
+UINTERFACE(Blueprintable)
 class UInteractable : public UInterface
 {
 	GENERATED_BODY()
@@ -16,6 +16,7 @@ class UInteractable : public UInterface
 /**
  * 
  */
+
 class CAMPUS_API IInteractable
 {
 	GENERATED_BODY()
@@ -25,6 +26,12 @@ public:
 	
 	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) = 0;
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Interaction System")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
 	void BPInteract(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
+	void BPTickInteract(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal);
+	
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Interaction System")
+	void BPEndInteract();
 };
