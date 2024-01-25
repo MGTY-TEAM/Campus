@@ -6,6 +6,7 @@
 #include "UObject/Object.h"
 #include "ChatManager.generated.h"
 
+DECLARE_LOG_CATEGORY_CLASS(LogChatManager, Log, Log);
 class UChatUserComponent;
 /**
  * 

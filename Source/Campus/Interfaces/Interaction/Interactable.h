@@ -27,11 +27,14 @@ public:
 	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
-	void BPInteract(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal);
+	void BPInteract(const FHitResult& HitResult);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
-	void BPTickInteract(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal);
+	void HoldInteract(const FHitResult& HitResult);
 	
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Interaction System")
-	void BPEndInteract();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
+	void EndInteract();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
+	void DragInteract(const FHitResult& HitResult);
 };

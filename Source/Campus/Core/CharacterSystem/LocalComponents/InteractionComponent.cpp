@@ -1,7 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-
 #include "InteractionComponent.h"
 
 #include "Camera/CameraComponent.h"
@@ -31,12 +30,11 @@ void UInteractionComponent::TryInteract()
 		}
 		if (HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
 		{
-			IInteractable::Execute_BPInteract(HitActor, HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
+			IInteractable::Execute_BPInteract(HitActor, HitResult);
 			OnSimpleInteract.Broadcast();
 		}
 	}
 }
-
 
 void UInteractionComponent::SetHoldStatus(bool bStatus)
 {
@@ -67,13 +65,26 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 	FHitResult HitResult = GetHitResultByTraceChannel();
 	
-	FocusActor = HitResult.GetActor();
-
-	if (FocusActor && bInteractHold)
+	if (!bInteractHold)
 	{
-		if (FocusActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+		FocusActor = HitResult.GetActor();
+	}
+	else
+	{
+		if (FocusActor)
 		{
-			IInteractable::Execute_BPTickInteract(FocusActor,HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
+			if (FocusActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+			{
+				if (FocusActor == HitResult.GetActor())
+				{
+					IInteractable::Execute_HoldInteract(FocusActor,
+									  HitResult);
+				}
+				else
+				{
+					IInteractable::Execute_DragInteract(FocusActor, HitResult);
+				}
+			}
 		}
 	}
 }

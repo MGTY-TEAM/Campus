@@ -52,7 +52,8 @@ void AAIAnimDrone::BeginPlay()
 	ChatWidget = CreateWidget<UChatBox>(GetWorld()->GetFirstPlayerController(), BlueprintChatClass);
 
 	StartLocationOfDrone = GetActorLocation();
-	
+
+	ChatUserComponent->SetUserID("Bot");
 	if (UChatManager::RegisterUser("Bot", ChatUserComponent))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("BotRegistered"));
