@@ -30,7 +30,7 @@ void UInteractionComponent::TryInteract()
 		}
 		if (HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
 		{
-			IInteractable::Execute_BPInteract(HitActor, HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
+			IInteractable::Execute_BPInteract(HitActor, HitResult);
 			OnSimpleInteract.Broadcast();
 		}
 	}
@@ -77,12 +77,12 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			{
 				if (FocusActor == HitResult.GetActor())
 				{
-					IInteractable::Execute_BPTickInteract(FocusActor, HitResult.GetComponent(), HitResult.Location,
-									  HitResult.Normal);
+					IInteractable::Execute_HoldInteract(FocusActor,
+									  HitResult);
 				}
 				else
 				{
-					IInteractable::Execute_BP_DragInteract(FocusActor, HitResult.TraceStart, HitResult.TraceEnd);
+					IInteractable::Execute_DragInteract(FocusActor, HitResult);
 				}
 			}
 		}
