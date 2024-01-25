@@ -68,7 +68,6 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	if (!bInteractHold)
 	{
 		FocusActor = HitResult.GetActor();
-		UE_LOG(InteractionComponentLog, Warning, TEXT("SwitchFocus Actor"));
 	}
 	else
 	{
@@ -78,13 +77,11 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			{
 				if (FocusActor == HitResult.GetActor())
 				{
-					UE_LOG(InteractionComponentLog, Warning, TEXT("TickInteract"));
 					IInteractable::Execute_BPTickInteract(FocusActor, HitResult.GetComponent(), HitResult.Location,
 									  HitResult.Normal);
 				}
 				else
 				{
-					UE_LOG(InteractionComponentLog, Warning, TEXT("TickHold"));
 					IInteractable::Execute_BP_DragInteract(FocusActor, HitResult.TraceStart, HitResult.TraceEnd);
 				}
 			}

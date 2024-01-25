@@ -13,8 +13,13 @@ bool UChatManager::RegisterUser(const FName& UserID, UChatUserComponent* User)
 	if (!UserID.IsNone() && !ValidateUserID(UserID) && User)
 	{
 		RegisteredUsers.Add(UserID, User);
+		for (auto RegisteredUser : RegisteredUsers)
+		{
+			UE_LOG(LogChatManager, Warning, TEXT("User : %s"), *RegisteredUser.Key.ToString())
+		}
 		return true;
 	}
+
 	return false;
 }
 

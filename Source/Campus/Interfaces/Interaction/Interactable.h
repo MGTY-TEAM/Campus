@@ -32,9 +32,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
 	void BPTickInteract(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal);
 	
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Interaction System")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
 	void BPEndInteract();
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Interaction System")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
 	void BP_DragInteract(const FVector& StartTrace, const FVector& EndTrace);
 };
