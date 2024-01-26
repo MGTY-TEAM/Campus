@@ -48,8 +48,7 @@ AAIAnimDrone::AAIAnimDrone()
 void AAIAnimDrone::BeginPlay()
 {
 	Super::BeginPlay();
-
-	ChatWidget = CreateWidget<UChatBox>(GetWorld()->GetFirstPlayerController(), BlueprintChatClass);
+	
 
 	StartLocationOfDrone = GetActorLocation();
 
