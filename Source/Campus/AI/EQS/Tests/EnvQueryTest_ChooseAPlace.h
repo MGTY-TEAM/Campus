@@ -6,7 +6,8 @@
 #include "EnvironmentQuery/EnvQueryTest.h"
 #include "EnvQueryTest_ChooseAPlace.generated.h"
 
-class ATeleportationPlane;
+// class ATeleportationPlane;
+class UMessageInstance;
 
 UCLASS()
 class CAMPUS_API UEnvQueryTest_ChooseAPlace : public UEnvQueryTest
@@ -24,4 +25,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
 	FName SelfActorKeyName = "SelfActor";
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector ActionPlaceKey;
 };

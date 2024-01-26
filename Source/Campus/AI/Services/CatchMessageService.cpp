@@ -43,9 +43,10 @@ void UCatchMessageService::MessageSent(UMessageInstance* MessageInstance)
 					UE_LOG(LogTemp, Warning,TEXT("API Message : %s"), *Message);
 					if (ActionType == "Teleport")
 					{
-						int ActionPlace = ActionID;
 						Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Teleport));
 						SActionType = EActionType::Teleport;
+
+						
 					}
 
 					Drone->ChatUserComponent->SendMessage("Bot", FText::FromString(Message));

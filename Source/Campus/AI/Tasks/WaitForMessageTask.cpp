@@ -66,9 +66,11 @@ void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 					Drone->ChatUserComponent->SendMessage("DefaultCharacterName", FText::FromString(Message));
 					if (ActionType == "Teleport")
 					{
-						int ActionPlace = ActionID;
 						Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Teleport));
 						SActionType = EActionType::Teleport;
+
+						const int32 ActionPlace = ActionID;
+						Blackboard->SetValueAsInt(ActionPlaceKey.SelectedKeyName, ActionPlace);
 					}
 
 					

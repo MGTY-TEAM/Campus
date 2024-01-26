@@ -1,12 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Campus/AI/EQS/Tests/EnvQueryTest_ChooseAPlace.h"
+#include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "EnvironmentQuery/Items/EnvQueryItemType_ActorBase.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Campus/UserInterface/ChatBox.h"
+// #include "Campus/UserInterface/ChatBox.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
-#include "Campus/Drone/TeleportationPlane.h"
+// #include "Campus/Drone/TeleportationPlane.h"
+#include "Campus\Chat\MessageInstance.h"
 
 UEnvQueryTest_ChooseAPlace::UEnvQueryTest_ChooseAPlace(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -30,6 +32,7 @@ void UEnvQueryTest_ChooseAPlace::RunTest(FEnvQueryInstance& QueryInstance) const
 
 	for (FEnvQueryInstance::ItemIterator It(this, QueryInstance); It; ++It)
 	{
-		It.SetScore(TestPurpose, FilterType, It.GetIndex() == 1, Switch);
+		const int32 ActionPlace = Blackboard->GetValueAsInt(ActionPlaceKey.SelectedKeyName);
+		It.SetScore(TestPurpose, FilterType, It.GetIndex() == ActionPlace, Switch);
 	}
 }
