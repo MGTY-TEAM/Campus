@@ -37,22 +37,19 @@ void ABaseHUD::SwitchChatState()
 
 void ABaseHUD::SwitchEscapeMenuState()
 {
-	
 }
-
 
 
 void ABaseHUD::SetupChat(UChatUserComponent* ChatUserComponent)
 {
-	if (!ChatBox)
+	if (UChatBox* NewChatBox = CreateWidget<UChatBox>(GetWorld(), ChatBoxClass))
 	{
-		if (UChatBox* NewChatBox = CreateWidget<UChatBox>(GetWorld(), ChatBoxClass))
-		{
-			ChatBox = NewChatBox;
-		}
-		ChatBox->AddToViewport();
+		ChatBox = NewChatBox;
+		ChatBox->AddToPlayerScreen(1);
 		ChatBox->ConnectChatComponent(ChatUserComponent);
+		UE_LOG(LogTemp, Error, TEXT("%"), *ChatBox->GetName())
 	}
+
 }
 
 
@@ -61,7 +58,7 @@ void ABaseHUD::AddCrosshair()
 	Crosshair = CreateWidget(GetWorld(), CrosshairClass);
 	if (Crosshair)
 	{
-		Crosshair->AddToPlayerScreen();
+		Crosshair->AddToViewport();
 		UE_LOG(BaseHUDLog, Log, TEXT("Crosshair Succesfully Added"));
 	}
 }
