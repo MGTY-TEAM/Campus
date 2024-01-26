@@ -90,10 +90,10 @@ void UHTTPAiMyLogicRequestsLib::MakeMove(const FString& GameId, const FString& M
 }
 
 
-void UHTTPAiMyLogicRequestsLib::CreateChessGame(FString AccessToken, int32 Level, int32 ClockLimit, int32 ClockIncrement, bool IsRated, FString Color, TFunction<void(bool, FString)> OnCreateGameCompleted)
+/*void UHTTPAiMyLogicRequestsLib::CreateChessGame(FString AccessToken, int32 Level, int32 ClockLimit, int32 ClockIncrement, bool IsRated, FString Color, TFunction<void(bool, FString)> OnCreateGameCompleted)
 {
     // Формируем URL для создания партии
-    FString URL = "https://lichess.org/api/challenge";
+    /*FString URL = "https://lichess.org/api/challenge";
 
     // Формируем JSON-запрос для создания партии
     TSharedPtr<FJsonObject> RequestData = MakeShareable(new FJsonObject);
@@ -112,7 +112,7 @@ void UHTTPAiMyLogicRequestsLib::CreateChessGame(FString AccessToken, int32 Level
     FJsonSerializer::Serialize(RequestData.ToSharedRef(), JsonWriter);
 
     // Создаем HTTP-запрос
-    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> HttpRequest = HttpModule->CreateRequest();
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> HttpRequest = FHttpModule::CreateRequest();
     HttpRequest->SetURL(URL);
     HttpRequest->SetVerb("POST");
     HttpRequest->SetHeader("Content-Type", "application/json");
@@ -151,6 +151,6 @@ void UHTTPAiMyLogicRequestsLib::CreateChessGame(FString AccessToken, int32 Level
     );
 
     // Выполняем запрос
-    HttpRequest->ProcessRequest();
-}
+    HttpRequest->ProcessRequest();#1#
+}*/
 

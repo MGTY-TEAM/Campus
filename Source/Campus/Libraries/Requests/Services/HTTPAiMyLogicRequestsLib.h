@@ -25,7 +25,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="Chess Engine")
 	static void MakeMove(const FString& GameId, const FString& Move, bool OfferingDraw);
-	UFUNCTION(BlueprintCallable, Category="Chess Engine")
+	/*UFUNCTION(BlueprintCallable, Category="Chess Engine")
 	static void CreateChessGame(FString AccessToken, int32 Level, int32 ClockLimit, int32 ClockIncrement, bool IsRated,
-	                     FString Color, TFunction<void(bool, FString)> OnCreateGameCompleted);
+	                     FString Color, TFunction<void(bool, FString)> OnCreateGameCompleted);*/
 };

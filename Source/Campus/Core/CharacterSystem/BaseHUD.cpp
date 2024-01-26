@@ -22,7 +22,7 @@ void ABaseHUD::SwitchChatState()
 {
 	/*if (ChatBox)
 	{
-		if (ChatBox->IsInViewport())
+		if (!ChatBox->bIsFocusable)
 		{
 			ChatBox->RemoveFromParent();
 		}
@@ -30,7 +30,7 @@ void ABaseHUD::SwitchChatState()
 		{
 			ChatBox->AddToViewport();
 			
-			ChatBox->SetFocusOnTextInput();
+			ChatBox->SetFocus();
 		}
 	}*/
 }
@@ -46,7 +46,10 @@ void ABaseHUD::SetupChat(UChatUserComponent* ChatUserComponent)
 {
 	if (!ChatBox)
 	{
-		ChatBox = Cast<UChatBox>(CreateWidget(GetWorld(), ChatBoxClass));
+		if (UChatBox* NewChatBox = CreateWidget<UChatBox>(GetWorld(), ChatBoxClass))
+		{
+			ChatBox = NewChatBox;
+		}
 		ChatBox->AddToViewport();
 		ChatBox->ConnectChatComponent(ChatUserComponent);
 	}
