@@ -10,10 +10,6 @@
 ABaseController::ABaseController()
 {
 	ChatUserComponent = CreateDefaultSubobject<UChatUserComponent>("ChatUserComponent");
-	if (ChatUserComponent)
-	{
-		ChatUserComponent->SetUserID("DefaultCharacterName");
-	}
 }
 
 void ABaseController::BeginPlay()
@@ -22,23 +18,20 @@ void ABaseController::BeginPlay()
 
 	SetInputMode(FInputModeGameOnly());
 
+	ChatUserComponent->SetUserID("DefaultCharacterName");
 	
-	if (ChatUserComponent)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Chat user component "));
-		if (UChatManager::RegisterUser("DefaultCharacterName", ChatUserComponent))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("User Registered"));
-			if (MyHUD)
-			{
-				BaseHUD = Cast<ABaseHUD>(MyHUD);
-				BaseHUD->SetupChat(ChatUserComponent);
+	UChatManager::RegisterUser("DefaultCharacterName", ChatUserComponent);
 
-				UE_LOG(LogTemp, Warning, TEXT("Setup Hud"));
-			}
-		}
-		
+	UE_LOG(LogTemp, Warning, TEXT("User Registered"));
+	if (MyHUD)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("User Registered"));
+		BaseHUD = Cast<ABaseHUD>(MyHUD);
+		BaseHUD->SetupChat(ChatUserComponent);
+
+		UE_LOG(LogTemp, Warning, TEXT("Setup Hud"));
 	}
+
 }
 
 

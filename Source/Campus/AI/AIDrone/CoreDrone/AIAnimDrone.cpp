@@ -23,11 +23,9 @@ AAIAnimDrone::AAIAnimDrone()
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AAIDroneController::StaticClass();
+	
+	ChatUserComponent = CreateDefaultSubobject<UChatUserComponent>("ChatUserComponent");
 
-	if (!ChatUserComponent)
-	{
-		ChatUserComponent = CreateDefaultSubobject<UChatUserComponent>("ChatUserComponent");
-	}
 	
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
 	SceneComponent->SetupAttachment(GetRootComponent());
@@ -88,18 +86,11 @@ void AAIAnimDrone::StopRotateToPlayerAnim()
 
 UChatBox* AAIAnimDrone::OpenChat()
 {
-	if (!ChatWidget->IsInViewport())
-	{
-		ChatWidget->AddToPlayerScreen();
-		UE_LOG(LogTemp, Warning, TEXT("AddToScreen"));
-	}
-	ChatWidget->SetVisibility(ESlateVisibility::Visible);
 	return ChatWidget;
 }
 
 void AAIAnimDrone::CloseChat()
 {
-	ChatWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AAIAnimDrone::TeleportToLocation(int index)
