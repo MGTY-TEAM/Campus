@@ -30,7 +30,7 @@ private:
 
 	AAIAnimDrone* Drone;
 
-
+	int32 ActionPlace = 0;
 	
 	UBlackboardComponent* Blackboard;
 protected:

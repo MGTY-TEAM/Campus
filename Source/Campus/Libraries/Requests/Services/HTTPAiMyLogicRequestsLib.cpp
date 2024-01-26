@@ -90,7 +90,7 @@ void UHTTPAiMyLogicRequestsLib::MakeMove(const FString& GameId, const FString& M
 }
 
 
-void UHTTPAiMyLogicRequestsLib::CreateChessGame(FString AccessToken, int32 Level, int32 ClockLimit, int32 ClockIncrement, bool IsRated, FString Color, TFunction<void(bool, FString)> OnCreateGameCompleted)
+/*void UHTTPAiMyLogicRequestsLib::CreateChessGame(FString AccessToken, int32 Level, int32 ClockLimit, int32 ClockIncrement, bool IsRated, FString Color, TFunction<void(bool, FString)> OnCreateGameCompleted)
 {
     // Формируем URL для создания партии
     FString URL = "https://lichess.org/api/challenge";
@@ -152,5 +152,5 @@ void UHTTPAiMyLogicRequestsLib::CreateChessGame(FString AccessToken, int32 Level
 
     // Выполняем запрос
     HttpRequest->ProcessRequest();
-}
+}*/
 

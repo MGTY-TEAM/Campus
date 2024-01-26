@@ -32,7 +32,7 @@ void UEnvQueryTest_ChooseAPlace::RunTest(FEnvQueryInstance& QueryInstance) const
 
 	for (FEnvQueryInstance::ItemIterator It(this, QueryInstance); It; ++It)
 	{
-		const int32 ActionPlace = Blackboard->GetValueAsInt(ActionPlaceKey.SelectedKeyName);
+		const int32 ActionPlace = Blackboard->GetValueAsInt(ActionPlaceKeyName);
 		It.SetScore(TestPurpose, FilterType, It.GetIndex() == ActionPlace, Switch);
 	}
 }

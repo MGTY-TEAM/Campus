@@ -27,5 +27,5 @@ protected:
 	FName SelfActorKeyName = "SelfActor";
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
-	FBlackboardKeySelector ActionPlaceKey;
+	FName ActionPlaceKeyName = "ActionPlace";
 };

@@ -55,6 +55,12 @@ void UWaitForMessageTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Message to bot : %s "), *MessageInstance->GetMessageInfo().Get<2>().ToString());
+	
+	if (MessageInstance->GetMessageInfo().Get<2>().IsNumeric())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 05.f, FColor::Black, MessageInstance->GetMessageInfo().Get<2>().ToString());
+		ActionPlace = FCString::Atoi(*MessageInstance->GetMessageInfo().Get<2>().ToString());
+	}
 	if (Drone)
 	{
 		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
@@ -68,8 +74,7 @@ void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 					{
 						Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Teleport));
 						SActionType = EActionType::Teleport;
-
-						const int32 ActionPlace = ActionID;
+						
 						Blackboard->SetValueAsInt(ActionPlaceKey.SelectedKeyName, ActionPlace);
 					}
 
