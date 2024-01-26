@@ -16,8 +16,8 @@ void ABaseController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetInputMode(FInputModeGameOnly());
-
+	SetInputMode(FInputModeGameAndUI());
+	SetShowMouseCursor(true);
 	ChatUserComponent->SetUserID("DefaultCharacterName");
 	
 	UChatManager::RegisterUser("DefaultCharacterName", ChatUserComponent);
