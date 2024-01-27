@@ -12,22 +12,30 @@ ABoardCell::ABoardCell()
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("Scene");
-
+	StaticMeshComponent->OnClicked.AddDynamic(this,&ABoardCell::OnClicked);
 }
-
+void ABoardCell::OnClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
+{
+	OnCellClicked.Broadcast(CellPos.Get<0>(), CellPos.Get<1>());
+}
 // Called when the game starts or when spawned
 void ABoardCell::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-void ABoardCell::SetMaterial(UMaterialInstance* Material)
+void ABoardCell::SetUpCell(UMaterialInstance* Material, TPair<int, int> Pos)
 {
 	if (StaticMeshComponent)
 	{
 		StaticMeshComponent->SetMaterial(0, Material);
 	}
+	CellPos = Pos;
+}
+
+void ABoardCell::Click()
+{
+	OnCellClicked.Broadcast(CellPos.Get<0>(),CellPos.Get<1>());
 }
 
 void ABoardCell::PlacePiece(ABasePiece* NewPiece)

@@ -5,26 +5,35 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BoardCell.generated.h"
-
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnCellClicked, int, int);
 class ABasePiece;
 
 UCLASS()
 class CAMPUS_API ABoardCell : public AActor
 {
 	GENERATED_BODY()
+	
 	ABasePiece* Piece;
 
 	UPROPERTY(EditDefaultsOnly, Category="Mesh")
 	UStaticMeshComponent* StaticMeshComponent;
 	UPROPERTY(EditDefaultsOnly)
 	USceneComponent* SceneComponent;
-public:
-	// Sets default values for this actor's properties
-	ABoardCell();
+	
+	TPair<int, int> CellPos;
 
-	virtual void SetMaterial(UMaterialInstance* Material);
+	UFUNCTION()
+	void OnClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
+public:
+	ABoardCell();
+	
+	FOnCellClicked OnCellClicked;
+	
+	virtual void SetUpCell(UMaterialInstance* Material, TPair<int, int> Pos);
+
+	UFUNCTION(BlueprintCallable)
+	void Click();
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 

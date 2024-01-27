@@ -17,7 +17,7 @@ class CAMPUS_API AChessCameraPawn : public APawn
 	UPROPERTY(EditDefaultsOnly, Category="Camera")
 	UCameraComponent* CameraComponent;
 
-
+	APlayerController* PlayerController;
 	
 public:
 	// Sets default values for this pawn's properties
@@ -32,6 +32,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void Interaction();
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

@@ -9,6 +9,7 @@
 
 DEFINE_LOG_CATEGORY(LogRequests);
 
+
 void UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&, const FString&, const int&)> CallBack, const FString& StringRequest, const FString& URL)
 {
 	FHttpModule* Module = &FHttpModule::Get();
@@ -56,7 +57,7 @@ void UHTTPAiMyLogicRequestsLib::MakeMove(const FString& GameId, const FString& M
 	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
     
 	// Замените "{ACCESS_TOKEN}" на ваш токен авторизации
-	FString AccessToken = "lip_VZxSCsNUaVSIzRxQlg3f";
+	FString AccessToken = "lip_RCA8VdGf766wCcXmUMui";
 	Request->SetHeader(TEXT("Authorization"), FString::Printf(TEXT("Bearer %s"), *AccessToken));
 
 	FString JsonPayload = FString::Printf(TEXT("{\"offeringDraw\": %s}"), OfferingDraw ? TEXT("true") : TEXT("false"));
@@ -90,67 +91,94 @@ void UHTTPAiMyLogicRequestsLib::MakeMove(const FString& GameId, const FString& M
 }
 
 
-/*void UHTTPAiMyLogicRequestsLib::CreateChessGame(FString AccessToken, int32 Level, int32 ClockLimit, int32 ClockIncrement, bool IsRated, FString Color, TFunction<void(bool, FString)> OnCreateGameCompleted)
+
+
+void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)> CallBack, const FString& Level, bool Clock, const FString& Time, const FString& Increment)
 {
-    // Формируем URL для создания партии
-    /*FString URL = "https://lichess.org/api/challenge";
+	TSharedRef<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
+	Request->SetURL(TEXT("https://lichess.org/api/challenge/ai"));
+	Request->SetVerb(TEXT("POST"));
+	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 
-    // Формируем JSON-запрос для создания партии
-    TSharedPtr<FJsonObject> RequestData = MakeShareable(new FJsonObject);
-    RequestData->SetNumberField("level", Level);
+	// Замените "{ACCESS_TOKEN}" на ваш токен авторизации
+	FString AccessToken = "lip_RCA8VdGf766wCcXmUMui";
+	Request->SetHeader(TEXT("Authorization"), FString::Printf(TEXT("Bearer %s"), *AccessToken));
 
-    TSharedPtr<FJsonObject> ClockData = MakeShareable(new FJsonObject);
-    ClockData->SetNumberField("limit", ClockLimit);
-    ClockData->SetNumberField("increment", ClockIncrement);
-    RequestData->SetObjectField("clock", ClockData);
+	FString ClockSettings = Clock ? FString::Printf(TEXT(", \"clock.limit\": %s, \"clock.increment\": %s"), *Time, *Increment) : TEXT("");
 
-    RequestData->SetBoolField("rated", IsRated);
-    RequestData->SetStringField("color", Color);
+	FString JsonPayload = FString::Printf(TEXT("{\"level\": %s %s}"), *Level, *ClockSettings);
+	Request->SetContentAsString(JsonPayload);
 
-    FString JsonRequest;
-    TSharedRef<TJsonWriter<>> JsonWriter = TJsonWriterFactory<>::Create(&JsonRequest);
-    FJsonSerializer::Serialize(RequestData.ToSharedRef(), JsonWriter);
+	Request->OnProcessRequestComplete().BindLambda([=](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+	{
+		if (bConnectedSuccessfully && Response.IsValid())
+		{
+			int32 StatusCode = Response->GetResponseCode();
+			FString ResponseContent = Response->GetContentAsString();
+			UE_LOG(LogRequests, Warning, TEXT("%s"), *ResponseContent)
+			if (StatusCode == 201)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Игра создана успешно: %s"), *ResponseContent);
 
-    // Создаем HTTP-запрос
-    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> HttpRequest = FHttpModule::CreateRequest();
-    HttpRequest->SetURL(URL);
-    HttpRequest->SetVerb("POST");
-    HttpRequest->SetHeader("Content-Type", "application/json");
-    HttpRequest->SetHeader("Authorization", "Bearer " + AccessToken);
-    HttpRequest->SetContentAsString(JsonRequest);
+				TSharedPtr<FJsonObject> JsonObject;
+				TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseContent);
 
-    // Устанавливаем обработчики событий
-    HttpRequest->OnProcessRequestComplete().BindLambda(
-        [OnCreateGameCompleted](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
-        {
-            bool bSuccess = false;
-            FString Message;
+				if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
+				{
+					// Проверьте наличие и правильность ключа в вашем JSON-ответе
+					if (JsonObject->HasField("id"))
+					{
+						FString GameID = JsonObject->GetStringField("id");
+						CallBack(GameID); // Передача ID игры в Callback
+					}
+				}
+			}
+			else
+			{
+				// Обработка ошибки
+				UE_LOG(LogTemp, Error, TEXT("Ошибка при создании игры. Код ошибки: %d"), StatusCode);
+			}
+		}
+		else
+		{
+			// Обработка ошибки запроса
+			UE_LOG(LogTemp, Error, TEXT("Ошибка при выполнении HTTP-запроса"));
+		}
+	});
+	Request->ProcessRequest();
+}
 
-            if (bConnectedSuccessfully && Response.IsValid())
-            {
-                if (Response->GetResponseCode() == 200)
-                {
-                    // Обработка успешного ответа
-                    bSuccess = true;
-                    Message = "Game created successfully";
-                }
-                else
-                {
-                    // Обработка ошибочного ответа
-                    Message = "Failed to create game";
-                }
-            }
-            else
-            {
-                // Обработка ошибки подключения
-                Message = "Connection error";
-            }
+void UHTTPAiMyLogicRequestsLib::StreamGameMoves(TFunction<void(const FString&)> CallBack, const FString& GameId)
+{
+	TSharedRef<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
+	Request->SetURL(FString::Printf(TEXT("https://lichess.org/api/stream/game/%s"), *GameId));
+	Request->SetVerb(TEXT("GET"));
+	Request->SetHeader(TEXT("Content-Type"), TEXT("application/x-ndjson"));
 
-            OnCreateGameCompleted(bSuccess, Message);
-        }
-    );
+	Request->OnProcessRequestComplete().BindLambda([CallBack](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+	{
+		if (bConnectedSuccessfully && Response.IsValid())
+		{
+			// Обработка потоковых данных
+			TArray<FString> Lines;
+			Response->GetContentAsString().ParseIntoArrayLines(Lines);
 
-    // Выполняем запрос
-    HttpRequest->ProcessRequest();#1#
-}*/
+			for (const FString& Line : Lines)
+			{
+				// Разбор каждой строки как JSON
+				TSharedPtr<FJsonObject> JsonObject;
+				TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Line);
 
+				if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
+				{
+					CallBack(JsonObject->GetStringField("lastMove"));
+				}
+			}
+		}
+		else
+		{
+			// Обработка ошибки запроса
+		}
+	});
+	Request->ProcessRequest();
+}

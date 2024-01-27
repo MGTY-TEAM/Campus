@@ -4,6 +4,8 @@
 #include "BasePiece.h"
 
 
+
+
 // Sets default values
 ABasePiece::ABasePiece()
 {
@@ -11,7 +13,9 @@ ABasePiece::ABasePiece()
 	PrimaryActorTick.bCanEverTick = false;
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("PieceMesh");
+
 }
+
 
 // Called when the game starts or when spawned
 void ABasePiece::BeginPlay()
@@ -19,6 +23,7 @@ void ABasePiece::BeginPlay()
 	Super::BeginPlay();
 	
 }
+
 
 TMap<int, int> ABasePiece::GetPossibleMoves()
 {

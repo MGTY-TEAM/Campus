@@ -6,23 +6,25 @@
 #include "GameFramework/Actor.h"
 #include "BasePiece.generated.h"
 
+
+
 UCLASS()
 class CAMPUS_API ABasePiece : public AActor
 {
 	GENERATED_BODY()
 
-
+	UPROPERTY(EditDefaultsOnly)
+	UStaticMeshComponent* StaticMeshComponent;
+	
 public:
-	// Sets default values for this actor's properties
 	ABasePiece();
 	
 	void MakeMove();
-
+	
 	virtual TMap<int, int> GetPossibleMoves();
+	
 protected:
 	virtual void BeginPlay() override;
-	UPROPERTY(EditDefaultsOnly)
-	UStaticMeshComponent* StaticMeshComponent;
-	// Return all possible moves for piece
+	
 	
 };

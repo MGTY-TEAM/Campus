@@ -18,14 +18,10 @@ class CAMPUS_API UHTTPAiMyLogicRequestsLib : public UObject
 public:
 	
 	static FString& CURRENT_GAME_ID;
-
-
-	
 	static void AIMyLogicGetRequest(TFunction<void(const FString&, const FString&, const int&)> CallBack, const FString& StringRequest, const FString& URL);
 	
-	UFUNCTION(BlueprintCallable, Category="Chess Engine")
 	static void MakeMove(const FString& GameId, const FString& Move, bool OfferingDraw);
-	/*UFUNCTION(BlueprintCallable, Category="Chess Engine")
-	static void CreateChessGame(FString AccessToken, int32 Level, int32 ClockLimit, int32 ClockIncrement, bool IsRated,
-	                     FString Color, TFunction<void(bool, FString)> OnCreateGameCompleted);*/
+
+	static void CreateGameWithAI(TFunction<void(const FString&)> CallBack, const FString& Level, bool Clock, const FString& Time, const FString& Increment);
+	static void StreamGameMoves(TFunction<void(const FString&)> CallBack, const FString& GameId);
 };

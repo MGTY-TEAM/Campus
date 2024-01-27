@@ -3,8 +3,11 @@
 
 #include "ChessCameraPawn.h"
 
+#include "BoardCell.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/GameSession.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -24,18 +27,38 @@ AChessCameraPawn::AChessCameraPawn()
 void AChessCameraPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
 }
 
 // Called every frame
 void AChessCameraPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+}
+
+void AChessCameraPawn::Interaction()
+{
+	if (PlayerController)
+	{
+		FHitResult HitResult;
+		PlayerController->GetHitResultUnderCursorByChannel(TraceTypeQuery1, false, HitResult);
+		if (HitResult.bBlockingHit)
+		{
+			if (ABoardCell* BoardCell = Cast<ABoardCell>(HitResult.GetActor()))
+			{
+				BoardCell->Click();
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input
 void AChessCameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAction("ChessBoardinteraction",IE_Pressed,this, &AChessCameraPawn::Interaction);
+	
 }
 

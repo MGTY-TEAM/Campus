@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BoardCell.h"
+#include "Templates/Tuple.h"
 #include "GameFramework/Actor.h"
 #include "GenerativeBoard.generated.h"
 
@@ -28,6 +29,11 @@ public:
 	UMaterialInstance* BlackMaterial;
 	UPROPERTY(EditAnywhere, Category="Cell Material")
 	UMaterialInstance* WhiteMaterial;
+	UFUNCTION()
+	void OnCellClicked(int X, int Y);
+	FString CurrentGameID;
+	
+	TPair<FString, FString> SelectedCells;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
