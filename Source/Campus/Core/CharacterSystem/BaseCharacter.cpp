@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Campus/Chat/ChatManager.h"
 #include "Campus/Chat/ChatUserComponent.h"
+#include "Components/WidgetInteractionComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "LocalComponents/InteractionComponent.h"
 
@@ -18,11 +19,14 @@ ABaseCharacter::ABaseCharacter()
 	
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+	WidgetInteractionComponent = CreateDefaultSubobject<UWidgetInteractionComponent>("WidgetInteractionComponent");
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-
+	
 	CameraComponent->SetupAttachment(SpringArmComponent);
-
+	
+	WidgetInteractionComponent->SetupAttachment(CameraComponent);
+	
 	SpringArmComponent->SetupAttachment(RootComponent);
 }
 

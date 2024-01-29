@@ -29,7 +29,7 @@ ABinaryTree::ABinaryTree()
 	Six->SetupAttachment(Tree);
 	Seven->SetupAttachment(Tree);
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> Apple(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Apple/QApple.QApple'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> Apple(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/YPPles/QApple.QApple'"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> Banana(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Banana/QBanana.QBanana'"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> Blue(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Blue/QBlue.QBlue'"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> Cherry(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Cherry/QCherry.QCherry'"));

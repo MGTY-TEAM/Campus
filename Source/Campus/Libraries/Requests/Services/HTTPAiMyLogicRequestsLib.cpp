@@ -3,10 +3,13 @@
 
 #include "HTTPAiMyLogicRequestsLib.h"
 
+#include "HTTPAiMyLogicRequestsLib.h"
 #include "HttpModule.h"
-#include "GenericPlatform/GenericPlatformHttp.h"
+#include "Sockets.h"
+#include "SocketSubsystem.h"
 #include "Interfaces/IHttpResponse.h"
-
+#include "GenericPlatform/GenericPlatformHttp.h"
+#include "Interfaces/IPv4/IPv4Address.h"
 DEFINE_LOG_CATEGORY(LogRequests);
 
 
@@ -143,41 +146,6 @@ void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)>
 		{
 			// Обработка ошибки запроса
 			UE_LOG(LogTemp, Error, TEXT("Ошибка при выполнении HTTP-запроса"));
-		}
-	});
-	Request->ProcessRequest();
-}
-
-void UHTTPAiMyLogicRequestsLib::StreamGameMoves(TFunction<void(const FString&)> CallBack, const FString& GameId)
-{
-	TSharedRef<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
-	Request->SetURL(FString::Printf(TEXT("https://lichess.org/api/stream/game/%s"), *GameId));
-	Request->SetVerb(TEXT("GET"));
-	Request->SetHeader(TEXT("Content-Type"), TEXT("application/x-ndjson"));
-
-	Request->OnProcessRequestComplete().BindLambda([CallBack](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
-	{
-		if (bConnectedSuccessfully && Response.IsValid())
-		{
-			// Обработка потоковых данных
-			TArray<FString> Lines;
-			Response->GetContentAsString().ParseIntoArrayLines(Lines);
-
-			for (const FString& Line : Lines)
-			{
-				// Разбор каждой строки как JSON
-				TSharedPtr<FJsonObject> JsonObject;
-				TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Line);
-
-				if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
-				{
-					CallBack(JsonObject->GetStringField("lastMove"));
-				}
-			}
-		}
-		else
-		{
-			// Обработка ошибки запроса
 		}
 	});
 	Request->ProcessRequest();

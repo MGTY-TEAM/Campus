@@ -5,6 +5,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "..\..\..\Interfaces\Interaction\Interactable.h"
+#include "Components/WidgetInteractionComponent.h"
 
 DECLARE_LOG_CATEGORY_CLASS(LogInteractionCompoent, Log, Log);
 
@@ -34,6 +35,14 @@ void UInteractionComponent::TryInteract()
 			OnSimpleInteract.Broadcast();
 		}
 	}
+	
+	/*if (UWidgetInteractionComponent* WidgetInteractionComponent = Cast<UWidgetInteractionComponent>(GetOwner()->GetComponentByClass(UWidgetInteractionComponent::StaticClass())))
+	{
+		UE_LOG(LogInteractionCompoent, Warning, TEXT("Widget Interaction"));
+		WidgetInteractionComponent->PressKey(EKeys::LeftMouseButton );
+	}*/
+	
+	
 }
 
 void UInteractionComponent::SetHoldStatus(bool bStatus)
