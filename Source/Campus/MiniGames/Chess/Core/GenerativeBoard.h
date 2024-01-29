@@ -31,6 +31,8 @@ public:
 	UMaterialInstance* WhiteMaterial;
 	UFUNCTION()
 	void OnCellClicked(int X, int Y);
+	UFUNCTION()
+	void OnBoardUpdated(const FString& Fen);
 	FString CurrentGameID;
 	
 	TPair<FString, FString> SelectedCells;

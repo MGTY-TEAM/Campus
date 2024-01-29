@@ -3,8 +3,6 @@
 
 #include "Panal.h"
 
-#include "AsyncTreeDifferences.h"
-
 
 // Sets default values
 APanal::APanal()

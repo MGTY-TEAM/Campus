@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+class UWidgetInteractionComponent;
 class USpringArmComponent;
 class UChatUserComponent;
 class UCameraComponent;
@@ -32,6 +33,8 @@ protected:
 	virtual void LookUp(float value);
 	virtual void LookRight(float value);
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Components")
+	UWidgetInteractionComponent* WidgetInteractionComponent;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	UInteractionComponent* InteractionComponent;

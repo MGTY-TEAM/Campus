@@ -5,6 +5,7 @@
 
 #include "BoardCell.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 
 // Sets default values
@@ -19,20 +20,6 @@ void AGenerativeBoard::BeginPlay()
 {
 	Super::BeginPlay();
 	GenerateBoard();
-	UHTTPAiMyLogicRequestsLib::CreateGameWithAI([this](FString GameID)
-	{
-		CurrentGameID = GameID;
-		UE_LOG(LogTemp, Warning, TEXT("GameID = %s"), *CurrentGameID);
-
-		UHTTPAiMyLogicRequestsLib::StreamGameMoves([this](FString LastMove)
-	{
-			UE_LOG(LogTemp, Warning, TEXT("LastMove = %s"), *LastMove);
-
-	},CurrentGameID);
-		
-	},"1",true, "1080", "0");
-
-	
 	
 }
 
@@ -81,6 +68,11 @@ void AGenerativeBoard::OnCellClicked(int X, int Y)
 		UHTTPAiMyLogicRequestsLib::MakeMove(CurrentGameID, SelectedCells.Key + SelectedCells.Value, false);
 		SelectedCells = TPair<FString, FString>();
 	}
+}
+
+void AGenerativeBoard::OnBoardUpdated(const FString& Fen)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Fen:%s"), *Fen);
 }
 
 void AGenerativeBoard::GenerateBoard()

@@ -10,18 +10,20 @@ DECLARE_LOG_CATEGORY_EXTERN(LogRequests, Log, All);
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFenReceivedDelegate, const FString&, Fen);
+
 UCLASS()
 class CAMPUS_API UHTTPAiMyLogicRequestsLib : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	
+	static FSocket* Socket;
+	static FFenReceivedDelegate OnFenReceived;
+
 	static FString& CURRENT_GAME_ID;
 	static void AIMyLogicGetRequest(TFunction<void(const FString&, const FString&, const int&)> CallBack, const FString& StringRequest, const FString& URL);
-	
 	static void MakeMove(const FString& GameId, const FString& Move, bool OfferingDraw);
-
 	static void CreateGameWithAI(TFunction<void(const FString&)> CallBack, const FString& Level, bool Clock, const FString& Time, const FString& Increment);
-	static void StreamGameMoves(TFunction<void(const FString&)> CallBack, const FString& GameId);
+	
 };

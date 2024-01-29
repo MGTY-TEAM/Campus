@@ -8,7 +8,7 @@ public class Campus : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem","Networking","WebSockets","Sockets" });
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
@@ -20,7 +20,8 @@ public class Campus : ModuleRules
 			"JsonUtilities",
 			"UMG",
 			"SlateCore",
-			"Slate"
+			"Slate",
+
 		});
 
         PublicIncludePaths.AddRange(new string[]
