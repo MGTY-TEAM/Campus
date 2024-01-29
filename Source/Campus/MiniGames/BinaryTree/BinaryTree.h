@@ -3,6 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ActorReferencesUtils.h"
+#include "PanalRandom.h"
+#include "Panal.h"
+#include "Campus/Interfaces/Interaction/Interactable.h"
 #include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"
 #include "GameFramework/Actor.h"
 #include "UObject/UObjectGlobals.h"
@@ -13,7 +17,7 @@ class CAMPUS_API ABinaryTree : public AActor , public IBinaryFruit
 {
 	GENERATED_BODY()
 
-public:
+protected:
 	// Sets default values for this actor's properties
 	ABinaryTree();
 
@@ -44,21 +48,19 @@ public:
 	UPROPERTY(EditAnywhere);
 	UStaticMeshComponent* Seven;
 	
-protected:
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	TArray<FString> AllAnswString {"apple","banana","blue","cherry","grape","orange","pine","straw"};
-	TArray<FString> AnswString;
 
 	TArray<int32> AllIntForRandom {0,1,2,3,4,5,6,7};
 	TArray<int32> IntForRandom;
-	
+
+
 	TArray<UStaticMesh*> MeshesObj;
 	TArray<UStaticMeshComponent*> Meshes;
 
 public:
 	
-	virtual void BinaryTreeI(int32 a, int32 b, int32 c, FString F, FString S, FString T) override;
+	virtual void BinaryTreeI(int32 FirstAnswerNumber, int32 SecondAnswerNumber, int32 ThirdAnswerNumber, int32 FirstMeshNumber, int32 SecondMeshNumber, int32 ThirdMeshNumber) override;
 
 };

@@ -77,16 +77,18 @@ void APanal::SetupOldLocationAndAnsw()
 		FVector ComponentLocationNew = UsedMeshes[i]->GetComponentLocation();
 		ComponentLocationNew.X = ComponentLocationNew.X - 3;
 		UsedMeshes[i]->SetWorldLocation(ComponentLocationNew);
-		AnswerNum = 0;
+		AnswerNumber = 0;
 		RightAnswers = 0;
 	}
 	UsedMeshes.Empty();
 }
 
-void APanal::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal)
+void APanal::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint,
+	const FVector& InteractionNormal)
 {
 	if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(InteractComponent))
 	{
+		// Set Location For Button
 		if (PrimitiveComponent != AnswerButton and PrimitiveComponent != DeleteButton)
 		{
 			if (UsedMeshes.Contains(PrimitiveComponent))
@@ -103,23 +105,24 @@ void APanal::Interact(UActorComponent* InteractComponent, const FVector& Interac
 		}
 	
 		// Add Answer when Answer True
-		if (AnswerNum<=2)
+		if (AnswerNumber<=3)
 		{
 			if (Meshes.Contains(PrimitiveComponent))
 			{
-				if (RightAnsw[AnswerNum] == PrimitiveComponent->GetMaterial(0)->GetName())
+				if (Meshes[RightAnswer[AnswerNumber]] == PrimitiveComponent)	
 				{
 					RightAnswers++;
-					GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::FromInt(AnswerNum));
+				
+					UE_LOG(LogTemp, Warning, TEXT("AnswerButton works %d ") , RightAnswers );
 				}
 			}
 		}
 
-		AnswerNum++;
+		AnswerNumber++;
+		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::FromInt(AnswerNumber));
 	
 		if (PrimitiveComponent == AnswerButton)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("AnswerButton works %d ") , RightAnswers );
 			if (RightAnswers == 3)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("You win"));
@@ -139,21 +142,21 @@ void APanal::Interact(UActorComponent* InteractComponent, const FVector& Interac
 		}
 
 		// Reset if Answer too much
-		if (AnswerNum==4)
+		if (AnswerNumber==4)
 		{
 			SetupOldLocationAndAnsw();
 		}
 	}
-
+	
 }
 
-
-void APanal::PanalI(FString a, FString b, FString c)
+void APanal::PanalI(int32 FirstMeshNumber, int32 SecondMeshNumber, int32 ThirdMeshNumber)
 {
-	RightAnsw.Empty();
-	RightAnsw.Add(a);
-	RightAnsw.Add(b);
-	RightAnsw.Add(c);
+	RightAnswer.Empty();
+	RightAnswer.Add(FirstMeshNumber);
+	RightAnswer.Add(SecondMeshNumber);
+	RightAnswer.Add(ThirdMeshNumber);
+
 	
 	for (int i = 0; i < Meshes.Num(); ++i)
 	{

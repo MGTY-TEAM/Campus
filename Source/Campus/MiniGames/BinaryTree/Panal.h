@@ -13,7 +13,7 @@ class CAMPUS_API APanal : public AActor , public IInteractable , public IBinaryF
 {
 	GENERATED_BODY()
 
-public:
+protected:
 	// Sets default values for this actor's properties
 	APanal();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -51,17 +51,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* AnswerButton;
-
-
-protected:
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	TArray<FString> RightAnsw;
+	TArray<int32> RightAnswer;
 	
 	int32 RightAnswers = 0;
 	
-	int32 AnswerNum = 0;
+	int32 AnswerNumber = 0;
 	
 	TArray<UStaticMeshComponent*> Meshes;
 	
@@ -70,11 +68,12 @@ protected:
 	int32 k = 0;
 
 	TArray<UPrimitiveComponent*> UsedMeshes;
+	
 	void SetupOldLocationAndAnsw();
 	
 public:
 	
-	virtual  void Interact(UActorComponent* GetComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
-
-	virtual void PanalI(FString a, FString b, FString c) override;
+	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
+	
+	virtual void PanalI(int32 FirstMeshNumber, int32 SecondMeshNumber, int32 ThirdMeshNumber) override;
 };

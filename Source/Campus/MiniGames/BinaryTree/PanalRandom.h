@@ -16,35 +16,37 @@ class CAMPUS_API APanalRandom : public AActor , public IInteractable , public IB
 {
 	GENERATED_BODY()
 
+protected:
+	
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	UTextRenderComponent* TextRender;
 	
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	UBoxComponent* CollisionMesh;
 	
-
-public:
 	// Sets default values for this actor's properties
 	APanalRandom();
 
-protected:
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
+
+	//Using only for debug
 	TArray<FString> AllAnswString {"apple","banana","blue","cherry","grape","orange","pine","straw"}; 
 	
 	int32 FirstAnsw = 0;
 	int32 SecondAnsw = 0;
 	int32 ThirdAnsw = 0;
 	
-	FString FirstAnswString = "";
-	FString SecondAnswString = "";
-	FString ThirdAnswString = "";
+	int32 FirstAnswMesh = 0;
+	int32 SecondAnswMesh = 0;
+	int32 ThirdAnswMesh = 0;
 	
 	FString ToBinary(int32 num);
 
 public:
-
+	
 	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
 	
 };
