@@ -3,6 +3,7 @@
 
 #include "GenerativeBoard.h"
 
+#include "BasePiece.h"
 #include "BoardCell.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "GameFramework/FloatingPawnMovement.h"
@@ -65,7 +66,6 @@ void AGenerativeBoard::OnCellClicked(int X, int Y)
 	else if (SelectedCells.Value.IsEmpty())
 	{
 		SelectedCells.Value = UCICommand;
-		UHTTPAiMyLogicRequestsLib::MakeMove(CurrentGameID, SelectedCells.Key + SelectedCells.Value, false);
 		SelectedCells = TPair<FString, FString>();
 	}
 }
@@ -96,13 +96,39 @@ void AGenerativeBoard::GenerateBoard()
 			FVector CellPos = FVector(StartupPos.X - j * Padding, StartupPos.Y + i * Padding, StartupPos.Z);
 
 			ABoardCell* BoardCell = GetWorld()->SpawnActor<ABoardCell>(BoardCellClass, CellPos, FRotator());
+
+			switch (StartupPattern[i][j])
+			{
+			case 0:
+				BoardCell->SetUpCell(TPair<int,int>(i,j), nullptr);
+				break;
+			case 1:
+				BoardCell->SetUpCell(TPair<int,int>(i,j), GetWorld()->SpawnActor<ABasePiece>(PawnClass, BoardCell->GetActorTransform()));
+				break;
+			case 2:
+				BoardCell->SetUpCell(TPair<int,int>(i,j), GetWorld()->SpawnActor<ABasePiece>(KnightClass,BoardCell->GetActorTransform()));
+				break;
+			case 3:
+				BoardCell->SetUpCell(TPair<int,int>(i,j), GetWorld()->SpawnActor<ABasePiece>(BishopClass, BoardCell->GetActorTransform()));
+				break;
+			case 4:
+				BoardCell->SetUpCell(TPair<int,int>(i,j), GetWorld()->SpawnActor<ABasePiece>(RookClass, BoardCell->GetActorTransform()));
+				break;
+			case 5:
+				BoardCell->SetUpCell(TPair<int,int>(i,j), GetWorld()->SpawnActor<ABasePiece>(QuinClass, BoardCell->GetActorTransform()));
+				break;
+			case 6:
+				BoardCell->SetUpCell(TPair<int,int>(i,j),GetWorld()->SpawnActor<ABasePiece>(KingClass, BoardCell->GetActorTransform()));
+				break;
+			default: break;
+			}
 			if ((i + j) % 2 == 0)
 			{
-				BoardCell->SetUpCell(BlackMaterial, TPair<int, int>(i, j));
+				BoardCell->SetUpColor(BlackMaterial,false);
 			}
 			else
 			{
-				BoardCell->SetUpCell(WhiteMaterial, TPair<int, int>(i, j));
+				BoardCell->SetUpColor(WhiteMaterial, true);
 			}
 			BoardCell->OnCellClicked.AddUObject(this, &AGenerativeBoard::OnCellClicked);
 		}

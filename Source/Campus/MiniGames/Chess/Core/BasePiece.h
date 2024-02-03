@@ -22,7 +22,7 @@ public:
 	void MakeMove();
 	
 	virtual TMap<int, int> GetPossibleMoves();
-	
+	bool bWhite;
 protected:
 	virtual void BeginPlay() override;
 	

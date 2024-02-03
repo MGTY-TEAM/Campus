@@ -13,7 +13,6 @@ ABasePiece::ABasePiece()
 	PrimaryActorTick.bCanEverTick = false;
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("PieceMesh");
-
 }
 
 

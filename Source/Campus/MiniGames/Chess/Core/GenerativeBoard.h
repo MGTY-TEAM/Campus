@@ -36,10 +36,23 @@ public:
 	FString CurrentGameID;
 	
 	TPair<FString, FString> SelectedCells;
+
+	UPROPERTY(EditDefaultsOnly, Category="PiecesClasses")
+	TSubclassOf<ABasePiece> PawnClass;
+	UPROPERTY(EditDefaultsOnly, Category="PiecesClasses")
+	TSubclassOf<ABasePiece> KnightClass;
+	UPROPERTY(EditDefaultsOnly, Category="PiecesClasses")
+	TSubclassOf<ABasePiece> BishopClass;
+	UPROPERTY(EditDefaultsOnly, Category="PiecesClasses")
+	TSubclassOf<ABasePiece> RookClass;
+	UPROPERTY(EditDefaultsOnly, Category="PiecesClasses")
+	TSubclassOf<ABasePiece> QuinClass;
+	UPROPERTY(EditDefaultsOnly, Category="PiecesClasses")
+	TSubclassOf<ABasePiece> KingClass;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	virtual void GenerateBoard();
-public:
 };

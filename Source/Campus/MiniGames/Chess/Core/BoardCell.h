@@ -17,22 +17,23 @@ class CAMPUS_API ABoardCell : public AActor
 
 	UPROPERTY(EditDefaultsOnly, Category="Mesh")
 	UStaticMeshComponent* StaticMeshComponent;
-	UPROPERTY(EditDefaultsOnly)
-	USceneComponent* SceneComponent;
+
 	
 	TPair<int, int> CellPos;
 
 	UFUNCTION()
 	void OnClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
 public:
+	UPROPERTY(EditDefaultsOnly)
+	USceneComponent* SceneComponent;
 	ABoardCell();
-	
-	FOnCellClicked OnCellClicked;
-	
-	virtual void SetUpCell(UMaterialInstance* Material, TPair<int, int> Pos);
-
-	UFUNCTION(BlueprintCallable)
+	virtual void SetUpCell(TPair<int, int> Pos, ABasePiece* = nullptr);
+	virtual void SetUpColor(UMaterialInstance* MaterialInstance, bool bColorWhite);
 	void Click();
+
+	FOnCellClicked OnCellClicked;
+
+	bool bWhite; 
 protected:
 	virtual void BeginPlay() override;
 
