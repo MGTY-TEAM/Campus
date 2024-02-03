@@ -12,7 +12,7 @@ ABoardCell::ABoardCell()
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("Scene");
-	StaticMeshComponent->OnClicked.AddDynamic(this,&ABoardCell::OnClicked);
+	StaticMeshComponent->OnClicked.AddDynamic(this, &ABoardCell::OnClicked);
 
 	SceneComponent = RootComponent;
 }
@@ -38,7 +38,11 @@ void ABoardCell::SetUpColor(UMaterialInstance* MaterialInstance, bool bColorWhit
 		StaticMeshComponent->SetMaterial(0, MaterialInstance);
 		bWhite = bColorWhite;
 	}
-	if(Piece)
+	if(bWhite && bColorWhite)
+	{
+		
+	}
+	else
 	{
 		
 	}

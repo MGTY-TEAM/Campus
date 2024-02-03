@@ -96,21 +96,15 @@ void UHTTPAiMyLogicRequestsLib::MakeMove(const FString& GameId, const FString& M
 
 
 
-void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)> CallBack, const FString& Level, bool Clock, const FString& Time, const FString& Increment)
+void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)> CallBack, bool StartWithWhite)
 {
 	TSharedRef<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
-	Request->SetURL(TEXT("https://lichess.org/api/challenge/ai"));
+	Request->SetURL(TEXT("http://127.0.0.1:5000/create_game"));
 	Request->SetVerb(TEXT("POST"));
+	
+	Request->SetContentAsString(StartWithWhite ? "{\"player_color\": \"white\"}" : "{\"player_color\": \"black\"}");
 	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 
-	// Замените "{ACCESS_TOKEN}" на ваш токен авторизации
-	FString AccessToken = "lip_RCA8VdGf766wCcXmUMui";
-	Request->SetHeader(TEXT("Authorization"), FString::Printf(TEXT("Bearer %s"), *AccessToken));
-
-	FString ClockSettings = Clock ? FString::Printf(TEXT(", \"clock.limit\": %s, \"clock.increment\": %s"), *Time, *Increment) : TEXT("");
-
-	FString JsonPayload = FString::Printf(TEXT("{\"level\": %s %s}"), *Level, *ClockSettings);
-	Request->SetContentAsString(JsonPayload);
 
 	Request->OnProcessRequestComplete().BindLambda([=](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 	{
@@ -119,7 +113,7 @@ void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)>
 			int32 StatusCode = Response->GetResponseCode();
 			FString ResponseContent = Response->GetContentAsString();
 			UE_LOG(LogRequests, Warning, TEXT("%s"), *ResponseContent)
-			if (StatusCode == 201)
+			if (StatusCode == 200)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Игра создана успешно: %s"), *ResponseContent);
 
@@ -129,9 +123,9 @@ void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)>
 				if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
 				{
 					// Проверьте наличие и правильность ключа в вашем JSON-ответе
-					if (JsonObject->HasField("id"))
+					if (JsonObject->HasField("game_id"))
 					{
-						FString GameID = JsonObject->GetStringField("id");
+						FString GameID = JsonObject->GetStringField("game_id");
 						CallBack(GameID); // Передача ID игры в Callback
 					}
 				}

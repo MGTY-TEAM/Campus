@@ -21,7 +21,11 @@ void AGenerativeBoard::BeginPlay()
 {
 	Super::BeginPlay();
 	GenerateBoard();
-	
+	UHTTPAiMyLogicRequestsLib::CreateGameWithAI([this](const FString& GameID)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Game_ID: %s"), *GameID);
+		CurrentGameID = GameID;
+	},true);
 }
 
 void AGenerativeBoard::OnCellClicked(int X, int Y)
