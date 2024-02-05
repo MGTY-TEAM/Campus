@@ -3,6 +3,8 @@
 
 #include "BoardCell.h"
 
+#include "BasePiece.h"
+
 
 // Sets default values
 ABoardCell::ABoardCell()
@@ -26,9 +28,15 @@ void ABoardCell::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ABoardCell::SetUpCell(TPair<int, int> Pos, ABasePiece* BasePiece)
+void ABoardCell::SetUpCell(TPair<int, int> Pos, ABasePiece* BasePiece, UMaterialInstance* PieceMaterial)
 {
 	CellPos = Pos;
+	Piece = BasePiece;
+	if (Piece)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s"), *Piece->GetName());
+		Piece->StaticMeshComponent->SetMaterial(0, PieceMaterial);
+	}
 }
 
 void ABoardCell::SetUpColor(UMaterialInstance* MaterialInstance, bool bColorWhite)
@@ -38,22 +46,12 @@ void ABoardCell::SetUpColor(UMaterialInstance* MaterialInstance, bool bColorWhit
 		StaticMeshComponent->SetMaterial(0, MaterialInstance);
 		bWhite = bColorWhite;
 	}
-	if(bWhite && bColorWhite)
-	{
-		
-	}
-	else
-	{
-		
-	}
 }
 
 void ABoardCell::Click()
 {
-	if (Piece)
-	{
-		OnCellClicked.Broadcast(CellPos.Get<0>(),CellPos.Get<1>());
-	}
+	UE_LOG(LogTemp, Warning, TEXT("BoardCell Click"));
+	OnCellClicked.Broadcast(CellPos.Get<0>(),CellPos.Get<1>());
 }
 
 void ABoardCell::PlacePiece(ABasePiece* NewPiece)

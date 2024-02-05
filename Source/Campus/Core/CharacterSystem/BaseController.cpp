@@ -18,7 +18,7 @@ void ABaseController::BeginPlay()
 	
 	SetInputMode(FInputModeGameAndUI());
 	SetShowMouseCursor(true);
-	ChatUserComponent->SetUserID("DefaultCharacterName");
+	/*ChatUserComponent->SetUserID("DefaultCharacterName");
 	
 	UChatManager::RegisterUser("DefaultCharacterName", ChatUserComponent);
 
@@ -30,7 +30,7 @@ void ABaseController::BeginPlay()
 		BaseHUD->SetupChat(ChatUserComponent);
 
 		UE_LOG(LogTemp, Warning, TEXT("Setup Hud"));
-	}
+	}*/
 
 }
 

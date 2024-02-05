@@ -13,10 +13,12 @@ class CAMPUS_API ABasePiece : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly)
-	UStaticMeshComponent* StaticMeshComponent;
+
 	
 public:
+
+	UPROPERTY(EditDefaultsOnly)
+	UStaticMeshComponent* StaticMeshComponent;
 	ABasePiece();
 	
 	void MakeMove();

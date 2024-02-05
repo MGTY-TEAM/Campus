@@ -43,10 +43,13 @@ void AChessCameraPawn::Interaction()
 	{
 		FHitResult HitResult;
 		PlayerController->GetHitResultUnderCursorByChannel(TraceTypeQuery1, false, HitResult);
+		UE_LOG(LogTemp, Warning, TEXT("Try ChessInteraction"));
 		if (HitResult.bBlockingHit)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("ChessInteraction block"));
 			if (ABoardCell* BoardCell = Cast<ABoardCell>(HitResult.GetActor()))
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Try board cell click"));
 				BoardCell->Click();
 			}
 		}
