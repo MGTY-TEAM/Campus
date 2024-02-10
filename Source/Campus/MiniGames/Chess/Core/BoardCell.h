@@ -12,12 +12,8 @@ UCLASS()
 class CAMPUS_API ABoardCell : public AActor
 {
 	GENERATED_BODY()
-	
-	
-
 	UPROPERTY(EditDefaultsOnly, Category="Mesh")
 	UStaticMeshComponent* StaticMeshComponent;
-
 	
 	TPair<int, int> CellPos;
 

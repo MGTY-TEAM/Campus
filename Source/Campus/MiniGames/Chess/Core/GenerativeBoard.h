@@ -7,7 +7,8 @@
 #include "Templates/Tuple.h"
 #include "GameFramework/Actor.h"
 #include "GenerativeBoard.generated.h"
-
+DECLARE_MULTICAST_DELEGATE(FOnPlayerMoveCompleted)
+DECLARE_MULTICAST_DELEGATE(FOnAIMoveCompleted)
 
 UCLASS()
 class CAMPUS_API AGenerativeBoard : public AActor
@@ -39,6 +40,8 @@ class CAMPUS_API AGenerativeBoard : public AActor
 		{"h", 7},
 	};
 
+	FOnPlayerMoveCompleted OnPlayerMoveCompleted;
+	FOnAIMoveCompleted OnAIMoveCompleted;
 public:
 	// Sets default values for this actor's properties
 	AGenerativeBoard();
@@ -46,9 +49,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Classes")
 	TSubclassOf<ABoardCell> BoardCellClass;
 
+	bool bPlayerTurn = false;
+	
 	UPROPERTY(EditAnywhere)
 	float Padding = 100.f;
 
+	UPROPERTY(EditDefaultsOnly, Category="Piece Animation Settings", meta=(ClampMin="0.3", ClampMax="2.0"))
+	float PieceAnimationSeconds = 1.0f;
+	UPROPERTY(EditDefaultsOnly, Category="Piece Animation Settings", meta=(ClampMin="0.01", ClampMax="0.2") )
+	float PieceAnimationFrequency = 0.01f;
+	
 	UPROPERTY(EditAnywhere, Category="Cell Material")
 	UMaterialInstance* BlackCellMaterial;
 	UPROPERTY(EditAnywhere, Category="Cell Material")
@@ -62,11 +72,13 @@ public:
 	void OnCellClicked(int X, int Y);
 
 	void TryToPlayerMove(const FString& UCI);
+	void TryToAIMove(const FString& UCI);
 	UFUNCTION()
 	void OnBoardUpdated(const FString& Fen);
 
-	void MakeMove(const FString& UCI);
-	
+	void ExecutePlayerMove(const FString& UCI);
+	void ExecuteAIMove(const FString& UCI);
+
 	FString CurrentGameID;
 
 	TPair<FString, FString> SelectedCells;
@@ -85,6 +97,11 @@ public:
 	TSubclassOf<ABasePiece> KingClass;
 
 protected:
+	
+	FTimerHandle PieceAnimationTimerHandle;
+
+	float CurrentPieceAnimationPoint = 1.0f;
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
