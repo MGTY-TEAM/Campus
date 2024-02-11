@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Campus/AI/Tasks/MoveAlongThePathTask.h"
-#include "Campus/AI/AIDroneController.h"
-#include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationData.h"
 #include "NavigationSystem.h"
+#include "Campus/AI/AIDroneController.h"
+#include "AI/Navigation/NavigationTypes.h"
 #include "AI/Navigation/NavAgentInterface.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Campus/AI/AIDrone/CampusCoreTypes.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
-#include "Campus/Core/CharacterSystem/BaseCharacter.h"
-#include "Engine/Engine.h"
 
 UMoveAlongThePathTask::UMoveAlongThePathTask()
 {
@@ -29,32 +29,34 @@ void UMoveAlongThePathTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 
-	AAIDroneController* const Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
-	if (!Controller) return;
-
-	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
+	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	if (!Blackboard) return;
 
-	// ABaseFirstPersonCharacter* Character = Cast<ABaseFirstPersonCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
-	// if (!Character) return;
-
-	bool ISeeYou = Blackboard->GetValueAsBool(ISeeYouKey.SelectedKeyName);
-	if (!ISeeYou && !CharacterIsGone)
+	const bool ISeeYou = Blackboard->GetValueAsBool(ISeeYouKey.SelectedKeyName);
+	const bool HeIsStandingNow = Blackboard->GetValueAsBool(IsHeStandingKey.SelectedKeyName);
+	if (!ISeeYou)
 	{
-		AbortMove(OwnerComp, NodeMemory);
-		CharacterIsGone = true;
+		ClearTimer();
+		PauseMove(OwnerComp, NodeMemory);
 	}
-	else if (ISeeYou && CharacterIsGone)
+	else if (ISeeYou)
 	{
-		RequestMove(OwnerComp, NodeMemory);
-		CharacterIsGone = false;
+		if (GetWorld() && !SetTimer)
+		{
+			GetWorld()->GetTimerManager().SetTimer(RequestMoveHandle, this, &UMoveAlongThePathTask::OnRequsetMove, 0.5f, false);
+			SetTimer = true;
+		}
+	}
+	
+	if (HeIsStandingNow)
+	{
+		ClearTimer();
 	}
 }
 
 ANavigationData* UMoveAlongThePathTask::FindNavigationData(UNavigationSystemV1& NavSys, UObject* Owner) const
 {
-	INavAgentInterface* NavAgent = Cast<INavAgentInterface>(Owner);
-	if (NavAgent)
+	if (const INavAgentInterface* NavAgent = Cast<INavAgentInterface>(Owner))
 	{
 		return NavSys.GetNavDataForProps(NavAgent->GetNavAgentPropertiesRef(), NavAgent->GetNavAgentLocation());
 	}
@@ -64,20 +66,26 @@ ANavigationData* UMoveAlongThePathTask::FindNavigationData(UNavigationSystemV1& 
 
 void UMoveAlongThePathTask::FinishMove(const FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
-	// if (Result.IsInterrupted()) return;
-	// else if (RequestID == MainRequestID) IsMove = false;
 	if (Result.IsSuccess() && RequestID == MainRequestID)
 	{
-		/*IsMove = false;
+		IsMove = false;
 
 		UBlackboardComponent* Blackboard = MyOwnerComp->GetBlackboardComponent();
 		if (!Blackboard) return;
-
-		ABaseCharacter* Character = Cast<ABaseCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
-		if (!Character) return;
-
-		Character->SetArrivalValue(true);*/
+		
+		Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Walk));
 	}
+}
+
+void UMoveAlongThePathTask::ClearTimer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(RequestMoveHandle);
+	SetTimer = false;
+}
+
+void UMoveAlongThePathTask::OnRequsetMove()
+{
+	RequestMove(*MyOwnerComp, nullptr);
 }
 
 EBTNodeResult::Type UMoveAlongThePathTask::RequestMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -95,15 +103,16 @@ EBTNodeResult::Type UMoveAlongThePathTask::RequestMove(UBehaviorTreeComponent& O
 
 	UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(OwnerComp.GetWorld());
 	if (!NavSys) return EBTNodeResult::Failed;
-
+	
 	ANavigationData* NavData = FindNavigationData(*NavSys, OwnerComp.GetOwner());
 	if (!NavData) return EBTNodeResult::Failed;
 
-	EPathFindingMode::Type PFMode(EPathFindingMode::Regular);
+	EPathFindingMode::Type PFMode(EPathFindingMode::Hierarchical);
 	FSharedConstNavQueryFilter NavFilter = UNavigationQueryFilter::GetQueryFilter(*NavData, OwnerComp.GetOwner(), FilterClass);
 
 	FPathFindingQuery Query(OwnerComp.GetOwner(), *NavData, Drone->GetActorLocation(), DestinationPoint, NavFilter);
 	Query.SetAllowPartialPaths(false);
+	Query.SetNavAgentProperties(15.f);
 
 	FPathFindingResult Result = NavSys->FindPathSync(Query, PFMode);
 
@@ -112,18 +121,16 @@ EBTNodeResult::Type UMoveAlongThePathTask::RequestMove(UBehaviorTreeComponent& O
 	
 	IsMove = true;
 
+	Controller->ClearFocus(EAIFocusPriority::Gameplay);
 	Controller->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &UMoveAlongThePathTask::FinishMove);
 
 	return EBTNodeResult::InProgress;
 }
 
-void UMoveAlongThePathTask::AbortMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+void UMoveAlongThePathTask::PauseMove(const UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
-	AAIDroneController* const Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
+	const AAIDroneController* Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
 	if (!Controller) return;
 
-	Controller->GetPathFollowingComponent()->AbortMove(
-		*OwnerComp.GetOwner(), 
-		FPathFollowingResultFlags::MovementStop, 
-		MainRequestID);
+	Controller->GetPathFollowingComponent()->PauseMove(MainRequestID);
 }

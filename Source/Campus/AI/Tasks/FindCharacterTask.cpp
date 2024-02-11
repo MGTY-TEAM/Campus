@@ -7,6 +7,7 @@
 #include "NavigationData.h"
 #include "NavigationSystem.h"
 #include "AI/Navigation/NavAgentInterface.h"
+#include "Campus/AI/AIDrone/CampusCoreTypes.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 #include "TimerManager.h"
 #include "Engine/World.h"
@@ -21,10 +22,20 @@ UFindCharacterTask::UFindCharacterTask()
 
 EBTNodeResult::Type UFindCharacterTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	if (!GetWorld()) return EBTNodeResult::Failed;
-
 	OwnerComponent = &OwnerComp;
 	NodeMem = NodeMemory;
+
+	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
+	if (!Blackboard) return EBTNodeResult::Failed;
+
+	if (Blackboard->GetValueAsBool(IsHeGettingCloserKey.SelectedKeyName))
+	{
+		HeIsCloser = true;
+		return EBTNodeResult::Succeeded;
+	}
+	
+	if (!GetWorld()) return EBTNodeResult::Failed;
+	
 	GetWorld()->GetTimerManager().SetTimer(CharacterLossHandle, this, &UFindCharacterTask::OnTimerFired, WaitingTime, false);
 
 	AAIDroneController* const Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
@@ -57,6 +68,8 @@ void UFindCharacterTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 
 void UFindCharacterTask::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
 {
+	if (HeIsCloser) return;
+	
 	GetWorld()->GetTimerManager().ClearTimer(CharacterLossHandle);
 	AbortMove(OwnerComp, NodeMemory);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, "ClearTimer");
@@ -132,5 +145,7 @@ void UFindCharacterTask::OnTimerFired()
 	if (!Blackboard) return;
 
 	AbortMove(*OwnerComponent, NodeMem);
+	Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Walk));
 	Blackboard->ClearValue(CharacterActorKey.SelectedKeyName);
+	
 }

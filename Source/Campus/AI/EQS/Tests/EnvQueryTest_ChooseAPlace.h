@@ -6,9 +6,6 @@
 #include "EnvironmentQuery/EnvQueryTest.h"
 #include "EnvQueryTest_ChooseAPlace.generated.h"
 
-// class ATeleportationPlane;
-class UMessageInstance;
-
 UCLASS()
 class CAMPUS_API UEnvQueryTest_ChooseAPlace : public UEnvQueryTest
 {
@@ -16,9 +13,6 @@ class CAMPUS_API UEnvQueryTest_ChooseAPlace : public UEnvQueryTest
 	
 public:
 	UEnvQueryTest_ChooseAPlace(const FObjectInitializer& ObjectInitializer);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Test")
-	int index = 0;
 
 protected:
 	virtual void RunTest(FEnvQueryInstance& QueryInstance) const override;

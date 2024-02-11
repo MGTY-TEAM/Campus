@@ -6,9 +6,6 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "SetCharacter.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class CAMPUS_API USetCharacter : public UBTTaskNode
 {

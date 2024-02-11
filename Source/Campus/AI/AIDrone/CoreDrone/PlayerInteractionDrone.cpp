@@ -3,6 +3,10 @@
 
 #include "PlayerInteractionDrone.h"
 
+APlayerInteractionDrone::APlayerInteractionDrone()
+{
+}
+
 void APlayerInteractionDrone::BeginPlay()
 {
 	Super::BeginPlay();

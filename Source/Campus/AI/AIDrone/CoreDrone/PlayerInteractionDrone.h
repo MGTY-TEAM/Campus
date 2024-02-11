@@ -14,7 +14,8 @@ UCLASS()
 class CAMPUS_API APlayerInteractionDrone : public ACoreDrone
 {
 	GENERATED_BODY()
-
+public:
+	APlayerInteractionDrone();
 protected:
 	virtual void BeginPlay() override;
 };

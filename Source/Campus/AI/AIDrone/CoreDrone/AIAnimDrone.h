@@ -24,8 +24,7 @@ class CAMPUS_API AAIAnimDrone : public APlayerInteractionDrone
 	
 public:
 	AAIAnimDrone();
-
-
+	
 	UPROPERTY(EditDefaultsOnly)
 	UChatUserComponent* ChatUserComponent;
 	
@@ -76,8 +75,8 @@ public:
 	void EndDarkeningScreen();
 
 	FVector GetStartLocation() const { return StartLocationOfDrone; }
-
-
+	USplineComponent* GetSpline() const { return SplineComponent; }
+	
 	bool LeadingTheCharacter = false;
 protected:
 	virtual void BeginPlay() override;

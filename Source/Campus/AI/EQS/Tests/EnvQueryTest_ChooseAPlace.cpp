@@ -1,14 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Campus/AI/EQS/Tests/EnvQueryTest_ChooseAPlace.h"
-#include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "EnvironmentQuery/Items/EnvQueryItemType_ActorBase.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
-// #include "Campus/UserInterface/ChatBox.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
-// #include "Campus/Drone/TeleportationPlane.h"
-#include "Campus\Chat\MessageInstance.h"
 
 UEnvQueryTest_ChooseAPlace::UEnvQueryTest_ChooseAPlace(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -28,11 +24,9 @@ void UEnvQueryTest_ChooseAPlace::RunTest(FEnvQueryInstance& QueryInstance) const
 
 	AAIAnimDrone* const Drone = Cast<AAIAnimDrone>(Blackboard->GetValueAsObject(SelfActorKeyName));
 
-	// Cast<ATeleportationPlane>(Drone->TeleportationPlaces[index]);
-
 	for (FEnvQueryInstance::ItemIterator It(this, QueryInstance); It; ++It)
 	{
 		const int32 ActionPlace = Blackboard->GetValueAsInt(ActionPlaceKeyName);
-		It.SetScore(TestPurpose, FilterType, It.GetIndex() == ActionPlace, Switch);
+		It.SetScore(TestPurpose, FilterType, Drone->TeleportationPlaces[It.GetIndex()] == Drone->TeleportationPlaces[ActionPlace - 1], Switch);
 	}
 }

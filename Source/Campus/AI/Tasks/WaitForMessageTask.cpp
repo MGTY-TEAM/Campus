@@ -58,7 +58,6 @@ void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 	
 	if (MessageInstance->GetMessageInfo().Get<2>().IsNumeric())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 05.f, FColor::Black, MessageInstance->GetMessageInfo().Get<2>().ToString());
 		ActionPlace = FCString::Atoi(*MessageInstance->GetMessageInfo().Get<2>().ToString());
 	}
 	if (Drone)
