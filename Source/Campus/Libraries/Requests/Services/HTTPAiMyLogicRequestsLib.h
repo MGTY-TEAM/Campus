@@ -19,11 +19,11 @@ class CAMPUS_API UHTTPAiMyLogicRequestsLib : public UObject
 
 public:
 	static FSocket* Socket;
-	static FFenReceivedDelegate OnFenReceived;
 
 	static FString& CURRENT_GAME_ID;
 	static void AIMyLogicGetRequest(TFunction<void(const FString&, const FString&, const int&)> CallBack, const FString& StringRequest, const FString& URL);
 	static void MakeMove(TFunction<void(bool, const FString&, const FString&)> CallBack,const FString& GameId, const FString& Move);
 	static void CreateGameWithAI(TFunction<void(const FString&)> CallBack, bool StartWithWhite);
+	static void MakeAiMove(TFunction<void(const FString&, const FString&, const FString&, const FString&)> CallBack, const FString& GameId);
 	
 };

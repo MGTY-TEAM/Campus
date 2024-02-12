@@ -3,13 +3,9 @@
 
 #include "HTTPAiMyLogicRequestsLib.h"
 
-#include "HTTPAiMyLogicRequestsLib.h"
 #include "HttpModule.h"
-#include "Sockets.h"
-#include "SocketSubsystem.h"
 #include "Interfaces/IHttpResponse.h"
 #include "GenericPlatform/GenericPlatformHttp.h"
-#include "Interfaces/IPv4/IPv4Address.h"
 DEFINE_LOG_CATEGORY(LogRequests);
 
 
@@ -54,59 +50,6 @@ void UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
 	Request->ProcessRequest();
 }
 
-void UHTTPAiMyLogicRequestsLib::MakeMove(TFunction<void(bool, const FString&, const FString&)> CallBack,
-                                         const FString& GameId, const FString& Move)
-{
-	TSharedRef<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
-	Request->SetURL(TEXT("http://127.0.0.1:5000/make_move"));
-	Request->SetVerb(TEXT("POST"));
-	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
-
-	FString JsonPayload = FString::Printf(TEXT("{\"game_id\": \"%s\",\"move\": \"%s\"}"), *GameId, *Move);
-	UE_LOG(LogTemp, Warning, TEXT("Данные для отправки: %s"), *JsonPayload);
-	Request->SetContentAsString(JsonPayload);
-
-	Request->OnProcessRequestComplete().BindLambda(
-		[=](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
-		{
-			if (bConnectedSuccessfully && Response.IsValid())
-			{
-				int32 StatusCode = Response->GetResponseCode();
-				FString ResponseContent = Response->GetContentAsString();
-				TSharedPtr<FJsonObject> JsonObject;
-				TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseContent);
-				UE_LOG(LogRequests, Warning, TEXT("%s"), *ResponseContent)
-				if (StatusCode == 200)
-				{
-					if (FJsonSerializer::Deserialize(Reader, JsonObject))
-					{
-						// Ход успешно выполнен
-						UE_LOG(LogTemp, Warning, TEXT("Ход выполнен успешно: %s"), *ResponseContent);
-
-						bool bValidMove = JsonObject->GetBoolField("valid_move");
-						FString AIMove = JsonObject->GetStringField("ai_move");
-						FString GameStatus = JsonObject->GetStringField("game_status");
- 
-						CallBack(bValidMove, AIMove, GameStatus);
-					}
-					else
-					{
-						// Обработка ошибки
-						UE_LOG(LogTemp, Error, TEXT("Ошибка при выполнении хода. Код ошибки: %d"), StatusCode);
-					}
-				}
-				else
-				{
-					// Обработка ошибки запроса
-					UE_LOG(LogTemp, Error, TEXT("Ошибка при выполнении HTTP-запроса"));
-				}
-			}
-		}
-			);
-			Request->ProcessRequest();
-}
-
-
 void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)> CallBack, bool StartWithWhite)
 {
 	TSharedRef<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
@@ -125,7 +68,7 @@ void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)>
 			{
 				int32 StatusCode = Response->GetResponseCode();
 				FString ResponseContent = Response->GetContentAsString();
-				UE_LOG(LogRequests, Warning, TEXT("%s"), *ResponseContent)
+				
 				if (StatusCode == 200)
 				{
 					UE_LOG(LogTemp, Warning, TEXT("Игра создана успешно: %s"), *ResponseContent);
@@ -135,25 +78,125 @@ void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)>
 
 					if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
 					{
-						// Проверьте наличие и правильность ключа в вашем JSON-ответе
 						if (JsonObject->HasField("game_id"))
 						{
 							FString GameID = JsonObject->GetStringField("game_id");
-							CallBack(GameID); // Передача ID игры в Callback
+							CallBack(GameID); 
 						}
 					}
 				}
 				else
 				{
-					// Обработка ошибки
 					UE_LOG(LogTemp, Error, TEXT("Ошибка при создании игры. Код ошибки: %d"), StatusCode);
 				}
 			}
 			else
 			{
-				// Обработка ошибки запроса
 				UE_LOG(LogTemp, Error, TEXT("Ошибка при выполнении HTTP-запроса"));
 			}
 		});
+	Request->ProcessRequest();
+}
+
+void UHTTPAiMyLogicRequestsLib::MakeMove(TFunction<void(bool, const FString&, const FString&)> CallBack,
+										 const FString& GameId, const FString& Move)
+{
+	TSharedRef<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
+	Request->SetURL(TEXT("http://127.0.0.1:5000/make_move"));
+	Request->SetVerb(TEXT("POST"));
+	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+
+	FString JsonPayload = FString::Printf(TEXT("{\"game_id\": \"%s\",\"move\": \"%s\"}"), *GameId, *Move);
+	UE_LOG(LogTemp, Warning, TEXT("Данные для отправки: %s"), *JsonPayload);
+	Request->SetContentAsString(JsonPayload);
+
+	Request->OnProcessRequestComplete().BindLambda(
+		[=](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+		{
+			if (bConnectedSuccessfully && Response.IsValid())
+			{
+				int32 StatusCode = Response->GetResponseCode();
+				FString ResponseContent = Response->GetContentAsString();
+				
+				TSharedPtr<FJsonObject> JsonObject;
+				TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseContent);
+				
+				UE_LOG(LogRequests, Warning, TEXT("%s"), *ResponseContent)
+				if (StatusCode == 200)
+				{
+					if (FJsonSerializer::Deserialize(Reader, JsonObject))
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Ход выполнен успешно: %s"), *ResponseContent);
+
+						bool bValidMove = JsonObject->GetBoolField("valid_move");
+						FString PlayerCastle = JsonObject->GetStringField("player_castle");
+						FString GameStatus = JsonObject->GetStringField("game_status");
+ 
+						CallBack(bValidMove, PlayerCastle, GameStatus);
+					}
+					else
+					{
+						UE_LOG(LogTemp, Error, TEXT("Ошибка при выполнении хода. Код ошибки: %d"), StatusCode);
+					}
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("Ошибка при выполнении HTTP-запроса"));
+				}
+			}
+		}
+			);
+	Request->ProcessRequest();
+}
+
+void UHTTPAiMyLogicRequestsLib::MakeAiMove(TFunction<void(const FString&, const FString&, const FString&, const FString&)> CallBack, const FString& GameId)
+{
+	TSharedRef<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
+	Request->SetURL(TEXT("http://127.0.0.1:5000/make_ai_move"));
+	Request->SetVerb(TEXT("POST"));
+	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+
+	FString JsonPayload = FString::Printf(TEXT("{\"game_id\": \"%s\"}"), *GameId);
+	
+	Request->SetContentAsString(JsonPayload);
+
+	Request->OnProcessRequestComplete().BindLambda(
+		[=](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+		{
+			if (bConnectedSuccessfully && Response.IsValid())
+			{
+				int32 StatusCode = Response->GetResponseCode();
+				FString ResponseContent = Response->GetContentAsString();
+				
+				TSharedPtr<FJsonObject> JsonObject;
+				TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseContent);
+				
+				UE_LOG(LogRequests, Warning, TEXT("%s"), *ResponseContent)
+				if (StatusCode == 200)
+				{
+					if (FJsonSerializer::Deserialize(Reader, JsonObject))
+					{
+
+						UE_LOG(LogTemp, Warning, TEXT("Ход выполнен успешно: %s"), *ResponseContent);
+
+						const FString& AIMove = JsonObject->GetStringField("ai_move");
+						const FString& AICastle = JsonObject->GetStringField("ai_castle");
+						const FString& GameStatus = JsonObject->GetStringField("game_status");
+						const FString& CurrentFen = JsonObject->GetStringField("current_fen");
+						
+						CallBack(AIMove, AICastle, GameStatus, CurrentFen);
+					}
+					else
+					{
+						UE_LOG(LogTemp, Error, TEXT("Ошибка при выполнении хода. Код ошибки: %d"), StatusCode);
+					}
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("Ошибка при выполнении HTTP-запроса"));
+				}
+			}
+		}
+			);
 	Request->ProcessRequest();
 }

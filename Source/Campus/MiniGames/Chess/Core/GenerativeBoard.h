@@ -49,7 +49,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Classes")
 	TSubclassOf<ABoardCell> BoardCellClass;
 
-	bool bPlayerTurn = false;
+	bool bPlayerTurn = true;
 	
 	UPROPERTY(EditAnywhere)
 	float Padding = 100.f;
@@ -76,8 +76,9 @@ public:
 	UFUNCTION()
 	void OnBoardUpdated(const FString& Fen);
 
-	void ExecutePlayerMove(const FString& UCI);
-	void ExecuteAIMove(const FString& UCI);
+	void ExecuteWhiteKingCastle(bool bPlayerMove);
+	void ExecutePlayerMove(const FString& UCI, const FString& CastleStatus);
+	void ExecuteAIMove(const FString& UCI, const FString& CastleStatus);
 
 	FString CurrentGameID;
 
