@@ -98,7 +98,7 @@ void UHTTPAiMyLogicRequestsLib::CreateGameWithAI(TFunction<void(const FString&)>
 	Request->ProcessRequest();
 }
 
-void UHTTPAiMyLogicRequestsLib::MakeMove(TFunction<void(bool, const FString&, const FString&)> CallBack,
+void UHTTPAiMyLogicRequestsLib::MakeMove(TFunction<void(bool, const FString&, const FString&, const FString&)> CallBack,
 										 const FString& GameId, const FString& Move)
 {
 	TSharedRef<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
@@ -131,8 +131,9 @@ void UHTTPAiMyLogicRequestsLib::MakeMove(TFunction<void(bool, const FString&, co
 						bool bValidMove = JsonObject->GetBoolField("valid_move");
 						FString PlayerCastle = JsonObject->GetStringField("player_castle");
 						FString GameStatus = JsonObject->GetStringField("game_status");
+						FString CurrentFen = JsonObject->GetStringField("current_fen");
  
-						CallBack(bValidMove, PlayerCastle, GameStatus);
+						CallBack(bValidMove, PlayerCastle, GameStatus, CurrentFen);
 					}
 					else
 					{

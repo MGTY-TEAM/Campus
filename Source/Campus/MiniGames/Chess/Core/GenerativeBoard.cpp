@@ -5,6 +5,7 @@
 
 #include "BasePiece.h"
 #include "BoardCell.h"
+#include "Campus/Libraries/MiniGames/Chess/ChessAuxiliaryLib.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Experimental/Async/AwaitableTask.h"
 #include "GameFramework/FloatingPawnMovement.h"
@@ -35,7 +36,7 @@ void AGenerativeBoard::BeginPlay()
 		UHTTPAiMyLogicRequestsLib::MakeAiMove(
 			[this](const FString& AIMove, const FString& AICastle, const FString& GameStatus, const FString& CurrentFen)
 			{
-				ExecuteAIMove(AIMove, AICastle);
+				ExecuteAIMove(AIMove, AICastle, CurrentFen);
 			}, CurrentGameID);
 	});
 
@@ -48,8 +49,7 @@ void AGenerativeBoard::BeginPlay()
 void AGenerativeBoard::OnCellClicked(int X, int Y)
 {
 	FString UCICommand;
-
-
+	
 	UCICommand += HorisontalUCI[Y];
 
 	UCICommand += FString::FromInt(X + 1);
@@ -73,11 +73,11 @@ void AGenerativeBoard::OnCellClicked(int X, int Y)
 void AGenerativeBoard::TryToPlayerMove(const FString& UCI)
 {
 	UHTTPAiMyLogicRequestsLib::MakeMove(
-		[this,UCI](bool bMoveValid, const FString& PlayerCastle, const FString& GameStatus)
+		[this,UCI](bool bMoveValid, const FString& PlayerCastle, const FString& GameStatus, const FString& CurrentFen)
 		{
 			if (bMoveValid)
 			{
-				ExecutePlayerMove(UCI, PlayerCastle);
+				ExecutePlayerMove(UCI, PlayerCastle, CurrentFen);
 				UE_LOG(LogTemp, Warning, TEXT("Ход запущен"));
 			}
 		}, CurrentGameID, UCI);
@@ -92,142 +92,105 @@ void AGenerativeBoard::OnBoardUpdated(const FString& Fen)
 	UE_LOG(LogTemp, Warning, TEXT("Fen:%s"), *Fen);
 }
 
-void AGenerativeBoard::ExecuteWhiteKingCastle(bool bPlayerMove)
+
+
+void AGenerativeBoard::ExecutePlayerMove(const FString& UCI, const FString& CastleStatus, const FString& NewFen)
 {
-	ABasePiece* King;
-	ABasePiece* Rook;
+	FString FirstKey = "";
+	FirstKey += UCI[0];
+	int32 IFirst = RverseHorisontalUCI[FirstKey];
+	int32 JFirst = FCString::Atoi(*UCI.Mid(1, 1)) - 1;
 
-	if (Board[0][3]->Piece)
-	{
-		King = Board[0][3]->Piece;
-	}
-	else
-	{
-		return;
-	}
+	FString SecondKey = "";
+	SecondKey += UCI[2];
+	int32 ISecond = RverseHorisontalUCI[SecondKey];
+	int32 JSecond = FCString::Atoi(*UCI.Mid(3, 1)) - 1;
 
-	if (Board[0][0]->Piece)
-	{
-		Rook = Board[0][0]->Piece;
-	}
-	else
-	{
-		return;
-	}
+	ABoardCell* FirstCell = Board[JFirst][IFirst];
+	ABoardCell* SecondCell = Board[JSecond][ISecond];
 
-	FVector TargetKingPosition = FVector(Board[0][1]->GetActorLocation().X, Board[0][1]->GetActorLocation().Y,
-	                                     King->GetActorLocation().Z);
-	FVector TargetRookPosition = FVector(Board[0][2]->GetActorLocation().X, Board[0][2]->GetActorLocation().Y,
-	                                     Rook->GetActorLocation().Z);
 
-	GetWorld()->GetTimerManager().SetTimer(PieceAnimationTimerHandle,
-	                                       [this, King, Rook, TargetKingPosition, TargetRookPosition]()
-	                                       {
-		                                       if (CurrentPieceAnimationPoint >= 1.0f)
-		                                       {
-			                                       GetWorld()->GetTimerManager().ClearTimer(PieceAnimationTimerHandle);
-		                                       }
-		                                       else
-		                                       {
-			                                       CurrentPieceAnimationPoint += PieceAnimationFrequency;
-			                                       King->SetActorLocation(FVector(
-				                                       FMath::Lerp(GetActorLocation().X, TargetKingPosition.X,
-				                                                   CurrentPieceAnimationPoint),
-				                                       FMath::Lerp(GetActorLocation().X, TargetKingPosition.X,
-				                                                   CurrentPieceAnimationPoint), TargetKingPosition.Z));
-			                                       Rook->SetActorLocation(FVector(
-				                                       FMath::Lerp(GetActorLocation().X, TargetRookPosition.X,
-				                                                   CurrentPieceAnimationPoint),
-				                                       FMath::Lerp(GetActorLocation().X, TargetRookPosition.X,
-				                                                   CurrentPieceAnimationPoint), TargetKingPosition.Z));
-		                                       }
-	                                       }, PieceAnimationFrequency, true);
-}
 
-void AGenerativeBoard::ExecutePlayerMove(const FString& UCI, const FString& CastleStatus)
-{
-	if (!CastleStatus.IsEmpty())
+	TArray<FString> FenMatrix = UChessAuxiliaryLib::FenToFenMatrix(NewFen);
+
+
+	/*for (int i = 0; i < FenMatrix.Num(); i++)
 	{
-		switch (CastleStatus)
+		for(int j = 0; j < FenMatrix.Num(); i++)
 		{
-		case FString("white_king_castle"):
-			ExecuteWhiteKingCastle(true);
-			break;
-		case FString("white_quin_castle"):
-			break;
-		case FString("black_king_castle"):
-			break;
-		case FString("black_quin_castle"):
-			break;
-		default:
-			break;
-		}
-	}
-	else
-	{
-		FString FirstKey = "";
-		FirstKey += UCI[0];
-		int32 IFirst = RverseHorisontalUCI[FirstKey];
-		int32 JFirst = FCString::Atoi(*UCI.Mid(1, 1)) - 1;
-
-		FString SecondKey = "";
-		SecondKey += UCI[2];
-		int32 ISecond = RverseHorisontalUCI[SecondKey];
-		int32 JSecond = FCString::Atoi(*UCI.Mid(3, 1)) - 1;
-
-		ABoardCell* FirstCell = Board[JFirst][IFirst];
-		ABoardCell* SecondCell = Board[JSecond][ISecond];
-		if (FirstCell && SecondCell)
-		{
-			if (FirstCell->Piece)
+			if (FenMatrix[i][j] == '0')
 			{
-				ABasePiece* FirstPiece = FirstCell->Piece;
+				if (Board[i][j]->Piece)
+				{
+					Board[i][j]->Piece->Destroy();
+				}
+			}
+			else  
+			{
+				TCHAR BoardLetter = UChessAuxiliaryLib::WhitePieceClassToFenChar[Board[i][j]->Piece->StaticClass()];
+				if (FChar::IsUpper(FenMatrix[i][j]) == BoardLetter)
+				{
+					
+				}
+				else if (FChar::IsLower(FenMatrix[i][j]) == BoardLetter)
+				{
+					
+				}
+			}
 
-				CurrentPieceAnimationPoint = 0.0f;
-				GetWorld()->GetTimerManager().SetTimer(PieceAnimationTimerHandle,
-				                                       [this,FirstPiece,SecondCell,FirstCell]()
+		}
+	}*/
+	
+	if (FirstCell && SecondCell)
+	{
+		if (FirstCell->Piece)
+		{
+			ABasePiece* FirstPiece = FirstCell->Piece;
+
+			CurrentPieceAnimationPoint = 0.0f;
+			GetWorld()->GetTimerManager().SetTimer(PieceAnimationTimerHandle,
+			                                       [this,FirstPiece,SecondCell,FirstCell]()
+			                                       {
+				                                       if (CurrentPieceAnimationPoint >= 1.0f)
 				                                       {
-					                                       if (CurrentPieceAnimationPoint >= 1.0f)
+					                                       UE_LOG(LogTemp, Error, TEXT("Таймер очистился!"));
+					                                       GetWorld()->GetTimerManager().ClearTimer(
+						                                       PieceAnimationTimerHandle);
+					                                       if (SecondCell->Piece)
 					                                       {
-						                                       UE_LOG(LogTemp, Error, TEXT("Таймер очистился!"));
-						                                       GetWorld()->GetTimerManager().ClearTimer(
-							                                       PieceAnimationTimerHandle);
-						                                       if (SecondCell->Piece)
-						                                       {
-							                                       SecondCell->Piece->Destroy();
-							                                       SecondCell->Piece = FirstCell->Piece;
-							                                       FirstCell->Piece = nullptr;
-						                                       }
-						                                       else
-						                                       {
-							                                       SecondCell->Piece = FirstCell->Piece;
-							                                       FirstCell->Piece = nullptr;
-						                                       }
-						                                       OnPlayerMoveCompleted.Broadcast();
+						                                       SecondCell->Piece->Destroy();
+						                                       SecondCell->Piece = FirstCell->Piece;
+						                                       FirstCell->Piece = nullptr;
 					                                       }
 					                                       else
 					                                       {
-						                                       CurrentPieceAnimationPoint += PieceAnimationFrequency;
-						                                       float NewLocationX = FMath::Lerp(
-							                                       FirstPiece->GetActorLocation().X,
-							                                       SecondCell->GetActorLocation().X,
-							                                       CurrentPieceAnimationPoint);
-						                                       float NewLocationY = FMath::Lerp(
-							                                       FirstPiece->GetActorLocation().Y,
-							                                       SecondCell->GetActorLocation().Y,
-							                                       CurrentPieceAnimationPoint);
-						                                       FirstPiece->SetActorLocation(
-							                                       FVector(NewLocationX, NewLocationY,
-							                                               FirstPiece->GetActorLocation().Z));
-						                                       UE_LOG(LogTemp, Warning, TEXT("Таймер сработал!"));
+						                                       SecondCell->Piece = FirstCell->Piece;
+						                                       FirstCell->Piece = nullptr;
 					                                       }
-				                                       }, PieceAnimationFrequency, true);
-			}
+					                                       OnPlayerMoveCompleted.Broadcast();
+				                                       }
+				                                       else
+				                                       {
+					                                       CurrentPieceAnimationPoint += PieceAnimationFrequency;
+					                                       float NewLocationX = FMath::Lerp(
+						                                       FirstPiece->GetActorLocation().X,
+						                                       SecondCell->GetActorLocation().X,
+						                                       CurrentPieceAnimationPoint);
+					                                       float NewLocationY = FMath::Lerp(
+						                                       FirstPiece->GetActorLocation().Y,
+						                                       SecondCell->GetActorLocation().Y,
+						                                       CurrentPieceAnimationPoint);
+					                                       FirstPiece->SetActorLocation(
+						                                       FVector(NewLocationX, NewLocationY,
+						                                               FirstPiece->GetActorLocation().Z));
+					                                       UE_LOG(LogTemp, Warning, TEXT("Таймер сработал!"));
+				                                       }
+			                                       }, PieceAnimationFrequency, true);
 		}
 	}
 }
 
-void AGenerativeBoard::ExecuteAIMove(const FString& UCI, const FString& CastleStatus)
+void AGenerativeBoard::ExecuteAIMove(const FString& UCI, const FString& CastleStatus, const FString& New_Fen)
 {
 	FString FirstKey = "";
 	FirstKey += UCI[0];
@@ -322,34 +285,34 @@ void AGenerativeBoard::GenerateBoard()
 				break;
 			case 1:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
-				                     GetWorld()->SpawnActor<ABasePiece>(PawnClass, BoardCell->GetActorTransform()),
+				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetPawnClass(), BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 2:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
 				                     GetWorld()->SpawnActor<
-					                     ABasePiece>(KnightClass, BoardCell->GetActorTransform()),
+					                     ABasePiece>(UChessAuxiliaryLib::GetKnightClass(), BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 3:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
 				                     GetWorld()->SpawnActor<
-					                     ABasePiece>(BishopClass, BoardCell->GetActorTransform()),
+					                     ABasePiece>(UChessAuxiliaryLib::GetBishopClass(), BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 4:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
-				                     GetWorld()->SpawnActor<ABasePiece>(RookClass, BoardCell->GetActorTransform()),
+				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetRookClass(), BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 5:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
-				                     GetWorld()->SpawnActor<ABasePiece>(QuinClass, BoardCell->GetActorTransform()),
+				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetQuinClass(), BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 6:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
-				                     GetWorld()->SpawnActor<ABasePiece>(KingClass, BoardCell->GetActorTransform()),
+				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetKingClass(), BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			default: break;

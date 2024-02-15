@@ -75,10 +75,9 @@ public:
 	void TryToAIMove(const FString& UCI);
 	UFUNCTION()
 	void OnBoardUpdated(const FString& Fen);
-
-	void ExecuteWhiteKingCastle(bool bPlayerMove);
-	void ExecutePlayerMove(const FString& UCI, const FString& CastleStatus);
-	void ExecuteAIMove(const FString& UCI, const FString& CastleStatus);
+	
+	void ExecutePlayerMove(const FString& UCI, const FString& CastleStatus, const FString& New_Fen);
+	void ExecuteAIMove(const FString& UCI, const FString& CastleStatus, const FString& New_Fen);
 
 	FString CurrentGameID;
 
