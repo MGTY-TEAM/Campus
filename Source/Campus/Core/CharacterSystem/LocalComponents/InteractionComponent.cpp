@@ -36,11 +36,13 @@ void UInteractionComponent::TryInteract()
 		}
 	}
 	
-	/*if (UWidgetInteractionComponent* WidgetInteractionComponent = Cast<UWidgetInteractionComponent>(GetOwner()->GetComponentByClass(UWidgetInteractionComponent::StaticClass())))
+	if (UWidgetInteractionComponent* WidgetInteractionComponent = Cast<UWidgetInteractionComponent>(GetOwner()->GetComponentByClass(UWidgetInteractionComponent::StaticClass())))
 	{
 		UE_LOG(LogInteractionCompoent, Warning, TEXT("Widget Interaction"));
-		WidgetInteractionComponent->PressKey(EKeys::LeftMouseButton );
-	}*/
+		WidgetInteractionComponent->PressPointerKey(EKeys::LeftMouseButton);
+		WidgetInteractionComponent->ReleasePointerKey(EKeys::LeftMouseButton);
+		//PressKey(EKeys::LeftMouseButton);
+	}
 	
 	
 }

@@ -4,9 +4,11 @@
 #include "PanalRandom.h"
 #include "Engine/World.h"  
 #include "BinaryTree.h"
+#include "PanalRandom.h"
 #include "GPUSkinCache.h"
 #include "NavigationSystemTypes.h"
-#include "Panal.h"
+#include "PanalButtonsWidget.h"
+#include "PanalWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -31,10 +33,12 @@ APanalRandom::APanalRandom()
 void APanalRandom::BeginPlay()
 {
 	Super::BeginPlay();
+	//Interact(this , this);
 }
 
 
-void APanalRandom::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal)
+void APanalRandom::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint,
+	const FVector& InteractionNormal)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Generate Numbers"));
 
@@ -51,28 +55,29 @@ void APanalRandom::Interact(UActorComponent* InteractComponent, const FVector& I
 		ThirdAnsw =  FMath::RandRange(0, 7);
 	}
 	
-	FirstAnswString = AllAnswString[FMath::RandRange(0,7)];
-	SecondAnswString = AllAnswString[FMath::RandRange(0,7)];
-	ThirdAnswString = AllAnswString[FMath::RandRange(0,7)];
-
-	while (FirstAnswString == SecondAnswString)
+	FirstAnswMesh =  FMath::RandRange(0, 7);
+	SecondAnswMesh =  FMath::RandRange(0, 7);
+	ThirdAnswMesh =  FMath::RandRange(0, 7);
+	
+	while (FirstAnswMesh == SecondAnswMesh)
 	{
-		SecondAnswString = AllAnswString[FMath::RandRange(0,7)];
+		SecondAnswMesh =  FMath::RandRange(0, 7);
 	}
-	while (SecondAnswString == ThirdAnswString || FirstAnswString == ThirdAnswString)
+	while (SecondAnswMesh == ThirdAnswMesh || FirstAnswMesh == ThirdAnswMesh)
 	{
-		ThirdAnswString = AllAnswString[FMath::RandRange(0,7)];
+		ThirdAnswMesh =  FMath::RandRange(0, 7);
 	}
 	
 	ABinaryTree* Tree = Cast<ABinaryTree>(UGameplayStatics::GetActorOfClass(GetWorld(), ABinaryTree::StaticClass()));
-	APanal* Panal = Cast<APanal>(UGameplayStatics::GetActorOfClass(GetWorld(), APanal::StaticClass()));
+
+	APanalWidget* Panel = Cast<APanalWidget>(UGameplayStatics::GetActorOfClass(GetWorld(), APanalWidget::StaticClass()));
 	
-	Tree->BinaryTreeI(FirstAnsw,SecondAnsw,ThirdAnsw ,FirstAnswString ,SecondAnswString ,ThirdAnswString);
-	Panal->PanalI( FirstAnswString ,SecondAnswString ,ThirdAnswString);
-	
-	
-	TextRender->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) + " " + FirstAnswString + " "  + SecondAnswString + " " + ThirdAnswString));
-	
+	Tree->BinaryTreeI(FirstAnsw,SecondAnsw,ThirdAnsw ,FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
+	Panel->PanalI(FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
+
+	RandomWork.Broadcast();
+
+	TextRender->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) ));
 }
 
 

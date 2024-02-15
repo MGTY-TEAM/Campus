@@ -7,6 +7,8 @@
 #include "MiniGames.generated.h"
 
 DECLARE_DELEGATE(FExecute);
+DECLARE_DELEGATE(OnBinaryTreeComplyted);
+DECLARE_DELEGATE(OnBinaryTreeError);
 // This class does not need to be modified.
 UINTERFACE()
 class UMiniGames : public UInterface
