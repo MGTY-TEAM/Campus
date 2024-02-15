@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Items.h"
 #include "Campus/Interfaces/Interaction/Interactable.h"
 #include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"
 #include "Components/BoxComponent.h"
@@ -12,7 +13,7 @@
 #include "PanalRandom.generated.h"
 
 UCLASS()
-class CAMPUS_API APanalRandom : public AActor , public IInteractable , public IBinaryFruit
+class CAMPUS_API APanalRandom : public AActor , public IInteractable , public IBinaryFruit , public Items
 {
 	GENERATED_BODY()
 
@@ -46,7 +47,8 @@ protected:
 	FString ToBinary(int32 num);
 
 public:
-	
+	UPROPERTY(BlueprintAssignable , BlueprintCallable , BlueprintReadWrite)
+	FRandom RandomWork;
 	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
-	
+
 };

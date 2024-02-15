@@ -3,6 +3,8 @@
 
 #include "Panal.h"
 
+#include "AsyncTreeDifferences.h"
+
 
 // Sets default values
 APanal::APanal()
@@ -124,7 +126,7 @@ void APanal::Interact(UActorComponent* InteractComponent, const FVector& Interac
 			if (RightAnswers == 3)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("You win"));
-				Execute.ExecuteIfBound();
+				//Execute.ExecuteIfBound();
 			}
 			else
 			{

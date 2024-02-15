@@ -4,8 +4,11 @@
 #include "PanalRandom.h"
 #include "Engine/World.h"  
 #include "BinaryTree.h"
+#include "PanalRandom.h"
 #include "GPUSkinCache.h"
 #include "NavigationSystemTypes.h"
+#include "PanalButtonsWidget.h"
+#include "PanalWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -64,17 +67,17 @@ void APanalRandom::Interact(UActorComponent* InteractComponent, const FVector& I
 	{
 		ThirdAnswMesh =  FMath::RandRange(0, 7);
 	}
-
-	
 	
 	ABinaryTree* Tree = Cast<ABinaryTree>(UGameplayStatics::GetActorOfClass(GetWorld(), ABinaryTree::StaticClass()));
-	APanal* Panal = Cast<APanal>(UGameplayStatics::GetActorOfClass(GetWorld(), APanal::StaticClass()));
+
+	APanalWidget* Panel = Cast<APanalWidget>(UGameplayStatics::GetActorOfClass(GetWorld(), APanalWidget::StaticClass()));
 	
 	Tree->BinaryTreeI(FirstAnsw,SecondAnsw,ThirdAnsw ,FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
-	Panal->PanalI(FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
-	
-	
-	TextRender->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw)));
+	Panel->PanalI(FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
+
+	RandomWork.Broadcast();
+
+	TextRender->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) ));
 }
 
 
