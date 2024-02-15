@@ -24,6 +24,7 @@ public:
 	void MakeMove();
 	
 	virtual TMap<int, int> GetPossibleMoves();
+	virtual void SetUpColor(bool bisWhite, UMaterialInstance* White, UMaterialInstance* Black);
 	bool bWhite;
 protected:
 	virtual void BeginPlay() override;

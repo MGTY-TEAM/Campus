@@ -49,7 +49,7 @@ void AGenerativeBoard::BeginPlay()
 void AGenerativeBoard::OnCellClicked(int X, int Y)
 {
 	FString UCICommand;
-	
+
 	UCICommand += HorisontalUCI[Y];
 
 	UCICommand += FString::FromInt(X + 1);
@@ -93,7 +93,6 @@ void AGenerativeBoard::OnBoardUpdated(const FString& Fen)
 }
 
 
-
 void AGenerativeBoard::ExecutePlayerMove(const FString& UCI, const FString& CastleStatus, const FString& NewFen)
 {
 	FString FirstKey = "";
@@ -110,38 +109,42 @@ void AGenerativeBoard::ExecutePlayerMove(const FString& UCI, const FString& Cast
 	ABoardCell* SecondCell = Board[JSecond][ISecond];
 
 
-
 	TArray<FString> FenMatrix = UChessAuxiliaryLib::FenToFenMatrix(NewFen);
 
 
-	/*for (int i = 0; i < FenMatrix.Num(); i++)
+	for (int i = 0, k = FenMatrix.Num() - 1; i < FenMatrix.Num() && k >= 0; i++, k--)
 	{
-		for(int j = 0; j < FenMatrix.Num(); i++)
+		for (int j = 0, d = FenMatrix.Num() - 1; j < FenMatrix.Num() && d >= 0; j++, d--)
 		{
+			ABoardCell* BoardCell = Board[k][d];
 			if (FenMatrix[i][j] == '0')
 			{
-				if (Board[i][j]->Piece)
+				if (BoardCell->Piece)
 				{
-					Board[i][j]->Piece->Destroy();
+					BoardCell->Piece->Destroy();
 				}
 			}
-			else  
+			else
 			{
-				TCHAR BoardLetter = UChessAuxiliaryLib::WhitePieceClassToFenChar[Board[i][j]->Piece->StaticClass()];
-				if (FChar::IsUpper(FenMatrix[i][j]) == BoardLetter)
+				if (BoardCell->Piece) BoardCell->Piece->Destroy();
+				
+				const TCHAR Char = FenMatrix[i][j];
+				const bool bWhite = FChar::IsUpper(FenMatrix[i][j]);
+				
+				UClass* Class = bWhite ? UChessAuxiliaryLib::FenCharToWhitePieceClass[Char] : UChessAuxiliaryLib::FenCharToBlackPieceClass[Char];
+				
+				ABasePiece* BasePiece = GetWorld()->SpawnActor<ABasePiece>(
+					Class, BoardCell->GetActorTransform());
+				if (BasePiece)
 				{
-					
-				}
-				else if (FChar::IsLower(FenMatrix[i][j]) == BoardLetter)
-				{
-					
+					BasePiece->SetUpColor(bWhite,WhitePieceMaterial, BlackPieceMaterial);
+					BoardCell->Piece = BasePiece;
 				}
 			}
-
 		}
-	}*/
-	
-	if (FirstCell && SecondCell)
+	}
+	OnPlayerMoveCompleted.Broadcast();
+	/*if (FirstCell && SecondCell)
 	{
 		if (FirstCell->Piece)
 		{
@@ -187,10 +190,10 @@ void AGenerativeBoard::ExecutePlayerMove(const FString& UCI, const FString& Cast
 				                                       }
 			                                       }, PieceAnimationFrequency, true);
 		}
-	}
+	}*/
 }
 
-void AGenerativeBoard::ExecuteAIMove(const FString& UCI, const FString& CastleStatus, const FString& New_Fen)
+void AGenerativeBoard::ExecuteAIMove(const FString& UCI, const FString& CastleStatus, const FString& NewFen)
 {
 	FString FirstKey = "";
 	FirstKey += UCI[0];
@@ -204,7 +207,43 @@ void AGenerativeBoard::ExecuteAIMove(const FString& UCI, const FString& CastleSt
 
 	ABoardCell* FirstCell = Board[JFirst][IFirst];
 	ABoardCell* SecondCell = Board[JSecond][ISecond];
-	if (FirstCell && SecondCell)
+
+
+	TArray<FString> FenMatrix = UChessAuxiliaryLib::FenToFenMatrix(NewFen);
+
+
+	for (int i = 0, k = FenMatrix.Num() - 1; i < FenMatrix.Num() && k >= 0; i++, k--)
+	{
+		for (int j = 0, d = FenMatrix.Num() - 1; j < FenMatrix.Num() && d >= 0; j++, d--)
+		{
+			ABoardCell* BoardCell = Board[k][d];
+			if (FenMatrix[i][j] == '0')
+			{
+				if (BoardCell->Piece)
+				{
+					BoardCell->Piece->Destroy();
+				}
+			}
+			else
+			{
+				if (BoardCell->Piece) BoardCell->Piece->Destroy();
+				
+				const TCHAR Char = FenMatrix[i][j];
+				const bool bWhite = FChar::IsUpper(FenMatrix[i][j]);
+				
+				UClass* Class = bWhite ? UChessAuxiliaryLib::FenCharToWhitePieceClass[Char] : UChessAuxiliaryLib::FenCharToBlackPieceClass[Char];
+				
+				ABasePiece* BasePiece = GetWorld()->SpawnActor<ABasePiece>(Class, BoardCell->GetActorTransform());
+				if (BasePiece)
+				{
+					BasePiece->SetUpColor(bWhite,WhitePieceMaterial, BlackPieceMaterial);
+					BoardCell->Piece = BasePiece;
+				}
+			}
+		}
+	}
+	OnAIMoveCompleted.Broadcast();
+	/*if (FirstCell && SecondCell)
 	{
 		if (FirstCell->Piece)
 		{
@@ -250,7 +289,7 @@ void AGenerativeBoard::ExecuteAIMove(const FString& UCI, const FString& CastleSt
 				                                       }
 			                                       }, PieceAnimationFrequency, true);
 		}
-	}
+	}*/
 }
 
 void AGenerativeBoard::GenerateBoard()
@@ -285,34 +324,40 @@ void AGenerativeBoard::GenerateBoard()
 				break;
 			case 1:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
-				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetPawnClass(), BoardCell->GetActorTransform()),
+				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetPawnClass(),
+				                                                        BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 2:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
 				                     GetWorld()->SpawnActor<
-					                     ABasePiece>(UChessAuxiliaryLib::GetKnightClass(), BoardCell->GetActorTransform()),
+					                     ABasePiece>(UChessAuxiliaryLib::GetKnightClass(),
+					                                 BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 3:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
 				                     GetWorld()->SpawnActor<
-					                     ABasePiece>(UChessAuxiliaryLib::GetBishopClass(), BoardCell->GetActorTransform()),
+					                     ABasePiece>(UChessAuxiliaryLib::GetBishopClass(),
+					                                 BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 4:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
-				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetRookClass(), BoardCell->GetActorTransform()),
+				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetRookClass(),
+				                                                        BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 5:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
-				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetQuinClass(), BoardCell->GetActorTransform()),
+				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetQuinClass(),
+				                                                        BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			case 6:
 				BoardCell->SetUpCell(TPair<int, int>(i, j),
-				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetKingClass(), BoardCell->GetActorTransform()),
+				                     GetWorld()->SpawnActor<ABasePiece>(UChessAuxiliaryLib::GetKingClass(),
+				                                                        BoardCell->GetActorTransform()),
 				                     i >= 6 ? BlackPieceMaterial : WhitePieceMaterial);
 				break;
 			default: break;

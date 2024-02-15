@@ -122,7 +122,7 @@ public:
 		return Result;
 	}
 
-	inline const static TMap<UClass*, TCHAR> BlackPieceClassToFenChar =
+	inline static TMap<UClass*, TCHAR> BlackPieceClassToFenChar =
 	{
 		{AChPawn::StaticClass(), 'p'},
 		{AChRook::StaticClass(), 'r'},
@@ -132,7 +132,7 @@ public:
 		{AChQuin::StaticClass(), 'q'}
 	};
 
-	inline const static TMap<UClass*, TCHAR> WhitePieceClassToFenChar =
+	inline static TMap<UClass*, TCHAR> WhitePieceClassToFenChar =
 	{
 		{AChPawn::StaticClass(), 'P'},
 		{AChRook::StaticClass(), 'R'},
@@ -140,5 +140,25 @@ public:
 		{AChBishop::StaticClass(), 'B'},
 		{AChKing::StaticClass(), 'K'},
 		{AChQuin::StaticClass(), 'Q'}
+	};
+
+	inline static TMap<TCHAR, UClass*> FenCharToBlackPieceClass =
+	{
+		{'p', AChPawn::StaticClass()},
+		{'r', AChRook::StaticClass()},
+		{'n', AChKnight::StaticClass()},
+		{'b', AChBishop::StaticClass()},
+		{'k', AChKing::StaticClass()},
+		{'q', AChQuin::StaticClass()}
+	};
+
+	inline static TMap<TCHAR, UClass*> FenCharToWhitePieceClass =
+	{
+		{'P', AChPawn::StaticClass()},
+		{'R', AChRook::StaticClass()},
+		{'N', AChKnight::StaticClass()},
+		{'B', AChBishop::StaticClass()},
+		{'K', AChKing::StaticClass()},
+		{'Q', AChQuin::StaticClass()}
 	};
 };

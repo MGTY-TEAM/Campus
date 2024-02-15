@@ -29,3 +29,16 @@ TMap<int, int> ABasePiece::GetPossibleMoves()
 	return TMap<int, int>();
 }
 
+void ABasePiece::SetUpColor(bool bisWhite, UMaterialInstance* White, UMaterialInstance* Black)
+{
+	bWhite = bisWhite;
+	if (bWhite)
+	{
+		StaticMeshComponent->SetMaterial(0, White);
+	}
+	else
+	{
+		StaticMeshComponent->SetMaterial(0, Black);
+	}
+}
+
