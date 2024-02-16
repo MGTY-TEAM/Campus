@@ -30,34 +30,32 @@ void UMoveAlongThePathTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 
-	if (CheckCapabilityOfStopping())
+	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
+	if (!Blackboard) return;
+
+	const bool ISeeYou = Blackboard->GetValueAsBool(ISeeYouKey.SelectedKeyName);
+	const bool HeIsStandingNow = Blackboard->GetValueAsBool(IsHeStandingKey.SelectedKeyName);
+	const bool IsThereObstacle = Blackboard->GetValueAsBool(IsThereObstacleKey.SelectedKeyName);
+
+	const bool CanStop = CheckCapabilityOfStopping();
+	
+	if ((!ISeeYou || IsThereObstacle) && CanStop)
 	{
-		const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
-		if (!Blackboard) return;
-
-		const bool ISeeYou = Blackboard->GetValueAsBool(ISeeYouKey.SelectedKeyName);
-		const bool HeIsStandingNow = Blackboard->GetValueAsBool(IsHeStandingKey.SelectedKeyName);
-		const bool IsThereObstacle = Blackboard->GetValueAsBool(IsThereObstacleKey.SelectedKeyName);
-
-		if (!ISeeYou || IsThereObstacle)
+		ClearTimer();
+		PauseMove(OwnerComp, NodeMemory);
+	}
+	else if (ISeeYou && !IsThereObstacle || !CanStop)
+	{
+		if (GetWorld() && !SetTimer)
 		{
-			ClearTimer();
-			PauseMove(OwnerComp, NodeMemory);
+			GetWorld()->GetTimerManager().SetTimer(RequestMoveHandle, this, &UMoveAlongThePathTask::OnRequsetMove,0.25f, false);
+			SetTimer = true;
 		}
-		else if (ISeeYou && !IsThereObstacle)
-		{
-			if (GetWorld() && !SetTimer)
-			{
-				GetWorld()->GetTimerManager().SetTimer(RequestMoveHandle, this, &UMoveAlongThePathTask::OnRequsetMove,
-				                                       0.25f, false);
-				SetTimer = true;
-			}
-		}
+	}
 
-		if (HeIsStandingNow)
-		{
-			ClearTimer();
-		}
+	if (HeIsStandingNow && CanStop)
+	{
+		ClearTimer();
 	}
 }
 
@@ -179,13 +177,16 @@ bool UMoveAlongThePathTask::CheckCapabilityOfStopping()
 		}
 	}
 
+	DrawDebugSphere(GetWorld(), ClosestToDrone, 28.f, 16, FColor::Yellow, false, 0.1f);
+	DrawDebugSphere(GetWorld(), ClosestToCharacter, 32.f, 16, FColor::Black, false, 0.1f);
+
 	const int32 DronePointIndex = PathPoints.IndexOfByKey(ClosestToDrone);
 	int32 CharacterPointIndex = PathPoints.IndexOfByKey(ClosestToCharacter);
-	
+
 	if (DronePointIndex != INDEX_NONE && CharacterPointIndex != INDEX_NONE)
 	{
 		if (CharacterPointIndex < DronePointIndex) CharacterPointIndex = DronePointIndex;
-		
+
 		if (DronePointIndex == CharacterPointIndex)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "First");
@@ -202,59 +203,12 @@ bool UMoveAlongThePathTask::CheckCapabilityOfStopping()
 			}
 			return false;
 		}
-		if (CharacterPointIndex > DronePointIndex) return false;
-	}
-	return false;
-	DrawDebugSphere(GetWorld(), ClosestToDrone, 28.f, 16, FColor::Yellow, false, 0.1f);
-	DrawDebugSphere(GetWorld(), ClosestToCharacter, 32.f, 16, FColor::Black, false, 0.1f);
-
-	for (auto It = PathPoints.CreateConstIterator(); It; ++It)
-	{
-		if (*It == ClosestToDrone && *It == ClosestToCharacter)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "First");
-			if (!(It++)) continue;
-
-			const FVector NextPoint = *(It++);
-
-			if ((Drone->GetActorLocation() - NextPoint).Length() <= (Character->GetActorLocation() - NextPoint).
-				Length())
-			{
-				return true;
-			}
-
-			return false;
-		}
-		if (*It == ClosestToDrone)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "Second");
-			if (!(It++)) continue;
-
-			const FVector NextPoint = *(It++);
-
-			if ((Drone->GetActorLocation() - NextPoint).Length() < (Character->GetActorLocation() - NextPoint).Length())
-			{
-				return false;
-			}
-
-			return true;
-		}
-		if (*It == ClosestToCharacter)
+		if (CharacterPointIndex > DronePointIndex)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "Third");
-			if (!(It++)) continue;
-
-			const FVector NextPoint = *(It++);
-
-			if ((Drone->GetActorLocation() - NextPoint).Length() < (Character->GetActorLocation() - NextPoint).Length())
-			{
-				return true;
-			}
-
 			return false;
 		}
 	}
-
 	return false;
 }
 
