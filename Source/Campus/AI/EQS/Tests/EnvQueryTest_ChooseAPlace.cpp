@@ -27,6 +27,10 @@ void UEnvQueryTest_ChooseAPlace::RunTest(FEnvQueryInstance& QueryInstance) const
 	for (FEnvQueryInstance::ItemIterator It(this, QueryInstance); It; ++It)
 	{
 		const int32 ActionPlace = Blackboard->GetValueAsInt(ActionPlaceKeyName);
-		It.SetScore(TestPurpose, FilterType, Drone->TeleportationPlaces[It.GetIndex()] == Drone->TeleportationPlaces[ActionPlace - 1], Switch);
+
+		if (Drone->TeleportationPlaces.IsValidIndex(ActionPlace - 1))
+		{
+			It.SetScore(TestPurpose, FilterType, Drone->TeleportationPlaces[It.GetIndex()] == Drone->TeleportationPlaces[ActionPlace - 1], Switch);
+		}
 	}
 }

@@ -25,9 +25,6 @@ class CAMPUS_API AAIAnimDrone : public APlayerInteractionDrone
 public:
 	AAIAnimDrone();
 	
-	UPROPERTY(EditDefaultsOnly)
-	UChatUserComponent* ChatUserComponent;
-	
 	UPROPERTY(EditAnywhere, Category = "RobotAnimation")
 	float RotationSpeed = 1;
 

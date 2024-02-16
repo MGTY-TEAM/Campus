@@ -18,13 +18,14 @@
 /////////////////////
 void UChatBox::ConnectChatComponent(UChatUserComponent* ChatUserComponent)
 {
-	ChatUserComponent->OnMessageReceived.BindUObject(this, &UChatBox::ReceiveMessage);
+	ChatUserComponent->OnMessageReceived.AddUObject(this, &UChatBox::ReceiveMessage);
 
 	OwnerChatUserComponent = ChatUserComponent;
 }
 
 void UChatBox::ReceiveMessage(UMessageInstance* MessageInstance)
 {
+	
 	UE_LOG(LogTemp, Warning, TEXT("Catch Chat from bot message : %s"), *MessageInstance->GetMessageInfo().Get<2>().ToString());
 	
 	TTuple<FName, FName, FText> MessageInfo = MessageInstance->GetMessageInfo();
@@ -79,7 +80,14 @@ void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type Commi
 {
 	if (CommitMethod == ETextCommit::OnEnter && !Text.IsEmpty())
 	{
-		OwnerChatUserComponent->SendMessage("Bot", Text);
+		if (OwnerChatUserComponent)
+		{
+			OwnerChatUserComponent->SendMessage("Bot", Text);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("PlayerChatBox IS DEAD"));
+		}
 		UpdateChatMessages(Text, FText::FromString("DefaultCharacterName"));
 	}
 }

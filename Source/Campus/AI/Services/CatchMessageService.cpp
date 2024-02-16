@@ -12,7 +12,7 @@
 
 void UCatchMessageService::OnSearchStart(FBehaviorTreeSearchData& SearchData)
 {
-	Blackboard = SearchData.OwnerComp.GetBlackboardComponent();
+	/*Blackboard = SearchData.OwnerComp.GetBlackboardComponent();
 	if (Blackboard)
 	{
 		Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, (uint8)SActionType);
@@ -26,13 +26,13 @@ void UCatchMessageService::OnSearchStart(FBehaviorTreeSearchData& SearchData)
 		{
 			Drone->ChatUserComponent->OnMessageReceived.BindUObject(this, &UCatchMessageService::MessageSent);
 		}
-	}
+	}*/
 	
 }
 
 void UCatchMessageService::MessageSent(UMessageInstance* MessageInstance)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Message to bot : %s "), *MessageInstance->GetMessageInfo().Get<2>().ToString());
+	/*UE_LOG(LogTemp, Warning, TEXT("Message to bot : %s "), *MessageInstance->GetMessageInfo().Get<2>().ToString());
 	if (Drone)
 	{
 		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
@@ -52,5 +52,5 @@ void UCatchMessageService::MessageSent(UMessageInstance* MessageInstance)
 					Drone->ChatUserComponent->SendMessage("Bot", FText::FromString(Message));
 				}
 			}, MessageInstance->GetMessageInfo().Get<2>().ToString(), Drone->BotURL);
-	}
+	}*/
 }

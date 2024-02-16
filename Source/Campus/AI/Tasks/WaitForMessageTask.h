@@ -7,6 +7,7 @@
 #include "Campus/AI/AIDrone/CampusCoreTypes.h"
 #include "WaitForMessageTask.generated.h"
 
+class AAIDroneController;
 class AAIAnimDrone;
 class UMessageInstance;
 
@@ -29,7 +30,7 @@ private:
 	void MessageSent(UMessageInstance* MessageInstance);
 
 	AAIAnimDrone* Drone;
-
+	AAIDroneController* DroneController;
 	int32 ActionPlace = 0;
 	
 	UBlackboardComponent* Blackboard;

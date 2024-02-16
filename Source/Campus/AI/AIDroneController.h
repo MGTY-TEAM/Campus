@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Campus/Chat/ChatUserComponent.h"
 #include "AIDroneController.generated.h"
 
 class UAIDronePerceptionComponent;
@@ -15,11 +16,17 @@ class CAMPUS_API AAIDroneController : public AAIController
 	
 public:
 	AAIDroneController();
+
+	UChatUserComponent* GetChatComponent();
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void BeginPlay() override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UAIDronePerceptionComponent* AIDronePerceptionComponent;
+	
+	UChatUserComponent* ChatUserComponent;
 };

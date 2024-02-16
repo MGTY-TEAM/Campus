@@ -29,7 +29,7 @@ void UMoveAlongThePathTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
-	
+
 	if (CheckCapabilityOfStopping())
 	{
 		const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
@@ -48,11 +48,12 @@ void UMoveAlongThePathTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
 		{
 			if (GetWorld() && !SetTimer)
 			{
-				GetWorld()->GetTimerManager().SetTimer(RequestMoveHandle, this, &UMoveAlongThePathTask::OnRequsetMove, 0.25f, false);
+				GetWorld()->GetTimerManager().SetTimer(RequestMoveHandle, this, &UMoveAlongThePathTask::OnRequsetMove,
+				                                       0.25f, false);
 				SetTimer = true;
 			}
 		}
-	
+
 		if (HeIsStandingNow)
 		{
 			ClearTimer();
@@ -78,7 +79,7 @@ void UMoveAlongThePathTask::FinishMove(const FAIRequestID RequestID, const FPath
 
 		UBlackboardComponent* Blackboard = MyOwnerComp->GetBlackboardComponent();
 		if (!Blackboard) return;
-		
+
 		Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Walk));
 	}
 }
@@ -97,7 +98,7 @@ void UMoveAlongThePathTask::OnRequsetMove()
 EBTNodeResult::Type UMoveAlongThePathTask::RequestMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	PathPoints.Reset();
-	
+
 	AAIDroneController* const Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
 	if (!Controller) return EBTNodeResult::Failed;
 
@@ -111,32 +112,33 @@ EBTNodeResult::Type UMoveAlongThePathTask::RequestMove(UBehaviorTreeComponent& O
 
 	UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(OwnerComp.GetWorld());
 	if (!NavSys) return EBTNodeResult::Failed;
-	
+
 	ANavigationData* NavData = FindNavigationData(*NavSys, OwnerComp.GetOwner());
 	if (!NavData) return EBTNodeResult::Failed;
 
 	EPathFindingMode::Type PFMode(EPathFindingMode::Hierarchical);
-	FSharedConstNavQueryFilter NavFilter = UNavigationQueryFilter::GetQueryFilter(*NavData, OwnerComp.GetOwner(), FilterClass);
+	FSharedConstNavQueryFilter NavFilter = UNavigationQueryFilter::GetQueryFilter(
+		*NavData, OwnerComp.GetOwner(), FilterClass);
 
 	FPathFindingQuery Query(OwnerComp.GetOwner(), *NavData, Drone->GetActorLocation(), DestinationPoint, NavFilter);
 	Query.SetAllowPartialPaths(false);
 	Query.SetNavAgentProperties(15.f);
 
 	FPathFindingResult Result = NavSys->FindPathSync(Query, PFMode);
-	
+
 	FAIMoveRequest MoveRequest(DestinationPoint);
 	MainRequestID = Controller->GetPathFollowingComponent()->RequestMove(MoveRequest, Result.Path);
-	
+
 	IsMove = true;
 
 	Controller->ClearFocus(EAIFocusPriority::Gameplay);
 	Controller->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &UMoveAlongThePathTask::FinishMove);
-	
+
 	if (MainRequestID.IsValid())
 	{
 		FillNavPoints(Result.Path->GetPathPoints());
 	}
-	
+
 	return EBTNodeResult::InProgress;
 }
 
@@ -159,7 +161,7 @@ bool UMoveAlongThePathTask::CheckCapabilityOfStopping()
 
 	FVector ClosestToDrone(TNumericLimits<float>::Max());
 	FVector ClosestToCharacter(TNumericLimits<float>::Max());
-	
+
 	for (auto Point : PathPoints)
 	{
 		float Distance = (Drone->GetActorLocation() - Point).Length();
@@ -177,58 +179,79 @@ bool UMoveAlongThePathTask::CheckCapabilityOfStopping()
 		}
 	}
 
+	const int32 DronePointIndex = PathPoints.IndexOfByKey(ClosestToDrone);
+	int32 CharacterPointIndex = PathPoints.IndexOfByKey(ClosestToCharacter);
+	
+	if (DronePointIndex != INDEX_NONE && CharacterPointIndex != INDEX_NONE)
+	{
+		if (CharacterPointIndex < DronePointIndex) CharacterPointIndex = DronePointIndex;
+		
+		if (DronePointIndex == CharacterPointIndex)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "First");
+
+			if (PathPoints.IsValidIndex(DronePointIndex + 1))
+			{
+				const FVector NextPoint = PathPoints[DronePointIndex + 1];
+
+				if ((Drone->GetActorLocation() - NextPoint).Length() <= (Character->GetActorLocation() - NextPoint).
+					Length())
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		if (CharacterPointIndex > DronePointIndex) return false;
+	}
+	return false;
 	DrawDebugSphere(GetWorld(), ClosestToDrone, 28.f, 16, FColor::Yellow, false, 0.1f);
 	DrawDebugSphere(GetWorld(), ClosestToCharacter, 32.f, 16, FColor::Black, false, 0.1f);
-	
+
 	for (auto It = PathPoints.CreateConstIterator(); It; ++It)
 	{
 		if (*It == ClosestToDrone && *It == ClosestToCharacter)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "First");
-			if (!It++) continue;
-			
+			if (!(It++)) continue;
+
 			const FVector NextPoint = *(It++);
 
-			if ((Drone->GetActorLocation() - NextPoint).Length() < (Character->GetActorLocation() - NextPoint).Length())
+			if ((Drone->GetActorLocation() - NextPoint).Length() <= (Character->GetActorLocation() - NextPoint).
+				Length())
 			{
 				return true;
 			}
-			else
-			{
-				return false;
-			}
+
+			return false;
 		}
-		else if (*It == ClosestToDrone)
+		if (*It == ClosestToDrone)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "Second");
-			if (!It++) continue;
-			
+			if (!(It++)) continue;
+
 			const FVector NextPoint = *(It++);
 
 			if ((Drone->GetActorLocation() - NextPoint).Length() < (Character->GetActorLocation() - NextPoint).Length())
 			{
 				return false;
 			}
-			else
-			{
-				return true;
-			}
+
+			return true;
 		}
-		else if (*It == ClosestToCharacter)
+		if (*It == ClosestToCharacter)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "Third");
-			if (!It++) continue;
-			
+			if (!(It++)) continue;
+
 			const FVector NextPoint = *(It++);
 
 			if ((Drone->GetActorLocation() - NextPoint).Length() < (Character->GetActorLocation() - NextPoint).Length())
 			{
 				return true;
 			}
-			else
-			{
-				return false;
-			}
+
+			return false;
 		}
 	}
 

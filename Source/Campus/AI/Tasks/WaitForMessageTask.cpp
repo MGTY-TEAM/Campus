@@ -3,6 +3,7 @@
 
 #include "Campus/AI/Tasks/WaitForMessageTask.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Campus/AI/AIDroneController.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 #include "Campus/AI/Services/CatchMessageService.h"
 #include "Campus/Chat/ChatManager.h"
@@ -35,7 +36,12 @@ EBTNodeResult::Type UWaitForMessageTask::ExecuteTask(UBehaviorTreeComponent& Own
 
 	if (Drone)
 	{
-		Drone->ChatUserComponent->OnMessageReceived.BindUObject(this, &UWaitForMessageTask::MessageSent);
+		DroneController = Cast<AAIDroneController>(Drone->Controller);
+		if (DroneController)
+		{
+			DroneController->GetChatComponent()->OnMessageReceived.AddUObject(this, &UWaitForMessageTask::MessageSent);
+		}
+		
 	}
 
 	return EBTNodeResult::InProgress;
@@ -68,7 +74,7 @@ void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 				if (!Message.IsEmpty())
 				{
 					UE_LOG(LogTemp, Warning,TEXT("API Message : %s"), *Message);
-					Drone->ChatUserComponent->SendMessage("DefaultCharacterName", FText::FromString(Message));
+					DroneController->GetChatComponent()->SendMessage("DefaultCharacterName", FText::FromString(Message));
 					if (ActionType == "Teleport")
 					{
 						Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Teleport));
@@ -76,8 +82,6 @@ void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 						
 						Blackboard->SetValueAsInt(ActionPlaceKey.SelectedKeyName, ActionPlace);
 					}
-
-					
 				}
 			}, MessageInstance->GetMessageInfo().Get<2>().ToString(), Drone->BotURL);
 	}

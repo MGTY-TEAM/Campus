@@ -19,13 +19,14 @@ UChatUserComponent::UChatUserComponent()
 
 void UChatUserComponent::SetUserID(const FName& NewUserID)
 {
+	UE_LOG(LogTemp, Warning, TEXT("New User Registered: %s"), *NewUserID.ToString());
 	UserID = NewUserID;
 }
 
 void UChatUserComponent::ReceiveMessage(UMessageInstance* MessageInstance)
 {
 	MessageInstance->GetMessageInfo();
-	OnMessageReceived.Execute(MessageInstance);
+	OnMessageReceived.Broadcast(MessageInstance);
 }
 
 void UChatUserComponent::SendMessage(const FName& ReceiverID, const FText& Message)

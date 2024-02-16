@@ -6,11 +6,21 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/Engine.h"
 #include "Campus/AI/AIDrone/Components/AIDronePerceptionComponent.h"
+#include "Campus/Chat/ChatManager.h"
+#include "Campus/Chat/ChatUserComponent.h"
 
 AAIDroneController::AAIDroneController()
 {
 	AIDronePerceptionComponent = CreateDefaultSubobject<UAIDronePerceptionComponent>("AIDronePerceptionComponent");
+	
+	ChatUserComponent = CreateDefaultSubobject<UChatUserComponent>("ChatUserComponent");
+	
 	SetPerceptionComponent(*AIDronePerceptionComponent);
+}
+
+UChatUserComponent* AAIDroneController::GetChatComponent()
+{
+	return ChatUserComponent;
 }
 
 void AAIDroneController::OnPossess(APawn* InPawn)
@@ -30,12 +40,27 @@ void AAIDroneController::Tick(float DeltaTime)
 
 	// GetPathFollowingComponent()->RequestMove();
 
-	// фокус остаётся после окончания взаимодействия, придумать, где это заканчивать
+	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	const AAIAnimDrone* Drone = Cast< AAIAnimDrone>(GetPawn());
 	if (Drone->DoesHeInteract())
 	{
 		const auto AimCharacter = AIDronePerceptionComponent->GetInteractionCharacter();
 		// SetFocus(AimCharacter);
+	}
+}
+
+void AAIDroneController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (ChatUserComponent)
+	{
+		ChatUserComponent->SetUserID("Bot");
+
+		if (UChatManager::RegisterUser("Bot", ChatUserComponent))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Bot Chat Component is registered"));
+		}
 	}
 }
 

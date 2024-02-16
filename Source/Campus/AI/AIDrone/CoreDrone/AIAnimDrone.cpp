@@ -22,23 +22,21 @@ AAIAnimDrone::AAIAnimDrone()
 {
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AAIDroneController::StaticClass();
-
-	ChatUserComponent = CreateDefaultSubobject<UChatUserComponent>("ChatUserComponent");
-
-
+	
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
 	SceneComponent->SetupAttachment(GetRootComponent());
 
 	SplineComponent = CreateDefaultSubobject<USplineComponent>("SplineComponent");
 	SplineComponent->SetupAttachment(GetRootComponent());
 
-
+	
 	bUseControllerRotationYaw = false;
 	if (GetCharacterMovement())
 	{
 		GetCharacterMovement()->bUseControllerDesiredRotation = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, DroneRotationSpeed, 0.0f);
 	}
+	
 }
 
 
@@ -48,18 +46,10 @@ void AAIAnimDrone::BeginPlay()
 
 
 	StartLocationOfDrone = GetActorLocation();
+	
 
-	ChatUserComponent->SetUserID("Bot");
-	if (UChatManager::RegisterUser("Bot", ChatUserComponent))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("BotRegistered"));
-	}
 
-	/*if (ChatWidget)
-	{
-		ChatWidget->TeleportationEvent.AddDynamic(this, &AAIAnimDrone::TeleportToLocation);
-		ChatWidget->DarkeningEvent.AddDynamic(this, &AAIAnimDrone::DarkeningScreen);
-	}*/
+
 }
 
 void AAIAnimDrone::StartRotateToPlayerAnim()
