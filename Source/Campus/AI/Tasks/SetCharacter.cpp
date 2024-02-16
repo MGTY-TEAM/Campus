@@ -1,8 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "SetCharacter.h"
-
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Campus/Core/CharacterSystem/BaseCharacter.h"
 #include "Kismet/GameplayStatics.h"
@@ -22,9 +20,10 @@ EBTNodeResult::Type USetCharacter::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 		
 		for (AActor* Pawn : Pawns)
 		{
-			if (ABaseCharacter* BaseCharacter =  Cast<ABaseCharacter>(Pawn))
+			if (ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(Pawn))
 			{
 				BlackboardComponent->SetValueAsObject(CharacterActorKey.SelectedKeyName, BaseCharacter);
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "SetCharacter");
 				return EBTNodeResult::Succeeded;
 			}
 		}

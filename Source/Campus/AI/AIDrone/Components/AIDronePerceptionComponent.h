@@ -17,6 +17,13 @@ public:
 
 	void SetLastLocationOf(AActor* Actor);
 	FVector GetLastLocationOfInteractionCharacter() { return LastLocationOfInteractionCharacter; }
+
+	bool CheckObstacleInFrontOfTarget(const AActor* Target) const;
+	
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sphere", meta =(ClampMin = 0.0f, ClampMax = 1000.0f))
+	float RadiusSphere = 100.0f;
 private:
 	FVector LastLocationOfInteractionCharacter = FVector();
 };

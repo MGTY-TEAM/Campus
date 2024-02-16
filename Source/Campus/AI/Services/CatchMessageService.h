@@ -26,6 +26,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector ActionTypeKey;
+
+	
 private:
 	bool FirstTick = true;
 

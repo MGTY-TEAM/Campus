@@ -33,7 +33,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector ISeeYouKey;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector IsHeStandingKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector IsThereObstacleKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector ActionTypeKey;
+
 private:
+	FTimerHandle RequestMoveHandle;
+	
 	ANavigationData* FindNavigationData(UNavigationSystemV1& NavSys, UObject* Owner) const;
 
 	UPROPERTY(EditDefaultsOnly, Category = Pathfinding)
@@ -42,12 +53,18 @@ private:
 	FAIRequestID MainRequestID;
 
 	bool IsMove = false;
+	bool SetTimer = false;
 	bool IsMoving() const  { return IsMove; }
 	void FinishMove(const FAIRequestID RequestID, const FPathFollowingResult& Result);
 
+	void ClearTimer();
+	void OnRequsetMove();
 	EBTNodeResult::Type RequestMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
-	void AbortMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
+	void PauseMove(const UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const;
 
-	bool CharacterIsGone = false;
 	UBehaviorTreeComponent* MyOwnerComp;
+
+	TArray<FVector> PathPoints;
+	bool CheckCapabilityOfStopping();
+	void FillNavPoints(const TArray<FNavPathPoint>& Points);
 };

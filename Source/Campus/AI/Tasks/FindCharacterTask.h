@@ -34,6 +34,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector ISeeYouKey;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector IsHeGettingCloserKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector ActionTypeKey;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (ClampMin = "2.0", ClampMax = "60.0"))
 	float WaitingTime = 15.0f;
 
@@ -57,4 +63,6 @@ private:
 
 	UBehaviorTreeComponent* OwnerComponent;
 	uint8* NodeMem;
+
+	bool HeIsCloser = false;
 };

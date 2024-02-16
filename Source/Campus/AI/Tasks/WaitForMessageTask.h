@@ -30,7 +30,7 @@ private:
 
 	AAIAnimDrone* Drone;
 
-
+	int32 ActionPlace = 0;
 	
 	UBlackboardComponent* Blackboard;
 protected:
@@ -52,6 +52,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector ChatWidgetKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector ActionPlaceKey;
 
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

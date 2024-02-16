@@ -13,6 +13,8 @@ UCanISeeYouService::UCanISeeYouService()
 
 void UCanISeeYouService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
+	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
+	
 	const AAIController* Controller = OwnerComp.GetAIOwner();
 	
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();

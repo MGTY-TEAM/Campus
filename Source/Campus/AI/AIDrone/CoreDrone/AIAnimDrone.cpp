@@ -20,20 +20,19 @@
 
 AAIAnimDrone::AAIAnimDrone()
 {
-
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AAIDroneController::StaticClass();
-	
+
 	ChatUserComponent = CreateDefaultSubobject<UChatUserComponent>("ChatUserComponent");
 
-	
+
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
 	SceneComponent->SetupAttachment(GetRootComponent());
 
 	SplineComponent = CreateDefaultSubobject<USplineComponent>("SplineComponent");
 	SplineComponent->SetupAttachment(GetRootComponent());
-	
-	
+
+
 	bUseControllerRotationYaw = false;
 	if (GetCharacterMovement())
 	{
@@ -46,7 +45,7 @@ AAIAnimDrone::AAIAnimDrone()
 void AAIAnimDrone::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 
 	StartLocationOfDrone = GetActorLocation();
 
@@ -55,7 +54,7 @@ void AAIAnimDrone::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("BotRegistered"));
 	}
-	
+
 	/*if (ChatWidget)
 	{
 		ChatWidget->TeleportationEvent.AddDynamic(this, &AAIAnimDrone::TeleportToLocation);
@@ -65,16 +64,20 @@ void AAIAnimDrone::BeginPlay()
 
 void AAIAnimDrone::StartRotateToPlayerAnim()
 {
-	GetWorld()->GetTimerManager().SetTimer(RotateToPlayerTimer, this, &AAIAnimDrone::StartRotateToPlayerAnim, 0.01f, true);
+	GetWorld()->GetTimerManager().SetTimer(RotateToPlayerTimer, this, &AAIAnimDrone::StartRotateToPlayerAnim, 0.01f,
+	                                       true);
 	FVector StartLocation = GetCapsuleComponent()->GetComponentLocation(); // Starting position of the drone
-	FVector TargetLocation = GetWorld()->GetFirstPlayerController()->GetCharacter()->GetActorLocation(); // Player's position
+	FVector TargetLocation = GetWorld()->GetFirstPlayerController()->GetCharacter()->GetActorLocation();
+	// Player's position
 
-	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, TargetLocation); // Calculates the look-at vector from the drone to the player
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, TargetLocation);
+	// Calculates the look-at vector from the drone to the player
 	FRotator StartRotation = GetCapsuleComponent()->GetComponentRotation(); // Starting rotation of the drone
 	FRotator EndRotation = LookAtRotation; // Final rotation - look at the player
 
 	// Calculates the interpolated rotation
-	FRotator InterpolatedRotation = FMath::RInterpTo(StartRotation, EndRotation, GetWorld()->GetDeltaSeconds(), RotationSpeed);
+	FRotator InterpolatedRotation = FMath::RInterpTo(StartRotation, EndRotation, GetWorld()->GetDeltaSeconds(),
+	                                                 RotationSpeed);
 	// Applies the interpolated rotation to the capsule component
 	GetCapsuleComponent()->SetWorldRotation(InterpolatedRotation);
 }

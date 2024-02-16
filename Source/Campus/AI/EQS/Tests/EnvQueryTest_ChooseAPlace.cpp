@@ -4,9 +4,7 @@
 #include "EnvironmentQuery/Items/EnvQueryItemType_ActorBase.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Campus/UserInterface/ChatBox.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
-#include "Campus/Drone/TeleportationPlane.h"
 
 UEnvQueryTest_ChooseAPlace::UEnvQueryTest_ChooseAPlace(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -26,10 +24,9 @@ void UEnvQueryTest_ChooseAPlace::RunTest(FEnvQueryInstance& QueryInstance) const
 
 	AAIAnimDrone* const Drone = Cast<AAIAnimDrone>(Blackboard->GetValueAsObject(SelfActorKeyName));
 
-	// Cast<ATeleportationPlane>(Drone->TeleportationPlaces[index]);
-
 	for (FEnvQueryInstance::ItemIterator It(this, QueryInstance); It; ++It)
 	{
-		It.SetScore(TestPurpose, FilterType, It.GetIndex() == 1, Switch);
+		const int32 ActionPlace = Blackboard->GetValueAsInt(ActionPlaceKeyName);
+		It.SetScore(TestPurpose, FilterType, Drone->TeleportationPlaces[It.GetIndex()] == Drone->TeleportationPlaces[ActionPlace - 1], Switch);
 	}
 }
