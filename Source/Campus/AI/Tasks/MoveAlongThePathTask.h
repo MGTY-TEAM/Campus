@@ -37,6 +37,9 @@ protected:
 	FBlackboardKeySelector IsHeStandingKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	FBlackboardKeySelector IsThereObstacleKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector ActionTypeKey;
 
 private:
@@ -60,4 +63,8 @@ private:
 	void PauseMove(const UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const;
 
 	UBehaviorTreeComponent* MyOwnerComp;
+
+	TArray<FVector> PathPoints;
+	bool CheckCapabilityOfStopping();
+	void FillNavPoints(const TArray<FNavPathPoint>& Points);
 };

@@ -8,6 +8,7 @@
 #include "AI/Navigation/NavAgentInterface.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Campus/AI/AIDrone/CampusCoreTypes.h"
+#include "Campus/AI/Tasks/CharacterFocusTask.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 
 UMoveAlongThePathTask::UMoveAlongThePathTask()
@@ -28,29 +29,34 @@ void UMoveAlongThePathTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
-
-	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
-	if (!Blackboard) return;
-
-	const bool ISeeYou = Blackboard->GetValueAsBool(ISeeYouKey.SelectedKeyName);
-	const bool HeIsStandingNow = Blackboard->GetValueAsBool(IsHeStandingKey.SelectedKeyName);
-	if (!ISeeYou)
-	{
-		ClearTimer();
-		PauseMove(OwnerComp, NodeMemory);
-	}
-	else if (ISeeYou)
-	{
-		if (GetWorld() && !SetTimer)
-		{
-			GetWorld()->GetTimerManager().SetTimer(RequestMoveHandle, this, &UMoveAlongThePathTask::OnRequsetMove, 0.5f, false);
-			SetTimer = true;
-		}
-	}
 	
-	if (HeIsStandingNow)
+	if (CheckCapabilityOfStopping())
 	{
-		ClearTimer();
+		const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
+		if (!Blackboard) return;
+
+		const bool ISeeYou = Blackboard->GetValueAsBool(ISeeYouKey.SelectedKeyName);
+		const bool HeIsStandingNow = Blackboard->GetValueAsBool(IsHeStandingKey.SelectedKeyName);
+		const bool IsThereObstacle = Blackboard->GetValueAsBool(IsThereObstacleKey.SelectedKeyName);
+
+		if (!ISeeYou || IsThereObstacle)
+		{
+			ClearTimer();
+			PauseMove(OwnerComp, NodeMemory);
+		}
+		else if (ISeeYou && !IsThereObstacle)
+		{
+			if (GetWorld() && !SetTimer)
+			{
+				GetWorld()->GetTimerManager().SetTimer(RequestMoveHandle, this, &UMoveAlongThePathTask::OnRequsetMove, 0.25f, false);
+				SetTimer = true;
+			}
+		}
+	
+		if (HeIsStandingNow)
+		{
+			ClearTimer();
+		}
 	}
 }
 
@@ -90,6 +96,8 @@ void UMoveAlongThePathTask::OnRequsetMove()
 
 EBTNodeResult::Type UMoveAlongThePathTask::RequestMove(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	PathPoints.Reset();
+	
 	AAIDroneController* const Controller = Cast<AAIDroneController>(OwnerComp.GetAIOwner());
 	if (!Controller) return EBTNodeResult::Failed;
 
@@ -115,7 +123,7 @@ EBTNodeResult::Type UMoveAlongThePathTask::RequestMove(UBehaviorTreeComponent& O
 	Query.SetNavAgentProperties(15.f);
 
 	FPathFindingResult Result = NavSys->FindPathSync(Query, PFMode);
-
+	
 	FAIMoveRequest MoveRequest(DestinationPoint);
 	MainRequestID = Controller->GetPathFollowingComponent()->RequestMove(MoveRequest, Result.Path);
 	
@@ -123,7 +131,12 @@ EBTNodeResult::Type UMoveAlongThePathTask::RequestMove(UBehaviorTreeComponent& O
 
 	Controller->ClearFocus(EAIFocusPriority::Gameplay);
 	Controller->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &UMoveAlongThePathTask::FinishMove);
-
+	
+	if (MainRequestID.IsValid())
+	{
+		FillNavPoints(Result.Path->GetPathPoints());
+	}
+	
 	return EBTNodeResult::InProgress;
 }
 
@@ -133,4 +146,101 @@ void UMoveAlongThePathTask::PauseMove(const UBehaviorTreeComponent& OwnerComp, u
 	if (!Controller) return;
 
 	Controller->GetPathFollowingComponent()->PauseMove(MainRequestID);
+}
+
+bool UMoveAlongThePathTask::CheckCapabilityOfStopping()
+{
+	const UBlackboardComponent* Blackboard = MyOwnerComp->GetBlackboardComponent();
+	if (!Blackboard) return false;
+
+	const AActor* Drone = Cast<AActor>(Blackboard->GetValueAsObject(SelfActorKey.SelectedKeyName));
+	const AActor* Character = Cast<AActor>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
+	if (!Drone || !Character) return false;
+
+	FVector ClosestToDrone(TNumericLimits<float>::Max());
+	FVector ClosestToCharacter(TNumericLimits<float>::Max());
+	
+	for (auto Point : PathPoints)
+	{
+		float Distance = (Drone->GetActorLocation() - Point).Length();
+		float CurrentDistance = (Drone->GetActorLocation() - ClosestToDrone).Length();
+		if (Distance < CurrentDistance)
+		{
+			ClosestToDrone = Point;
+		}
+
+		Distance = (Character->GetActorLocation() - Point).Length();
+		CurrentDistance = (Character->GetActorLocation() - ClosestToCharacter).Length();
+		if (Distance < CurrentDistance)
+		{
+			ClosestToCharacter = Point;
+		}
+	}
+
+	DrawDebugSphere(GetWorld(), ClosestToDrone, 28.f, 16, FColor::Yellow, false, 0.1f);
+	DrawDebugSphere(GetWorld(), ClosestToCharacter, 32.f, 16, FColor::Black, false, 0.1f);
+	
+	for (auto It = PathPoints.CreateConstIterator(); It; ++It)
+	{
+		if (*It == ClosestToDrone && *It == ClosestToCharacter)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "First");
+			if (!It++) continue;
+			
+			const FVector NextPoint = *(It++);
+
+			if ((Drone->GetActorLocation() - NextPoint).Length() < (Character->GetActorLocation() - NextPoint).Length())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if (*It == ClosestToDrone)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "Second");
+			if (!It++) continue;
+			
+			const FVector NextPoint = *(It++);
+
+			if ((Drone->GetActorLocation() - NextPoint).Length() < (Character->GetActorLocation() - NextPoint).Length())
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else if (*It == ClosestToCharacter)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "Third");
+			if (!It++) continue;
+			
+			const FVector NextPoint = *(It++);
+
+			if ((Drone->GetActorLocation() - NextPoint).Length() < (Character->GetActorLocation() - NextPoint).Length())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
+	return false;
+}
+
+void UMoveAlongThePathTask::FillNavPoints(const TArray<FNavPathPoint>& Points)
+{
+	for (auto PathPoint : Points)
+	{
+		FVector Pos = PathPoint;
+		PathPoints.Add(Pos);
+		// DrawDebugSphere(GetWorld(), Pos, 32.f, 16, FColor::Red, false, 60.f);
+	}
 }

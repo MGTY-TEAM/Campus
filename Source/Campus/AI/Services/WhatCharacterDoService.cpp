@@ -3,6 +3,7 @@
 
 #include "Campus/AI/Services/WhatCharacterDoService.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Campus/Core/CharacterSystem/BaseCharacter.h"
 
 UWhatCharacterDoService::UWhatCharacterDoService()
 {
@@ -22,7 +23,6 @@ void UWhatCharacterDoService::OnSearchStart(FBehaviorTreeSearchData& SearchData)
 	Drone = Cast<AActor>(Blackboard->GetValueAsObject(SelfActorKey.SelectedKeyName));
 	if (!Drone) return;
 	
-	LocationLastTick = Character->GetActorLocation();
 	DistanceLastTick = (Character->GetActorLocation() - Drone->GetActorLocation()).Size();
 }
 
@@ -37,18 +37,18 @@ void UWhatCharacterDoService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 	}
 }
 
-bool UWhatCharacterDoService::IsHeStanding()
+bool UWhatCharacterDoService::IsHeStanding() const
 {
 	if (!Character) return false;
 	
-	const FVector LocationOnThisTick = Character->GetActorLocation();
+	const ABaseCharacter* Player = Cast<ABaseCharacter>(Character);
+	if (!Player) return false;
 
-	if (LocationLastTick == LocationOnThisTick)
+	if (Player->IsMoving())
 	{
 		return true;
 	}
-	
-	LocationLastTick = Character->GetActorLocation();
+
 	return false;
 }
 

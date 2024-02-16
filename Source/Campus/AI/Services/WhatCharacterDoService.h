@@ -34,10 +34,9 @@ private:
 	UBlackboardComponent* Blackboard = nullptr;
 	const AActor* Character = nullptr;
 	const AActor* Drone = nullptr;
-	
-	FVector LocationLastTick;
+
 	double DistanceLastTick = 0;
 
-	bool IsHeStanding();
+	bool IsHeStanding() const;
 	bool IsHeGettingCloser();
 };

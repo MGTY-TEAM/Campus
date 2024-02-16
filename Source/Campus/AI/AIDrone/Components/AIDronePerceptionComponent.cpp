@@ -4,7 +4,10 @@
 #include "Campus/AI/AIDrone/Components/AIDronePerceptionComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "Campus/AI/AIDroneController.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "Engine/Engine.h"
+#include "DrawDebugHelpers.h"
+#include "CollisionQueryParams.h"
 
 AActor* UAIDronePerceptionComponent::GetInteractionCharacter() const
 {
@@ -57,4 +60,43 @@ bool UAIDronePerceptionComponent::CanISee(AActor* Actor)
 void UAIDronePerceptionComponent::SetLastLocationOf(AActor* Actor)
 {
 	LastLocationOfInteractionCharacter = Actor->GetActorLocation();
+}
+
+bool UAIDronePerceptionComponent::CheckObstacleInFrontOfTarget(const AActor* Target) const
+{
+	const AAIController* Controller = Cast<AAIController>(GetOwner());
+	if (!Controller) return false;
+	
+	const APawn* SelfPawn = Controller->GetPawn();
+	if (!SelfPawn) return false;
+	
+	TArray<FHitResult> OutHits;
+	const FVector& Start = SelfPawn->GetActorLocation();
+	const FVector& End = Target->GetActorLocation();
+	FCollisionObjectQueryParams QueryParams;
+	QueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
+	QueryParams.AddObjectTypesToQuery(ECC_Pawn);
+	const FCollisionShape Sphere = FCollisionShape::MakeSphere(RadiusSphere);
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(SelfPawn);
+	
+	if (GetWorld()->SweepMultiByObjectType(OutHits, Start, End, FQuat::Identity, QueryParams, Sphere, Params))
+	{
+		if (OutHits.Num() == 1 && OutHits[0].GetActor() == Target)
+		{
+			// DrawDebugSphere(GetWorld(), OutHits[0].Location, RadiusSphere, 16, FColor::Green, false, 1.0f);
+			return false;
+		}
+		// DrawDebugSphere(GetWorld(), OutHits[0].Location, RadiusSphere, 16, FColor::Red, false, 1.0f);
+		return true;
+	}
+	
+	return false;
+}
+
+void UAIDronePerceptionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	
 }
