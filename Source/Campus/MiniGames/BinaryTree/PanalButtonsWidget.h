@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Items.h"
+#include "MiniMinic.h"
 #include "PanalWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"
@@ -15,7 +15,7 @@
  * 
  */
 UCLASS()
-class CAMPUS_API UPanalButtonsWidget : public UUserWidget , public IBinaryFruit , public Items
+class CAMPUS_API UPanalButtonsWidget : public UUserWidget , public IBinaryFruit , public  IMiniGames
 {
 	GENERATED_BODY()
 
@@ -79,13 +79,9 @@ class CAMPUS_API UPanalButtonsWidget : public UUserWidget , public IBinaryFruit 
 
 	
 	virtual void NativeConstruct() override;
-public:
-	UPROPERTY(BlueprintReadWrite)
-	int32 AnswerNumber = 0;
-	UPROPERTY(BlueprintReadWrite)
-	int32 RightAnswers = 0;
 	
 	TArray<UObject*> Images;
+	TArray<UObject*> ImagesYes;
 	TArray<UButton*> Buttons;
 	TArray<int32> MyButtonsInt {0,1,2,3,4,5,6,7,8};
 	UObject* ImageOld;
@@ -95,5 +91,20 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void RandomMyImages();
+
+	void ButtonClick(int32 N);
+
+	void SetToOriginalImage();
 	
+	USoundBase* ClickButton = LoadObject<USoundBase>(nullptr, TEXT("/Script/Engine.SoundWave'/Game/Sounds/MiniGames/BinaryTree/najatie-na-kompyuternuyu-knopku1.najatie-na-kompyuternuyu-knopku1'"));
+	USoundBase* GameEndRight = LoadObject<USoundBase>(nullptr, TEXT("/Script/Engine.SoundWave'/Game/Sounds/MiniGames/BinaryTree/GameEndRight.GameEndRight'"));
+	USoundBase* GameNotEnd = LoadObject<USoundBase>(nullptr, TEXT("/Script/Engine.SoundWave'/Game/Sounds/MiniGames/BinaryTree/GameNotEnd.GameNotEnd'"));
+public:
+	UPROPERTY(BlueprintAssignable , BlueprintCallable , BlueprintReadWrite)
+	FRandom RandomWorkEnd;
+
+	UPROPERTY(BlueprintReadWrite)
+	int32 AnswerNumber = 0;
+	UPROPERTY(BlueprintReadWrite)
+	int32 RightAnswers = 0;
 };

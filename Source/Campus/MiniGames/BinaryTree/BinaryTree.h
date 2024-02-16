@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "ActorReferencesUtils.h"
-#include "PanalRandom.h"
-#include "Panal.h"
 #include "Campus/Interfaces/Interaction/Interactable.h"
 #include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"
 #include "GameFramework/Actor.h"
