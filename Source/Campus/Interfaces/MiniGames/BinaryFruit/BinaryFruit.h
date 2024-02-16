@@ -25,8 +25,7 @@ public:
 
 
 	virtual void BinaryTreeI(int32 FirstAnswerNumber,int32 SecondAnswerNumber,int32 ThirdAnswerNumber, int32 FirstMeshNumber,int32 SecondMeshNumber,int32 ThirdMeshNumber) {};
-	
-	FExecute Execute;
+
 	FRandom RandomWork;
 	
 	virtual void PanalI(int32 FirstMeshNumber,int32 SecondMeshNumber,int32 ThirdMeshNumber) {};

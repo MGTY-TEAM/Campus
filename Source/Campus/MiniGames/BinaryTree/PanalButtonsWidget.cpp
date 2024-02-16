@@ -78,17 +78,36 @@ void UPanalButtonsWidget::NativeConstruct()
 	Images.Add(ButtonImage.GetResourceObject());
 	Eight->WidgetStyle.Normal.SetResourceObject(ButtonImage.GetResourceObject());
 	
-
-	Zero->SynchronizeProperties();
-	One->SynchronizeProperties();
-	Two->SynchronizeProperties();
-	Three->SynchronizeProperties();
-	Four->SynchronizeProperties();
-	Five->SynchronizeProperties();
-	Six->SynchronizeProperties();
-	Seven->SynchronizeProperties();
-	Eight->SynchronizeProperties();
 	
+	ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/YesUApple.YesUApple'")));
+	ImagesYes.Add(ButtonImage.GetResourceObject());
+
+	ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/YesBanana.YesBanana'")));
+	ImagesYes.Add(ButtonImage.GetResourceObject());
+	
+	ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/YesBlue.YesBlue'")));
+	ImagesYes.Add(ButtonImage.GetResourceObject());
+
+	ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/YesCherry.YesCherry'")));
+	ImagesYes.Add(ButtonImage.GetResourceObject());
+
+	ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/YesGrape.YesGrape'")));
+	ImagesYes.Add(ButtonImage.GetResourceObject());
+	
+	ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/YesOrange.YesOrange'")));
+	ImagesYes.Add(ButtonImage.GetResourceObject());
+
+	ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/YesPine.YesPine'")));
+	ImagesYes.Add(ButtonImage.GetResourceObject());
+
+	ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/YesStrawberry.YesStrawberry'")));
+	ImagesYes.Add(ButtonImage.GetResourceObject());
+
+	ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/YesPear.YesPear'")));
+	ImagesYes.Add(ButtonImage.GetResourceObject());
+	
+	SyncImg();
+
 	RandomWork.AddDynamic(this , &UPanalButtonsWidget::RandomMyImages);
 }
 
@@ -119,133 +138,97 @@ void UPanalButtonsWidget::RandomMyImages()
 		ImageOld = Images[i];
 		Images[i] = Images[R];
 		Images[R] = ImageOld;
+		
+		ImageOld = ImagesYes[i];
+		ImagesYes[i] = ImagesYes[R];
+		ImagesYes[R] = ImageOld;
+		
 		OldN = MyButtonsInt[i];
-		MyButtonsInt[i]=R;
+		MyButtonsInt[i]=MyButtonsInt[R];
 		MyButtonsInt[R]=OldN;
 		R = FMath::RandRange(0,8);
 	}
 	SyncImg();
 }
 
+void UPanalButtonsWidget::ButtonClick(int32 N)
+{
+	if(Panel->RightAnswer.Num() != 0)
+	{
+		if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[N])
+		{
+			RightAnswers++;
+			UE_LOG(LogTemp, Warning, TEXT("Right"));
+		}
+		AnswerNumber++;
+		UE_LOG(LogTemp, Warning, TEXT("Номер %d") , MyButtonsInt[N]);
+
+		Buttons[N]->WidgetStyle.Normal.SetResourceObject(ImagesYes[N]);
+		Buttons[N]->SynchronizeProperties();
+	
+		if (AnswerNumber==3)
+		{
+			CheckAnswers();
+		}
+		else
+		{
+			PlaySound(ClickButton);
+		}
+	}
+}
+
+void UPanalButtonsWidget::SetToOriginalImage()
+{
+	for (int i = 0; i < Buttons.Num(); ++i)
+	{
+		Buttons[i]->WidgetStyle.Normal.SetResourceObject(Images[i]);
+	}
+}
+
+
 void UPanalButtonsWidget::ZeroClick()
 {
-	if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[0])
-	{
-		RightAnswers++;
-		UE_LOG(LogTemp, Warning, TEXT("Right"));
-	}
-	AnswerNumber++;
-	
-	if (AnswerNumber==3)
-	{
-		CheckAnswers();
-	}
+	ButtonClick(0);
 }
 
 void UPanalButtonsWidget::OneClick()
 {
-	if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[1])
-	{
-		RightAnswers++;
-		UE_LOG(LogTemp, Warning, TEXT("Right"));
-	}
-	AnswerNumber++;
-	if (AnswerNumber==3)
-	{
-		CheckAnswers();
-	}
+	ButtonClick(1);
 }
 
 void UPanalButtonsWidget::TwoClick()
 {
-	if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[2])
-	{
-		RightAnswers++;UE_LOG(LogTemp, Warning, TEXT("Right"));
-	}
-	AnswerNumber++;
-	if (AnswerNumber==3)
-	{
-		CheckAnswers();
-	}
+	ButtonClick(2);
 }
 
 void UPanalButtonsWidget::ThreeClick()
 {
-	if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[3])
-	{
-		RightAnswers++;UE_LOG(LogTemp, Warning, TEXT("Right"));
-	}
-	AnswerNumber++;
-	if (AnswerNumber==3)
-	{
-		CheckAnswers();
-	}
+	ButtonClick(3);
 }
 
 void UPanalButtonsWidget::FourClick()
 {
-	if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[4])
-	{
-		RightAnswers++;UE_LOG(LogTemp, Warning, TEXT("Right"));
-	}
-	AnswerNumber++;
-	if (AnswerNumber==3)
-	{
-		CheckAnswers();
-	}
+	ButtonClick(4);
 }
 
 void UPanalButtonsWidget::FiveClick()
 {
-	if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[5])
-	{
-		RightAnswers++;UE_LOG(LogTemp, Warning, TEXT("Right"));
-	}
-	AnswerNumber++;
-	if (AnswerNumber==3)
-	{
-		CheckAnswers();
-	}
+	ButtonClick(5);
 }
 
 void UPanalButtonsWidget::SixClick()
 {
-	if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[6])
-	{
-		RightAnswers++;UE_LOG(LogTemp, Warning, TEXT("Right"));
-	}
-	AnswerNumber++;
-	if (AnswerNumber==3)
-	{
-		CheckAnswers();
-	}
+	ButtonClick(6);
 }
 
 void UPanalButtonsWidget::SevenClick()
 {
-	if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[7])
-	{
-		RightAnswers++;UE_LOG(LogTemp, Warning, TEXT("Right"));
-	}
-	AnswerNumber++;
-	if (AnswerNumber==3)
-	{
-		CheckAnswers();
-	}
+	ButtonClick(7);
 }
 
 void UPanalButtonsWidget::EightClick()
 {
-	if(Panel->RightAnswer[AnswerNumber] == MyButtonsInt[8])
-	{
-		RightAnswers++;UE_LOG(LogTemp, Warning, TEXT("Right"));
-	}
-	AnswerNumber++;
-
-	if (AnswerNumber==3)
-	{
-		CheckAnswers();
-	}
+	ButtonClick(8);
 }
 
 void UPanalButtonsWidget::CheckAnswers()
@@ -253,13 +236,21 @@ void UPanalButtonsWidget::CheckAnswers()
 	if(RightAnswers==3)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("You win"));
-		Execute.ExecuteIfBound();
+		RandomWorkEnd.Broadcast();
+		RightAnswers=0;
+		AnswerNumber=0;
+		PlaySound(GameEndRight);
+		SetToOriginalImage();
+		ExecuteOnBinaryTreeComplyted.Broadcast();
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("You lose"));
 		RightAnswers=0;
 		AnswerNumber=0;
+		PlaySound(GameNotEnd);
+		SetToOriginalImage();
+		ExecuteOnBinaryTreeError.Broadcast();
 	}
 }
 

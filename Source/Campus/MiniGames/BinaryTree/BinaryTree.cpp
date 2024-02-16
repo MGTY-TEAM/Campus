@@ -3,7 +3,6 @@
 
 #include "BinaryTree.h"
 #include "ActorReferencesUtils.h"
-#include "PanalRandom.h"
 #include "Runtime/Core/Tests/Containers/TestUtils.h"
 
 
@@ -30,14 +29,14 @@ ABinaryTree::ABinaryTree()
 	Six->SetupAttachment(Tree);
 	Seven->SetupAttachment(Tree);
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh>Apple(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/YPPles/QApple.QApple'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh>Banana(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Banana/QBanana.QBanana'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh>Blue(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Blue/QBlue.QBlue'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh>Cherry(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Cherry/QCherry.QCherry'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh>Grape(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Grape/QGrape.QGrape'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh>Orange(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Orange/QOrange.QOrange'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh>Pine(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Pine/QPine.QPine'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh>Straw(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Straw/QStraw.QStraw'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>Apple(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Thre/Tree_QApple.Tree_QApple'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>Banana(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Thre/Tree_QBanana.Tree_QBanana'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>Blue(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Thre/Tree_QBlue.Tree_QBlue'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>Cherry(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Thre/Tree_QCherry.Tree_QCherry'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>Grape(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Thre/Tree_QGrape.Tree_QGrape'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>Orange(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Thre/Tree_QOrange.Tree_QOrange'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>Pine(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Thre/Tree_QPine.Tree_QPine'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>Straw(TEXT("/Script/Engine.StaticMesh'/Game/Mesh/BinaryTree/Thre/Tree_QStraw.Tree_QStraw'"));
 	
 	if (Apple.Succeeded())
 	{
