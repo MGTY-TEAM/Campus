@@ -15,14 +15,17 @@ APanalWidget::APanalWidget()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Board"));
 	CollisionMesh = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Mesh"));
 	Origin = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Origin"));
-	Answers = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Answers"));
+	Minic = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Minic"));
+	Answerss = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Answers"));
 	
 	RootComponent = Origin;
 	
 	WidgetComponent->SetupAttachment(Origin);
 	Mesh->SetupAttachment(Origin);
 	CollisionMesh->SetupAttachment(Origin);
-	Answers->SetupAttachment(Origin);
+	Minic->SetupAttachment(Origin);
+	Answerss->SetupAttachment(Origin);
+	
 	
 	CollisionMesh->SetNotifyRigidBodyCollision(true);
 
@@ -63,11 +66,6 @@ void APanalWidget::BeginPlay()
 	
 }
 
-// Called every frame
-void APanalWidget::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
 
 void APanalWidget::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint,
 	const FVector& InteractionNormal)
@@ -108,7 +106,8 @@ void APanalWidget::Interact(UActorComponent* InteractComponent, const FVector& I
 		PanalI(FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
 		RandomWorkStart.Broadcast();
 		UE_LOG(LogTemp, Warning, TEXT("Номера ответов  %d , %d , %d") , FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
-		Answers->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) ));
+		Answerss->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) ));
+		//MiniMinic->Answers->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) ));
 	}
 	
 }

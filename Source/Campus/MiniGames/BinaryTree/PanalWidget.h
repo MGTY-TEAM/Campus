@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MiniMinic.h"
 #include "Campus/Interfaces/Interaction/Interactable.h"
 #include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"
 #include "Components/BoxComponent.h"
@@ -11,6 +12,7 @@
 #include "Components/TextRenderComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "PanalWidget.generated.h"
 
 UCLASS()
@@ -30,13 +32,18 @@ public:
 	int32 SecondAnswMesh = 0;
 	int32 ThirdAnswMesh = 0;
 	FString ToBinary(int32 num);
+	
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	UStaticMeshComponent* Minic;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	UTextRenderComponent* Answerss;
+	
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	UWidgetComponent* WidgetComponent;
 
@@ -47,9 +54,7 @@ protected:
 	UStaticMeshComponent* Origin;
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	UBoxComponent* CollisionMesh;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
-	UTextRenderComponent* Answers;
-	
+
 	int32 k = 0;
 	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
 	
@@ -61,5 +66,8 @@ public:
 	FRandom RandomWorkEnd;
 	UPROPERTY(BlueprintAssignable , BlueprintCallable , BlueprintReadWrite)
 	FRandom StartTimer;
+
 	TArray<int32> RightAnswer;
+	AMiniMinic* MiniMinic = Cast<AMiniMinic>(UGameplayStatics::GetActorOfClass(GetWorld(), AMiniMinic::StaticClass()));
+
 };
