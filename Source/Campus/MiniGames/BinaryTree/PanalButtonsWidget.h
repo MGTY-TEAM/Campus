@@ -107,4 +107,43 @@ public:
 	int32 AnswerNumber = 0;
 	UPROPERTY(BlueprintReadWrite)
 	int32 RightAnswers = 0;
+
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush UAppleBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush BananaBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush BlueBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush CherryBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush GrapeBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush OrangeBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush PineBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush StrawberryBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush PearBrush;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush YesUAppleBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush YesBananaBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush YesBlueBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush YesCherryBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush YesGrapeBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush YesOrangeBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush YesPineBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush YesStrawberryBrush;
+	UPROPERTY(EditDefaultsOnly, Category="Images")
+	FSlateBrush YesPearBrush;
+	
 };
