@@ -41,7 +41,6 @@ void UPanalButtonsWidget::NativeConstruct()
 	Seven->OnClicked.AddDynamic(this, &UPanalButtonsWidget::SevenClick);
 	Eight->OnClicked.AddDynamic(this, &UPanalButtonsWidget::EightClick);
 
-	FSlateBrush ButtonImage;
 
 
 	Images.Add(UAppleBrush.GetResourceObject());
@@ -65,6 +64,7 @@ void UPanalButtonsWidget::NativeConstruct()
 	ImagesYes.Add(YesPearBrush.GetResourceObject());
 	
 	// Аналогично для ImagesYes
+	FSlateBrush ButtonImage;
 	/*ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/UApple.UApple'")));
 	Images.Add(ButtonImage.GetResourceObject());
 	Zero->WidgetStyle.Normal.SetResourceObject(ButtonImage.GetResourceObject());
