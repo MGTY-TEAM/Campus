@@ -43,10 +43,6 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	int32 Minuts;
 
-	UPROPERTY(BlueprintReadWrite)
-	int32 EndSeconds;
-	UPROPERTY(BlueprintReadWrite)
-	int32 EndMinuts;
 
 protected:
 	// Called when the game starts or when spawned
