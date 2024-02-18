@@ -9,6 +9,8 @@
 
 DECLARE_LOG_CATEGORY_CLASS(LogInteractionCompoent, Log, Log);
 
+#define INTERACTION_DEBUG
+
 // Sets default values for this component's properties
 UInteractionComponent::UInteractionComponent()
 {
@@ -22,10 +24,18 @@ void UInteractionComponent::TryInteract()
 	FHitResult HitResult = GetHitResultByTraceChannel();
 	if (AActor* HitActor = HitResult.GetActor())
 	{
+		
+#ifdef  INTERACTION_DEBUG
 		UE_LOG(LogInteractionCompoent, Warning, TEXT("%s"), *HitResult.GetActor()->GetName());
+#endif
+		
 		if (IInteractable* Interactable = Cast<IInteractable>(HitActor))
 		{
+			
+#ifdef INTERACTION_DEBUG
 			UE_LOG(LogInteractionCompoent, Warning, TEXT("Interact  %s"), *HitActor->GetName());
+#endif
+			
 			Interactable->Interact(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
 			OnSimpleInteract.Broadcast();
 		}
@@ -35,16 +45,17 @@ void UInteractionComponent::TryInteract()
 			OnSimpleInteract.Broadcast();
 		}
 	}
-	
-	if (UWidgetInteractionComponent* WidgetInteractionComponent = Cast<UWidgetInteractionComponent>(GetOwner()->GetComponentByClass(UWidgetInteractionComponent::StaticClass())))
+
+	if (UWidgetInteractionComponent* WidgetInteractionComponent = Cast<UWidgetInteractionComponent>(
+		GetOwner()->GetComponentByClass(UWidgetInteractionComponent::StaticClass())))
 	{
+#ifdef INTERACTION_DEBUG
 		UE_LOG(LogInteractionCompoent, Warning, TEXT("Widget Interaction"));
+#endif
 		WidgetInteractionComponent->PressPointerKey(EKeys::LeftMouseButton);
 		WidgetInteractionComponent->ReleasePointerKey(EKeys::LeftMouseButton);
 		//PressKey(EKeys::LeftMouseButton);
 	}
-	
-	
 }
 
 void UInteractionComponent::SetHoldStatus(bool bStatus)
@@ -58,11 +69,19 @@ void UInteractionComponent::BeginPlay()
 	Super::BeginPlay();
 	if (GetOwner())
 	{
+		
+#ifdef INTERACTION_DEBUG
 		UE_LOG(InteractionComponentLog, Warning, TEXT("Owner"));
+#endif
+		
 		if (UCameraComponent* CameraComponent = Cast<UCameraComponent>(
 			GetOwner()->GetComponentByClass(UCameraComponent::StaticClass())))
 		{
+			
+#ifdef INTERACTION_DEBUG
 			UE_LOG(InteractionComponentLog, Warning, TEXT("Camera"));
+#endif
+			
 			OwnedCameraComponent = CameraComponent;
 		}
 	}
@@ -75,7 +94,7 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	FHitResult HitResult = GetHitResultByTraceChannel();
-	
+
 	if (!bInteractHold)
 	{
 		FocusActor = HitResult.GetActor();
@@ -89,7 +108,7 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 				if (FocusActor == HitResult.GetActor())
 				{
 					IInteractable::Execute_HoldInteract(FocusActor,
-									  HitResult);
+					                                    HitResult);
 				}
 				else
 				{

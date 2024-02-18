@@ -24,7 +24,7 @@ class CAMPUS_API IInteractable
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	
-	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) = 0;
+	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal){};
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
 	void BPInteract(const FHitResult& HitResult);
