@@ -41,7 +41,6 @@ void UPanalButtonsWidget::NativeConstruct()
 	Seven->OnClicked.AddDynamic(this, &UPanalButtonsWidget::SevenClick);
 	Eight->OnClicked.AddDynamic(this, &UPanalButtonsWidget::EightClick);
 
-	FSlateBrush ButtonImage;
 
 
 	Images.Add(UAppleBrush.GetResourceObject());
@@ -65,6 +64,7 @@ void UPanalButtonsWidget::NativeConstruct()
 	ImagesYes.Add(YesPearBrush.GetResourceObject());
 	
 	// Аналогично для ImagesYes
+	FSlateBrush ButtonImage;
 	/*ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/UApple.UApple'")));
 	Images.Add(ButtonImage.GetResourceObject());
 	Zero->WidgetStyle.Normal.SetResourceObject(ButtonImage.GetResourceObject());
@@ -149,34 +149,41 @@ void UPanalButtonsWidget::SyncImg()
 
 void UPanalButtonsWidget::RandomMyImages()
 {
-	R = FMath::RandRange(0, 8);
-	for (int i = 0; i < 9; i++)
-	{
-		while (i == R)
+	if(Buttons.Num() != 0 && Images.Num() != 0 && ImagesYes.Num() !=0){
+		R = FMath::RandRange(0, 8);
+		for (int i = 0; i < 9; i++)
 		{
+			while (i == R)
+			{
+				R = FMath::RandRange(0, 8);
+			}
+			Buttons[i]->WidgetStyle.Normal.SetResourceObject(Images[R]);
+			Buttons[R]->WidgetStyle.Normal.SetResourceObject(Images[i]);
+
+			Buttons[i]->WidgetStyle.Hovered.SetResourceObject(Images[R]);
+			Buttons[R]->WidgetStyle.Hovered.SetResourceObject(Images[i]);
+		
+			ImageOld = Images[i];
+			Images[i] = Images[R];
+			Images[R] = ImageOld;
+
+			ImageOld = ImagesYes[i];
+			ImagesYes[i] = ImagesYes[R];
+			ImagesYes[R] = ImageOld;
+
+			OldN = MyButtonsInt[i];
+			MyButtonsInt[i] = MyButtonsInt[R];
+			MyButtonsInt[R] = OldN;
 			R = FMath::RandRange(0, 8);
 		}
-		Buttons[i]->WidgetStyle.Normal.SetResourceObject(Images[R]);
-		Buttons[R]->WidgetStyle.Normal.SetResourceObject(Images[i]);
-		ImageOld = Images[i];
-		Images[i] = Images[R];
-		Images[R] = ImageOld;
-
-		ImageOld = ImagesYes[i];
-		ImagesYes[i] = ImagesYes[R];
-		ImagesYes[R] = ImageOld;
-
-		OldN = MyButtonsInt[i];
-		MyButtonsInt[i] = MyButtonsInt[R];
-		MyButtonsInt[R] = OldN;
-		R = FMath::RandRange(0, 8);
+		SyncImg();
 	}
-	SyncImg();
+	
 }
 
 void UPanalButtonsWidget::ButtonClick(int32 N)
 {
-	if (Panel->RightAnswer.Num() != 0)
+	if (Panel->RightAnswer.Num() != 0 && Buttons[N]->GetIsEnabled() && Buttons.Num() != 0)
 	{
 		if (Panel->RightAnswer[AnswerNumber] == MyButtonsInt[N])
 		{
@@ -187,6 +194,8 @@ void UPanalButtonsWidget::ButtonClick(int32 N)
 		UE_LOG(LogTemp, Warning, TEXT("Номер %d"), MyButtonsInt[N]);
 
 		Buttons[N]->WidgetStyle.Normal.SetResourceObject(ImagesYes[N]);
+		Buttons[N]->WidgetStyle.Hovered.SetResourceObject(ImagesYes[N]);
+		Buttons[N]->SetIsEnabled(false);
 		Buttons[N]->SynchronizeProperties();
 
 		if (AnswerNumber == 3)
@@ -205,6 +214,7 @@ void UPanalButtonsWidget::SetToOriginalImage()
 	for (int i = 0; i < Buttons.Num(); ++i)
 	{
 		Buttons[i]->WidgetStyle.Normal.SetResourceObject(Images[i]);
+		Buttons[i]->WidgetStyle.Hovered.SetResourceObject(Images[i]);
 	}
 }
 
@@ -256,6 +266,10 @@ void UPanalButtonsWidget::EightClick()
 
 void UPanalButtonsWidget::CheckAnswers()
 {
+	for (int i = 0; i < Buttons.Num(); ++i)
+	{
+		Buttons[i]->SetIsEnabled(true);
+	}
 	if (RightAnswers == 3)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("You win"));

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MiniMinic.h"
 #include "PanalWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"

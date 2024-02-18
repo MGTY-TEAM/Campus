@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MiniMinic.h"
 #include "Campus/Interfaces/Interaction/Interactable.h"
 #include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"
 #include "Components/BoxComponent.h"
@@ -38,7 +37,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	UTextRenderComponent* Answerss;
-	
+
+	UPROPERTY(BlueprintReadWrite)
+	int32 Seconds;
+	UPROPERTY(BlueprintReadWrite)
+	int32 Minuts;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -68,6 +72,4 @@ public:
 	FRandom StartTimer;
 
 	TArray<int32> RightAnswer;
-	AMiniMinic* MiniMinic = Cast<AMiniMinic>(UGameplayStatics::GetActorOfClass(GetWorld(), AMiniMinic::StaticClass()));
-
 };
