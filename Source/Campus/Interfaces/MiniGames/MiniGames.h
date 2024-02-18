@@ -7,8 +7,8 @@
 #include "MiniGames.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBinaryTreeComplyted);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBinaryTreeError);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMiniGameComplited);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMiniGameError);
 // This class does not need to be modified.
 UINTERFACE()
 class UMiniGames : public UInterface
@@ -25,6 +25,6 @@ class CAMPUS_API IMiniGames
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	FOnBinaryTreeComplyted ExecuteOnBinaryTreeComplyted;
-	FOnBinaryTreeError ExecuteOnBinaryTreeError;
+	FOnMiniGameComplited ExecuteMiniGameComplited;
+	FOnMiniGameError ExecuteMiniGameError;
 };

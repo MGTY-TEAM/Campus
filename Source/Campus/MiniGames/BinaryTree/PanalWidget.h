@@ -13,6 +13,7 @@
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
 #include "PanalWidget.generated.h"
+DEFINE_LOG_CATEGORY_STATIC(FBinaryTree,Log,Log)
 
 UCLASS()
 class CAMPUS_API APanalWidget : public AActor , public IBinaryFruit , public IInteractable

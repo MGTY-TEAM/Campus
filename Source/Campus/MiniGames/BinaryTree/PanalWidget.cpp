@@ -5,6 +5,7 @@
 
 #include "BinaryTree.h"
 #include "PanalButtonsWidget.h"
+#define BINARY_TREE_DEBUG = false
 
 
 class UWidgetBlueprint;
@@ -72,7 +73,9 @@ void APanalWidget::Interact(UActorComponent* InteractComponent, const FVector& I
 {
 	if (InteractComponent==CollisionMesh)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Generate Numbers"));
+#ifdef BINARY_TREE_DEBUG
+		UE_LOG(FBinaryTree, Warning, TEXT("Generate Numbers"));
+#endif
 
 		FirstAnsw =  FMath::RandRange(0, 7);
 		SecondAnsw =  FMath::RandRange(0, 7);
@@ -105,9 +108,13 @@ void APanalWidget::Interact(UActorComponent* InteractComponent, const FVector& I
 		Tree->BinaryTreeI(FirstAnsw,SecondAnsw,ThirdAnsw ,FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
 		PanalI(FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
 		RandomWorkStart.Broadcast();
-		UE_LOG(LogTemp, Warning, TEXT("Номера ответов  %d , %d , %d") , FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
+
+#ifdef BINARY_TREE_DEBUG
+		UE_LOG(FBinaryTree, Warning, TEXT("Номера ответов  %d , %d , %d") , FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
+#endif
+		
 		Answerss->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) ));
-		//MiniMinic->Answers->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) ));
+		CollisionMesh->DestroyComponent();
 	}
 	
 }

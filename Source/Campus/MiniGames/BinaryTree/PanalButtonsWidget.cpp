@@ -5,7 +5,7 @@
 #include "PanalWidget.h"
 #include "Blueprint/WidgetTree.h"
 #include "Engine/AssetManager.h"
-
+#define BINARY_TREE_DEBUG = false
 
 void UPanalButtonsWidget::NativeConstruct()
 {
@@ -41,8 +41,6 @@ void UPanalButtonsWidget::NativeConstruct()
 	Seven->OnClicked.AddDynamic(this, &UPanalButtonsWidget::SevenClick);
 	Eight->OnClicked.AddDynamic(this, &UPanalButtonsWidget::EightClick);
 
-
-
 	Images.Add(UAppleBrush.GetResourceObject());
 	Images.Add(BananaBrush.GetResourceObject());
 	Images.Add(BlueBrush.GetResourceObject());
@@ -64,7 +62,7 @@ void UPanalButtonsWidget::NativeConstruct()
 	ImagesYes.Add(YesPearBrush.GetResourceObject());
 	
 	// Аналогично для ImagesYes
-	FSlateBrush ButtonImage;
+	//FSlateBrush ButtonImage;
 	/*ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/UApple.UApple'")));
 	Images.Add(ButtonImage.GetResourceObject());
 	Zero->WidgetStyle.Normal.SetResourceObject(ButtonImage.GetResourceObject());
@@ -188,11 +186,15 @@ void UPanalButtonsWidget::ButtonClick(int32 N)
 		if (Panel->RightAnswer[AnswerNumber] == MyButtonsInt[N])
 		{
 			RightAnswers++;
+#ifdef BINARY_TREE_DEBUG
 			UE_LOG(LogTemp, Warning, TEXT("Right"));
+#endif
+			
 		}
 		AnswerNumber++;
+#ifdef BINARY_TREE_DEBUG
 		UE_LOG(LogTemp, Warning, TEXT("Номер %d"), MyButtonsInt[N]);
-
+#endif
 		Buttons[N]->WidgetStyle.Normal.SetResourceObject(ImagesYes[N]);
 		Buttons[N]->WidgetStyle.Hovered.SetResourceObject(ImagesYes[N]);
 		Buttons[N]->SetIsEnabled(false);
@@ -272,21 +274,26 @@ void UPanalButtonsWidget::CheckAnswers()
 	}
 	if (RightAnswers == 3)
 	{
+#ifdef BINARY_TREE_DEBUG
 		UE_LOG(LogTemp, Warning, TEXT("You win"));
+#endif
+		
 		RandomWorkEnd.Broadcast();
 		RightAnswers = 0;
 		AnswerNumber = 0;
 		PlaySound(GameEndRight);
 		SetToOriginalImage();
-		ExecuteOnBinaryTreeComplyted.Broadcast();
+		ExecuteMiniGameComplited.Broadcast();
 	}
 	else
 	{
+#ifdef BINARY_TREE_DEBUG
 		UE_LOG(LogTemp, Warning, TEXT("You lose"));
+# endif
 		RightAnswers = 0;
 		AnswerNumber = 0;
 		PlaySound(GameNotEnd);
 		SetToOriginalImage();
-		ExecuteOnBinaryTreeError.Broadcast();
+		ExecuteMiniGameError.Broadcast();
 	}
 }
