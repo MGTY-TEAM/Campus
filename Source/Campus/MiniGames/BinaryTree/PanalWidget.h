@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MiniMinic.h"
 #include "Campus/Interfaces/Interaction/Interactable.h"
 #include "Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"
 #include "Components/BoxComponent.h"
@@ -68,6 +67,4 @@ public:
 	FRandom StartTimer;
 
 	TArray<int32> RightAnswer;
-	AMiniMinic* MiniMinic = Cast<AMiniMinic>(UGameplayStatics::GetActorOfClass(GetWorld(), AMiniMinic::StaticClass()));
-
 };
