@@ -4,6 +4,7 @@
 #include "Campus/AI/Services/WhatCharacterDoService.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Campus/Core/CharacterSystem/BaseCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UWhatCharacterDoService::UWhatCharacterDoService()
 {
@@ -44,12 +45,11 @@ bool UWhatCharacterDoService::IsHeStanding() const
 	const ABaseCharacter* Player = Cast<ABaseCharacter>(Character);
 	if (!Player) return false;
 
-	////////////////////////////////////////////////
-	if (Player->IsMoving())
+	if (Player->GetCharacterMovement()->Velocity.IsZero())
 	{
 		return true;
 	}
-	////////////////////////////////////////////////
+
 	return false;
 }
 
