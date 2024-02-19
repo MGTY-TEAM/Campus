@@ -10,45 +10,43 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "LocalComponents/InteractionComponent.h"
 
-
-// Sets default values
 ABaseCharacter::ABaseCharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
-	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
 	WidgetInteractionComponent = CreateDefaultSubobject<UWidgetInteractionComponent>("WidgetInteractionComponent");
-	
+
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-	
+
 	CameraComponent->SetupAttachment(SpringArmComponent);
-	
 	WidgetInteractionComponent->SetupAttachment(CameraComponent);
-	
 	SpringArmComponent->SetupAttachment(RootComponent);
 }
 
-// Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+#ifdef BASE_CHARACTER_DEBUG
+	checkf(!WidgetInteractionComponent,TEXT("Widget interaction component valid"));
+#endif
+
+#ifdef BASE_CHARACTER_DEBUG
+	checkf(!InteractionComponent,TEXT("Interaction component valid"));
+#endif
 }
 
-
-// Called every frame
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-
-// Called to bind functionality to input
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Interaction", IE_Pressed,this, &ABaseCharacter::Interact);
+
+	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &ABaseCharacter::Interact);
 	PlayerInputComponent->BindAction("Interaction", IE_Released, this, &ABaseCharacter::EndInteract);
 
 	PlayerInputComponent->BindAxis("ForwardAxis", this, &ABaseCharacter::MoveForward);
@@ -59,12 +57,29 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ABaseCharacter::Interact()
 {
+#ifdef BASE_CHARACTER_DEBUG
+	UE_LOG(LogBaseCharacter, Log, TEXT("Interact"))
+#endif
+
+#ifdef BASE_CHARACTER_DEBUG
+	UE_LOG(LogBaseCharacter, Log, TEXT("Try interact"))
+#endif
+
 	InteractionComponent->TryInteract();
+
+#ifdef BASE_CHARACTER_DEBUG
+	UE_LOG(LogBaseCharacter, Log, TEXT("Set hold status true"))
+#endif
+
 	InteractionComponent->SetHoldStatus(true);
 }
 
 void ABaseCharacter::EndInteract()
 {
+#ifdef BASE_CHARACTER_DEBUG
+	UE_LOG(LogBaseCharacter, Log, TEXT("End interact"))
+	UE_LOG(LogBaseCharacter, Log, TEXT("Set hold status false"))
+#endif
 	InteractionComponent->SetHoldStatus(false);
 }
 
@@ -82,10 +97,10 @@ void ABaseCharacter::MoveRight(float value)
 
 void ABaseCharacter::LookUp(float value)
 {
-	AddControllerPitchInput(value * MouseSens * -1);
+	AddControllerPitchInput(value * MouseSensivity * -1);
 }
 
 void ABaseCharacter::LookRight(float value)
 {
-	AddControllerYawInput(value * MouseSens);
+	AddControllerYawInput(value * MouseSensivity);
 }

@@ -1,6 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#define BASE_CHARACTER_DEBUG false
+
+DECLARE_LOG_CATEGORY_CLASS(LogBaseCharacter, Log, Log);
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -16,13 +19,12 @@ UCLASS()
 class CAMPUS_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
+	
+	bool IsMove = false;
 public:
-	// Sets default values for this character's properties
 	ABaseCharacter();
 	
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	virtual void Interact();
@@ -45,17 +47,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
 	UCameraComponent* CameraComponent;
 	
-	UPROPERTY(EditAnywhere,  BlueprintReadWrite ,Category="Mouse Settings")
-	float MouseSens = 0.4f;
+	UPROPERTY(EditAnywhere,  BlueprintReadWrite, Category="Mouse Settings", meta=(ClampMin = 0.1f, ClampMax = 2.0f))
+	float MouseSensivity = 0.4f;
 	
 public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	
 	bool IsMoving() const { return IsMove; };
-private:
-	bool IsMove = false;
 };

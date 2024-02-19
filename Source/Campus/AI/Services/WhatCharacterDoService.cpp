@@ -44,11 +44,12 @@ bool UWhatCharacterDoService::IsHeStanding() const
 	const ABaseCharacter* Player = Cast<ABaseCharacter>(Character);
 	if (!Player) return false;
 
+	////////////////////////////////////////////////
 	if (Player->IsMoving())
 	{
 		return true;
 	}
-
+	////////////////////////////////////////////////
 	return false;
 }
 

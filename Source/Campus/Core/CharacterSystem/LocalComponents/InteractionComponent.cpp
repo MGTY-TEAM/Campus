@@ -1,21 +1,12 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "InteractionComponent.h"
-
 #include "Camera/CameraComponent.h"
 #include "..\..\..\Interfaces\Interaction\Interactable.h"
 #include "Components/WidgetInteractionComponent.h"
 
-DECLARE_LOG_CATEGORY_CLASS(LogInteractionCompoent, Log, Log);
-
-#define INTERACTION_DEBUG
-
-// Sets default values for this component's properties
-UInteractionComponent::UInteractionComponent()
+UInteractionComponent::UInteractionComponent(): FocusActor(nullptr), OwnedCameraComponent(nullptr)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
@@ -25,15 +16,15 @@ void UInteractionComponent::TryInteract()
 	if (AActor* HitActor = HitResult.GetActor())
 	{
 		
-#ifdef  INTERACTION_DEBUG
-		UE_LOG(LogInteractionCompoent, Warning, TEXT("%s"), *HitResult.GetActor()->GetName());
+#ifdef  INTERACTION_COMPONENT_DEBUG
+		UE_LOG(LogInteractionComponent, Warning, TEXT("%s"), *HitResult.GetActor()->GetName());
 #endif
 		
 		if (IInteractable* Interactable = Cast<IInteractable>(HitActor))
 		{
 			
-#ifdef INTERACTION_DEBUG
-			UE_LOG(LogInteractionCompoent, Warning, TEXT("Interact  %s"), *HitActor->GetName());
+#ifdef INTERACTION_COMPONENT_DEBUG
+			UE_LOG(LogInteractionComponent, Warning, TEXT("Interact  %s"), *HitActor->GetName());
 #endif
 			
 			Interactable->Interact(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
@@ -49,12 +40,13 @@ void UInteractionComponent::TryInteract()
 	if (UWidgetInteractionComponent* WidgetInteractionComponent = Cast<UWidgetInteractionComponent>(
 		GetOwner()->GetComponentByClass(UWidgetInteractionComponent::StaticClass())))
 	{
-#ifdef INTERACTION_DEBUG
-		UE_LOG(LogInteractionCompoent, Warning, TEXT("Widget Interaction"));
+		
+#ifdef INTERACTION_COMPONENT_DEBUG
+		UE_LOG(LogInteractionComponent, Warning, TEXT("Widget Interaction"));
 #endif
+		
 		WidgetInteractionComponent->PressPointerKey(EKeys::LeftMouseButton);
 		WidgetInteractionComponent->ReleasePointerKey(EKeys::LeftMouseButton);
-		//PressKey(EKeys::LeftMouseButton);
 	}
 }
 
@@ -70,16 +62,16 @@ void UInteractionComponent::BeginPlay()
 	if (GetOwner())
 	{
 		
-#ifdef INTERACTION_DEBUG
-		UE_LOG(InteractionComponentLog, Warning, TEXT("Owner"));
+#ifdef INTERACTION_COMPONENT_DEBUG
+		UE_LOG(LogInteractionComponent, Warning, TEXT("Owner"));
 #endif
 		
 		if (UCameraComponent* CameraComponent = Cast<UCameraComponent>(
 			GetOwner()->GetComponentByClass(UCameraComponent::StaticClass())))
 		{
 			
-#ifdef INTERACTION_DEBUG
-			UE_LOG(InteractionComponentLog, Warning, TEXT("Camera"));
+#ifdef INTERACTION_COMPONENT_DEBUG
+			UE_LOG(LogInteractionComponent, Warning, TEXT("Camera"));
 #endif
 			
 			OwnedCameraComponent = CameraComponent;
@@ -87,7 +79,6 @@ void UInteractionComponent::BeginPlay()
 	}
 }
 
-// Called every frame
 void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                           FActorComponentTickFunction* ThisTickFunction)
 {
@@ -135,8 +126,6 @@ FHitResult UInteractionComponent::GetHitResultByTraceChannel()
 
 			if (HitResult.bBlockingHit)
 			{
-				AActor* BlockActor = HitResult.GetActor();
-
 				return HitResult;
 			}
 		}
