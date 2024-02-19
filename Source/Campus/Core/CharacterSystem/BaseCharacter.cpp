@@ -95,10 +95,10 @@ void ABaseCharacter::MoveRight(float value)
 
 void ABaseCharacter::LookUp(float value)
 {
-	AddControllerPitchInput(value * MouseSensivity * -1);
+	AddControllerPitchInput(value * MouseSens * -1);
 }
 
 void ABaseCharacter::LookRight(float value)
 {
-	AddControllerYawInput(value * MouseSensivity);
+	AddControllerYawInput(value * MouseSens);
 }
