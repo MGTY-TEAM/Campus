@@ -70,13 +70,11 @@ void ABaseCharacter::EndInteract()
 
 void ABaseCharacter::MoveForward(float value)
 {
-	value == 0 ? IsMove = false : IsMove = true;
 	AddMovementInput(GetActorForwardVector() * value);
 }
 
 void ABaseCharacter::MoveRight(float value)
 {
-	value == 0 ? IsMove = false : IsMove = true;
 	AddMovementInput(GetActorRightVector() * value);
 }
 
