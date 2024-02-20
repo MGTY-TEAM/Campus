@@ -17,14 +17,14 @@ void UInteractionComponent::TryInteract()
 	{
 		
 #ifdef  INTERACTION_COMPONENT_DEBUG
-		UE_LOG(LogInteractionComponent, Warning, TEXT("%s"), *HitResult.GetActor()->GetName());
+		UE_LOG(LogInteractionComponent, Log, TEXT("Actor hited: %s"), *HitResult.GetActor()->GetName());
 #endif
 		
 		if (IInteractable* Interactable = Cast<IInteractable>(HitActor))
 		{
 			
 #ifdef INTERACTION_COMPONENT_DEBUG
-			UE_LOG(LogInteractionComponent, Warning, TEXT("Interact  %s"), *HitActor->GetName());
+			UE_LOG(LogInteractionComponent, Warning, TEXT("Interact with implemented actor: %s"), *HitActor->GetName());
 #endif
 			
 			Interactable->Interact(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
@@ -42,7 +42,7 @@ void UInteractionComponent::TryInteract()
 	{
 		
 #ifdef INTERACTION_COMPONENT_DEBUG
-		UE_LOG(LogInteractionComponent, Warning, TEXT("Widget Interaction"));
+		UE_LOG(LogInteractionComponent, Log, TEXT("Widget Interaction"));
 #endif
 		
 		WidgetInteractionComponent->PressPointerKey(EKeys::LeftMouseButton);
@@ -71,7 +71,7 @@ void UInteractionComponent::BeginPlay()
 		{
 			
 #ifdef INTERACTION_COMPONENT_DEBUG
-			UE_LOG(LogInteractionComponent, Warning, TEXT("Camera"));
+			UE_LOG(LogInteractionComponent, Log, TEXT("Camera"));
 #endif
 			
 			OwnedCameraComponent = CameraComponent;
@@ -122,7 +122,7 @@ FHitResult UInteractionComponent::GetHitResultByTraceChannel()
 
 			FHitResult HitResult;
 
-			GetWorld()->LineTraceSingleByChannel(HitResult, CameraLocation, GoalLocation, ECC_Camera);
+			GetWorld()->LineTraceSingleByChannel(HitResult, CameraLocation, GoalLocation, ECC_Visibility);
 
 			if (HitResult.bBlockingHit)
 			{

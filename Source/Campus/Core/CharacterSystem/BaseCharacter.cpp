@@ -1,5 +1,5 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+#define BASE_CHARACTER_DEBUG false
 
 #include "BaseCharacter.h"
 
@@ -9,6 +9,8 @@
 #include "Components/WidgetInteractionComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "LocalComponents/InteractionComponent.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, Log, Log)
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -29,11 +31,11 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 #ifdef BASE_CHARACTER_DEBUG
-	checkf(!WidgetInteractionComponent,TEXT("Widget interaction component valid"));
+	UE_CLOG(WidgetInteractionComponent == nullptr, LogBaseCharacter, Error, TEXT("Widget interaction component is not valid"));
 #endif
 
 #ifdef BASE_CHARACTER_DEBUG
-	checkf(!InteractionComponent,TEXT("Interaction component valid"));
+	UE_CLOG(InteractionComponent == nullptr, LogBaseCharacter, Error, TEXT("Interaction component is not valid"));
 #endif
 }
 
