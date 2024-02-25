@@ -12,43 +12,65 @@ class UChatUserComponent;
 class UCameraComponent;
 class UInteractionComponent;
 
+/**
+ * Base class for all characters in the game.
+ */
 UCLASS()
 class CAMPUS_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
+	/** Default constructor. */
 	ABaseCharacter();
-	
+
 protected:
+	/** Called when the game starts or when spawned. */
 	virtual void BeginPlay() override;
-	
+
+	/** Function to handle character interaction. */
 	virtual void Interact();
+
+	/** Function to handle ending interaction. */
 	virtual void EndInteract();
-	
+
+	/** Function to handle moving the character forward. */
 	virtual void MoveForward(float value);
+
+	/** Function to handle moving the character right. */
 	virtual void MoveRight(float value);
+
+	/** Function to handle looking up. */
 	virtual void LookUp(float value);
+
+	/** Function to handle looking right. */
 	virtual void LookRight(float value);
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Components")
+
+	/** Widget interaction component for interacting with UI widgets in the world. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UWidgetInteractionComponent* WidgetInteractionComponent;
-	
-	UPROPERTY(EditDefaultsOnly, Category="Components")
+
+	/** Component for handling character interactions. */
+	UPROPERTY(EditDefaultsOnly, Category = "Components")
 	UInteractionComponent* InteractionComponent;
 
+	/** Spring arm component for the character's camera. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USpringArmComponent* SpringArmComponent;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
+
+	/** Camera component for the character's view. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	UCameraComponent* CameraComponent;
-	
-	UPROPERTY(EditAnywhere,  BlueprintReadWrite ,Category="Mouse Settings")
+
+	/** Mouse sensitivity for camera movement. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mouse Settings")
 	float MouseSens = 0.4f;
-	
+
 public:
+	/** Called every frame. */
 	virtual void Tick(float DeltaTime) override;
 
+	/** Function to set up input bindings. */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
 };
+

@@ -1,0 +1,28 @@
+\doxysection{Idle\+Animation\+Service.\+h}
+\hypertarget{_idle_animation_service_8h_source}{}\label{_idle_animation_service_8h_source}\index{Source/Campus/AI/Services/IdleAnimationService.h@{Source/Campus/AI/Services/IdleAnimationService.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}BehaviorTree/BTService.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}IdleAnimationService.generated.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ UCLASS()}
+\DoxyCodeLine{00010\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_u_idle_animation_service}{UIdleAnimationService}}\ :\ public\ UBTService}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00013\ \ \ \ \ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ TickNode(UBehaviorTreeComponent\&\ OwnerComp,\ uint8*\ NodeMemory,\ \textcolor{keywordtype}{float}\ DeltaSeconds)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ UPROPERTY(EditAnywhere,\ Category\ =\ \textcolor{stringliteral}{"{}RobotAnimation"{}})}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{float}\ Frequency\ =\ 1;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ UPROPERTY(EditAnywhere,\ Category\ =\ \textcolor{stringliteral}{"{}RobotAnimation"{}})}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{float}\ Amplitude\ =\ 0.1;}
+\DoxyCodeLine{00022\ \};}
+
+\end{DoxyCode}

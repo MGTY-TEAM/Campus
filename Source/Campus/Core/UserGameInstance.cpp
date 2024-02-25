@@ -3,13 +3,10 @@
 
 #include "UserGameInstance.h"
 
-#include "OnlineSubsystem.h"
-#include "OnlineSessionSettings.h"
-#include "Online/OnlineSessionNames.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Libraries/Requests/GameAPI/HTTPGameAPIRequestsLib.h"
 #include "../Libraries/Requests/GameAPI/HTTPGameAPIStructures.h"
-#include "GameFramework/PlayerState.h"
+
 
 
 const FString& UUserGameInstance::GetUserID() const
@@ -32,11 +29,6 @@ const FString& UUserGameInstance::GetEmail() const
 	return M_UserInfo.Email;
 }
 
-const FString& UUserGameInstance::GetGameServerPort() const
-{
-	return M_GameServerPort;
-}
-
 void UUserGameInstance::SetUserToken(const FString& Token)
 {
 	if (M_UserToken.IsEmpty())
@@ -45,7 +37,7 @@ void UUserGameInstance::SetUserToken(const FString& Token)
 	}
 }
 
-bool UUserGameInstance::TryToGetAndFillUserInfoAndOpenMainMenu()
+bool UUserGameInstance::TryToGetAndFillUserInfoAndTransitToMainMenu()
 {
 	FUserInfoRequest UserInfoRequest;
 	UserInfoRequest.Token = GetUserToken();
@@ -58,15 +50,17 @@ bool UUserGameInstance::TryToGetAndFillUserInfoAndOpenMainMenu()
 				M_UserInfo.Email = UserInfoResponse.Email;
 				M_UserInfo.Nickname = UserInfoResponse.Nickname;
 				M_UserInfo.ID = UserInfoResponse.UserID;
-
-				UE_LOG(LogTemp, Warning, TEXT("User info is filled. UserID: %s"), *UserInfoResponse.UserID);
-
+#ifdef USER_GAME_INSTANCE_DEBUG
+				UE_LOG(LogUserGameInstance, Log, TEXT("User info is filled. UserID: %s"), *UserInfoResponse.UserID);
+#endif
+#ifdef USER_GAME_INSTANCE_DEBUG
+				UE_LOG(LogUserGameInstance, Log, TEXT("Transit to main menu level"))
+#endif
 				UGameplayStatics::OpenLevel(this, "L_MainMenu");
 				return true;
 			}
 			return false;
 		}, UserInfoRequest);
-
 	return false;
 }
 

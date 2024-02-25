@@ -1,0 +1,96 @@
+\doxysection{HTTPGame\+APIStructures.\+h}
+\hypertarget{_h_t_t_p_game_a_p_i_structures_8h_source}{}\label{_h_t_t_p_game_a_p_i_structures_8h_source}\index{Source/Campus/Libraries/Requests/GameAPI/HTTPGameAPIStructures.h@{Source/Campus/Libraries/Requests/GameAPI/HTTPGameAPIStructures.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}HTTPGameAPIStructures.generated.h"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00010\ USTRUCT(BlueprintType)}
+\DoxyCodeLine{00011\ struct\ \mbox{\hyperlink{struct_f_login_request}{FLoginRequest}}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00014\ \ \ \ \ }
+\DoxyCodeLine{00015\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00016\ \ \ \ \ FString\ Login;}
+\DoxyCodeLine{00017\ \ \ \ \ }
+\DoxyCodeLine{00018\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00019\ \ \ \ \ FString\ Password;}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ USTRUCT(BlueprintType)}
+\DoxyCodeLine{00023\ struct\ \mbox{\hyperlink{struct_f_login_response}{FLoginResponse}}}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00026\ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00028\ \ \ \ \ FString\ Token;}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00031\ USTRUCT(BlueprintType)}
+\DoxyCodeLine{00032\ struct\ \mbox{\hyperlink{struct_f_register_request}{FRegisterRequest}}}
+\DoxyCodeLine{00033\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00035\ \ \ \ \ }
+\DoxyCodeLine{00036\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00037\ \ \ \ \ FString\ Nickname;}
+\DoxyCodeLine{00038\ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00040\ \ \ \ \ FString\ Email;}
+\DoxyCodeLine{00041\ \ \ \ \ }
+\DoxyCodeLine{00042\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00043\ \ \ \ \ FString\ Login;}
+\DoxyCodeLine{00044\ \ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00046\ \ \ \ \ FString\ Password;}
+\DoxyCodeLine{00047\ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ USTRUCT(BlueprintType)}
+\DoxyCodeLine{00050\ struct\ \mbox{\hyperlink{struct_f_register_response}{FRegisterResponse}}}
+\DoxyCodeLine{00051\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00053\ \ \ \ \ }
+\DoxyCodeLine{00054\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00055\ \ \ \ \ FString\ Token;}
+\DoxyCodeLine{00056\ \};}
+\DoxyCodeLine{00058\ USTRUCT(BlueprintType)}
+\DoxyCodeLine{00059\ struct\ \mbox{\hyperlink{struct_f_user_info_request}{FUserInfoRequest}}}
+\DoxyCodeLine{00060\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00062\ \ \ \ \ }
+\DoxyCodeLine{00063\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00064\ \ \ \ \ FString\ Token;}
+\DoxyCodeLine{00065\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ USTRUCT(BlueprintType)}
+\DoxyCodeLine{00068\ struct\ \mbox{\hyperlink{struct_f_user_info_response}{FUserInfoResponse}}}
+\DoxyCodeLine{00069\ \{}
+\DoxyCodeLine{00070\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00073\ \ \ \ \ FString\ UserID;}
+\DoxyCodeLine{00074\ \ \ \ \ }
+\DoxyCodeLine{00075\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00076\ \ \ \ \ FString\ Nickname;}
+\DoxyCodeLine{00077\ \ \ \ \ }
+\DoxyCodeLine{00078\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00079\ \ \ \ \ FString\ Email;}
+\DoxyCodeLine{00080\ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00086\ USTRUCT(BlueprintType)}
+\DoxyCodeLine{00087\ struct\ \mbox{\hyperlink{struct_f_error_response}{FErrorResponse}}}
+\DoxyCodeLine{00088\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00090\ \ \ \ \ }
+\DoxyCodeLine{00091\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00092\ \ \ \ \ FString\ Error;}
+\DoxyCodeLine{00093\ \};}
+\DoxyCodeLine{00094\ }
+
+\end{DoxyCode}

@@ -1,0 +1,42 @@
+\doxysection{HTTPGame\+APIRequests\+Lib.\+h}
+\hypertarget{_h_t_t_p_game_a_p_i_requests_lib_8h_source}{}\label{_h_t_t_p_game_a_p_i_requests_lib_8h_source}\index{Source/Campus/Libraries/Requests/GameAPI/HTTPGameAPIRequestsLib.h@{Source/Campus/Libraries/Requests/GameAPI/HTTPGameAPIRequestsLib.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}HTTPGameAPIStructures.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}HTTPGameAPIRequestsLib.generated.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00014\ DEFINE\_LOG\_CATEGORY\_STATIC(HTTPGameApiLog,\ Log,\ All);}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ UCLASS()}
+\DoxyCodeLine{00017\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_u_h_t_t_p_game_a_p_i_requests_lib}{UHTTPGameAPIRequestsLib}}\ :\ public\ UObject}
+\DoxyCodeLine{00018\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ GameAPILoginRequest(}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ TFunction<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_f_login_response}{FLoginResponse}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_f_error_response}{FErrorResponse}}\&)>\ CallBack,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_f_login_request}{FLoginRequest}}\&\ LoginRequest);}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ GameAPIRegisterRequest(}
+\DoxyCodeLine{00037\ \ \ \ \ TFunction<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_f_register_response}{FRegisterResponse}}\&\ ,\ \textcolor{keyword}{const}\ \ \mbox{\hyperlink{struct_f_error_response}{FErrorResponse}}\&)>\ CallBack,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_f_register_request}{FRegisterRequest}}\&\ RegisterRequest);}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ GameAPIUserInfoRequest(}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ TFunction<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_f_user_info_response}{FUserInfoResponse}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_f_error_response}{FErrorResponse}}\&)>\ CallBack,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_f_user_info_request}{FUserInfoRequest}}\&\ UserInfoRequest);}
+\DoxyCodeLine{00043\ \ \ \ \ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TStruct>}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ GetJsonStringFromStruct(TStruct\ FilledStruct,\ FString\&\ StringOutput);}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TStruct>}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ GetStructFromJsonString(\textcolor{keyword}{const}\ FString\&,\ TStruct\&\ OutputStruct);}
+\DoxyCodeLine{00063\ \};}
+
+\end{DoxyCode}

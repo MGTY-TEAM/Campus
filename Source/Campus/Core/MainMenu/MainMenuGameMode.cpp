@@ -23,12 +23,15 @@ void AMainMenuGameMode::BeginPlay()
 		World->GetFirstPlayerController()->SetInputMode(FInputModeUIOnly());
 
 		UGameplayStatics::GetGameInstance(World);
+#ifdef MAIN_MENU_GAME_MODE_DEBUG
+		UE_LOG(LogMainMenuGameMode, Log, TEXT("Create main menu widget"));
+#endif
+		
+		M_MainMenuWidget = CreateWidget<UUserWidget>(World, M_MainMenuWidgetClass);
 
-		MainMenuWidget = CreateWidget<UUserWidget>(World, MainMenuWidgetClass);
-
-		if (MainMenuWidget)
+		if (M_MainMenuWidget)
 		{
-			MainMenuWidget->AddToViewport();
+			M_MainMenuWidget->AddToViewport();
 		}
 	}
 }

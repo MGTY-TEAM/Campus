@@ -6,24 +6,47 @@
 #include "MessageInstance.h"
 #include "ChatUserComponent.h"
 
-TMap<FName, UChatUserComponent*> UChatManager::RegisteredUsers = TMap<FName, UChatUserComponent*>();
+
+UChatManager* UChatManager::ChatManagerInstance = nullptr;
+
+UChatManager::UChatManager(){}
+
+UChatManager* UChatManager::Get()
+{
+	if (!ChatManagerInstance)
+	{
+		ChatManagerInstance = NewObject<UChatManager>();
+		ChatManagerInstance->AddToRoot();
+	}
+	return ChatManagerInstance;
+}
+
+void UChatManager::BeginDestroy()
+{
+	Super::BeginDestroy();
+	
+	if (ChatManagerInstance)
+	{
+		ChatManagerInstance->RemoveFromRoot();
+		ChatManagerInstance = nullptr;
+	}
+}
+
 
 bool UChatManager::RegisterUser(const FName& UserID, UChatUserComponent* User)
 {
 	if (!UserID.IsNone() && !ValidateUserID(UserID) && User)
 	{
 		RegisteredUsers.Add(UserID, User);
-		for (auto RegisteredUser : RegisteredUsers)
-		{
-			UE_LOG(LogChatManager, Warning, TEXT("User : %s"), *RegisteredUser.Key.ToString())
-		}
+#ifdef CHAT_MANAGER_DEBUG
+		UE_LOG(LogChatManager, Log, TEXT("User registered : %s"), *UserID.ToString());
+#endif
 		return true;
 	}
-
 	return false;
 }
 
-bool UChatManager::ValidateUserID(const FName& UserID) 
+bool UChatManager::ValidateUserID(const FName& UserID) const 
 {
 	return RegisteredUsers.Contains(UserID);
 }
@@ -38,14 +61,12 @@ void UChatManager::SendChatMessage(const FName& SenderID, const FName& ReceiverI
 		UChatUserComponent* Receiver = RegisteredUsers[ReceiverID];
 		if (Receiver)
 		{
+#ifdef CHAT_MANAGER_DEBUG
+			UE_LOG(LogChatManager, Log, TEXT("Message transmission"));
+#endif
 			Receiver->ReceiveMessage(NewMessage);
 		}
 	}
 }
 
-TArray<FName> UChatManager::GetUserListWithoutSelf(const FName& SelfUserID) 
-{
-	TArray<FName> UserID;
-	RegisteredUsers.GetKeys(UserID);
-	return UserID;
-}
+

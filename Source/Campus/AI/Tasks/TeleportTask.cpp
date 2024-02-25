@@ -15,6 +15,7 @@ UTeleportTask::UTeleportTask()
 
 EBTNodeResult::Type UTeleportTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	/*
 	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	if (!Blackboard) EBTNodeResult::Failed;
 
@@ -27,6 +28,7 @@ EBTNodeResult::Type UTeleportTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	TimerDel.BindUObject(Drone, &AAIAnimDrone::TeleportToLocation, ChatWidget->ActionPlace);
 	GetWorld()->GetTimerManager().SetTimer(TeleportTimer, TimerDel, 1.f, false);
 	Drone->DarkeningScreen();
+	*/
 
-	return EBTNodeResult::Succeeded;
+	return EBTNodeResult::Failed;
 }

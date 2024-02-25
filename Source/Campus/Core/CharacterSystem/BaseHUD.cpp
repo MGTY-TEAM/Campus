@@ -47,7 +47,7 @@ void ABaseHUD::SetupChat(UChatUserComponent* ChatUserComponent)
 		ChatBox = NewChatBox;
 		ChatBox->AddToPlayerScreen(1);
 		ChatBox->ConnectChatComponent(ChatUserComponent);
-		UE_LOG(LogTemp, Error, TEXT("%"), *ChatBox->GetName())
+		UE_LOG(LogTemp, Log, TEXT("%"), *ChatBox->GetName())
 	}
 
 }

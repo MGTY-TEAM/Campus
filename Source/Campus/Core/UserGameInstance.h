@@ -1,6 +1,7 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// UserGameInstance.h
 
 #pragma once
+#define USER_GAME_INSTANCE_DEBUG false
 
 #include "CoreMinimal.h"
 #include "OnlineSessionSettings.h"
@@ -8,46 +9,81 @@
 #include "Engine/GameInstance.h"
 #include "UserGameInstance.generated.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogSession, Log, Log);
-/**
- * 
- */
+// Define a logging category for game instance logs
+DEFINE_LOG_CATEGORY_STATIC(LogUserGameInstance, Log, Log);
 
+/**
+ * Represents user-specific information.
+ */
 USTRUCT(BlueprintType)
 struct FUserInfo
 {
 	GENERATED_BODY()
-	UPROPERTY(BlueprintReadOnly, Category = "User") FString Nickname;
-	UPROPERTY(BlueprintReadOnly, Category = "User") FString Email;
-	UPROPERTY(BlueprintReadOnly, Category = "User") FString ID;
-	
+
+public:
+	UPROPERTY(BlueprintReadOnly, Category = "User")
+	FString Nickname;
+
+	UPROPERTY(BlueprintReadOnly, Category = "User")
+	FString Email;
+
+	UPROPERTY(BlueprintReadOnly, Category = "User")
+	FString ID;
 };
 
+/**
+ * Manages user-specific data and transitions between game states.
+ */
 UCLASS()
 class CAMPUS_API UUserGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
-
 public:
-	
+	/**
+	 * Retrieves the user's ID.
+	 *
+	 * @return The user's ID.
+	 */
 	const FString& GetUserID() const;
+
+	/**
+	 * Retrieves the user's authentication token.
+	 *
+	 * @return The user's authentication token.
+	 */
 	const FString& GetUserToken() const;
+
+	/**
+	 * Retrieves the user's nickname.
+	 *
+	 * @return The user's nickname.
+	 */
 	const FString& GetNickname() const;
+
+	/**
+	 * Retrieves the user's email address.
+	 *
+	 * @return The user's email address.
+	 */
 	const FString& GetEmail() const;
-	const FString& GetGameServerPort() const;
 
+	/**
+	 * Sets the user's authentication token.
+	 *
+	 * @param Token The authentication token to set.
+	 */
 	void SetUserToken(const FString& Token);
-	
-	bool TryToGetAndFillUserInfoAndOpenMainMenu();
 
-	
-protected:
+	/**
+	 * Attempts to retrieve user information and transition to the main menu.
+	 *
+	 * @return True if the attempt was successful, false otherwise.
+	 */
+	bool TryToGetAndFillUserInfoAndTransitToMainMenu();
 
 private:
-	
-	FUserInfo M_UserInfo;
-	
-	FString M_UserToken;
-	FString M_GameServerPort;
+	FUserInfo M_UserInfo; // User information
+	FString M_UserToken; // User authentication token
+	FString M_GameServerPort; // Port for the game server
 };

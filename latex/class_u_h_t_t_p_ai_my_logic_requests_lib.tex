@@ -1,0 +1,121 @@
+\doxysection{UHTTPAi\+My\+Logic\+Requests\+Lib Class Reference}
+\hypertarget{class_u_h_t_t_p_ai_my_logic_requests_lib}{}\label{class_u_h_t_t_p_ai_my_logic_requests_lib}\index{UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}}
+
+
+{\ttfamily \#include $<$HTTPAi\+My\+Logic\+Requests\+Lib.\+h$>$}
+
+Inheritance diagram for UHTTPAi\+My\+Logic\+Requests\+Lib\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_u_h_t_t_p_ai_my_logic_requests_lib}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_u_h_t_t_p_ai_my_logic_requests_lib_a75a75b6efe5cd2946dc0ab7d74c4e2d6}{AIMy\+Logic\+Get\+Request}} (TFunction$<$ void(const FString \&, const FString \&, const int \&)$>$ Call\+Back, const FString \&String\+Request, const FString \&URL)
+\item 
+static void \mbox{\hyperlink{class_u_h_t_t_p_ai_my_logic_requests_lib_a1da6007f995a543d8bc08411c688af5f}{Make\+Move}} (TFunction$<$ void(bool, const FString \&, const FString \&, const FString \&)$>$ Call\+Back, const FString \&Game\+Id, const FString \&Move)
+\item 
+static void \mbox{\hyperlink{class_u_h_t_t_p_ai_my_logic_requests_lib_a15265741e1e56f14dec6200f028cdb98}{Create\+Game\+With\+AI}} (TFunction$<$ void(const FString \&)$>$ Call\+Back, bool Start\+With\+White)
+\item 
+static void \mbox{\hyperlink{class_u_h_t_t_p_ai_my_logic_requests_lib_afa4e17f6c02c1962973cf31fd0004ee7}{Make\+Ai\+Move}} (TFunction$<$ void(const FString \&, const FString \&, const FString \&, const FString \&)$>$ Call\+Back, const FString \&Game\+Id)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static FSocket \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_u_h_t_t_p_ai_my_logic_requests_lib_a13998ccf6457b8f56b3a136f6f451950}{Socket}}
+\item 
+static FString \& \mbox{\hyperlink{class_u_h_t_t_p_ai_my_logic_requests_lib_a49cce3f1c85314d9ec7f3c68f840ee32}{CURRENT\+\_\+\+GAME\+\_\+\+ID}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Library for handling HTTP requests related to AI logic in the game. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_u_h_t_t_p_ai_my_logic_requests_lib_a75a75b6efe5cd2946dc0ab7d74c4e2d6}\label{class_u_h_t_t_p_ai_my_logic_requests_lib_a75a75b6efe5cd2946dc0ab7d74c4e2d6} 
+\index{UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}!AIMyLogicGetRequest@{AIMyLogicGetRequest}}
+\index{AIMyLogicGetRequest@{AIMyLogicGetRequest}!UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}}
+\doxysubsubsection{\texorpdfstring{AIMyLogicGetRequest()}{AIMyLogicGetRequest()}}
+{\footnotesize\ttfamily void UHTTPAi\+My\+Logic\+Requests\+Lib\+::\+AIMy\+Logic\+Get\+Request (\begin{DoxyParamCaption}\item[{TFunction$<$ void(const FString \&, const FString \&, const int \&)$>$}]{Call\+Back,  }\item[{const FString \&}]{String\+Request,  }\item[{const FString \&}]{URL }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Perform a GET request to the AI logic server.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Call\+Back} & Callback function to execute after the request is complete. \\
+\hline
+{\em String\+Request} & The request string. \\
+\hline
+{\em URL} & The URL to send the request to. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_u_h_t_t_p_ai_my_logic_requests_lib_a15265741e1e56f14dec6200f028cdb98}\label{class_u_h_t_t_p_ai_my_logic_requests_lib_a15265741e1e56f14dec6200f028cdb98} 
+\index{UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}!CreateGameWithAI@{CreateGameWithAI}}
+\index{CreateGameWithAI@{CreateGameWithAI}!UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}}
+\doxysubsubsection{\texorpdfstring{CreateGameWithAI()}{CreateGameWithAI()}}
+{\footnotesize\ttfamily void UHTTPAi\+My\+Logic\+Requests\+Lib\+::\+Create\+Game\+With\+AI (\begin{DoxyParamCaption}\item[{TFunction$<$ void(const FString \&)$>$}]{Call\+Back,  }\item[{bool}]{Start\+With\+White }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Create a new game with AI opponent.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Call\+Back} & Callback function to execute after the request is complete. \\
+\hline
+{\em Start\+With\+White} & Whether to start the game with white pieces. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_u_h_t_t_p_ai_my_logic_requests_lib_afa4e17f6c02c1962973cf31fd0004ee7}\label{class_u_h_t_t_p_ai_my_logic_requests_lib_afa4e17f6c02c1962973cf31fd0004ee7} 
+\index{UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}!MakeAiMove@{MakeAiMove}}
+\index{MakeAiMove@{MakeAiMove}!UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}}
+\doxysubsubsection{\texorpdfstring{MakeAiMove()}{MakeAiMove()}}
+{\footnotesize\ttfamily void UHTTPAi\+My\+Logic\+Requests\+Lib\+::\+Make\+Ai\+Move (\begin{DoxyParamCaption}\item[{TFunction$<$ void(const FString \&, const FString \&, const FString \&, const FString \&)$>$}]{Call\+Back,  }\item[{const FString \&}]{Game\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Make a move by AI in the game.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Call\+Back} & Callback function to execute after the request is complete. \\
+\hline
+{\em Game\+Id} & The ID of the game. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_u_h_t_t_p_ai_my_logic_requests_lib_a1da6007f995a543d8bc08411c688af5f}\label{class_u_h_t_t_p_ai_my_logic_requests_lib_a1da6007f995a543d8bc08411c688af5f} 
+\index{UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}!MakeMove@{MakeMove}}
+\index{MakeMove@{MakeMove}!UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}}
+\doxysubsubsection{\texorpdfstring{MakeMove()}{MakeMove()}}
+{\footnotesize\ttfamily void UHTTPAi\+My\+Logic\+Requests\+Lib\+::\+Make\+Move (\begin{DoxyParamCaption}\item[{TFunction$<$ void(bool, const FString \&, const FString \&, const FString \&)$>$}]{Call\+Back,  }\item[{const FString \&}]{Game\+Id,  }\item[{const FString \&}]{Move }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Make a move in the game.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Call\+Back} & Callback function to execute after the request is complete. \\
+\hline
+{\em Game\+Id} & The ID of the game. \\
+\hline
+{\em Move} & The move to make. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_u_h_t_t_p_ai_my_logic_requests_lib_a49cce3f1c85314d9ec7f3c68f840ee32}\label{class_u_h_t_t_p_ai_my_logic_requests_lib_a49cce3f1c85314d9ec7f3c68f840ee32} 
+\index{UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}!CURRENT\_GAME\_ID@{CURRENT\_GAME\_ID}}
+\index{CURRENT\_GAME\_ID@{CURRENT\_GAME\_ID}!UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}}
+\doxysubsubsection{\texorpdfstring{CURRENT\_GAME\_ID}{CURRENT\_GAME\_ID}}
+{\footnotesize\ttfamily FString\& UHTTPAi\+My\+Logic\+Requests\+Lib\+::\+CURRENT\+\_\+\+GAME\+\_\+\+ID\hspace{0.3cm}{\ttfamily [static]}}
+
+Current game ID. \Hypertarget{class_u_h_t_t_p_ai_my_logic_requests_lib_a13998ccf6457b8f56b3a136f6f451950}\label{class_u_h_t_t_p_ai_my_logic_requests_lib_a13998ccf6457b8f56b3a136f6f451950} 
+\index{UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}!Socket@{Socket}}
+\index{Socket@{Socket}!UHTTPAiMyLogicRequestsLib@{UHTTPAiMyLogicRequestsLib}}
+\doxysubsubsection{\texorpdfstring{Socket}{Socket}}
+{\footnotesize\ttfamily FSocket\texorpdfstring{$\ast$}{*} UHTTPAi\+My\+Logic\+Requests\+Lib\+::\+Socket\hspace{0.3cm}{\ttfamily [static]}}
+
+Socket for handling HTTP requests. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Source/\+Campus/\+Libraries/\+Requests/\+Services/HTTPAi\+My\+Logic\+Requests\+Lib.\+h\item 
+Source/\+Campus/\+Libraries/\+Requests/\+Services/HTTPAi\+My\+Logic\+Requests\+Lib.\+cpp\end{DoxyCompactItemize}

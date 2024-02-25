@@ -7,31 +7,34 @@
 #include "Campus/Chat/ChatManager.h"
 
 
-// Sets default values for this component's properties
 UChatUserComponent::UChatUserComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
-	// ...
 }
 
-void UChatUserComponent::SetUserID(const FName& NewUserID)
+void UChatUserComponent::SetUserID(const FName& UserID)
 {
-	UE_LOG(LogTemp, Warning, TEXT("New User Registered: %s"), *NewUserID.ToString());
-	UserID = NewUserID;
+#ifdef CHAT_USER_COMPONENT_DEBUG
+	UE_LOG(LogChatUserComponent, Warning, TEXT("User id registered: %s"), *UserID.ToString());
+#endif
+	M_UserID = UserID;
 }
 
 void UChatUserComponent::ReceiveMessage(UMessageInstance* MessageInstance)
 {
+#ifdef CHAT_USER_COMPONENT_DEBUG
+	UE_LOG(LogChatUserComponent, Log, TEXT("Recive chat message"))
+#endif
 	MessageInstance->GetMessageInfo();
 	OnMessageReceived.Broadcast(MessageInstance);
 }
 
 void UChatUserComponent::SendMessage(const FName& ReceiverID, const FText& Message)
 {
-	UChatManager::SendChatMessage(UserID, ReceiverID, Message);
+#ifdef CHAT_USER_COMPONENT_DEBUG
+	UE_LOG(LogChatUserComponent, Log, TEXT("Send chat message"))
+#endif
+	UChatManager::Get()->SendChatMessage(M_UserID, ReceiverID, Message);
 }
 
 

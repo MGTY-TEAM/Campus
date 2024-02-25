@@ -10,14 +10,4 @@
 void ASinglePlayerGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
-	{
-		PlayerController->SetInputMode(FInputModeGameOnly());
-		PlayerController->bShowMouseCursor = false;
-		
-		MessageManager = NewObject<UChatManager>();
-	}
-	
-	
 }

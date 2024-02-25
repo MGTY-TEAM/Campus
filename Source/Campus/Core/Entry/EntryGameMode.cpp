@@ -22,8 +22,10 @@ void AEntryGameMode::BeginPlay()
 	{
 		World->GetFirstPlayerController()->bShowMouseCursor = true;
 		World->GetFirstPlayerController()->SetInputMode(FInputModeUIOnly());
-
-		M_EntryWidget = CreateWidget<UEntryWidget>(World, EntryWidgetClass);
+#ifdef ENTRY_GAME_MODE_DEBUG
+		UE_LOG(LogEntryGameMode, Log, TEXT("Create entry widget"));
+#endif
+		M_EntryWidget = CreateWidget<UEntryWidget>(World, M_EntryWidgetClass);
 		M_EntryWidget->AddToViewport();
 
 		M_EntryWidget->OnEntryExecute.AddDynamic(this, &AEntryGameMode::OnEntryWidgetExecute);
@@ -39,9 +41,10 @@ void AEntryGameMode::OnEntryWidgetExecute(const FString& Token)
 		if (UserGameInstance)
 		{
 			UserGameInstance->SetUserToken(Token);
-			UserGameInstance->TryToGetAndFillUserInfoAndOpenMainMenu();
-
-			UE_LOG(LogTemp, Warning, TEXT("Entry is finished!"));
+			UserGameInstance->TryToGetAndFillUserInfoAndTransitToMainMenu();
+#ifdef ENTRY_GAME_MODE_DEBUG
+			UE_LOG(LogEntryGameMode, Log, TEXT("Entry behavior completed"));
+#endif
 		}
 		M_EntryWidget->RemoveFromParent();
 	}

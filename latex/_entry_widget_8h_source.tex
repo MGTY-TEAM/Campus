@@ -1,0 +1,66 @@
+\doxysection{Entry\+Widget.\+h}
+\hypertarget{_entry_widget_8h_source}{}\label{_entry_widget_8h_source}\index{Source/Campus/UserInterface/Entry/EntryWidget.h@{Source/Campus/UserInterface/Entry/EntryWidget.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Blueprint/UserWidget.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}EntryWidget.generated.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ DECLARE\_DYNAMIC\_MULTICAST\_DELEGATE\_OneParam(FOnEntryExecuted,\ \textcolor{keyword}{const}\ FString\&,\ Token);}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }UButton;}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_u_login_widget}{ULoginWidget}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_u_register_widget}{URegisterWidget}};}
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }UTextBlock;}
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }UWidgetSwitcher;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00020\ UCLASS()}
+\DoxyCodeLine{00021\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_u_entry_widget}{UEntryWidget}}\ :\ public\ UUserWidget}
+\DoxyCodeLine{00022\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ UPROPERTY(BlueprintAssignable)}
+\DoxyCodeLine{00028\ \ \ \ \ FOnEntryExecuted\ OnEntryExecute;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ protected:}
+\DoxyCodeLine{00031\ \ \ \ \ virtual\ \textcolor{keywordtype}{void}\ NativeOnInitialized()\ override;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ private:}
+\DoxyCodeLine{00035\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category\ =\ "{}Entry\ classes"{})}
+\DoxyCodeLine{00036\ \ \ \ \ TSubclassOf<\mbox{\hyperlink{class_u_login_widget}{ULoginWidget}}>\ LoginWidgetClass;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00039\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category\ =\ "{}Entry\ classes"{})}
+\DoxyCodeLine{00040\ \ \ \ \ TSubclassOf<\mbox{\hyperlink{class_u_register_widget}{URegisterWidget}}>\ RegisterWidgetClass;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00043\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00044\ \ \ \ \ UWidgetSwitcher*\ WidgetSwitcher;}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00047\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00048\ \ \ \ \ UButton*\ SwitchEntryTypeButton;}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00051\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00052\ \ \ \ \ UTextBlock*\ SwitchEntryTypeButtonText;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00055\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{class_u_login_widget}{ULoginWidget}}*\ M\_LoginWidget;}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00059\ \ \ \ \ UPROPERTY()}
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{class_u_register_widget}{URegisterWidget}}*\ M\_RegisterWidget;}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00063\ \ \ \ \ UFUNCTION()}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ OnSwitchEntryTypeButtonClicked();}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00067\ \ \ \ \ UFUNCTION()}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ OnLoginExecute(const\ FString\&\ Token);}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00071\ \ \ \ \ UFUNCTION()}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ OnRegisterExecute(const\ FString\&\ Token);}
+\DoxyCodeLine{00073\ \};}
+\DoxyCodeLine{00074\ }
+
+\end{DoxyCode}

@@ -57,7 +57,7 @@ void AAIDroneController::BeginPlay()
 	{
 		ChatUserComponent->SetUserID("Bot");
 
-		if (UChatManager::RegisterUser("Bot", ChatUserComponent))
+		if (UChatManager::Get()->RegisterUser("Bot", ChatUserComponent))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Bot Chat Component is registered"));
 		}

@@ -6,8 +6,6 @@
 #include "BoardCell.h"
 #include "Campus/Libraries/MiniGames/Chess/ChessAuxiliaryLib.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
-#include "Experimental/Async/AwaitableTask.h"
-#include "GameFramework/FloatingPawnMovement.h"
 
 // Sets default values
 AGenerativeBoard::AGenerativeBoard()
@@ -93,7 +91,7 @@ void AGenerativeBoard::OnBoardUpdated(const FString& Fen)
 
 void AGenerativeBoard::ExecutePlayerMove(const FString& UCI, const FString& CastleStatus, const FString& NewFen)
 {
-	FString FirstKey = "";
+	/*FString FirstKey = "";
 	FirstKey += UCI[0];
 	int32 IFirst = RverseHorisontalUCI[FirstKey];
 	int32 JFirst = FCString::Atoi(*UCI.Mid(1, 1)) - 1;
@@ -141,7 +139,7 @@ void AGenerativeBoard::ExecutePlayerMove(const FString& UCI, const FString& Cast
 			}
 		}
 	}
-	OnPlayerMoveCompleted.Broadcast();
+	OnPlayerMoveCompleted.Broadcast();*/
 	/*if (FirstCell && SecondCell)
 	{
 		if (FirstCell->Piece)
@@ -193,7 +191,7 @@ void AGenerativeBoard::ExecutePlayerMove(const FString& UCI, const FString& Cast
 
 void AGenerativeBoard::ExecuteAIMove(const FString& UCI, const FString& CastleStatus, const FString& NewFen)
 {
-	FString FirstKey = "";
+	/*FString FirstKey = "";
 	FirstKey += UCI[0];
 	int32 IFirst = RverseHorisontalUCI[FirstKey];
 	int32 JFirst = FCString::Atoi(*UCI.Mid(1, 1)) - 1;
@@ -240,7 +238,7 @@ void AGenerativeBoard::ExecuteAIMove(const FString& UCI, const FString& CastleSt
 			}
 		}
 	}
-	OnAIMoveCompleted.Broadcast();
+	OnAIMoveCompleted.Broadcast();*/
 	/*if (FirstCell && SecondCell)
 	{
 		if (FirstCell->Piece)

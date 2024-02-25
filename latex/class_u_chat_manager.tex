@@ -1,0 +1,88 @@
+\doxysection{UChat\+Manager Class Reference}
+\hypertarget{class_u_chat_manager}{}\label{class_u_chat_manager}\index{UChatManager@{UChatManager}}
+
+
+{\ttfamily \#include $<$Chat\+Manager.\+h$>$}
+
+Inheritance diagram for UChat\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_u_chat_manager}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_u_chat_manager_ab964b4eb30d7af1800e585ac3705f493}{Register\+User}} (const FName \&User\+ID, UChat\+User\+Component \texorpdfstring{$\ast$}{*}User)
+\item 
+void \mbox{\hyperlink{class_u_chat_manager_aa03e0cfe80e400f8de82fe004daa43f8}{Send\+Chat\+Message}} (const FName \&Sender\+ID, const FName \&Receiver\+ID, const FText \&Message)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_u_chat_manager}{UChat\+Manager}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_u_chat_manager_a38e036d97efc4d30ebe1edadd66adbd7}{Get}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_u_chat_manager_a56a2b970d5358c62512b9bb00e0fd547}\label{class_u_chat_manager_a56a2b970d5358c62512b9bb00e0fd547} 
+virtual void {\bfseries Begin\+Destroy} () override
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages the chat functionality of the application. Allows users to register, send messages, and retrieve user lists. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_u_chat_manager_a38e036d97efc4d30ebe1edadd66adbd7}\label{class_u_chat_manager_a38e036d97efc4d30ebe1edadd66adbd7} 
+\index{UChatManager@{UChatManager}!Get@{Get}}
+\index{Get@{Get}!UChatManager@{UChatManager}}
+\doxysubsubsection{\texorpdfstring{Get()}{Get()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_u_chat_manager}{UChat\+Manager}} \texorpdfstring{$\ast$}{*} UChat\+Manager\+::\+Get (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Retrieves the instance of the Chat\+Manager singleton.
+
+\begin{DoxyReturn}{Returns}
+The instance of the Chat\+Manager. 
+\end{DoxyReturn}
+\Hypertarget{class_u_chat_manager_ab964b4eb30d7af1800e585ac3705f493}\label{class_u_chat_manager_ab964b4eb30d7af1800e585ac3705f493} 
+\index{UChatManager@{UChatManager}!RegisterUser@{RegisterUser}}
+\index{RegisterUser@{RegisterUser}!UChatManager@{UChatManager}}
+\doxysubsubsection{\texorpdfstring{RegisterUser()}{RegisterUser()}}
+{\footnotesize\ttfamily bool UChat\+Manager\+::\+Register\+User (\begin{DoxyParamCaption}\item[{const FName \&}]{User\+ID,  }\item[{UChat\+User\+Component \texorpdfstring{$\ast$}{*}}]{User }\end{DoxyParamCaption})}
+
+Registers a user with the Chat\+Manager.
+
+
+\begin{DoxyParams}{Parameters}
+{\em User\+ID} & The unique identifier of the user to register. \\
+\hline
+{\em User} & A pointer to the Chat\+User\+Component associated with the user. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the user is successfully registered, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_u_chat_manager_aa03e0cfe80e400f8de82fe004daa43f8}\label{class_u_chat_manager_aa03e0cfe80e400f8de82fe004daa43f8} 
+\index{UChatManager@{UChatManager}!SendChatMessage@{SendChatMessage}}
+\index{SendChatMessage@{SendChatMessage}!UChatManager@{UChatManager}}
+\doxysubsubsection{\texorpdfstring{SendChatMessage()}{SendChatMessage()}}
+{\footnotesize\ttfamily void UChat\+Manager\+::\+Send\+Chat\+Message (\begin{DoxyParamCaption}\item[{const FName \&}]{Sender\+ID,  }\item[{const FName \&}]{Receiver\+ID,  }\item[{const FText \&}]{Message }\end{DoxyParamCaption})}
+
+Sends a chat message from one user to another.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Sender\+ID} & The unique identifier of the user sending the message. \\
+\hline
+{\em Receiver\+ID} & The unique identifier of the user receiving the message. \\
+\hline
+{\em Message} & The content of the message to be sent. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Source/\+Campus/\+Chat/Chat\+Manager.\+h\item 
+Source/\+Campus/\+Chat/Chat\+Manager.\+cpp\end{DoxyCompactItemize}

@@ -283,7 +283,7 @@ void UPanalButtonsWidget::CheckAnswers()
 		AnswerNumber = 0;
 		PlaySound(GameEndRight);
 		SetToOriginalImage();
-		ExecuteMiniGameComplited.Broadcast();
+		ExecuteMiniGameCompleted.Broadcast();
 	}
 	else
 	{
