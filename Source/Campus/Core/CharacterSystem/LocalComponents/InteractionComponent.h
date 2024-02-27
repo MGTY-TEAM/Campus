@@ -13,6 +13,14 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventoryItemPickup, AActor*, Pic
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDialogInteract, AActor*, DialogInterace);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSimpleInteract);
 
+UENUM(BlueprintType)
+enum EInteractionState : uint8
+{
+	EIS_FREE = 0 UMETA(DisplayName = "Free"),
+	EIS_DRAG = 1 UMETA(DisplayName = "Drag"),
+    EIS_HOLD = 2 UMETA(DisplayName = "Hold")
+};
+
 class IInteractable;
 class UCameraComponent;
 
@@ -31,6 +39,8 @@ class CAMPUS_API UInteractionComponent : public UActorComponent
 	bool bInteractHold = false;
 	
 	FHitResult GetHitResultByTraceChannel();
+	
+	EInteractionState InteractionState;
 	
 public:
 	UInteractionComponent();

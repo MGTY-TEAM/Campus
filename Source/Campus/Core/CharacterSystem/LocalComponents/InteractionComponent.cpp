@@ -50,12 +50,12 @@ void UInteractionComponent::TryInteract()
 	}
 }
 
+
 void UInteractionComponent::SetHoldStatus(bool bStatus)
 {
 	bInteractHold = bStatus;
 }
 
-// Called when the game starts
 void UInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -98,14 +98,19 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			{
 				if (FocusActor == HitResult.GetActor())
 				{
-					IInteractable::Execute_HoldInteract(FocusActor,
-					                                    HitResult);
+					IInteractable::Execute_HoldInteract(FocusActor, HitResult);
+					InteractionState = EInteractionState::EIS_HOLD;
 				}
 				else
 				{
 					IInteractable::Execute_DragInteract(FocusActor, HitResult);
+					InteractionState = EInteractionState::EIS_DRAG;
 				}
 			}
+		}
+		else
+		 {
+			InteractionState = EInteractionState::EIS_FREE; 
 		}
 	}
 }
