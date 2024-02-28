@@ -4,7 +4,6 @@
 #include "Campus/AI/AIDrone/Components/AIDronePerceptionComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "Campus/AI/AIDroneController.h"
-#include "Perception/AIPerceptionTypes.h"
 #include "Engine/Engine.h"
 #include "DrawDebugHelpers.h"
 #include "CollisionQueryParams.h"
@@ -45,13 +44,10 @@ bool UAIDronePerceptionComponent::CanISee(AActor* Actor)
 	GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceiveActors);
 	if (PerceiveActors.Num() == 0) return false;
 
-	for (const auto PerceiveActor : PerceiveActors)
+	if (std::any_of(PerceiveActors.begin(), PerceiveActors.end(), [&](const AActor* ActorP){ return Actor == ActorP; }))
 	{
-		if (PerceiveActor == Actor)
-		{
-			SetLastLocationOf(Actor);
-			return true;
-		}
+		SetLastLocationOf(Actor);
+		return true;
 	}
 
 	return false;

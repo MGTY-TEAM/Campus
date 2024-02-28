@@ -19,7 +19,7 @@ protected:
 	virtual void OnSearchStart(FBehaviorTreeSearchData& SearchData) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
-	EActionType SActionType = EActionType::Walk;
+	EActionType SActionType = EActionType::Holding;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector SelfActorKey;

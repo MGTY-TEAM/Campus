@@ -145,7 +145,7 @@ void UFindCharacterTask::OnTimerFired()
 	if (!Blackboard) return;
 
 	AbortMove(*OwnerComponent, NodeMem);
-	Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Walk));
+	Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Holding));
 	Blackboard->ClearValue(CharacterActorKey.SelectedKeyName);
 	
 }

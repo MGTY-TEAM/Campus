@@ -16,7 +16,7 @@ public:
 	bool CanISee(AActor* Actor);
 
 	void SetLastLocationOf(AActor* Actor);
-	FVector GetLastLocationOfInteractionCharacter() { return LastLocationOfInteractionCharacter; }
+	FVector GetLastLocationOfInteractionCharacter() const { return LastLocationOfInteractionCharacter; }
 
 	bool CheckObstacleInFrontOfTarget(const AActor* Target) const;
 	
