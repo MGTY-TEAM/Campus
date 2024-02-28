@@ -12,8 +12,7 @@ USetCharacter::USetCharacter()
 
 EBTNodeResult::Type USetCharacter::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	UBlackboardComponent* BlackboardComponent  = OwnerComp.GetBlackboardComponent();
-	if (BlackboardComponent)
+	if (UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent())
 	{
 		TArray<AActor*> Pawns;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), APawn::StaticClass(), Pawns);

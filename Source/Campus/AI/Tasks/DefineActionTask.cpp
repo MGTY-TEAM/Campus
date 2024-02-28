@@ -21,12 +21,12 @@ EBTNodeResult::Type UDefineActionTask::ExecuteTask(UBehaviorTreeComponent& Owner
 
 	Controller->ClearFocus(EAIFocusPriority::Default);
 
-	AAIAnimDrone* const Drone = Cast<AAIAnimDrone>(Controller->GetPawn());
-	if (!Drone) return EBTNodeResult::Failed;
-
-	Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, (uint8)ActionType);
-	Blackboard->SetValueAsVector(StartLocationKey.SelectedKeyName, Drone->GetStartLocation());
-	Blackboard->SetValueAsBool(BoolNotTheFirstKey.SelectedKeyName, false);
+	// AAIAnimDrone* const Drone = Cast<AAIAnimDrone>(Controller->GetPawn());
+	// if (!Drone) return EBTNodeResult::Failed;
+	
+	Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(ActionType));
+	// Blackboard->SetValueAsVector(StartLocationKey.SelectedKeyName, Drone->GetStartLocation());
+	// Blackboard->SetValueAsBool(BoolNotTheFirstKey.SelectedKeyName, false);
 
 	return EBTNodeResult::Succeeded;
 }

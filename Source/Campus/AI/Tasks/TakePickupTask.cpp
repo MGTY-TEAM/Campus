@@ -14,13 +14,13 @@ UTakePickupTask::UTakePickupTask()
 EBTNodeResult::Type UTakePickupTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
-	if (!Blackboard) EBTNodeResult::Failed;
+	if (!Blackboard) return EBTNodeResult::Failed;
 
 	AAIAnimDrone* Drone = Cast<AAIAnimDrone>(Blackboard->GetValueAsObject(DroneActorKey.SelectedKeyName));
 	if (!Drone) return EBTNodeResult::Failed;
 
 	ABaseGarbage* Pickup = Cast<ABaseGarbage>(Blackboard->GetValueAsObject(PickupActorKey.SelectedKeyName));
-	if (!Drone) return EBTNodeResult::Failed;
+	if (!Pickup) return EBTNodeResult::Failed;
 
 	Pickup->TakingItem(Drone->GetSceneComponent());
 

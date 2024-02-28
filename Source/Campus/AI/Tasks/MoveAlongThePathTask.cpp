@@ -78,7 +78,15 @@ void UMoveAlongThePathTask::FinishMove(const FAIRequestID RequestID, const FPath
 		UBlackboardComponent* Blackboard = MyOwnerComp->GetBlackboardComponent();
 		if (!Blackboard) return;
 
-		Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Walk));
+		if (AAIController* Controller = MyOwnerComp->GetAIOwner())
+		{
+			if (AActor* Character = Cast<AActor>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName)))
+			{
+				Controller->SetFocus(Character);
+			}
+		}
+
+		Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Holding));
 	}
 }
 
@@ -177,9 +185,6 @@ bool UMoveAlongThePathTask::CheckCapabilityOfStopping()
 		}
 	}
 
-	DrawDebugSphere(GetWorld(), ClosestToDrone, 28.f, 16, FColor::Yellow, false, 0.1f);
-	DrawDebugSphere(GetWorld(), ClosestToCharacter, 32.f, 16, FColor::Black, false, 0.1f);
-
 	const int32 DronePointIndex = PathPoints.IndexOfByKey(ClosestToDrone);
 	int32 CharacterPointIndex = PathPoints.IndexOfByKey(ClosestToCharacter);
 
@@ -189,14 +194,11 @@ bool UMoveAlongThePathTask::CheckCapabilityOfStopping()
 
 		if (DronePointIndex == CharacterPointIndex)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "First");
-
 			if (PathPoints.IsValidIndex(DronePointIndex + 1))
 			{
 				const FVector NextPoint = PathPoints[DronePointIndex + 1];
 
-				if ((Drone->GetActorLocation() - NextPoint).Length() <= (Character->GetActorLocation() - NextPoint).
-					Length())
+				if ((Drone->GetActorLocation() - NextPoint).Length() <= (Character->GetActorLocation() - NextPoint).Length())
 				{
 					return true;
 				}
@@ -205,7 +207,6 @@ bool UMoveAlongThePathTask::CheckCapabilityOfStopping()
 		}
 		if (CharacterPointIndex > DronePointIndex)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, "Third");
 			return false;
 		}
 	}
@@ -218,6 +219,5 @@ void UMoveAlongThePathTask::FillNavPoints(const TArray<FNavPathPoint>& Points)
 	{
 		FVector Pos = PathPoint;
 		PathPoints.Add(Pos);
-		// DrawDebugSphere(GetWorld(), Pos, 32.f, 16, FColor::Red, false, 60.f);
 	}
 }

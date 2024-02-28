@@ -14,11 +14,9 @@ UCheckFirstRequest::UCheckFirstRequest()
 EBTNodeResult::Type UCheckFirstRequest::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
-	if (!Blackboard) EBTNodeResult::Failed;
+	if (!Blackboard) return EBTNodeResult::Failed;
 
-	bool FirstRequest = !Blackboard->GetValueAsBool(BoolNotTheFirstKey.SelectedKeyName);
-
-	if (FirstRequest)
+	if (!Blackboard->GetValueAsBool(BoolNotTheFirstKey.SelectedKeyName))
 	{
 		Blackboard->SetValueAsBool(BoolNotTheFirstKey.SelectedKeyName, true);
 		return EBTNodeResult::Succeeded;
@@ -30,7 +28,7 @@ EBTNodeResult::Type UCheckFirstRequest::ExecuteTask(UBehaviorTreeComponent& Owne
 void UCheckFirstRequest::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
-	if (!Blackboard) EBTNodeResult::Failed;
+	if (!Blackboard) return;
 
 	AAIAnimDrone* Drone = Cast<AAIAnimDrone>(Blackboard->GetValueAsObject(SelfActorKey.SelectedKeyName));
 	if (!Drone) return;

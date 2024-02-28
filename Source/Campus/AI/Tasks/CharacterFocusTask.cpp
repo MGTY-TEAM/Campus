@@ -23,7 +23,7 @@ EBTNodeResult::Type UCharacterFocusTask::ExecuteTask(UBehaviorTreeComponent& Own
 	ABaseCharacter* Character = Cast<ABaseCharacter>(Blackboard->GetValueAsObject(CharacterActorKey.SelectedKeyName));
 	if (!Character) return EBTNodeResult::Failed;
 		
-	if (Character) Controller->SetFocus(Character);
+	Controller->SetFocus(Character);
 		
 	return EBTNodeResult::Succeeded;
 }
