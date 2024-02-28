@@ -3,18 +3,22 @@
 #include "GameExceptions.h"
 using namespace ButterflyGenerationsGame;
 
-Game::Game(): M_GameState(GameState::GS_NOT_STARTED)
+Game::Game(): M_GameState(GS_NOT_STARTED)
 {
 }
 
-bool Game::TryStartGameWithPosition(
-	std::vector<std::tuple<std::vector<uint8_t>, std::vector<uint8_t>, std::vector<uint8_t>, std::vector<uint8_t>>>
-	layers)
+Game::~Game()
+{
+	delete M_ButterflyGenerationRegistry;
+}
+
+bool Game::TryStartGameWithPosition(const std::vector<uint8_t>& layers,
+                                    const std::vector<InheritanceConnection>& connections)
 {
 	switch (M_GameState)
 	{
 	case GS_NOT_STARTED:
-		M_ButterflyGenerationRegistry = std::make_unique<ButterflyGenerationRegistry>(layers);
+		M_ButterflyGenerationRegistry = std::make_unique<ButterflyGenerationRegistry>(layers, connections);
 		M_GameState = GameState::GS_IN_PROGRESS;
 		return true;
 	default:
@@ -22,14 +26,12 @@ bool Game::TryStartGameWithPosition(
 	}
 }
 
-bool Game::TryAddButterfly(std::vector<uint8_t> butterflyPosition, std::vector<uint8_t> butterflyProperties,
-                           std::vector<uint8_t> firstParentPosition, std::vector<uint8_t> secondParentPosition)
+bool Game::TryAddButterfly(const std::pair<uint8_t, uint8_t>& butterflyPosition,const std::vector<uint8_t>& butterflyProperties)
 {
 	switch (M_GameState)
 	{
 	case GameState::GS_IN_PROGRESS:
-		M_ButterflyGenerationRegistry->AddButterfly(butterflyPosition, butterflyProperties, firstParentPosition,
-		                                            secondParentPosition);
+		M_ButterflyGenerationRegistry->AddButterfly(butterflyPosition, butterflyProperties);
 		return true;
 	case GameState::GS_NOT_STARTED:
 		throw GameException("Game is not started");
@@ -45,7 +47,7 @@ bool Game::TryValidateCurrentSolution()
 	switch (M_GameState)
 	{
 	case GameState::GS_IN_PROGRESS:
-		return M_ButterflyGenerationRegistry->IsGenerationsValid();;
+		return M_ButterflyGenerationRegistry->ValidateGenerations();;
 	case GameState::GS_NOT_STARTED:
 		throw GameException("Game is not started");
 	case GameState::GS_ENDED:

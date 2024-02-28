@@ -11,13 +11,11 @@ namespace ButterflyGenerationsGame
 		Game();
 		~Game();
 
-		bool TryStartGameWithPosition(
-			std::vector<std::tuple<std::vector<uint8_t>, std::vector<uint8_t>, std::vector<uint8_t>, std::vector<
-				                       uint8_t>>> layers);
-		bool TryAddButterfly(std::vector<uint8_t> butterflyPosition, std::vector<uint8_t> butterflyProperties,
-		                     std::vector<uint8_t> firstParentPosition, std::vector<uint8_t> secondParentPosition);
+		bool TryStartGameWithPosition(const std::vector<uint8_t>& layers, const std::vector<InheritanceConnection>& connections);
+		bool TryAddButterfly(const std::pair<uint8_t, uint8_t>& butterflyPosition, const std::vector<uint8_t>& butterflyProperties);
 
 		bool TryValidateCurrentSolution();
+	
 	private:
 		std::unique_ptr<ButterflyGenerationRegistry> M_ButterflyGenerationRegistry;
 

@@ -1,25 +1,30 @@
 ﻿#pragma once
 #include "Butterfly.h"
+#include "ButterflySlot.h"
+#include "InheritanceConnection.h"
 
 namespace ButterflyGenerationsGame
 {
 	class ButterflyGenerationRegistry
 	{
 	public:
-		ButterflyGenerationRegistry(std::vector<std::vector<Butterfly*>> generationLayers);
+		ButterflyGenerationRegistry(const std::vector<uint8_t>& layers,
+		                            const std::vector<InheritanceConnection>& connections)
+		{
+			FillGenerationLayers(layers);
+			FillParentsConnections(connections);
+		}
 
-		ButterflyGenerationRegistry(
-			std::vector<std::tuple<std::vector<uint8_t>, std::vector<uint8_t>, std::vector<uint8_t>, std::vector<
-				                       uint8_t>>> layers);
+		void AddButterfly(const std::pair<uint8_t, uint8_t>& position, const std::vector<uint8_t>& properties);
 
-		~ButterflyGenerationRegistry();
+		void RemoveButterfly(const std::pair<uint8_t, uint8_t>& position);
 
-		void AddButterfly(Butterfly* butterfly, std::vector<uint8_t> position);
-		void AddButterfly(std::vector<uint8_t> butterflyPosition, std::vector<uint8_t> butterflyProperties,
-		                  std::vector<uint8_t> firstParentPosition, std::vector<uint8_t> secondParentPosition);
-		bool IsGenerationsValid() const;
+		bool ValidateGenerations() const;
 
 	private:
-		std::vector<std::vector<Butterfly*>> M_GenerationLayers;
+		void FillGenerationLayers(const std::vector<uint8_t>& layers);
+
+		void FillParentsConnections(const std::vector<InheritanceConnection>& parentsConnections);
+		std::vector<std::vector<ButterflySlot*>> M_GenerationLayers;
 	};
 }
