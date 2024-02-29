@@ -9,6 +9,10 @@ ButterflyProperties::ButterflyProperties(const std::vector<uint8_t>& properties)
 	
 }
 
+ButterflyProperties::ButterflyProperties(const ButterflyProperties& BP) : WingShape(BP.WingShape), Pattern(BP.Pattern), Color(BP.Color)
+{
+}
+
 void ButterflyProperties::ChangeProperties(const std::vector<uint8_t>& properties)
 {
 	if (!properties.empty())

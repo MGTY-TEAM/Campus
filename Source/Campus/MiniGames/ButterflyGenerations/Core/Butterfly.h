@@ -7,7 +7,7 @@ namespace ButterflyGenerationsGame
 	class Butterfly
 	{
 	public:
-		Butterfly(ButterflyProperties butterflyProperties);
+		Butterfly(const ButterflyProperties& butterflyProperties);
 		
 		const ButterflyProperties& GetProperties() const;
 		

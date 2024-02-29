@@ -9,7 +9,7 @@ Game::Game(): M_GameState(GS_NOT_STARTED)
 
 Game::~Game()
 {
-	delete M_ButterflyGenerationRegistry;
+	M_ButterflyGenerationRegistry = nullptr;
 }
 
 bool Game::TryStartGameWithPosition(const std::vector<uint8_t>& layers,
