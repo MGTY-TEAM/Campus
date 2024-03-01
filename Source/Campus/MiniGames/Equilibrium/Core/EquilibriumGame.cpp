@@ -1,12 +1,12 @@
 #include "EquilibriumGame.h"
 
-EquilibriumGame::Game::Game(const vector<vector<int>>& Cups)
+EquilibriumGame::GameEquilibrium::GameEquilibrium(const vector<vector<int>>& Cups)
 {
 	EquilibriumInstance = Equilibrium(Cups);
 	GameState = GS_UnPlaying;
 }
 
-bool EquilibriumGame::Game::TryStartGame()
+bool EquilibriumGame::GameEquilibrium::TryStartGame()
 {
 	if (GameState != GS_NotStart)
 	{
@@ -16,12 +16,12 @@ bool EquilibriumGame::Game::TryStartGame()
 	return false;
 }
 
-bool EquilibriumGame::Game::EquilibriumIsValidByCups(const vector<vector<int>>& Cups) const
+bool EquilibriumGame::GameEquilibrium::EquilibriumIsValidByCups(const vector<vector<int>>& Cups) const
 {
 	return EquilibriumInstance.IsValidByCups(Cups);
 }
 
-bool EquilibriumGame::Game::TryAddWeight(const vector<int>& Array, int Weight) const
+bool EquilibriumGame::GameEquilibrium::TryAddWeight(const vector<int>& Array, int Weight) const
 {
 	if (GameState == GS_Playing)
 	{
@@ -30,7 +30,7 @@ bool EquilibriumGame::Game::TryAddWeight(const vector<int>& Array, int Weight) c
 	return false;
 }
 
-bool EquilibriumGame::Game::TryRemoveWeight(const vector<int>& Array) const
+bool EquilibriumGame::GameEquilibrium::TryRemoveWeight(const vector<int>& Array) const
 {
 	if (GameState == GS_Playing)
 	{
@@ -39,7 +39,7 @@ bool EquilibriumGame::Game::TryRemoveWeight(const vector<int>& Array) const
 	return false;
 }
 
-bool EquilibriumGame::Game::CheckWin()
+bool EquilibriumGame::GameEquilibrium::CheckWin()
 {
 	if (GameState == GS_Playing)
 	{

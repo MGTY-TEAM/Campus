@@ -14,10 +14,10 @@ namespace EquilibriumGame
 		GS_NotStart = 2
 	};
 
-	class Game
+	class GameEquilibrium
 	{
 	public:
-		Game(const vector<vector<int>>& Cups);
+		GameEquilibrium(const vector<vector<int>>& Cups);
 
 		bool TryStartGame();
 

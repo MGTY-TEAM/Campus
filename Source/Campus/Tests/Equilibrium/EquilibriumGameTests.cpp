@@ -20,7 +20,7 @@ bool FEquilibriumGameTests::RunTest(const FString& Parameters)
 	Cups.push_back(vector<int32> {1, 1, 1});
 
 	AddInfo("Initialization check");
-	Game EquilibriumScale(Cups);
+	GameEquilibrium EquilibriumScale(Cups);
 	TestTrue("Equilibrium isn't created correctly", EquilibriumScale.EquilibriumIsValidByCups(Cups));
 	TestTrue("Expected start game", EquilibriumScale.TryStartGame());
 
