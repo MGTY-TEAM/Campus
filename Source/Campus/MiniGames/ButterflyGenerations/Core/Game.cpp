@@ -33,26 +33,30 @@ bool Game::TryAddButterfly(const std::pair<uint8_t, uint8_t>& butterflyPosition,
 	case GameState::GS_IN_PROGRESS:
 		M_ButterflyGenerationRegistry->AddButterfly(butterflyPosition, butterflyProperties);
 		return true;
-	case GameState::GS_NOT_STARTED:
-		throw GameException("Game is not started");
-	case GameState::GS_ENDED:
-		throw GameException("Game is already ended");
 	default:
-		throw GameException("Unknown game error");
+		return false;
 	}
 }
 
-bool Game::TryValidateCurrentSolution()
+bool Game::TryRemoveButterfly(const std::pair<uint8_t, uint8_t> butterflyPosition)
+{
+	switch (M_GameState)
+    {
+    case GameState::GS_IN_PROGRESS:
+        M_ButterflyGenerationRegistry->RemoveButterfly(butterflyPosition);
+        return true;
+    default:
+    	return false;
+    }
+}
+
+bool Game::TryValidateCurrentSolution() const
 {
 	switch (M_GameState)
 	{
 	case GameState::GS_IN_PROGRESS:
 		return M_ButterflyGenerationRegistry->ValidateGenerations();;
-	case GameState::GS_NOT_STARTED:
-		throw GameException("Game is not started");
-	case GameState::GS_ENDED:
-		throw GameException("Game is already ended");
 	default:
-		throw GameException("Unknown game error");
+		return false;
 	}
 }
