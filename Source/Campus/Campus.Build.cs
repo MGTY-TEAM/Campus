@@ -7,7 +7,7 @@ public class Campus : ModuleRules
 	public Campus(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-
+		
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem","Networking","WebSockets","Sockets" });
 
 		PrivateDependencyModuleNames.AddRange(new string[]
@@ -29,6 +29,7 @@ public class Campus : ModuleRules
             "Campus/AI/AIDrone/CoreDrone"
         });
 
+        bUseRTTI = true;
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 
