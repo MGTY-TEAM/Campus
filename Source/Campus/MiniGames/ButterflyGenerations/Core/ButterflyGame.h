@@ -5,11 +5,11 @@
 
 namespace ButterflyGenerationsGame
 {
-	class Game
+	class ButterflyGame
 	{
 	public:
-		Game();
-		~Game();
+		ButterflyGame();
+		~ButterflyGame();
 		
 		bool TryStartGameWithPosition(const std::vector<uint8_t>& layers, const std::vector<InheritanceConnection>& connections);
 		bool TryAddButterfly(const std::pair<uint8_t, uint8_t>& butterflyPosition, const std::vector<uint8_t>& butterflyProperties);

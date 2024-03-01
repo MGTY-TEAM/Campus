@@ -1,18 +1,18 @@
-﻿#include "Game.h"
+﻿#include "ButterflyGame.h"
 
 #include "GameExceptions.h"
 using namespace ButterflyGenerationsGame;
 
-Game::Game(): M_GameState(GS_NOT_STARTED)
+ButterflyGame::ButterflyGame(): M_GameState(GS_NOT_STARTED)
 {
 }
 
-Game::~Game()
+ButterflyGame::~ButterflyGame()
 {
 	M_ButterflyGenerationRegistry = nullptr;
 }
 
-bool Game::TryStartGameWithPosition(const std::vector<uint8_t>& layers,
+bool ButterflyGame::TryStartGameWithPosition(const std::vector<uint8_t>& layers,
                                     const std::vector<InheritanceConnection>& connections)
 {
 	switch (M_GameState)
@@ -26,7 +26,7 @@ bool Game::TryStartGameWithPosition(const std::vector<uint8_t>& layers,
 	}
 }
 
-bool Game::TryAddButterfly(const std::pair<uint8_t, uint8_t>& butterflyPosition,const std::vector<uint8_t>& butterflyProperties)
+bool ButterflyGame::TryAddButterfly(const std::pair<uint8_t, uint8_t>& butterflyPosition,const std::vector<uint8_t>& butterflyProperties)
 {
 	switch (M_GameState)
 	{
@@ -38,7 +38,7 @@ bool Game::TryAddButterfly(const std::pair<uint8_t, uint8_t>& butterflyPosition,
 	}
 }
 
-bool Game::TryRemoveButterfly(const std::pair<uint8_t, uint8_t> butterflyPosition)
+bool ButterflyGame::TryRemoveButterfly(const std::pair<uint8_t, uint8_t> butterflyPosition)
 {
 	switch (M_GameState)
     {
@@ -50,7 +50,7 @@ bool Game::TryRemoveButterfly(const std::pair<uint8_t, uint8_t> butterflyPositio
     }
 }
 
-bool Game::TryValidateCurrentSolution() const
+bool ButterflyGame::TryValidateCurrentSolution() const
 {
 	switch (M_GameState)
 	{
