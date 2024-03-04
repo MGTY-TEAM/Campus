@@ -4,7 +4,7 @@
 #include "ChatManager.h"
 
 #include "MessageInstance.h"
-#include "ChatUserComponent.h"
+#include "Components/ChatUserComponent.h"
 
 
 UChatManager* UChatManager::ChatManagerInstance = nullptr;

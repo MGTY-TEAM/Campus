@@ -1,5 +1,5 @@
-﻿#if (WITH_DEV_AUTOMATION_TESTS || WITH_PERF_AUTOMATION_TESTS)
-#include "ButterflyGenerationsSimplePositionValidatorTest.h"
+﻿#include "ButterflyGenerationsSimplePositionValidatorTest.h"
+#if (WITH_DEV_AUTOMATION_TESTS || WITH_PERF_AUTOMATION_TESTS)
 #include "Campus/MiniGames/ButterflyGenerations/Core/ButterflyGenerationRegistry.h"
 #include "CoreMinimal.h"
 #include "Misc/AutomationTest.h"

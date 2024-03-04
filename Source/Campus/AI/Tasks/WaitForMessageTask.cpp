@@ -7,7 +7,7 @@
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 #include "Campus/AI/Services/CatchMessageService.h"
 #include "Campus/Chat/ChatManager.h"
-#include "Campus/Chat/ChatUserComponent.h"
+#include "Campus/Chat/Components/ChatUserComponent.h"
 #include "Campus/UserInterface/ChatBox.h"
 #include "Engine/Engine.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"

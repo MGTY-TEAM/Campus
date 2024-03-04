@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Campus/Chat/ChatUserComponent.h"
+#include "Campus/Chat/Components/ChatUserComponent.h"
 #include "GameFramework/HUD.h"
 #include "BaseHUD.generated.h"
 

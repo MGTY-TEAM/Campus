@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+class AInventoryActor;
+class UInventoryComponent;
 class UWidgetInteractionComponent;
 class USpringArmComponent;
 class UChatUserComponent;
@@ -25,6 +27,8 @@ public:
 	ABaseCharacter();
 
 protected:
+
+	virtual void PostInitializeComponents() override;
 	/** Called when the game starts or when spawned. */
 	virtual void BeginPlay() override;
 
@@ -45,7 +49,11 @@ protected:
 
 	/** Function to handle looking right. */
 	virtual void LookRight(float value);
+	
+	virtual void SelectNextItem();
 
+	virtual void SelectPrevItem();
+	
 	/** Widget interaction component for interacting with UI widgets in the world. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UWidgetInteractionComponent* WidgetInteractionComponent;
@@ -53,6 +61,10 @@ protected:
 	/** Component for handling character interactions. */
 	UPROPERTY(EditDefaultsOnly, Category = "Components")
 	UInteractionComponent* InteractionComponent;
+
+	/** Component for handling character inventory. */
+	UPROPERTY(EditDefaultsOnly, Category = "Components")
+	UInventoryComponent* InventoryComponent;
 
 	/** Spring arm component for the character's camera. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -66,10 +78,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mouse Settings")
 	float MouseSens = 0.4f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
+	USceneComponent* InventoryActorSlotComponent;
+	UFUNCTION()
+	void OnSelectedInventoryActorChanged(AInventoryActor* SelectedInventoryActor);
+
+	UFUNCTION()
+	void OnPickupInventoryActor(AInventoryActor* InventoryActor);
 public:
 	/** Called every frame. */
 	virtual void Tick(float DeltaTime) override;
 
+
+	
 	/** Function to set up input bindings. */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

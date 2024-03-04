@@ -5,7 +5,6 @@
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Campus/Chat/ChatUserComponent.h"
 #include "Campus\Chat\MessageInstance.h"
 #include "Campus/Chat/ChatManager.h"
 #include "AIController.h"

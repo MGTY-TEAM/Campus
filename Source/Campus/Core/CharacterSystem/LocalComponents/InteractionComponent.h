@@ -9,7 +9,7 @@ DECLARE_LOG_CATEGORY_CLASS(LogInteractionComponent, Log, Log);
 #include "Components/ActorComponent.h"
 #include "InteractionComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventoryItemPickup, AActor*, PickupedActor);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventoryItemPickup, AInventoryActor*, InventoryActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDialogInteract, AActor*, DialogInterace);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSimpleInteract);
 

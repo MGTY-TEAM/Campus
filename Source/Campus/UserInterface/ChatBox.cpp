@@ -6,7 +6,7 @@
 #include "AIAnimDrone.h"
 #include "Chat_Message.h"
 #include "Campus/Chat/ChatManager.h"
-#include "Campus/Chat/ChatUserComponent.h"
+#include "Campus/Chat/Components/ChatUserComponent.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"

@@ -60,6 +60,8 @@ bool ButterflyGenerationsGame::ButterflySlot::IsValidDependency() const
 }
 
 void ButterflyGenerationsGame::ButterflySlot::SetDependencySlots(ButterflySlot* firstParent,
-	ButterflySlot* secondParent) : M_FirstSlotParent(firstParent), M_SecondSlotParent(secondParent)
+	ButterflySlot* secondParent)
 {
+	M_FirstSlotParent = firstParent;
+	M_SecondSlotParent = secondParent;
 }

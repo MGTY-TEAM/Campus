@@ -14,7 +14,6 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SplineComponent.h"
-#include "Campus/Chat/ChatUserComponent.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Kismet/GameplayStatics.h"
 

@@ -7,7 +7,7 @@
 #include "Engine/Engine.h"
 #include "Campus/AI/AIDrone/Components/AIDronePerceptionComponent.h"
 #include "Campus/Chat/ChatManager.h"
-#include "Campus/Chat/ChatUserComponent.h"
+#include "Campus/Chat/Components/ChatUserComponent.h"
 
 AAIDroneController::AAIDroneController()
 {

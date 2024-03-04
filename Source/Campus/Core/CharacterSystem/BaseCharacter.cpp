@@ -5,10 +5,12 @@
 
 #include "Camera/CameraComponent.h"
 #include "Campus/Chat/ChatManager.h"
-#include "Campus/Chat/ChatUserComponent.h"
+#include "Campus/Chat/Components/ChatUserComponent.h"
 #include "Components/WidgetInteractionComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "LocalComponents/InteractionComponent.h"
+#include "Campus/Inventory/InventoryActor.h"
+#include "LocalComponents/InventoryComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, Log, Log)
 
@@ -17,14 +19,24 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
 	WidgetInteractionComponent = CreateDefaultSubobject<UWidgetInteractionComponent>("WidgetInteractionComponent");
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	InventoryActorSlotComponent = CreateDefaultSubobject<USceneComponent>("InventorySlotComponent");
 
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	WidgetInteractionComponent->SetupAttachment(CameraComponent);
 	SpringArmComponent->SetupAttachment(RootComponent);
+}
+
+void ABaseCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	InteractionComponent->OnInventoryItemPickup.AddDynamic(this, &ABaseCharacter::OnPickupInventoryActor);
+	InventoryComponent->OnSelectedItemChanged.AddUObject(this, &ABaseCharacter::OnSelectedInventoryActorChanged);
+	InventoryComponent->SetInventoryActorAttachComponent(InventoryActorSlotComponent);
 }
 
 void ABaseCharacter::BeginPlay()
@@ -39,6 +51,24 @@ void ABaseCharacter::BeginPlay()
 #endif
 }
 
+void ABaseCharacter::OnSelectedInventoryActorChanged(AInventoryActor* SelectedInventoryActor)
+{
+#ifdef BASE_CHARACTER_DEBUG
+	UE_LOG(LogBaseCharacter, Log, TEXT("Selected inventory actor: %s"), *SelectedInventoryActor->GetName());
+#endif
+}
+
+void ABaseCharacter::OnPickupInventoryActor(AInventoryActor* InventoryActor)
+{
+	if (InventoryActor)
+	{
+		if (InventoryComponent)
+		{
+			InventoryComponent->AddItemAndSelect(InventoryActor);
+		}
+	}
+}
+
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -50,6 +80,8 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &ABaseCharacter::Interact);
 	PlayerInputComponent->BindAction("Interaction", IE_Released, this, &ABaseCharacter::EndInteract);
+	PlayerInputComponent->BindAction("SelectNextItem", IE_Pressed, this, &ABaseCharacter::SelectNextItem);
+	PlayerInputComponent->BindAction("SelectPrevItem", IE_Pressed, this, &ABaseCharacter::SelectPrevItem);
 
 	PlayerInputComponent->BindAxis("ForwardAxis", this, &ABaseCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("RightAxis", this, &ABaseCharacter::MoveRight);
@@ -103,4 +135,20 @@ void ABaseCharacter::LookUp(float value)
 void ABaseCharacter::LookRight(float value)
 {
 	AddControllerYawInput(value * MouseSens);
+}
+
+void ABaseCharacter::SelectNextItem()
+{
+	if (InventoryComponent)
+	{
+		InventoryComponent->SelectNextItem();
+	}
+}
+
+void ABaseCharacter::SelectPrevItem()
+{
+	if (InventoryComponent)
+	{
+		InventoryComponent->SelectPrevItem();
+	}
 }

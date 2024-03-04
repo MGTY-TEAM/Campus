@@ -3,6 +3,7 @@
 #include "InteractionComponent.h"
 #include "Camera/CameraComponent.h"
 #include "..\..\..\Interfaces\Interaction\Interactable.h"
+#include "Campus/Inventory/InventoryActor.h"
 #include "Components/WidgetInteractionComponent.h"
 
 UInteractionComponent::UInteractionComponent(): FocusActor(nullptr), OwnedCameraComponent(nullptr)
@@ -24,11 +25,19 @@ void UInteractionComponent::TryInteract()
 		{
 			
 #ifdef INTERACTION_COMPONENT_DEBUG
-			UE_LOG(LogInteractionComponent, Warning, TEXT("Interact with implemented actor: %s"), *HitActor->GetName());
+			UE_LOG(LogInteractionComponent, Log, TEXT("Interact with implemented actor: %s"), *HitActor->GetName());
 #endif
 			
 			Interactable->Interact(HitResult.GetComponent(), HitResult.Location, HitResult.Normal);
 			OnSimpleInteract.Broadcast();
+
+			if (AInventoryActor* InventoryActor = Cast<AInventoryActor>(HitActor))
+			{
+#ifdef INTERACTION_COMPONENT_DEBUG
+				UE_LOG(LogInteractionComponent, Log, TEXT("Interact with inventory actor: %s"), *HitActor->GetName());
+#endif
+				OnInventoryItemPickup.Broadcast(InventoryActor);
+			}
 		}
 		if (HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
 		{
