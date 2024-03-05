@@ -59,6 +59,21 @@ void UInteractionComponent::TryInteract()
 	}
 }
 
+void UInteractionComponent::TryPlaceActorOnHitLocation(AActor* ToPlaceActor)
+{
+	FHitResult HitResult = GetHitResultByTraceChannel();
+	if (HitResult.IsValidBlockingHit())
+	{
+		if (AActor* HitActor = HitResult.GetActor())
+		{
+			if (!HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+			{
+				ToPlaceActor->SetActorLocation(HitResult.Location);
+			}
+		}
+	}
+}
+
 
 void UInteractionComponent::SetHoldStatus(bool bStatus)
 {

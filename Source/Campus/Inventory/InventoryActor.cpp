@@ -37,7 +37,9 @@ void AInventoryActor::Tick(float DeltaTime)
 
 UTexture2D* AInventoryActor::GetRenderTargetTexture() const
 {
-	return nullptr;/*RenderTarget->ConstructTexture2D(GetWorld(), FString(), RF_);*/
+	UTexture2D* Texture = RenderTarget->ConstructTexture2D(GetWorld(), FString("T_InventoryObjectScreen"),RF_NoFlags);
+	
+	return Texture;
 }
 //POOL FUNCTIONS
 void AInventoryActor::SetEnabled(bool bEnabled)
@@ -46,13 +48,11 @@ void AInventoryActor::SetEnabled(bool bEnabled)
     {
         SetActorHiddenInGame(false);
 		SetActorTickEnabled(false);
-		SetActorEnableCollision(false);
     }
     else
     {
         SetActorHiddenInGame(true);
     	SetActorTickEnabled(true);
-    	SetActorEnableCollision(true);
     }
 }
 

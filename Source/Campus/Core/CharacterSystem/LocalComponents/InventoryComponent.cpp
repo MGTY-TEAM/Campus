@@ -9,7 +9,6 @@ UInventoryComponent::UInventoryComponent()
 }
 
 
-
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -27,40 +26,80 @@ void UInventoryComponent::SetInventoryActorAttachComponent(USceneComponent* Atta
 	InventoryActorAttachComponent = AttachComponent;
 }
 
-void UInventoryComponent::SelectNextItem() 
+void UInventoryComponent::HideInventoryActor()
 {
-	if(SelectedInventoryActor)
-	{
-		AInventoryActor* NextItem = InventoryPool.FindNode(SelectedInventoryActor)->GetNextNode()->GetValue();
-		if (NextItem)
-		{
-			if (SelectedInventoryActor)
-				SelectedInventoryActor->SetEnabled(false);
-			
-			SelectedInventoryActor = NextItem;
+	InventoryActorAttachComponent = nullptr;
+}
 
-			SelectedInventoryActor->SetEnabled(true);
-			
-			OnSelectedItemChanged.Broadcast(SelectedInventoryActor);
+void UInventoryComponent::SelectNextItem()
+{
+	if (SelectedInventoryActor)
+	{
+		if (auto Node = InventoryPool.FindNode(SelectedInventoryActor))
+		{
+			if (auto NextNode = Node->GetNextNode())
+			{
+				if (AInventoryActor* NextItem = NextNode->GetValue())
+				{
+					if (NextItem)
+					{
+						if (SelectedInventoryActor)
+							SelectedInventoryActor->SetEnabled(false);
+
+						SelectedInventoryActor = NextItem;
+
+						SelectedInventoryActor->SetEnabled(true);
+
+						OnSelectedItemChanged.Broadcast(SelectedInventoryActor);
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		if (auto Node = InventoryPool.GetHead())
+		{
+			if (AInventoryActor* Item = Node->GetValue())
+			{
+				SelectedInventoryActor = Item;
+				OnSelectedItemChanged.Broadcast(SelectedInventoryActor);
+			}
 		}
 	}
 }
 
-void UInventoryComponent::SelectPrevItem() 
+void UInventoryComponent::SelectPrevItem()
 {
 	if (SelectedInventoryActor)
 	{
-		AInventoryActor* PrevItem = InventoryPool.FindNode(SelectedInventoryActor)->GetPrevNode()->GetValue();
-		if (PrevItem)
+		if (auto CurrentNode = InventoryPool.FindNode(SelectedInventoryActor))
 		{
-			if (SelectedInventoryActor)
-				SelectedInventoryActor->SetEnabled(false);
-			
-			SelectedInventoryActor = PrevItem;
-			
-			SelectedInventoryActor->SetEnabled(true);
-			
-			OnSelectedItemChanged.Broadcast(SelectedInventoryActor);
+			if (auto PrevNode = CurrentNode->GetPrevNode())
+			{
+				if (AInventoryActor* PrevItem = PrevNode->GetValue())
+				{
+					if (SelectedInventoryActor)
+						SelectedInventoryActor->SetEnabled(false);
+
+					SelectedInventoryActor = PrevItem;
+
+					SelectedInventoryActor->SetEnabled(true);
+
+					OnSelectedItemChanged.Broadcast(SelectedInventoryActor);
+				}
+			}
+		}
+	}
+	else
+	{
+		if (auto Node = InventoryPool.GetHead())
+		{
+			if (AInventoryActor* Item = Node->GetValue())
+			{
+				SelectedInventoryActor = Item;
+				OnSelectedItemChanged.Broadcast(SelectedInventoryActor);
+			}
 		}
 	}
 }
@@ -69,42 +108,34 @@ void UInventoryComponent::AddItemAndSelect(AInventoryActor* Item)
 {
 	if (Item)
 	{
-		
 		if (SelectedInventoryActor)
 			SelectedInventoryActor->SetEnabled(false);
 		
-		Item->AttachToComponent(InventoryActorAttachComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		InventoryPool.AddTail(Item);
 		SelectedInventoryActor = Item;
-	
+
 		/*OnInventoryItemAdded.Broadcast(Item);*/
 		Item->SetEnabled(true);
 		OnSelectedItemChanged.Broadcast(Item);
 	}
 }
 
-void UInventoryComponent::RemoveSelectedItem()
+AInventoryActor* UInventoryComponent::RemoveSelectedItem()
 {
-	if(SelectedInventoryActor)
+	AInventoryActor* RemovedItem = nullptr;
+	if (SelectedInventoryActor)
 	{
+		RemovedItem = SelectedInventoryActor;
 		InventoryPool.RemoveNode(SelectedInventoryActor);
-		OnSelectedItemChanged.Broadcast(nullptr);
-		
-		TDoubleLinkedList<AInventoryActor*>::TDoubleLinkedListNode* NextNode  = InventoryPool.FindNode(SelectedInventoryActor)->GetNextNode();
-		TDoubleLinkedList<AInventoryActor*>::TDoubleLinkedListNode* PrevNode  = InventoryPool.FindNode(SelectedInventoryActor)->GetPrevNode();
+		SelectedInventoryActor = nullptr;
 
-		if (PrevNode->GetValue())
-		{
-			SelectedInventoryActor = PrevNode->GetValue();
-			
-			OnSelectedItemChanged.Broadcast(SelectedInventoryActor);
-		}
-		else if (NextNode->GetValue())
-		{
-			SelectedInventoryActor = NextNode->GetValue();
-			
-			OnSelectedItemChanged.Broadcast(SelectedInventoryActor);
-		}
+		RemovedItem->SetEnabled(true);
+		return RemovedItem;
 	}
+	return RemovedItem;
 }
 
+bool UInventoryComponent::IsEmpty()
+{
+	return SelectedInventoryActor != nullptr;
+}

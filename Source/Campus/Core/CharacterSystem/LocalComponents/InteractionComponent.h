@@ -55,6 +55,8 @@ public:
 	FOnSimpleInteract OnSimpleInteract;
 	
 	void TryInteract();
+
+	void TryPlaceActorOnHitLocation(AActor* ToPlaceActor);
 	
 	UFUNCTION()
 	void SetHoldStatus(bool bStatus);

@@ -30,12 +30,13 @@ public:
 
 
 	void SetInventoryActorAttachComponent(USceneComponent* AttachComponent);
-	
+
+	void HideInventoryActor();
 	void AddItemAndSelect(AInventoryActor* Item);
 	void SelectNextItem();
 	void SelectPrevItem();
-	void RemoveSelectedItem();
-	
+	AInventoryActor* RemoveSelectedItem();
+	bool IsEmpty();
 	FOnSelectedItemChanged OnSelectedItemChanged;
 private:
 	TDoubleLinkedList<AInventoryActor*> InventoryPool;

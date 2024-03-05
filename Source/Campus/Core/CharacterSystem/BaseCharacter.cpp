@@ -29,12 +29,14 @@ ABaseCharacter::ABaseCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	WidgetInteractionComponent->SetupAttachment(CameraComponent);
 	SpringArmComponent->SetupAttachment(RootComponent);
+	InventoryActorSlotComponent->SetupAttachment(CameraComponent);
 }
 
 void ABaseCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	InteractionComponent->OnInventoryItemPickup.AddDynamic(this, &ABaseCharacter::OnPickupInventoryActor);
+	
 	InventoryComponent->OnSelectedItemChanged.AddUObject(this, &ABaseCharacter::OnSelectedInventoryActorChanged);
 	InventoryComponent->SetInventoryActorAttachComponent(InventoryActorSlotComponent);
 }
@@ -53,17 +55,25 @@ void ABaseCharacter::BeginPlay()
 
 void ABaseCharacter::OnSelectedInventoryActorChanged(AInventoryActor* SelectedInventoryActor)
 {
+	if (SelectedInventoryActor)
+	{
 #ifdef BASE_CHARACTER_DEBUG
-	UE_LOG(LogBaseCharacter, Log, TEXT("Selected inventory actor: %s"), *SelectedInventoryActor->GetName());
+		UE_LOG(LogBaseCharacter, Log, TEXT("Selected inventory actor: %s"), *SelectedInventoryActor->GetName());
 #endif
+	}
 }
 
 void ABaseCharacter::OnPickupInventoryActor(AInventoryActor* InventoryActor)
 {
 	if (InventoryActor)
 	{
-		if (InventoryComponent)
+		if (InventoryComponent && InventoryActorSlotComponent)
 		{
+			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, false);
+			
+			InventoryActor->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+			InventoryActor->AttachToComponent(InventoryActorSlotComponent, AttachmentRules);
+			
 			InventoryComponent->AddItemAndSelect(InventoryActor);
 		}
 	}
@@ -99,7 +109,16 @@ void ABaseCharacter::Interact()
 	UE_LOG(LogBaseCharacter, Log, TEXT("Try interact"))
 #endif
 
-	InteractionComponent->TryInteract();
+	if (AInventoryActor* SelectedInventoryActor = InventoryComponent->RemoveSelectedItem())
+	{
+		SelectedInventoryActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		InteractionComponent->TryPlaceActorOnHitLocation(SelectedInventoryActor);
+	}
+	else
+	{
+		InteractionComponent->TryInteract();
+	}
+	
 
 #ifdef BASE_CHARACTER_DEBUG
 	UE_LOG(LogBaseCharacter, Log, TEXT("Set hold status true"))
