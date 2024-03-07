@@ -2,9 +2,12 @@
 
 #pragma once
 
+#include "Campus/UserInterface/Hud/Inventory/UInventoryWidget.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
+
 
 class AInventoryActor;
 class UInventoryComponent;
@@ -80,6 +83,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
 	USceneComponent* InventoryActorSlotComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category ="Inventory")
+	TSubclassOf<UUInventoryWidget> InventoryWidgetClass;
+	
 	UFUNCTION()
 	void OnSelectedInventoryActorChanged(AInventoryActor* SelectedInventoryActor);
 

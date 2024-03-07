@@ -3,6 +3,7 @@
 
 #include "BaseCharacter.h"
 
+#include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Campus/Chat/ChatManager.h"
 #include "Campus/Chat/Components/ChatUserComponent.h"
@@ -38,7 +39,16 @@ void ABaseCharacter::PostInitializeComponents()
 	InteractionComponent->OnInventoryItemPickup.AddDynamic(this, &ABaseCharacter::OnPickupInventoryActor);
 	
 	InventoryComponent->OnSelectedItemChanged.AddUObject(this, &ABaseCharacter::OnSelectedInventoryActorChanged);
-	InventoryComponent->SetInventoryActorAttachComponent(InventoryActorSlotComponent);
+
+	if (IsValid(InventoryWidgetClass))
+	{
+		if (UUInventoryWidget* InventoryWidget = CreateWidget<UUInventoryWidget>(GetWorld(), InventoryWidgetClass))
+		{
+			InventoryComponent->ConnectInventoryWidget(InventoryWidget);
+
+			InventoryWidget->AddToViewport();
+		}
+	}
 }
 
 void ABaseCharacter::BeginPlay()
@@ -108,17 +118,8 @@ void ABaseCharacter::Interact()
 #ifdef BASE_CHARACTER_DEBUG
 	UE_LOG(LogBaseCharacter, Log, TEXT("Try interact"))
 #endif
-
-	if (AInventoryActor* SelectedInventoryActor = InventoryComponent->RemoveSelectedItem())
-	{
-		SelectedInventoryActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		InteractionComponent->TryPlaceActorOnHitLocation(SelectedInventoryActor);
-	}
-	else
-	{
-		InteractionComponent->TryInteract();
-	}
 	
+	InteractionComponent->TryInteract();
 
 #ifdef BASE_CHARACTER_DEBUG
 	UE_LOG(LogBaseCharacter, Log, TEXT("Set hold status true"))

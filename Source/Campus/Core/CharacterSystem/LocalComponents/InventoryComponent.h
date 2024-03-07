@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AIHelpers.h"
 #include "Campus/Inventory/InventoryActor.h"
 #include "Components/ActorComponent.h"
-#include "Containers/IntrusiveDoubleLinkedList.h"
 #include "InventoryComponent.generated.h"
+
+class UUInventoryWidget;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnSelectedItemChanged, AInventoryActor*);
 
@@ -29,19 +29,20 @@ public:
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 
-	void SetInventoryActorAttachComponent(USceneComponent* AttachComponent);
-
-	void HideInventoryActor();
+	void ConnectInventoryWidget(UUInventoryWidget* InventoryWidget);
 	void AddItemAndSelect(AInventoryActor* Item);
 	void SelectNextItem();
 	void SelectPrevItem();
 	AInventoryActor* RemoveSelectedItem();
 	bool IsEmpty();
+	
 	FOnSelectedItemChanged OnSelectedItemChanged;
 private:
+	void SelectItem(AInventoryActor* Item);
+	
 	TDoubleLinkedList<AInventoryActor*> InventoryPool;
-
 	AInventoryActor* SelectedInventoryActor{nullptr};
-
-	USceneComponent* InventoryActorAttachComponent{nullptr};
+	
+	UUInventoryWidget* M_InventoryWidget;
+	
 };
