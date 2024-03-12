@@ -80,8 +80,8 @@ void ABaseCharacter::OnPickupInventoryActor(AInventoryActor* InventoryActor)
 		if (InventoryComponent && InventoryActorSlotComponent)
 		{
 			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, false);
-			
-			InventoryActor->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+
+			InventoryActor->DetachFromParent();
 			InventoryActor->AttachToComponent(InventoryActorSlotComponent, AttachmentRules);
 			
 			InventoryComponent->AddItemAndSelect(InventoryActor);
@@ -100,6 +100,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &ABaseCharacter::Interact);
 	PlayerInputComponent->BindAction("Interaction", IE_Released, this, &ABaseCharacter::EndInteract);
+	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &ABaseCharacter::Drop);
 	PlayerInputComponent->BindAction("SelectNextItem", IE_Pressed, this, &ABaseCharacter::SelectNextItem);
 	PlayerInputComponent->BindAction("SelectPrevItem", IE_Pressed, this, &ABaseCharacter::SelectPrevItem);
 
@@ -128,6 +129,8 @@ void ABaseCharacter::Interact()
 	InteractionComponent->SetHoldStatus(true);
 }
 
+
+
 void ABaseCharacter::EndInteract()
 {
 #ifdef BASE_CHARACTER_DEBUG
@@ -135,6 +138,20 @@ void ABaseCharacter::EndInteract()
 	UE_LOG(LogBaseCharacter, Log, TEXT("Set hold status false"))
 #endif
 	InteractionComponent->SetHoldStatus(false);
+}
+
+void ABaseCharacter::Drop()
+{
+	if (InventoryComponent)
+	{
+		AInventoryActor* RemovedActor =  InventoryComponent->RemoveSelectedItem();
+		
+		if (RemovedActor)
+		{
+			RemovedActor->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+			InteractionComponent->TryPlaceActorOnHitLocation(RemovedActor);
+		}
+	}
 }
 
 void ABaseCharacter::MoveForward(float value)
@@ -172,3 +189,5 @@ void ABaseCharacter::SelectPrevItem()
 		InventoryComponent->SelectPrevItem();
 	}
 }
+
+

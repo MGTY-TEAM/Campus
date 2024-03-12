@@ -17,10 +17,10 @@ void UInventoryItemWidget::SetSelectedState(bool bSelected)
 {
 	if (bSelected)
     {
-		ItemImage->Brush.SetImageSize(ItemImage->GetBrush().GetImageSize() * 1.1);
+		ItemImage->Brush.OutlineSettings.Width = 5.0f;
     }
     else
     {
-    	ItemImage->Brush.SetImageSize(ItemImage->GetBrush().GetImageSize() / 1.1);
+    	ItemImage->Brush.OutlineSettings.Width = 0.0f;
     }
 }

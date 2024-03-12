@@ -8,6 +8,7 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogInventoryWidget, Log, Log);
 
+class UImage;
 class AInventoryActor;
 class UInventoryItemWidget;
 class UHorizontalBox;
@@ -24,14 +25,26 @@ public:
 	void RemoveItem(AInventoryActor* InventoryActor);
 
 	void SelectItem(AInventoryActor* InventoryActor);
+	void DeselectItem(AInventoryActor* InventoryActor);
 
 protected:
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	UImage* BackGroundImage;
+	
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
 	UHorizontalBox* HorizontalBox;
 
 	UPROPERTY(EditDefaultsOnly, Category="InventoryClasses")
 	TSubclassOf<UInventoryItemWidget> InventoryItemWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category="View Settings", meta = (ClampMin = 0.0f, ClampMax = 20.0f))
+	float InventoryItemsPadding = 5.0f;
+	UPROPERTY(EditDefaultsOnly, Category="View Settings")
+	float InventoryItemsSize = 100.0f;
 	
 private:
 	TMap<AInventoryActor*, UInventoryItemWidget*> Items;
+
+	void ExpandBackGroundImage();
+	void CompressBackGroundImage();
 };

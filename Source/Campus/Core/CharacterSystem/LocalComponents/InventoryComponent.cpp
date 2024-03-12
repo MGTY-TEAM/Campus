@@ -7,34 +7,27 @@
 
 UInventoryComponent::UInventoryComponent(): M_InventoryWidget(nullptr)
 {
-	PrimaryComponentTick.bCanEverTick = true;
-}
-
-
-void UInventoryComponent::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-
-void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                        FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UInventoryComponent::ConnectInventoryWidget(UUInventoryWidget* InventoryWidget)
 {
 	if (InventoryWidget && InventoryPool.IsEmpty())
-    {
-        M_InventoryWidget = InventoryWidget;
-    }
+	{
+		M_InventoryWidget = InventoryWidget;
+	}
 }
 
 void UInventoryComponent::SelectNextItem()
 {
 	if (SelectedInventoryActor)
 	{
+		if (!SelectedInventoryActor->IsEnabled())
+		{
+			SelectItem(SelectedInventoryActor);
+			return;
+		}
+		
 		if (auto Node = InventoryPool.FindNode(SelectedInventoryActor))
 		{
 			if (auto NextNode = Node->GetNextNode())
@@ -43,13 +36,10 @@ void UInventoryComponent::SelectNextItem()
 				{
 					if (NextItem)
 					{
-						if (SelectedInventoryActor)
-							SelectedInventoryActor->SetEnabled(false);
-
+						DeselectItem(SelectedInventoryActor);
+						
 						SelectedInventoryActor = NextItem;
-
-						SelectedInventoryActor->SetEnabled(true);
-
+						
 						SelectItem(SelectedInventoryActor);
 					}
 				}
@@ -79,15 +69,16 @@ void UInventoryComponent::SelectPrevItem()
 			{
 				if (AInventoryActor* PrevItem = PrevNode->GetValue())
 				{
-					if (SelectedInventoryActor)
-						SelectedInventoryActor->SetEnabled(false);
+					DeselectItem(SelectedInventoryActor);
 
 					SelectedInventoryActor = PrevItem;
-
-					SelectedInventoryActor->SetEnabled(true);
-
+					
 					SelectItem(SelectedInventoryActor);
 				}
+			}
+			else
+			{
+				DeselectItem(SelectedInventoryActor);
 			}
 		}
 	}
@@ -109,14 +100,14 @@ void UInventoryComponent::AddItemAndSelect(AInventoryActor* Item)
 	if (Item)
 	{
 		if (SelectedInventoryActor)
-			SelectedInventoryActor->SetEnabled(false);
+		{
+			DeselectItem(SelectedInventoryActor);
+		}
 		
 		InventoryPool.AddTail(Item);
 		SelectedInventoryActor = Item;
 
-		/*OnInventoryItemAdded.Broadcast(Item);*/
-		Item->SetEnabled(true);
-		if(M_InventoryWidget)
+		if (M_InventoryWidget)
 		{
 			M_InventoryWidget->AddItem(Item);
 		}
@@ -129,24 +120,25 @@ AInventoryActor* UInventoryComponent::RemoveSelectedItem()
 	AInventoryActor* RemovedItem = nullptr;
 	if (SelectedInventoryActor)
 	{
-		RemovedItem = SelectedInventoryActor;
-		InventoryPool.RemoveNode(SelectedInventoryActor);
-		SelectedInventoryActor = nullptr;
-
-		RemovedItem->SetEnabled(true);
-
-		if (M_InventoryWidget)
+		if (SelectedInventoryActor->IsEnabled())
 		{
-			M_InventoryWidget->RemoveItem(RemovedItem);
+			RemovedItem = SelectedInventoryActor;
+			InventoryPool.RemoveNode(SelectedInventoryActor);
+			SelectedInventoryActor = nullptr;
+
+			if (M_InventoryWidget)
+			{
+				M_InventoryWidget->RemoveItem(RemovedItem);
+			}
+			return RemovedItem;
 		}
-		return RemovedItem;
 	}
 	return RemovedItem;
 }
 
-bool UInventoryComponent::IsEmpty()
+bool UInventoryComponent::IsEmpty() const
 {
-	return SelectedInventoryActor != nullptr;
+	return InventoryPool.IsEmpty();
 }
 
 void UInventoryComponent::SelectItem(AInventoryActor* Item)
@@ -155,5 +147,15 @@ void UInventoryComponent::SelectItem(AInventoryActor* Item)
 	{
 		M_InventoryWidget->SelectItem(Item);
 	}
+	Item->SetEnabled(true);
 	OnSelectedItemChanged.Broadcast(SelectedInventoryActor);
+}
+
+void UInventoryComponent::DeselectItem(AInventoryActor* Item)
+{
+	if (M_InventoryWidget)
+	{
+		M_InventoryWidget->DeselectItem(Item);
+	}
+	Item->SetEnabled(false);
 }

@@ -10,8 +10,6 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogInventoryActor, Log, Log);
 
-class USpringArmComponent;
-
 UCLASS()
 class CAMPUS_API AInventoryActor : public AActor, public IInteractable
 {
@@ -24,26 +22,28 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly)
-	USceneComponent* SceneComponent;	
+	USceneComponent* SceneComponent;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* StaticMeshComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category="Scene Capture")
-	USpringArmComponent* SpringArmComponent;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Scene Capture")
-	USceneCaptureComponent2D* SceneCaptureComponent;
-	
+	UPROPERTY(EditDefaultsOnly, Category = "Item Image")
+	UTexture2D* ItemImageTexture;
+
+
 public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void OnConstruction(const FTransform& Transform) override;
 	
 	UTexture2D* GetRenderTargetTexture() const;
-
+	
+	void DetachFromParent();
 	//POOL FUNCTIONS
 	void SetEnabled(bool bEnabled);
-	//
+    bool IsEnabled() const;
 private:
-	UTextureRenderTarget2D* RenderTargetTexture;
+	bool M_IsEnabled;
+
+	
 };

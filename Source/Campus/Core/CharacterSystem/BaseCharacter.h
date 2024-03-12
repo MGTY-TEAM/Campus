@@ -56,7 +56,8 @@ protected:
 	virtual void SelectNextItem();
 
 	virtual void SelectPrevItem();
-	
+
+	void Drop();
 	/** Widget interaction component for interacting with UI widgets in the world. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UWidgetInteractionComponent* WidgetInteractionComponent;
@@ -95,8 +96,6 @@ protected:
 public:
 	/** Called every frame. */
 	virtual void Tick(float DeltaTime) override;
-
-
 	
 	/** Function to set up input bindings. */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

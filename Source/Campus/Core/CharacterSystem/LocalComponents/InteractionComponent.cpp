@@ -4,6 +4,7 @@
 #include "Camera/CameraComponent.h"
 #include "..\..\..\Interfaces\Interaction\Interactable.h"
 #include "Campus/Inventory/InventoryActor.h"
+#include "Campus/Inventory/PickupSocketComponent.h"
 #include "Components/WidgetInteractionComponent.h"
 
 UInteractionComponent::UInteractionComponent(): FocusActor(nullptr), OwnedCameraComponent(nullptr)
@@ -61,16 +62,26 @@ void UInteractionComponent::TryInteract()
 
 void UInteractionComponent::TryPlaceActorOnHitLocation(AActor* ToPlaceActor)
 {
+	if (!ToPlaceActor)
+		return;
+	
 	FHitResult HitResult = GetHitResultByTraceChannel();
+	
 	if (HitResult.IsValidBlockingHit())
 	{
-		if (AActor* HitActor = HitResult.GetActor())
+		if (UPickupSocketComponent* PickupSocketComponent  = Cast<UPickupSocketComponent>(HitResult.GetComponent()))
 		{
-			if (!HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+			UE_LOG(LogInteractionComponent, Warning, TEXT("TryPlaceActorOnHitLocation: PickupSocketComponentDetected"));
+			if (PickupSocketComponent->PlacePickup(ToPlaceActor))
 			{
-				ToPlaceActor->SetActorLocation(HitResult.Location);
+				UE_LOG(LogInteractionComponent, Warning, TEXT("TryPlaceActorOnHitLocation: Placed"));
 			}
 		}
+		else
+		{
+			ToPlaceActor->SetActorLocation(HitResult.Location);
+		}
+		
 	}
 }
 

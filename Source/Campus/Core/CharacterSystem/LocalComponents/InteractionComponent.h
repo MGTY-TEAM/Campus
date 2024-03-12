@@ -36,6 +36,8 @@ class CAMPUS_API UInteractionComponent : public UActorComponent
 	UPROPERTY(EditDefaultsOnly, Category="Interaction Component Settings")
 	float InteractionDistance = 300;
 	
+	UPROPERTY(EditInstanceOnly, Category = "Interaction Component Settings")
+	
 	bool bInteractHold = false;
 	
 	FHitResult GetHitResultByTraceChannel();
