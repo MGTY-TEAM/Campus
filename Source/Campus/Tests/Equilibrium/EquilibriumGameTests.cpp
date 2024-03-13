@@ -6,10 +6,10 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FEquilibriumGameTests, "Campus.Equilibrium.EquilibriumGameTests",
                                  EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority)
 
-using namespace EquilibriumGame;
-
 bool FEquilibriumGameTests::RunTest(const FString& Parameters)
 {
+	using namespace EquilibriumGame;
+	
 	vector<vector<int>> Cups;
 
 	Cups.push_back(vector<int32> {0, 0, 0});

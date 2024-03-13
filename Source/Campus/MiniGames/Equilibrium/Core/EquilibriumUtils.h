@@ -8,7 +8,7 @@ using namespace std;
 
 namespace EquilibriumUtils
 {
-	static EquilElement* GetNeededElement(const vector<int>& Array, EquilElement* Root)
+	static EquilElement* GetNeededElement(const vector<int32_t>& Array, EquilElement* Root)
 	{
 		EquilElement* CurrentElement = Root;
 		for (const auto Element : Array)

@@ -17,15 +17,17 @@ namespace EquilibriumGame
 	class GameEquilibrium
 	{
 	public:
-		GameEquilibrium(const vector<vector<int>>& Cups);
+		GameEquilibrium();
+		GameEquilibrium(const vector<vector<int32_t>>& Cups);
 
 		bool TryStartGame();
 
-		bool EquilibriumIsValidByCups(const vector<vector<int>>& Cups) const;
-		bool TryAddWeight(const vector<int>& Array, int Weight) const;
-		bool TryRemoveWeight(const vector<int>& Array) const;
+		bool EquilibriumIsValidByCups(const vector<vector<int32_t>>& Cups) const;
+		bool TryAddWeight(const vector<int32_t>& Array, int32_t Weight) const;
+		bool TryRemoveWeight(const vector<int32_t>& Array) const;
 		bool CheckWin();
 
+		vector<ENodeRotationState> CheckState() const;
 		Equilibrium GetEquilibriumInstance() const { return EquilibriumInstance; }
 	private:
 		Equilibrium EquilibriumInstance;

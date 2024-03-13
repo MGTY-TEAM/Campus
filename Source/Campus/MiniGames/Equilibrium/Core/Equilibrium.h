@@ -13,20 +13,20 @@ namespace EquilibriumGame
 	{
 	public:
 		Equilibrium();
-		Equilibrium(const vector<vector<int>>& Cups);
-		bool TryAddWeight(const vector<int>& Array, int Weight) const;
-		bool TryRemoveWeight(const vector<int>& Array) const;
+		Equilibrium(const vector<vector<int32_t>>& Cups);
+		bool TryAddWeight(const vector<int32_t>& Array, int32_t Weight) const;
+		bool TryRemoveWeight(const vector<int32_t>& Array) const;
 
 		ENodeRotationState GetRootState() const;
-		void CheckState() const;
+		void CheckState(vector<ENodeRotationState>& NodeRotations) const;
 
-		bool IsValidByCups(const vector<vector<int>>& Cups) const;
+		bool IsValidByCups(const vector<vector<int32_t>>& Cups) const;
 		bool EveryCupHasWeight() const;
 		bool EveryNodeIsStable() const;
 	private:
 		EquilNode* Root;
 
-		void CheckState(EquilNode* Root) const;
+		void CheckState(EquilNode* Root, vector<ENodeRotationState>& NodeRotations) const;
 		bool EveryCupHasWeight(EquilNode* Root) const;
 		bool EveryNodeIsStable(EquilNode* Root) const;
 	};

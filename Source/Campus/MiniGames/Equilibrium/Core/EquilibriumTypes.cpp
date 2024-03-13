@@ -9,10 +9,10 @@ EquilNode::EquilNode()
 	RotationState = NRS_Stable;
 }
 
-int EquilNode::CalculateMass()
+int32_t EquilNode::CalculateMass()
 {
-	const int LeftMass = GetLeftChild() ? GetLeftChild()->CalculateMass() : 0;
-	const int RightMass = GetRightChild() ? GetRightChild()->CalculateMass() : 0;
+	const int32_t LeftMass = GetLeftChild() ? GetLeftChild()->CalculateMass() : 0;
+	const int32_t RightMass = GetRightChild() ? GetRightChild()->CalculateMass() : 0;
 
 	if (LeftMass == RightMass)
 	{
@@ -52,7 +52,7 @@ EquilCup::EquilCup()
 	Weight = 0;
 }
 
-void EquilCup::AddWeight(int NewWeight)
+void EquilCup::AddWeight(int32_t NewWeight)
 {
 	this->Weight = NewWeight;
 }
@@ -62,7 +62,7 @@ void EquilCup::RemoveWeight()
 	this->Weight = 0;
 }
 
-int EquilCup::CalculateMass()
+int32_t EquilCup::CalculateMass()
 {
 	return GetMass();
 }

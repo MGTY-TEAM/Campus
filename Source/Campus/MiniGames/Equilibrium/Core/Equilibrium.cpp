@@ -1,6 +1,8 @@
 #include "Equilibrium.h"
 #include "EquilibriumUtils.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogEquilModel, All, All);
+
 using namespace EquilibriumGame;
 
 // ------------------  Equilibrium  ------------------
@@ -13,14 +15,14 @@ Equilibrium::Equilibrium()
 	// Root->SetRightChild(new EquilCup);
 }
 
-Equilibrium::Equilibrium(const vector<vector<int>>& Cups)
+Equilibrium::Equilibrium(const vector<vector<int32_t>>& Cups)
 {
 	Root = new EquilNode;
 
 	for (auto CupCoordinates : Cups)
 	{
 		EquilNode* Current = Root;
-		while ((CupCoordinates.size() - 1) != 0)
+		while (CupCoordinates.size() - 1 != 0)
 		{
 			if (CupCoordinates[0] == 0)
 			{
@@ -45,10 +47,12 @@ Equilibrium::Equilibrium(const vector<vector<int>>& Cups)
 		if (CupCoordinates[0] == 0)
 		{
 			Current->SetLeftChild(new EquilCup);
+			UE_LOG(LogEquilModel, Warning, TEXT("Cup in Model Was Create"));
 		}
 		else if (CupCoordinates[0] == 1)
 		{
 			Current->SetRightChild(new EquilCup);
+			UE_LOG(LogEquilModel, Warning, TEXT("Cup in Model Was Create"));
 		}
 		CupCoordinates.clear();
 	}
@@ -59,15 +63,45 @@ ENodeRotationState Equilibrium::GetRootState() const
 	return Root->GetRotationState();
 }
 
-void Equilibrium::CheckState() const
+void Equilibrium::CheckState(vector<ENodeRotationState>& NodeRotations) const
 {
 	if (Root)
 	{
-		CheckState(Root);
+		CheckState(Root, NodeRotations);
 	}
 }
 
-bool Equilibrium::IsValidByCups(const vector<vector<int>>& Cups) const
+void Equilibrium::CheckState(EquilNode* RootEquilNode, vector<ENodeRotationState>& NodeRotations) const
+{
+	switch (RootEquilNode->GetRotationState())
+	{
+	case NRS_Stable:
+		NodeRotations.push_back(NRS_Stable);
+		// cout << "Stable" << endl;
+		break;
+	case NRS_Left:
+		NodeRotations.push_back(NRS_Left);
+		// cout << "Left" << endl;
+		break;
+	case NRS_Right:
+		NodeRotations.push_back(NRS_Right);
+		// cout << "Right" << endl;
+		break;
+	default:
+		break;
+	}
+
+	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetLeftChild()))
+	{
+		CheckState(NodeRoot, NodeRotations);
+	}
+	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetRightChild()))
+	{
+		CheckState(NodeRoot, NodeRotations);
+	}
+}
+
+bool Equilibrium::IsValidByCups(const vector<vector<int32_t>>& Cups) const
 {
 	for (const auto Cup : Cups)
 	{
@@ -79,47 +113,26 @@ bool Equilibrium::IsValidByCups(const vector<vector<int>>& Cups) const
 	return true;
 }
 
-void Equilibrium::CheckState(EquilNode* RootEquilNode) const
+bool Equilibrium::TryAddWeight(const vector<int32_t>& Array, int32_t Weight) const
 {
-	switch (RootEquilNode->GetRotationState())
+	for (const auto Elem : Array)
 	{
-	case NRS_Stable:
-		cout << "Stable" << endl;
-		break;
-	case NRS_Left:
-		cout << "Left" << endl;
-		break;
-	case NRS_Right:
-		cout << "Right" << endl;
-		break;
-	default:
-		break;
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::FromInt(Elem));
 	}
-
-	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetLeftChild()))
-	{
-		CheckState(NodeRoot);
-	}
-	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetRightChild()))
-	{
-		CheckState(NodeRoot);
-	}
-}
-
-bool Equilibrium::TryAddWeight(const vector<int>& Array, int Weight) const
-{
 	EquilElement* NeededElement = EquilibriumUtils::GetNeededElement(Array, Root);
 
 	if (EquilCup* NeededCup = dynamic_cast<EquilCup*>(NeededElement))
 	{
 		NeededCup->AddWeight(Weight);
 		Root->CalculateMass();
+		UE_LOG(LogEquilModel, Warning, TEXT("Weight in Model Was Added"));
 		return true;
 	}
+	UE_LOG(LogEquilModel, Warning, TEXT("Weight in Model Wasn't Added"));
 	return false;
 }
 
-bool Equilibrium::TryRemoveWeight(const vector<int>& Array) const
+bool Equilibrium::TryRemoveWeight(const vector<int32_t>& Array) const
 {
 	EquilElement* NeededElement = EquilibriumUtils::GetNeededElement(Array, Root);
 
@@ -127,8 +140,10 @@ bool Equilibrium::TryRemoveWeight(const vector<int>& Array) const
 	{
 		NeededCup->RemoveWeight();
 		Root->CalculateMass();
+		UE_LOG(LogEquilModel, Warning, TEXT("Weight in Model Was Removed"));
 		return true;
 	}
+	UE_LOG(LogEquilModel, Warning, TEXT("Weight in Model Wasn't Removed"));
 	return false;
 }
 

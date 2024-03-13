@@ -13,12 +13,12 @@ namespace EquilibriumTypes
 	{
 	protected:
 		virtual ~EquilElement();
-		int Weight = 0;
+		int32_t Weight = 0;
 		
 	public:
-		virtual int CalculateMass() = 0;
+		virtual int32_t CalculateMass() = 0;
 
-		int GetMass() const { return Weight; }
+		int32_t GetMass() const { return Weight; }
 
 		EquilElement* GetLeftChild() const { return LeftChild; }
 		EquilElement* GetRightChild() const { return RightChild; }
@@ -36,7 +36,7 @@ namespace EquilibriumTypes
 	public:
 		EquilNode();
 		
-		virtual int CalculateMass() override;
+		virtual int32_t CalculateMass() override;
 
 		ENodeRotationState GetRotationState() const { return RotationState; }
 
@@ -48,8 +48,8 @@ namespace EquilibriumTypes
 	{
 	public:
 		EquilCup();
-		void AddWeight(int NewWeight);
+		void AddWeight(int32_t NewWeight);
 		void RemoveWeight();
-		virtual int CalculateMass() override;
+		virtual int32_t CalculateMass() override;
 	};
 }
