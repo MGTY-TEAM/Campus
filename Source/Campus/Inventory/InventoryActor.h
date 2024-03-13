@@ -8,6 +8,7 @@
 #include "GameFramework/Actor.h"
 #include "InventoryActor.generated.h"
 
+class UPickupSocketComponent;
 DEFINE_LOG_CATEGORY_STATIC(LogInventoryActor, Log, Log);
 
 UCLASS()
@@ -29,7 +30,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Item Image")
 	UTexture2D* ItemImageTexture;
-
+	
+	UPickupSocketComponent* CurrentSocket;
 
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -37,8 +39,13 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	
 	UTexture2D* GetRenderTargetTexture() const;
+
+	virtual void PickupProcess();
+	virtual void DropProcess();
+
+	virtual void SetAttachSocket(UPickupSocketComponent* socket);
 	
-	void DetachFromParent();
+	
 	//POOL FUNCTIONS
 	void SetEnabled(bool bEnabled);
     bool IsEnabled() const;

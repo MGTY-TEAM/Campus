@@ -81,7 +81,7 @@ void ABaseCharacter::OnPickupInventoryActor(AInventoryActor* InventoryActor)
 		{
 			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, false);
 
-			InventoryActor->DetachFromParent();
+			InventoryActor->PickupProcess();
 			InventoryActor->AttachToComponent(InventoryActorSlotComponent, AttachmentRules);
 			
 			InventoryComponent->AddItemAndSelect(InventoryActor);
@@ -144,12 +144,12 @@ void ABaseCharacter::Drop()
 {
 	if (InventoryComponent)
 	{
-		AInventoryActor* RemovedActor =  InventoryComponent->RemoveSelectedItem();
-		
-		if (RemovedActor)
+		if (InteractionComponent->CanPlaceActorOnHitLocation())
 		{
-			RemovedActor->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
-			InteractionComponent->TryPlaceActorOnHitLocation(RemovedActor);
+			if (AInventoryActor* RemovedActor = InventoryComponent->RemoveSelectedItem())
+			{
+				InteractionComponent->TryPlaceActorOnHitLocation(RemovedActor);
+			}
 		}
 	}
 }

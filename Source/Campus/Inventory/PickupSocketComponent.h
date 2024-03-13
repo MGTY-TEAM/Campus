@@ -6,6 +6,8 @@
 #include "Components/BoxComponent.h"
 #include "PickupSocketComponent.generated.h"
 
+DECLARE_DYNAMIC_DELEGATE_OneParam(FOnPickupPlaced, AInventoryActor*, InventoryActor);
+DECLARE_DYNAMIC_DELEGATE(FOnPickupRemoved);
 
 class AInventoryActor;
 
@@ -18,13 +20,13 @@ public:
 	UPickupSocketComponent();
 
 	UFUNCTION(BlueprintCallable, Category="Attachment")
-	bool CanPlacePickup(AActor* Actor);
+	bool CanPlacePickup(AInventoryActor* Actor);
 	
 	UFUNCTION(BlueprintCallable, Category="Attachment")
-	bool PlacePickup(AActor* Actor);
+	bool PlacePickup(AInventoryActor* Actor);
 
 	UFUNCTION(BlueprintCallable, Category="Attachment")
-	bool RemovePickup(AActor* Actor);
+	bool RemovePickup();
 
 	UFUNCTION(BlueprintCallable, Category="Attachment")
 	void SetAttachmentScene(USceneComponent* SceneComponent);
@@ -32,8 +34,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasPickup();
 
+	UPROPERTY(EditDefaultsOnly, Category="Attachment")
+	FName AttachComponentName;
+	
 	AActor* GetPickup();
 	
+	FOnPickupPlaced OnPickupPlaced;
+	
+	FOnPickupRemoved OnPickupRemoved;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -45,7 +53,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category= "Socket Settings")
 	USceneComponent* AttachmentScene;
+
+
+	USceneComponent* GetAttachComponent() const;
+
+	void PlacePickupOnComponent(USceneComponent* Component);
 	
 private:
-	AActor* PlacedActor;
+	AInventoryActor* PlacedActor;
 };

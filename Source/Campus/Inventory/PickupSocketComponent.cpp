@@ -5,6 +5,7 @@
 
 #include "InventoryActor.h"
 #include "Engine/StaticMeshSocket.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 
 UPickupSocketComponent::UPickupSocketComponent()
@@ -19,6 +20,33 @@ void UPickupSocketComponent::OnRegister()
 	Super::OnRegister();
 	
 	SetNotifyRigidBodyCollision(true);
+
+	SetCollisionProfileName("BlockAll");
+}
+
+USceneComponent* UPickupSocketComponent::GetAttachComponent() const
+{
+	const AActor* Owner = GetOwner();
+
+	TArray<UActorComponent*> Components;
+	Owner->GetComponents(Components);
+
+	for (auto Component : Components)
+	{
+		if (Component->GetName() == AttachComponentName)
+		{
+			if (USceneComponent* SceneComponent = Cast<USceneComponent>(Component))
+			{
+				return SceneComponent;
+			}
+		}
+	}
+	return nullptr;
+}
+
+void UPickupSocketComponent::PlacePickupOnComponent(USceneComponent* Component)
+{
+	
 }
 
 void UPickupSocketComponent::SetAttachmentScene(USceneComponent* SceneComponent)
@@ -36,7 +64,7 @@ AActor* UPickupSocketComponent::GetPickup()
 	return PlacedActor;
 }
 
-bool UPickupSocketComponent::CanPlacePickup(AActor* Actor)
+bool UPickupSocketComponent::CanPlacePickup(AInventoryActor* Actor)
 {
 	if (PlacedActor)
 		return false;
@@ -54,30 +82,58 @@ bool UPickupSocketComponent::CanPlacePickup(AActor* Actor)
 	return false;
 }
 
-bool UPickupSocketComponent::PlacePickup(AActor* Actor)
+bool UPickupSocketComponent::PlacePickup(AInventoryActor* Actor)
 {
 	if (CanPlacePickup(Actor))
 	{
 		PlacedActor = Actor;
+		
 		PlacedActor->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
-		/*if (AttachmentScene)
+		if (USceneComponent* AttachComponent = GetAttachComponent())
 		{
-			PlacedActor->AttachToComponent(AttachmentScene, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		}*/
+	
+			PlacedActor->SetActorLocation(AttachComponent->GetComponentLocation());
+			
+			PlacedActor->AttachToActor(GetOwner(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			
+			PlacedActor->AttachToComponent(AttachComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			PlacedActor->SetAttachSocket(this);
+			
+			if (OnPickupPlaced.IsBound())
+			{
+				OnPickupPlaced.Execute(PlacedActor);
+			}
+			
+			return true;
+		}
 		PlacedActor->SetActorLocation(GetComponentLocation());
-		PlacedActor->AttachToActor(GetOwner(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-		/*PlacedActor->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);*/
+		PlacedActor->AttachToActor(GetOwner(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		PlacedActor->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+		PlacedActor->SetAttachSocket(this);
+
+		if (OnPickupPlaced.IsBound())
+		{
+			OnPickupPlaced.Execute(PlacedActor);
+		}
+
 		return true;
+		
 	}
 	return false;
 }
 
-bool UPickupSocketComponent::RemovePickup(AActor* Actor)
+bool UPickupSocketComponent::RemovePickup()
 {
 	if (PlacedActor)
 	{
 		PlacedActor->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
 		PlacedActor = nullptr;
+
+		if (OnPickupRemoved.IsBound())
+		{
+			OnPickupRemoved.Execute();
+		}
 		return true;
 	}
 	return false;

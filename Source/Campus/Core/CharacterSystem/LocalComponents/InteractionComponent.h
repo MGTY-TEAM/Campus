@@ -58,8 +58,8 @@ public:
 	
 	void TryInteract();
 
-	void TryPlaceActorOnHitLocation(AActor* ToPlaceActor);
-	
+	bool TryPlaceActorOnHitLocation(AInventoryActor* ToPlaceActor);
+	bool CanPlaceActorOnHitLocation();
 	UFUNCTION()
 	void SetHoldStatus(bool bStatus);
 	

@@ -60,10 +60,10 @@ void UInteractionComponent::TryInteract()
 	}
 }
 
-void UInteractionComponent::TryPlaceActorOnHitLocation(AActor* ToPlaceActor)
+bool UInteractionComponent::TryPlaceActorOnHitLocation(AInventoryActor* ToPlaceActor)
 {
 	if (!ToPlaceActor)
-		return;
+		return false;
 	
 	FHitResult HitResult = GetHitResultByTraceChannel();
 	
@@ -75,14 +75,35 @@ void UInteractionComponent::TryPlaceActorOnHitLocation(AActor* ToPlaceActor)
 			if (PickupSocketComponent->PlacePickup(ToPlaceActor))
 			{
 				UE_LOG(LogInteractionComponent, Warning, TEXT("TryPlaceActorOnHitLocation: Placed"));
+				return true;
+			}
+		}
+		ToPlaceActor->DropProcess();
+		ToPlaceActor->SetActorLocation(HitResult.Location);
+		return true;
+	}
+	return false;
+}
+
+bool UInteractionComponent::CanPlaceActorOnHitLocation()
+{
+	FHitResult HitResult = GetHitResultByTraceChannel();
+	
+	if (HitResult.IsValidBlockingHit())
+	{
+		if (UPickupSocketComponent* PickupSocketComponent  = Cast<UPickupSocketComponent>(HitResult.GetComponent()))
+		{
+			if (!PickupSocketComponent->HasPickup())
+			{
+				return true;
 			}
 		}
 		else
 		{
-			ToPlaceActor->SetActorLocation(HitResult.Location);
+			return true;
 		}
-		
 	}
+	return false;
 }
 
 

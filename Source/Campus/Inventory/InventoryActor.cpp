@@ -19,35 +19,12 @@ AInventoryActor::AInventoryActor()
 
 	StaticMeshComponent->SetupAttachment(RootComponent);
 
+	CurrentSocket = nullptr;
 }
 
 void AInventoryActor::BeginPlay()
 {
 	Super::BeginPlay();
-}
-
-void AInventoryActor::DetachFromParent()
-{
-	if (!GetOwner())
-		return;
-	TArray<UActorComponent*> Components = GetOwner()->K2_GetComponentsByClass(UPickupSocketComponent::StaticClass());
-
-	for (UActorComponent* Component : Components)
-	{
-		if (Component)
-		{
-			if (UPickupSocketComponent* PickupSocketComponent =  Cast<UPickupSocketComponent>(Component))
-			{
-				if (PickupSocketComponent)
-				{
-					if (this == PickupSocketComponent->GetPickup())
-					{
-						PickupSocketComponent->RemovePickup(this);
-					}
-				}
-			}
-		}
-	}
 }
 
 void AInventoryActor::Tick(float DeltaTime)
@@ -67,6 +44,30 @@ UTexture2D* AInventoryActor::GetRenderTargetTexture() const
 		return ItemImageTexture;
 	}
 	return nullptr;
+}
+
+void AInventoryActor::PickupProcess()
+{
+	SetEnabled(true);
+	
+	if (CurrentSocket)
+	{
+		CurrentSocket->RemovePickup();
+	}
+	DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+}
+
+void AInventoryActor::DropProcess()
+{
+	SetEnabled(true);
+	
+	CurrentSocket = nullptr;
+	DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+}
+
+void AInventoryActor::SetAttachSocket(UPickupSocketComponent* socket)
+{
+	CurrentSocket = socket;
 }
 
 //POOL FUNCTIONS
