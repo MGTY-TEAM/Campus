@@ -8,20 +8,16 @@ AEquilNode::AEquilNode()
 {
 	RotationState = EquilibriumTypes::ENodeRotationState::NRS_Stable;
 
+	PositionAroundRotation = CreateDefaultSubobject<USceneComponent>("PositionAroundRotation");
+	PositionAroundRotation->SetupAttachment(GetRootComponent());
+	
 	PositionLeft = CreateDefaultSubobject<USceneComponent>("PositionLeft");
-	PositionLeft->SetupAttachment(GetRootComponent());
+	PositionLeft->SetupAttachment(PositionAroundRotation);
 	
 	PositionRight = CreateDefaultSubobject<USceneComponent>("PositionRight");
-	PositionRight->SetupAttachment(GetRootComponent());
+	PositionRight->SetupAttachment(PositionAroundRotation);
 	
-	StaticMeshComponent->SetupAttachment(GetRootComponent());
-}
-
-void AEquilNode::CalculateRotation(FRotator DesiredRotationToSet, FVector DesiredLocationLeftToSet, FVector DesiredLocationRightToSet)
-{
-	DesiredRotation = DesiredRotationToSet;
-	DesiredLocationLeft = DesiredLocationLeftToSet;
-	DesiredLocationRight = DesiredLocationRightToSet;
+	StaticMeshComponent->SetupAttachment(PositionAroundRotation);
 }
 
 void AEquilNode::SetNewState(const EquilibriumTypes::ENodeRotationState& NewRotationState)
@@ -33,9 +29,10 @@ void AEquilNode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	DesiredRotation = StaticMeshComponent->GetRelativeRotation();
-	DesiredLocationLeft = GetLeftChild()->GetActorLocation();
-	DesiredLocationRight = GetRightChild()->GetActorLocation();
+	DesiredRotation = PositionAroundRotation->GetComponentRotation();
+	NormalRotation = PositionAroundRotation->GetComponentRotation();
+	NormalLeftRotation = GetPositionLeft()->GetComponentRotation();
+	NormalRightRotation = GetPositionRight()->GetComponentRotation();
 }
 
 void AEquilNode::Tick(float DeltaTime)
@@ -45,24 +42,27 @@ void AEquilNode::Tick(float DeltaTime)
 	CalculateRotation(DeltaTime);
 }
 
+void AEquilNode::CalculateRotation(FRotator DesiredRotationToSet)
+{
+	DesiredRotation = DesiredRotationToSet;
+}
+
 void AEquilNode::CalculateRotation(float DeltaTime) const
 {
-	const FRotator InitialRotation = StaticMeshComponent->GetRelativeRotation();
-	const FVector InitialLocationLeft = GetLeftChild()->GetActorLocation();
-	const FVector InitialLocationRight = GetRightChild()->GetActorLocation();
+	const FRotator InitialRotation = PositionAroundRotation->GetComponentRotation();
+	const FRotator InitialLeftRotation = GetPositionLeft()->GetComponentRotation();
+	const FRotator InitialRightRotation = GetPositionRight()->GetComponentRotation();
 	
 	if (InitialRotation != DesiredRotation)
 	{
-		const FRotator NewRotation = FMath::RInterpTo(InitialRotation, DesiredRotation, DeltaTime, InterpSpeedTime);
-		StaticMeshComponent->SetRelativeRotation(NewRotation);
-	}
-	
-	if (InitialLocationLeft != DesiredLocationLeft && InitialLocationRight != DesiredLocationRight && GetLeftChild() && GetRightChild())
-	{
-		const FVector NewLocationLeftChild = FMath::VInterpTo(InitialLocationLeft, GetPositionLeft()->GetComponentLocation() + DesiredLocationLeft, DeltaTime, InterpSpeedTime);
-		GetLeftChild()->SetActorLocation(NewLocationLeftChild);
-		const FVector NewLocationRightChild = FMath::VInterpTo(InitialLocationRight, GetPositionRight()->GetComponentLocation() + DesiredLocationRight, DeltaTime, InterpSpeedTime);
-		GetRightChild()->SetActorLocation(NewLocationRightChild);
+		const FRotator NewRotation = FMath::RInterpTo(InitialRotation, NormalRotation + DesiredRotation, DeltaTime, InterpSpeedTime);
+		PositionAroundRotation->SetWorldRotation(NewRotation);
+		
+		const FRotator NewLeftRotation = FMath::RInterpTo(InitialLeftRotation, NormalLeftRotation, DeltaTime, InterpSpeedTime);
+		GetPositionLeft()->SetWorldRotation(NewLeftRotation);
+
+		const FRotator NewRightRotation = FMath::RInterpTo(InitialRightRotation, NormalRightRotation, DeltaTime, InterpSpeedTime);
+		GetPositionRight()->SetWorldRotation(NewRightRotation);
 	}
 }
 

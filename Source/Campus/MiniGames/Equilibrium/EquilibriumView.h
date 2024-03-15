@@ -35,6 +35,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Equilibrium")
 	UEquilibriumViewModelComponent* EquilibriumViewModelComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Equilibrium")
+	TObjectPtr<class UStaticMesh> StaticMeshForRootNode;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Equilibrium")
+	TObjectPtr<class UStaticMesh> StaticMeshForRootArm;
 public:	
 	virtual void Tick(float DeltaTime) override;
 	

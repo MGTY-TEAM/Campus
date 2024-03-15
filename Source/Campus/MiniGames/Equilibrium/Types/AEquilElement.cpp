@@ -10,27 +10,24 @@ AAEquilElement::AAEquilElement()
 	
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
 	StaticMeshComponent->SetupAttachment(GetRootComponent());
-}
 
-void AAEquilElement::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-void AAEquilElement::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	StaticMeshComponentForArm = CreateDefaultSubobject<UStaticMeshComponent>("Arm");
+	StaticMeshComponentForArm->SetupAttachment(GetRootComponent());
 }
 
 void AAEquilElement::SetLeftChild(AAEquilElement* Element)
 {
-	LeftChild = Element;
+	if (Element)
+	{
+		LeftChild = Element;
+	}
 }
 
 void AAEquilElement::SetRightChild(AAEquilElement* Element)
 {
-	RightChild = Element;
+	if (Element)
+	{
+		RightChild = Element;
+	}
 }
 

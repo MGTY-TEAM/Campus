@@ -14,7 +14,7 @@ class CAMPUS_API AEquilNode : public AAEquilElement
 public:
 	AEquilNode();
 
-	virtual void CalculateRotation(FRotator DesiredRotationToSet, FVector DesiredLocationLeftToSet, FVector DesiredLocationRightToSet);
+	virtual void CalculateRotation(FRotator DesiredRotationToSet);
 	EquilibriumTypes::ENodeRotationState GetRotationState() const { return RotationState; }
 
 	USceneComponent* GetPositionLeft() const { return PositionLeft; }
@@ -30,6 +30,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	USceneComponent* PositionRight;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	USceneComponent* PositionAroundRotation;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = 0.f, ClampMAx = 10.f))
 	float InterpSpeedTime = 5.f;
 
@@ -39,8 +42,9 @@ public:
 private:
 	EquilibriumTypes::ENodeRotationState RotationState;
 	FRotator DesiredRotation = FRotator();
-	FVector DesiredLocationLeft = FVector();
-	FVector DesiredLocationRight = FVector();
+	FRotator NormalRotation = FRotator();
+	FRotator NormalLeftRotation = FRotator();
+	FRotator NormalRightRotation = FRotator();
 	
 	void CalculateRotation(float DeltaTime) const;
 };

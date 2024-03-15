@@ -60,6 +60,22 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 
 		AddInstanceComponent(ChildActorComponent);
 		Root = Cast<AEquilNode>(ChildActorComponent->GetChildActor());
+
+		if (Root->GetStaticMesh())
+		{
+			Root->GetStaticMesh()->SetStaticMesh(StaticMeshForRootNode);
+			if (const AEquilNode* RootNode = Cast<AEquilNode>(Root))
+			{
+				RootNode->GetPositionLeft()->SetRelativeLocation(RootNode->GetPositionLeft()->GetRelativeLocation() + FVector(-6.75f, 0.f, 0.f));
+				RootNode->GetPositionRight()->SetRelativeLocation(RootNode->GetPositionRight()->GetRelativeLocation() + FVector(6.75f, 0.f, 0.f));
+			}
+		}
+		
+		if (Root->GetStaticMeshForArm())
+		{
+			Root->GetStaticMeshForArm()->SetStaticMesh(StaticMeshForRootArm);
+			Root->GetStaticMeshForArm()->SetRelativeLocation(Root->GetStaticMeshForArm()->GetRelativeLocation() + FVector(0.f, 0.f, -30.25f));
+		}
 	}
 	
 	for (auto CupCoo : CupsCoo)
@@ -88,14 +104,11 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 
 						ChildActorComponent->SetChildActorClass(SpawnableNodeClass);
 
-						// ChildActorComponent->AttachToComponent(Current->GetPositionRight(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-						// ChildActorComponent->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 						ChildActorComponent->GetChildActor()->AttachToComponent(Current->GetPositionRight(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 						UE_LOG(LogTemp, Warning, TEXT("Added Node For EquilibriumViewInstance"));
 
 						ChildActorComponent->SetRelativeLocation(Current->GetPositionRight()->GetComponentLocation());
-						// ChildActorComponent->SetRelativeRotation(FRotator(0, 90, 0));
 						ChildActorComponent->GetChildActor()->SetActorRelativeRotation(FRotator(0, 90, 0));
 
 						AddInstanceComponent(ChildActorComponent);
@@ -113,15 +126,12 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 						ChildActorComponent->RegisterComponent();
 
 						ChildActorComponent->SetChildActorClass(SpawnableNodeClass);
-
-						// ChildActorComponent->AttachToComponent(Current->GetPositionLeft(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-						// ChildActorComponent->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+						
 						ChildActorComponent->GetChildActor()->AttachToComponent(Current->GetPositionLeft(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 						UE_LOG(LogTemp, Warning, TEXT("Added Node For EquilibriumViewInstance"));
 
 						ChildActorComponent->SetRelativeLocation(Current->GetPositionLeft()->GetComponentLocation());
-						// ChildActorComponent->SetRelativeRotation(FRotator(0, -90, 0));
 						ChildActorComponent->GetChildActor()->SetActorRelativeRotation(FRotator(0, 90, 0));
 
 						AddInstanceComponent(ChildActorComponent);
@@ -140,8 +150,6 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 
 				ChildActorComponent->SetChildActorClass(SpawnableCupClass);
 				
-				// ChildActorComponent->AttachToComponent(Current->GetPositionRight(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-				// ChildActorComponent->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 				ChildActorComponent->GetChildActor()->AttachToComponent(Current->GetPositionRight(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 				UE_LOG(LogTemp, Warning, TEXT("Added Cup For EquilibriumViewInstance"));
@@ -155,7 +163,6 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 					Current->SetRightChild(Cup);
 					Cup->SetCoordinates(FStringToVectorOfInt(CupCoo));
 					Cups.Add(Cup);
-					// AddCupToArrayOfCups(Cup);
 				}
 			}
 		}
@@ -167,8 +174,6 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 
 				ChildActorComponent->SetChildActorClass(SpawnableCupClass);
 				
-				// ChildActorComponent->AttachToComponent(Current->GetPositionLeft(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-				// ChildActorComponent->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 				ChildActorComponent->GetChildActor()->AttachToComponent(Current->GetPositionLeft(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 				UE_LOG(LogTemp, Warning, TEXT("Added Cup For EquilibriumViewInstance"));
@@ -182,12 +187,10 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 					Current->SetLeftChild(Cup);
 					Cups.Add(Cup);
 					Cup->SetCoordinates(FStringToVectorOfInt(CupCoo));
-					// AddCupToArrayOfCups(Cup);
 				}
 			}
 		}
 	}
-	// EquilibriumViewModelComponent->CreateModelInstance(TArrayOfFStringToVectorOfVectorOfInt(CupsCoo));
 }
 
 void AEquilibriumView::BeginPlay()
@@ -200,8 +203,6 @@ void AEquilibriumView::BeginPlay()
 		EquilibriumViewModelComponent->OnChangeStates.AddUObject(this, &AEquilibriumView::CalculateRotation);
 	}
 	SetCoordinatesForCups();
-	
-	// CreateEquilibriumByCups();
 }
 
 void AEquilibriumView::Tick(float DeltaTime)
@@ -296,13 +297,13 @@ void AEquilibriumView::CalculateRotation(AAEquilElement* RootElem)
 		switch(RootNode->GetRotationState())
 		{
 		case EquilibriumTypes::NRS_Left:
-			RootNode->CalculateRotation(FRotator(30.f, 0, 0), FVector(0, 0, -50.f), FVector(0, 0, 50.f));
+			RootNode->CalculateRotation(FRotator(30.f, 0, 0));
 			break;
 		case EquilibriumTypes::NRS_Right:
-			RootNode->CalculateRotation(FRotator(-30.f, 0, 0), FVector(0, 0, 50.f), FVector(0, 0, -50.f));
+			RootNode->CalculateRotation(FRotator(-30.f, 0, 0));
 			break;
 		case EquilibriumTypes::NRS_Stable:
-			RootNode->CalculateRotation(FRotator(0.f, 0, 0), FVector(0, 0, 0), FVector(0, 0, 0));
+			RootNode->CalculateRotation(FRotator(0.f, 0, 0));
 			break;
 		default:
 			break;

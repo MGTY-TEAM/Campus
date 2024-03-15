@@ -1,21 +1,38 @@
 
 #include "Campus/MiniGames/Equilibrium/Types/EquilCup.h"
+#include "Campus/Inventory/PickupSocketComponent.h"
+#include "Campus/MiniGames/Equilibrium/Types/EquilCargo.h"
 
 AEquilCup::AEquilCup()
 {
 	StaticMeshComponent->SetupAttachment(GetRootComponent());
+
+	PickupSocketComponent = CreateDefaultSubobject<UPickupSocketComponent>("PickupSocketComponent");
+	PickupSocketComponent->SetupAttachment(GetRootComponent());
+	PickupSocketComponent->SetAttachmentScene(GetRootComponent());
 }
 
-void AEquilCup::AddWeight(int32_t NewWeight)
+void AEquilCup::BeginPlay()
 {
-	if (GetCoordinates().empty()) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No Coordinates");
-	Weight = NewWeight;
-	OnAttemptToAddWeight.Broadcast(GetCoordinates(), NewWeight);
+	Super::BeginPlay();
+
+	if (PickupSocketComponent)
+	{
+		PickupSocketComponent->OnPickupPlaced.BindDynamic(this, &AEquilCup::AddWeight);
+		PickupSocketComponent->OnPickupRemoved.BindDynamic(this, &AEquilCup::RemoveWeight);
+	}
+}
+
+void AEquilCup::AddWeight(AInventoryActor* InventoryActor)
+{
+	if (const AEquilCargo* Cargo = Cast<AEquilCargo>(InventoryActor))
+	{
+		OnAttemptToAddWeight.Broadcast(GetCoordinates(), Cargo->GetWeight());
+	}
 }
 
 void AEquilCup::RemoveWeight()
 {
-	Weight = 0;
 	OnAttemptToRemoveWeight.Broadcast(GetCoordinates());
 }
 

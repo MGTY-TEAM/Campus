@@ -1,8 +1,6 @@
 #include "Equilibrium.h"
 #include "EquilibriumUtils.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogEquilModel, All, All);
-
 using namespace EquilibriumGame;
 
 // ------------------  Equilibrium  ------------------
@@ -47,15 +45,14 @@ Equilibrium::Equilibrium(const vector<vector<int32_t>>& Cups)
 		if (CupCoordinates[0] == 0)
 		{
 			Current->SetLeftChild(new EquilCup);
-			UE_LOG(LogEquilModel, Warning, TEXT("Cup in Model Was Create"));
 		}
 		else if (CupCoordinates[0] == 1)
 		{
 			Current->SetRightChild(new EquilCup);
-			UE_LOG(LogEquilModel, Warning, TEXT("Cup in Model Was Create"));
 		}
 		CupCoordinates.clear();
 	}
+	// Root->CalculateMass();
 }
 
 ENodeRotationState Equilibrium::GetRootState() const
@@ -125,10 +122,8 @@ bool Equilibrium::TryAddWeight(const vector<int32_t>& Array, int32_t Weight) con
 	{
 		NeededCup->AddWeight(Weight);
 		Root->CalculateMass();
-		UE_LOG(LogEquilModel, Warning, TEXT("Weight in Model Was Added"));
 		return true;
 	}
-	UE_LOG(LogEquilModel, Warning, TEXT("Weight in Model Wasn't Added"));
 	return false;
 }
 
@@ -140,10 +135,8 @@ bool Equilibrium::TryRemoveWeight(const vector<int32_t>& Array) const
 	{
 		NeededCup->RemoveWeight();
 		Root->CalculateMass();
-		UE_LOG(LogEquilModel, Warning, TEXT("Weight in Model Was Removed"));
 		return true;
 	}
-	UE_LOG(LogEquilModel, Warning, TEXT("Weight in Model Wasn't Removed"));
 	return false;
 }
 

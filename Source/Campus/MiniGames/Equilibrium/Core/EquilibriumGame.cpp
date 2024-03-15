@@ -1,7 +1,5 @@
 #include "EquilibriumGame.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogEquilGameModel, All, All);
-
 EquilibriumGame::GameEquilibrium::GameEquilibrium()
 {
 	EquilibriumInstance = Equilibrium();
@@ -33,10 +31,8 @@ bool EquilibriumGame::GameEquilibrium::TryAddWeight(const vector<int32_t>& Array
 {
 	if (GameState == GS_Playing)
 	{
-		UE_LOG(LogEquilGameModel, Warning, TEXT("EquilGameModel Trying To Add Weight"));
 		return EquilibriumInstance.TryAddWeight(Array, Weight);
 	}
-	UE_LOG(LogEquilGameModel, Warning, TEXT("EquilGameModel Cann't Add Weight"));
 	return false;
 }
 
@@ -44,10 +40,8 @@ bool EquilibriumGame::GameEquilibrium::TryRemoveWeight(const vector<int32_t>& Ar
 {
 	if (GameState == GS_Playing)
 	{
-		UE_LOG(LogEquilGameModel, Warning, TEXT("EquilGameModel Trying To Remove Weight"));
 		return EquilibriumInstance.TryRemoveWeight(Array);
 	}
-	UE_LOG(LogEquilGameModel, Warning, TEXT("EquilGameModel Cann't Remove Weight"));
 	return false;
 }
 

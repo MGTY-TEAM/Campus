@@ -8,6 +8,8 @@
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnAttemptToAddWeight, const std::vector<int32_t>&, int32_t);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnAttemptToRemoveWeight, const std::vector<int32_t>&);
 
+class UPickupSocketComponent;
+
 UCLASS()
 class CAMPUS_API AEquilCup : public AAEquilElement
 {
@@ -16,7 +18,9 @@ class CAMPUS_API AEquilCup : public AAEquilElement
 public:
 	AEquilCup();
 
-	void AddWeight(int32_t NewWeight);
+	UFUNCTION()
+	void AddWeight(AInventoryActor* InventoryActor);
+	UFUNCTION()
 	void RemoveWeight();
 
 	std::vector<int32_t> GetCoordinates() const { return Coordinates; }
@@ -25,8 +29,10 @@ public:
 	FOnAttemptToAddWeight OnAttemptToAddWeight;
 	FOnAttemptToRemoveWeight OnAttemptToRemoveWeight;
 protected:
-	//UPROPERTY(EditDefaultsOnly, Category = "Equilibrium")
-	//USceneComponent* SceneComponent;
+	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Equilibrium")
+	UPickupSocketComponent* PickupSocketComponent;
 private:
 	std::vector<int32_t> Coordinates;
 };

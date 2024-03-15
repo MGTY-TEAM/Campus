@@ -26,8 +26,6 @@ void UEquilibriumViewModelComponent::BeginPlay()
 			Cup->OnAttemptToRemoveWeight.AddUObject(this, &UEquilibriumViewModelComponent::OnTryRemoveWeight);
 		}
 	}
-
-	
 }
 
 void UEquilibriumViewModelComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
