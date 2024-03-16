@@ -3,6 +3,8 @@
 #include "Campus/MiniGames/Equilibrium/EquilibriumView.h"
 #include "Types/EquilCup.h"
 
+using namespace EquilibriumGame;
+
 UEquilibriumViewModelComponent::UEquilibriumViewModelComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -26,6 +28,7 @@ void UEquilibriumViewModelComponent::CreateModelInstance(const vector<vector<int
 {
 	EquilibriumGameModelInstance = EquilibriumGame::GameEquilibrium(Cups);
 	EquilibriumGameModelInstance.TryStartGame();
+	EquilibriumGameModelInstance.OnGameEnded += METHOD_HANDLER(*this, UEquilibriumViewModelComponent::OnGameEnded);
 }
 
 void UEquilibriumViewModelComponent::OnTryAddWeight(const vector<int>& Array, int Weight)
@@ -46,5 +49,10 @@ void UEquilibriumViewModelComponent::OnTryRemoveWeight(const vector<int>& Array)
 	{
 		OnChangeStates.Broadcast(EquilibriumGameModelInstance.CheckState());
 	}
+}
+
+void UEquilibriumViewModelComponent::OnGameEnded()
+{
+	UE_LOG(LogTemp, Warning, TEXT("GAME ENDED"));
 }
 

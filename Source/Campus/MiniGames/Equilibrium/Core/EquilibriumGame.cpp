@@ -52,6 +52,7 @@ bool EquilibriumGame::GameEquilibrium::CheckWin()
 		// EquilibriumInstance.CheckState();
 		if (EquilibriumInstance.EveryNodeIsStable() && EquilibriumInstance.EveryCupHasWeight())
 		{
+			OnGameEnded();
 			GameState = GS_Executed;
 			return true;
 		}

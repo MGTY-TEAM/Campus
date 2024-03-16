@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "Equilibrium.h"
+#include "EventSystem/EquilibBaseEventClasses.h"
 
 using namespace std;
 
@@ -21,6 +22,8 @@ namespace EquilibriumGame
 		GameEquilibrium();
 		GameEquilibrium(const vector<vector<int32_t>>& Cups);
 
+		TEvent<> OnGameEnded;
+		
 		bool TryStartGame();
 
 		bool EquilibriumIsValidByCups(const vector<vector<int32_t>>& Cups) const;

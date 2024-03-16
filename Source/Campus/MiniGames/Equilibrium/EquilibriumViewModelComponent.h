@@ -29,9 +29,12 @@ public:
 	void CreateModelInstance(const vector<vector<int32_t>>& Cups);
 	
 	FOnChangeStates OnChangeStates;
+
 private:
 	EquilibriumGame::GameEquilibrium EquilibriumGameModelInstance;
 	
 	void OnTryAddWeight(const vector<int>& Array, int Weight);
 	void OnTryRemoveWeight(const vector<int>& Array) const;
+
+	void OnGameEnded();
 };
