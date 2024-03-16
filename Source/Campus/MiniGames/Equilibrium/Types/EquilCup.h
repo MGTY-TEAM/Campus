@@ -18,8 +18,15 @@ class CAMPUS_API AEquilCup : public AAEquilElement
 public:
 	AEquilCup();
 
+	/**
+	 * Adds weight to the cup.
+	 * @param InventoryActor 
+	 */
 	UFUNCTION()
 	void AddWeight(AInventoryActor* InventoryActor);
+	/**
+	 * Remove weight from the cup.
+	 */
 	UFUNCTION()
 	void RemoveWeight();
 

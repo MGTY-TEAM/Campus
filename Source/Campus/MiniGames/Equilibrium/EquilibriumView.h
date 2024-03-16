@@ -20,7 +20,6 @@ class CAMPUS_API AEquilibriumView : public AActor
 public:	
 	AEquilibriumView();
 
-	virtual void OnConstruction(const FTransform& Transform) override;
 protected:
 	virtual void BeginPlay() override;
 	
@@ -42,8 +41,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Equilibrium")
 	TObjectPtr<class UStaticMesh> StaticMeshForRootArm;
 public:	
-	virtual void Tick(float DeltaTime) override;
-	
 	TArray<AEquilCup*> GetAllCups() const { return Cups; }
 
 	void CreateEquilibrium(const TArray<FString>& CupsCoor);
@@ -52,18 +49,24 @@ private:
 
 	UPROPERTY()
 	AAEquilElement* Root;
-	
+
+	/**
+	 * Coordinates of Cups.
+	 */
 	UPROPERTY()
 	TArray<FString> CupsCoo{};
 
+	/**
+	 * Pointers to all cups.
+	 */
 	UPROPERTY()
 	TArray<AEquilCup*> Cups{};
-
-	std::vector<int32_t> FStringToVectorOfInt(const FString& StringToInt) const;
-	std::vector<std::vector<int32_t>> TArrayOfFStringToVectorOfVectorOfInt(const TArray<FString>& TArrayToConv) const;
 
 	void SetCoordinatesForCups();
 	void SetNewStates(AEquilNode* RootNode, std::vector<EquilibriumTypes::ENodeRotationState>& RotationStates);
 	void CalculateRotation(const std::vector<EquilibriumTypes::ENodeRotationState>& RotationStates);
 	void CalculateRotation(AAEquilElement* RootElem);
+	
+	UChildActorComponent* CreateNode(AEquilNode* Current, const AAEquilElement* Child, USceneComponent* Position);
+	UChildActorComponent* CreateCup(USceneComponent* Position, const FString& CupCoo);
 };

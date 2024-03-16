@@ -22,6 +22,8 @@ Equilibrium::Equilibrium(const vector<vector<int32_t>>& Cups)
 		EquilNode* Current = Root;
 		while (CupCoordinates.size() - 1 != 0)
 		{
+			if (!Current) return;
+			
 			if (CupCoordinates[0] == 0)
 			{
 				if (Current->GetLeftChild() == nullptr)
@@ -112,10 +114,6 @@ bool Equilibrium::IsValidByCups(const vector<vector<int32_t>>& Cups) const
 
 bool Equilibrium::TryAddWeight(const vector<int32_t>& Array, int32_t Weight) const
 {
-	for (const auto Elem : Array)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::FromInt(Elem));
-	}
 	EquilElement* NeededElement = EquilibriumUtils::GetNeededElement(Array, Root);
 
 	if (EquilCup* NeededCup = dynamic_cast<EquilCup*>(NeededElement))

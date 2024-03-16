@@ -4,13 +4,9 @@
 AEquilibriumGameView::AEquilibriumGameView()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	bRunConstructionScriptOnDrag = false;
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
 	SetRootComponent(SceneComponent);
-
-	// ChildActorComponent = CreateDefaultSubobject<UChildActorComponent>("ChildActorComponent");
-	// ChildActorComponent->SetupAttachment(GetRootComponent());
 }
 
 void AEquilibriumGameView::OnConstruction(const FTransform& Transform)
@@ -39,7 +35,6 @@ void AEquilibriumGameView::OnConstruction(const FTransform& Transform)
 		ChildActorComponent->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 		AddInstanceComponent(ChildActorComponent);
-		UE_LOG(LogTemp, Warning, TEXT("Added EquilibriumViewInstance"));
 	}
 }
 

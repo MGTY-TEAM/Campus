@@ -9,7 +9,6 @@ AEquilCup::AEquilCup()
 
 	PickupSocketComponent = CreateDefaultSubobject<UPickupSocketComponent>("PickupSocketComponent");
 	PickupSocketComponent->SetupAttachment(GetRootComponent());
-	PickupSocketComponent->SetAttachmentScene(GetRootComponent());
 }
 
 void AEquilCup::BeginPlay()

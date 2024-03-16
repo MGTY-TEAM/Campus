@@ -1,7 +1,8 @@
+
 #include "Campus/MiniGames/Equilibrium/EquilibriumView.h"
+#include "Campus/Libraries/CampusUtils.h"
 #include "Campus/MiniGames/Equilibrium/Types/EquilCup.h"
 #include "Campus/MiniGames/Equilibrium/Types/EquilNode.h"
-#include "Campus/MiniGames/Equilibrium/EquilibriumGameView.h"
 #include "Campus/MiniGames/Equilibrium/EquilibriumViewModelComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogEquilView, All, All);
@@ -9,7 +10,6 @@ DEFINE_LOG_CATEGORY_STATIC(LogEquilView, All, All);
 AEquilibriumView::AEquilibriumView()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	bRunConstructionScriptOnDrag = false;
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
 	SetRootComponent(SceneComponent);
@@ -17,15 +17,10 @@ AEquilibriumView::AEquilibriumView()
 	EquilibriumViewModelComponent = CreateDefaultSubobject<UEquilibriumViewModelComponent>("EquilibriumViewModel");
 }
 
-void AEquilibriumView::OnConstruction(const FTransform& Transform)
-{
-	Super::OnConstruction(Transform);
-
-	
-}
-
 void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 {
+	if (!SceneComponent) return;
+	
 	TArray<USceneComponent*> Components;
 	SceneComponent->GetChildrenComponents(true, Components);
 	for (const auto Component : Components)
@@ -43,20 +38,15 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 	if (CupsCoo.IsEmpty()) return;
 	for (auto CupCoo : CupsCoo)
 	{
-		if (CupCoo.IsEmpty()) return;
+		if (CupCoo.IsEmpty() || !CupCoo.IsNumeric() || !CampusUtils::IsBinaryNumber(CupCoo)) return;
 	}
 	
 	if (UChildActorComponent* ChildActorComponent = Cast<UChildActorComponent>(AddComponentByClass(UChildActorComponent::StaticClass(), true, FTransform(), false)))
 	{
 		ChildActorComponent->RegisterComponent();
-
 		ChildActorComponent->SetChildActorClass(SpawnableNodeClass);
-		
 		ChildActorComponent->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
-
-		UE_LOG(LogTemp, Warning, TEXT("Added Root For EquilibriumViewInstance"));
-
-		ChildActorComponent->SetRelativeLocation(SceneComponent->GetRelativeLocation());
+		ChildActorComponent->SetRelativeLocation(SceneComponent->GetComponentLocation());
 
 		AddInstanceComponent(ChildActorComponent);
 		Root = Cast<AEquilNode>(ChildActorComponent->GetChildActor());
@@ -64,6 +54,7 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 		if (Root->GetStaticMesh())
 		{
 			Root->GetStaticMesh()->SetStaticMesh(StaticMeshForRootNode);
+			Root->GetStaticMesh()->SetRelativeLocation(Root->GetStaticMesh()->GetRelativeLocation() - FVector(0.f, 0.f, 5.25f));
 			if (const AEquilNode* RootNode = Cast<AEquilNode>(Root))
 			{
 				RootNode->GetPositionLeft()->SetRelativeLocation(RootNode->GetPositionLeft()->GetRelativeLocation() + FVector(-6.75f, 0.f, 0.f));
@@ -74,7 +65,7 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 		if (Root->GetStaticMeshForArm())
 		{
 			Root->GetStaticMeshForArm()->SetStaticMesh(StaticMeshForRootArm);
-			Root->GetStaticMeshForArm()->SetRelativeLocation(Root->GetStaticMeshForArm()->GetRelativeLocation() + FVector(0.f, 0.f, -30.25f));
+			Root->GetStaticMeshForArm()->SetRelativeLocation(Root->GetStaticMeshForArm()->GetRelativeLocation()+ FVector(0.f, 0.f, -30.125f));
 		}
 	}
 	
@@ -82,61 +73,29 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 	{
 		if (CupCoo.IsEmpty()) continue;
 
-		std::vector<int32_t> CupCooInt = FStringToVectorOfInt(CupCoo);
 		int16 Index = 0;
 		const int16 Count = CupCoo.Len();
-		
-		UE_LOG(LogTemp, Warning, TEXT("foreach Cups"));
+
 		AEquilNode* Current = Cast<AEquilNode>(Root);
 		
 		for (const auto Place : CupCoo)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("foreach Cup"));
 			if (++Index == Count) continue;
+			if (!Current) return;
 			
 			if (FChar::ConvertCharDigitToInt(Place))
 			{
-				if (Current->GetRightChild() == nullptr)
+				if (const UChildActorComponent* ChildActorComponent = CreateNode(Current, Current->GetRightChild(), Current->GetPositionRight()))
 				{
-					if (UChildActorComponent* ChildActorComponent = Cast<UChildActorComponent>(AddComponentByClass(UChildActorComponent::StaticClass(), true, FTransform(), false)))
-					{
-						ChildActorComponent->RegisterComponent();
-
-						ChildActorComponent->SetChildActorClass(SpawnableNodeClass);
-
-						ChildActorComponent->GetChildActor()->AttachToComponent(Current->GetPositionRight(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-
-						UE_LOG(LogTemp, Warning, TEXT("Added Node For EquilibriumViewInstance"));
-
-						ChildActorComponent->SetRelativeLocation(Current->GetPositionRight()->GetComponentLocation());
-						ChildActorComponent->GetChildActor()->SetActorRelativeRotation(FRotator(0, 90, 0));
-
-						AddInstanceComponent(ChildActorComponent);
-						Current->SetRightChild(Cast<AEquilNode>(ChildActorComponent->GetChildActor()));
-					}
+					Current->SetRightChild(Cast<AEquilNode>(ChildActorComponent->GetChildActor()));
 				}
 				Current = Cast<AEquilNode>(Current->GetRightChild());
 			}
 			else
 			{
-				if (Current->GetLeftChild() == nullptr)
+				if (const UChildActorComponent* ChildActorComponent = CreateNode(Current, Current->GetLeftChild(), Current->GetPositionLeft()))
 				{
-					if (UChildActorComponent* ChildActorComponent = Cast<UChildActorComponent>(AddComponentByClass(UChildActorComponent::StaticClass(), true, FTransform(), false)))
-					{
-						ChildActorComponent->RegisterComponent();
-
-						ChildActorComponent->SetChildActorClass(SpawnableNodeClass);
-						
-						ChildActorComponent->GetChildActor()->AttachToComponent(Current->GetPositionLeft(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-
-						UE_LOG(LogTemp, Warning, TEXT("Added Node For EquilibriumViewInstance"));
-
-						ChildActorComponent->SetRelativeLocation(Current->GetPositionLeft()->GetComponentLocation());
-						ChildActorComponent->GetChildActor()->SetActorRelativeRotation(FRotator(0, 90, 0));
-
-						AddInstanceComponent(ChildActorComponent);
-						Current->SetLeftChild(Cast<AEquilNode>(ChildActorComponent->GetChildActor()));
-					}
+					Current->SetLeftChild(Cast<AEquilNode>(ChildActorComponent->GetChildActor()));
 				}
 				Current = Cast<AEquilNode>(Current->GetLeftChild());
 			}
@@ -144,50 +103,16 @@ void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 		
 		if (FChar::ConvertCharDigitToInt(CupCoo[CupCoo.Len() - 1]))
 		{
-			if (UChildActorComponent* ChildActorComponent = Cast<UChildActorComponent>(AddComponentByClass(UChildActorComponent::StaticClass(), true, FTransform(), false)))
+			if (const UChildActorComponent* ChildActorComponent = CreateCup(Current->GetPositionRight(), CupCoo))
 			{
-				ChildActorComponent->RegisterComponent();
-
-				ChildActorComponent->SetChildActorClass(SpawnableCupClass);
-				
-				ChildActorComponent->GetChildActor()->AttachToComponent(Current->GetPositionRight(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-
-				UE_LOG(LogTemp, Warning, TEXT("Added Cup For EquilibriumViewInstance"));
-
-				ChildActorComponent->SetRelativeLocation(Current->GetPositionRight()->GetComponentLocation());
-
-				AddInstanceComponent(ChildActorComponent);
-				
-				if (AEquilCup* Cup = Cast<AEquilCup>(ChildActorComponent->GetChildActor()))
-				{
-					Current->SetRightChild(Cup);
-					Cup->SetCoordinates(FStringToVectorOfInt(CupCoo));
-					Cups.Add(Cup);
-				}
+				Current->SetRightChild(Cast<AEquilCup>(ChildActorComponent->GetChildActor()));
 			}
 		}
 		else
 		{
-			if (UChildActorComponent* ChildActorComponent = Cast<UChildActorComponent>(AddComponentByClass(UChildActorComponent::StaticClass(), true, FTransform(), false)))
+			if (const UChildActorComponent* ChildActorComponent = CreateCup(Current->GetPositionLeft(), CupCoo))
 			{
-				ChildActorComponent->RegisterComponent();
-
-				ChildActorComponent->SetChildActorClass(SpawnableCupClass);
-				
-				ChildActorComponent->GetChildActor()->AttachToComponent(Current->GetPositionLeft(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-
-				UE_LOG(LogTemp, Warning, TEXT("Added Cup For EquilibriumViewInstance"));
-
-				ChildActorComponent->SetRelativeLocation(Current->GetPositionLeft()->GetComponentLocation());
-
-				AddInstanceComponent(ChildActorComponent);
-
-				if (AEquilCup* Cup = Cast<AEquilCup>(ChildActorComponent->GetChildActor()))
-				{
-					Current->SetLeftChild(Cup);
-					Cups.Add(Cup);
-					Cup->SetCoordinates(FStringToVectorOfInt(CupCoo));
-				}
+				Current->SetLeftChild(Cast<AEquilCup>(ChildActorComponent->GetChildActor()));
 			}
 		}
 	}
@@ -199,48 +124,18 @@ void AEquilibriumView::BeginPlay()
 
 	if (EquilibriumViewModelComponent)
 	{
-		EquilibriumViewModelComponent->CreateModelInstance(TArrayOfFStringToVectorOfVectorOfInt(CupsCoo));
+		EquilibriumViewModelComponent->CreateModelInstance(CampusUtils::TArrayOfFStringToVectorOfVectorOfInt(CupsCoo));
 		EquilibriumViewModelComponent->OnChangeStates.AddUObject(this, &AEquilibriumView::CalculateRotation);
 	}
 	SetCoordinatesForCups();
-}
-
-void AEquilibriumView::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 void AEquilibriumView::AddCupToArrayOfCups(AEquilCup* NewCup)
 {
 	if (NewCup)
 	{
-		UE_LOG(LogEquilView, Warning, TEXT("Cup Was Added To Array"));
 		Cups.Add(NewCup);
 	}
-}
-
-std::vector<int32_t> AEquilibriumView::FStringToVectorOfInt(const FString& StringToInt) const
-{
-	std::vector<int32_t> VectorInt;
-	
-	for (const auto CharToInt : StringToInt)
-	{
-		VectorInt.push_back(FChar::ConvertCharDigitToInt(CharToInt));
-	}
-	
-	return VectorInt;
-}
-
-std::vector<std::vector<int32_t>> AEquilibriumView::TArrayOfFStringToVectorOfVectorOfInt(const TArray<FString>& TArrayToConv) const
-{
-	std::vector<std::vector<int32_t>> VectorOfVectorOfInt;
-
-	for (auto StringToConv : TArrayToConv)
-	{
-		VectorOfVectorOfInt.push_back(FStringToVectorOfInt(StringToConv));
-	}
-	
-	return VectorOfVectorOfInt;
 }
 
 void AEquilibriumView::SetCoordinatesForCups()
@@ -248,7 +143,7 @@ void AEquilibriumView::SetCoordinatesForCups()
 	int index = 0;
 	for (auto Cup : Cups)
 	{
-		Cup->SetCoordinates(FStringToVectorOfInt(CupsCoo[index++]));
+		Cup->SetCoordinates(CampusUtils::FStringToVectorOfInt(CupsCoo[index++]));
 	}
 }
 
@@ -276,8 +171,6 @@ void AEquilibriumView::CalculateRotation(const std::vector<EquilibriumTypes::ENo
 		std::vector<EquilibriumTypes::ENodeRotationState> VectorToDelete = RotationStates;
 		SetNewStates(Cast<AEquilNode>(Root), VectorToDelete);
 		CalculateRotation(Root);
-		// Root->CalculateRotation();
-		UE_LOG(LogEquilView, Warning, TEXT("View Was Recalculate"));
 	}
 }
 
@@ -309,4 +202,46 @@ void AEquilibriumView::CalculateRotation(AAEquilElement* RootElem)
 			break;
 		}
 	}
+}
+
+UChildActorComponent* AEquilibriumView::CreateNode(AEquilNode* Current, const AAEquilElement* Child, USceneComponent* Position)
+{
+	if (Child == nullptr)
+	{
+		if (UChildActorComponent* ChildActorComponent = Cast<UChildActorComponent>(AddComponentByClass(UChildActorComponent::StaticClass(), true, FTransform(), false)))
+		{
+			ChildActorComponent->RegisterComponent();
+			ChildActorComponent->SetChildActorClass(SpawnableNodeClass);
+			ChildActorComponent->GetChildActor()->AttachToComponent(Position, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			ChildActorComponent->SetRelativeLocation(Position->GetComponentLocation());
+			ChildActorComponent->GetChildActor()->SetActorRelativeRotation(FRotator(0, 90, 0));
+
+			AddInstanceComponent(ChildActorComponent);
+			return ChildActorComponent;
+		}
+		return nullptr;
+	}
+	return nullptr;
+}
+
+UChildActorComponent* AEquilibriumView::CreateCup(USceneComponent* Position, const FString& CupCoo)
+{
+	if (UChildActorComponent* ChildActorComponent = Cast<UChildActorComponent>(AddComponentByClass(UChildActorComponent::StaticClass(), true, FTransform(), false)))
+	{
+		ChildActorComponent->RegisterComponent();
+		ChildActorComponent->SetChildActorClass(SpawnableCupClass);
+		ChildActorComponent->GetChildActor()->AttachToComponent(Position, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		ChildActorComponent->SetRelativeLocation(Position->GetComponentLocation());
+
+		AddInstanceComponent(ChildActorComponent);
+				
+		if (AEquilCup* Cup = Cast<AEquilCup>(ChildActorComponent->GetChildActor()))
+		{
+			Cup->SetCoordinates(CampusUtils::FStringToVectorOfInt(CupCoo));
+			Cups.Add(Cup);
+			return ChildActorComponent;
+		}
+		return nullptr;
+	}
+	return nullptr;
 }

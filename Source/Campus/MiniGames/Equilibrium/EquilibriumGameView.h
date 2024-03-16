@@ -18,7 +18,6 @@ public:
 	
 	virtual void OnConstruction(const FTransform& Transform) override;
 
-	// TArray<FString>& GetCups() { return Cups; }
 protected:
 	virtual void BeginPlay() override;
 
@@ -31,8 +30,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Equilibrium")
 	USceneComponent* SceneComponent;
 
-	// UPROPERTY(EditDefaultsOnly, Category = "Equilibrium")
-	// UChildActorComponent* ChildActorComponent;
 public:	
 	virtual void Tick(float DeltaTime) override;
 

@@ -29,7 +29,7 @@ bool EquilibriumGame::GameEquilibrium::EquilibriumIsValidByCups(const vector<vec
 
 bool EquilibriumGame::GameEquilibrium::TryAddWeight(const vector<int32_t>& Array, int32_t Weight) const
 {
-	if (GameState == GS_Playing)
+	if (GameState == GS_Playing || GameState == GS_Executed)
 	{
 		return EquilibriumInstance.TryAddWeight(Array, Weight);
 	}
@@ -38,7 +38,7 @@ bool EquilibriumGame::GameEquilibrium::TryAddWeight(const vector<int32_t>& Array
 
 bool EquilibriumGame::GameEquilibrium::TryRemoveWeight(const vector<int32_t>& Array) const
 {
-	if (GameState == GS_Playing)
+	if (GameState == GS_Playing || GameState == GS_Executed)
 	{
 		return EquilibriumInstance.TryRemoveWeight(Array);
 	}
@@ -52,7 +52,7 @@ bool EquilibriumGame::GameEquilibrium::CheckWin()
 		// EquilibriumInstance.CheckState();
 		if (EquilibriumInstance.EveryNodeIsStable() && EquilibriumInstance.EveryCupHasWeight())
 		{
-			GameState = GS_UnPlaying;
+			GameState = GS_Executed;
 			return true;
 		}
 		return false;

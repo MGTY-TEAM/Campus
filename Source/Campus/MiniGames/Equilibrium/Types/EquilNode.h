@@ -14,6 +14,10 @@ class CAMPUS_API AEquilNode : public AAEquilElement
 public:
 	AEquilNode();
 
+	/**
+	 * Calls for some node and sets her and her children new desired rotation.
+	 * @param DesiredRotationToSet Desired Rotation.
+	 */
 	virtual void CalculateRotation(FRotator DesiredRotationToSet);
 	EquilibriumTypes::ENodeRotationState GetRotationState() const { return RotationState; }
 
@@ -45,6 +49,6 @@ private:
 	FRotator NormalRotation = FRotator();
 	FRotator NormalLeftRotation = FRotator();
 	FRotator NormalRightRotation = FRotator();
-	
+
 	void CalculateRotation(float DeltaTime) const;
 };

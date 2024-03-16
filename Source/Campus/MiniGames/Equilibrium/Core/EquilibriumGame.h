@@ -11,7 +11,8 @@ namespace EquilibriumGame
 	{
 		GS_UnPlaying = 0,
 		GS_Playing = 1,
-		GS_NotStart = 2
+		GS_Executed = 2,
+		GS_NotStart = 3
 	};
 
 	class GameEquilibrium

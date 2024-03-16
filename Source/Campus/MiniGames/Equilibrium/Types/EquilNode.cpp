@@ -29,10 +29,16 @@ void AEquilNode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	DesiredRotation = PositionAroundRotation->GetComponentRotation();
-	NormalRotation = PositionAroundRotation->GetComponentRotation();
-	NormalLeftRotation = GetPositionLeft()->GetComponentRotation();
-	NormalRightRotation = GetPositionRight()->GetComponentRotation();
+	if (PositionAroundRotation)
+	{
+		DesiredRotation = PositionAroundRotation->GetComponentRotation();
+		NormalRotation = PositionAroundRotation->GetComponentRotation();
+	}
+	if (GetPositionLeft() && GetPositionRight())
+	{
+		NormalLeftRotation = GetPositionLeft()->GetComponentRotation();
+		NormalRightRotation = GetPositionRight()->GetComponentRotation();
+	}
 }
 
 void AEquilNode::Tick(float DeltaTime)
@@ -49,6 +55,8 @@ void AEquilNode::CalculateRotation(FRotator DesiredRotationToSet)
 
 void AEquilNode::CalculateRotation(float DeltaTime) const
 {
+	if (!PositionAroundRotation || !GetPositionLeft() || !GetPositionRight()) return;
+	
 	const FRotator InitialRotation = PositionAroundRotation->GetComponentRotation();
 	const FRotator InitialLeftRotation = GetPositionLeft()->GetComponentRotation();
 	const FRotator InitialRightRotation = GetPositionRight()->GetComponentRotation();
