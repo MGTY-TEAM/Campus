@@ -79,10 +79,8 @@ void ABaseCharacter::OnPickupInventoryActor(AInventoryActor* InventoryActor)
 	{
 		if (InventoryComponent && InventoryActorSlotComponent)
 		{
-			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, false);
-
 			InventoryActor->PickupProcess();
-			InventoryActor->AttachToComponent(InventoryActorSlotComponent, AttachmentRules);
+			InventoryActor->AttachToComponent(InventoryActorSlotComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			
 			InventoryComponent->AddItemAndSelect(InventoryActor);
 		}

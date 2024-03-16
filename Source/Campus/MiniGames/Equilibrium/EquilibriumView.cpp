@@ -297,10 +297,10 @@ void AEquilibriumView::CalculateRotation(AAEquilElement* RootElem)
 		switch(RootNode->GetRotationState())
 		{
 		case EquilibriumTypes::NRS_Left:
-			RootNode->CalculateRotation(FRotator(30.f, 0, 0));
+			RootNode->CalculateRotation(FRotator(15.f, 0, 0));
 			break;
 		case EquilibriumTypes::NRS_Right:
-			RootNode->CalculateRotation(FRotator(-30.f, 0, 0));
+			RootNode->CalculateRotation(FRotator(-15.f, 0, 0));
 			break;
 		case EquilibriumTypes::NRS_Stable:
 			RootNode->CalculateRotation(FRotator(0.f, 0, 0));

@@ -58,7 +58,8 @@ protected:
 	USceneComponent* GetAttachComponent() const;
 
 	void PlacePickupOnComponent(USceneComponent* Component);
-	
+
+	void SetCanPlacePickup(bool bCanPlacePickup);
 private:
 	AInventoryActor* PlacedActor;
 };

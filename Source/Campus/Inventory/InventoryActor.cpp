@@ -54,7 +54,7 @@ void AInventoryActor::PickupProcess()
 	{
 		CurrentSocket->RemovePickup();
 	}
-	DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 }
 
 void AInventoryActor::DropProcess()
@@ -62,7 +62,7 @@ void AInventoryActor::DropProcess()
 	SetEnabled(true);
 	
 	CurrentSocket = nullptr;
-	DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 }
 
 void AInventoryActor::SetAttachSocket(UPickupSocketComponent* socket)

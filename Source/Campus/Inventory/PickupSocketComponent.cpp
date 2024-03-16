@@ -49,6 +49,20 @@ void UPickupSocketComponent::PlacePickupOnComponent(USceneComponent* Component)
 	
 }
 
+void UPickupSocketComponent::SetCanPlacePickup(bool bCanPlacePickup)
+{
+	if (bCanPlacePickup)
+	{
+		SetNotifyRigidBodyCollision(true);
+		SetCollisionProfileName("BlockAll");
+	}
+	else
+	{
+		SetNotifyRigidBodyCollision(false);
+		SetCollisionProfileName("NoCollision");
+	}
+}
+
 void UPickupSocketComponent::SetAttachmentScene(USceneComponent* SceneComponent)
 {
 	AttachmentScene = SceneComponent;
@@ -103,7 +117,7 @@ bool UPickupSocketComponent::PlacePickup(AInventoryActor* Actor)
 			{
 				OnPickupPlaced.Execute(PlacedActor);
 			}
-			
+			SetCanPlacePickup(false);
 			return true;
 		}
 		PlacedActor->SetActorLocation(GetComponentLocation());
@@ -116,7 +130,7 @@ bool UPickupSocketComponent::PlacePickup(AInventoryActor* Actor)
 		{
 			OnPickupPlaced.Execute(PlacedActor);
 		}
-
+		SetCanPlacePickup(false);
 		return true;
 		
 	}
@@ -127,13 +141,15 @@ bool UPickupSocketComponent::RemovePickup()
 {
 	if (PlacedActor)
 	{
-		PlacedActor->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+		FDetachmentTransformRules DetachmentTransformRules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepRelative, EDetachmentRule::KeepRelative, false);
+		PlacedActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		PlacedActor = nullptr;
 
 		if (OnPickupRemoved.IsBound())
 		{
 			OnPickupRemoved.Execute();
 		}
+		SetCanPlacePickup(true);
 		return true;
 	}
 	return false;
