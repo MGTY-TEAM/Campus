@@ -30,11 +30,16 @@ public:
 	
 	FOnChangeStates OnChangeStates;
 
+	EquilibriumGame::TEvent<const vector<int32_t>&, int32_t> OnTryAddWeightInModel;
+	EquilibriumGame::TEvent<const vector<int32_t>&> OnTryRemoveWeightInModel;
 private:
-	EquilibriumGame::GameEquilibrium EquilibriumGameModelInstance;
+	EquilibriumGame::GameEquilibrium* EquilibriumGameModelInstance;
 	
-	void OnTryAddWeight(const vector<int>& Array, int Weight);
-	void OnTryRemoveWeight(const vector<int>& Array) const;
+	void OnTryAddWeight(const vector<int32_t>& Array, int32_t Weight);
+	void OnTryRemoveWeight(const vector<int32_t>& Array);
+
+	void OnAddedWeight();
+	void OnRemovedWeight();
 
 	void OnGameEnded();
 };

@@ -27,22 +27,26 @@ bool EquilibriumGame::GameEquilibrium::EquilibriumIsValidByCups(const vector<vec
 	return EquilibriumInstance.IsValidByCups(Cups);
 }
 
-bool EquilibriumGame::GameEquilibrium::TryAddWeight(const vector<int32_t>& Array, int32_t Weight) const
+void EquilibriumGame::GameEquilibrium::TryAddWeight(const vector<int32_t>& Array, int32_t Weight)
 {
 	if (GameState == GS_Playing || GameState == GS_Executed)
 	{
-		return EquilibriumInstance.TryAddWeight(Array, Weight);
+		if (EquilibriumInstance.TryAddWeight(Array, Weight))
+		{
+			OnAddedWeight();
+		}
 	}
-	return false;
 }
 
-bool EquilibriumGame::GameEquilibrium::TryRemoveWeight(const vector<int32_t>& Array) const
+void EquilibriumGame::GameEquilibrium::TryRemoveWeight(const vector<int32_t>& Array)
 {
 	if (GameState == GS_Playing || GameState == GS_Executed)
 	{
-		return EquilibriumInstance.TryRemoveWeight(Array);
+		if (EquilibriumInstance.TryRemoveWeight(Array))
+		{
+			OnRemovedWeight();
+		}
 	}
-	return false;
 }
 
 bool EquilibriumGame::GameEquilibrium::CheckWin()
@@ -61,11 +65,16 @@ bool EquilibriumGame::GameEquilibrium::CheckWin()
 	return false;
 }
 
-vector<ENodeRotationState> EquilibriumGame::GameEquilibrium::CheckState() const
+vector<ENodeRotationState> EquilibriumGame::GameEquilibrium::CheckState()
 {
 	vector<ENodeRotationState> NodeRotations;
 
 	EquilibriumInstance.CheckState(NodeRotations);
+
+	if (GameState == GS_Playing)
+	{
+		CheckWin();
+	}
 	
 	return NodeRotations;
 }

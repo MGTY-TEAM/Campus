@@ -7,6 +7,10 @@ namespace EquilibriumGame
 	public:
 		virtual void call(TParams... params) = 0;
 
+		virtual ~AbstractEventHandler()
+		{
+			
+		}
 	protected:
 		AbstractEventHandler()
 		{

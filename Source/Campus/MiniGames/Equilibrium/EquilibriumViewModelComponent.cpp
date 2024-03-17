@@ -8,6 +8,7 @@ using namespace EquilibriumGame;
 UEquilibriumViewModelComponent::UEquilibriumViewModelComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+	EquilibriumGameModelInstance = nullptr;
 }
 
 void UEquilibriumViewModelComponent::BeginPlay()
@@ -26,33 +27,39 @@ void UEquilibriumViewModelComponent::BeginPlay()
 
 void UEquilibriumViewModelComponent::CreateModelInstance(const vector<vector<int32_t>>& Cups)
 {
-	EquilibriumGameModelInstance = EquilibriumGame::GameEquilibrium(Cups);
-	EquilibriumGameModelInstance.TryStartGame();
-	EquilibriumGameModelInstance.OnGameEnded += METHOD_HANDLER(*this, UEquilibriumViewModelComponent::OnGameEnded);
+	EquilibriumGameModelInstance = new GameEquilibrium(Cups);
+	EquilibriumGameModelInstance->TryStartGame();
+	EquilibriumGameModelInstance->OnGameEnded += METHOD_HANDLER(*this, UEquilibriumViewModelComponent::OnGameEnded);
+	EquilibriumGameModelInstance->OnAddedWeight += METHOD_HANDLER(*this, UEquilibriumViewModelComponent::OnAddedWeight);
+	EquilibriumGameModelInstance->OnRemovedWeight += METHOD_HANDLER(*this, UEquilibriumViewModelComponent::OnRemovedWeight);
+
+	OnTryAddWeightInModel += METHOD_HANDLER(*EquilibriumGameModelInstance, GameEquilibrium::TryAddWeight);
+	OnTryRemoveWeightInModel += METHOD_HANDLER(*EquilibriumGameModelInstance, GameEquilibrium::TryRemoveWeight);
 }
 
-void UEquilibriumViewModelComponent::OnTryAddWeight(const vector<int>& Array, int Weight)
+void UEquilibriumViewModelComponent::OnTryAddWeight(const vector<int32_t>& Array, int32_t Weight)
 {
-	if (EquilibriumGameModelInstance.TryAddWeight(Array, Weight))
-	{
-		OnChangeStates.Broadcast(EquilibriumGameModelInstance.CheckState());
-		if (EquilibriumGameModelInstance.CheckWin())
-		{
-			ExecuteMiniGameCompleted.Broadcast();
-		}
-	}
+	OnTryAddWeightInModel(Array, Weight);
 }
 
-void UEquilibriumViewModelComponent::OnTryRemoveWeight(const vector<int>& Array) const
+void UEquilibriumViewModelComponent::OnTryRemoveWeight(const vector<int32_t>& Array)
 {
-	if (EquilibriumGameModelInstance.TryRemoveWeight(Array))
-	{
-		OnChangeStates.Broadcast(EquilibriumGameModelInstance.CheckState());
-	}
+	OnTryRemoveWeightInModel(Array);
 }
 
-void UEquilibriumViewModelComponent::OnGameEnded()
+void UEquilibriumViewModelComponent::OnAddedWeight()
 {
-	UE_LOG(LogTemp, Warning, TEXT("GAME ENDED"));
+	OnChangeStates.Broadcast(EquilibriumGameModelInstance->CheckState());
+}
+
+void UEquilibriumViewModelComponent::OnRemovedWeight() 
+{
+	OnChangeStates.Broadcast(EquilibriumGameModelInstance->CheckState());
+}
+
+void UEquilibriumViewModelComponent::OnGameEnded() 
+{
+	ExecuteMiniGameCompleted.Broadcast();
+	UE_LOG(LogTemp, Log, TEXT("EQUILIBRIUM GAME ENDED"));
 }
 
