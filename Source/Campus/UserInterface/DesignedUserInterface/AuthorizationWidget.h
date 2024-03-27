@@ -21,8 +21,6 @@ protected:
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	class UTextBlock* TextIncorrect;
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* TextRegistration;
-	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextForgotPassword;
 	
 	UPROPERTY(meta = (BindWidget))
@@ -30,7 +28,6 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* TextBoxPassword;
 	
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	class UButton* ButtonAuthorization;
-	
 };
