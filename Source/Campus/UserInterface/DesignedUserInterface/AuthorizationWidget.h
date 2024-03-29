@@ -16,9 +16,14 @@ class CAMPUS_API UAuthorizationWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+	virtual void NativeOnInitialized() override;
+
+	UFUNCTION()
+	void OnRegistrationFormButtonCLick();
+
 protected:
 	
-	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
+	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* TextIncorrect;
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextForgotPassword;
@@ -28,6 +33,8 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* TextBoxPassword;
 	
-	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
+	UPROPERTY(meta = (BindWidget))
 	class UButton* ButtonAuthorization;
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
+	UButton* ButtonRegistrationForm;
 };
