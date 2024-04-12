@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿// Fill out your copyright notice in the Description page of Project Se
 #include "InventoryActor.h"
 
 #include "ComponentUtils.h"
@@ -54,7 +53,7 @@ void AInventoryActor::PickupProcess()
 	{
 		CurrentSocket->RemovePickup();
 	}
-	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
 }
 
 void AInventoryActor::DropProcess()
@@ -62,7 +61,7 @@ void AInventoryActor::DropProcess()
 	SetEnabled(true);
 	
 	CurrentSocket = nullptr;
-	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
 }
 
 void AInventoryActor::SetAttachSocket(UPickupSocketComponent* socket)

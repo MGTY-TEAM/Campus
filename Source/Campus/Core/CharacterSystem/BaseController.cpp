@@ -18,12 +18,14 @@ void ABaseController::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetInputMode(FInputModeGameAndUI());
-	SetShowMouseCursor(true);
+	SetInputMode(FInputModeGameOnly());
+	
 	M_ChatUserComponent->SetUserID("DefaultCharacterName");
+	
 #ifdef BASE_CONTROLLER_DEBUG
 	UE_LOG(LogBaseController, Log, TEXT("Try to register"));
 #endif
+	
 	UChatManager::Get()->RegisterUser("DefaultCharacterName", M_ChatUserComponent);
 
 	if (MyHUD)
@@ -39,7 +41,6 @@ void ABaseController::BeginPlay()
 #endif
 			M_BaseHUD->SetupChat(M_ChatUserComponent);
 		}
-		
 	}
 
 }
