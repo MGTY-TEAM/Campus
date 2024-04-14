@@ -17,6 +17,7 @@ class CAMPUS_API IInteractable
 	GENERATED_BODY()
 	
 public:
+	
 	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal){};
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
@@ -31,4 +32,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
 	void DragInteract(const FHitResult& HitResult);
 	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
+	bool CanInteract();	
 };

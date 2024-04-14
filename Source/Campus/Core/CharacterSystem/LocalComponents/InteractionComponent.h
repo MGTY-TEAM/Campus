@@ -62,7 +62,8 @@ public:
 	bool CanPlaceActorOnHitLocation();
 	UFUNCTION()
 	void SetHoldStatus(bool bStatus);
-	
+
+	bool bLookAtInteractionComponent = false;
 protected:
 	virtual void BeginPlay() override;
 

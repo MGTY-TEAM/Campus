@@ -139,12 +139,13 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                           FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	
 	FHitResult HitResult = GetHitResultByTraceChannel();
-
+	
 	if (!bInteractHold)
 	{
 		FocusActor = HitResult.GetActor();
+		bLookAtInteractionComponent = true;
 	}
 	else
 	{
@@ -155,19 +156,15 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 				if (FocusActor == HitResult.GetActor())
 				{
 					IInteractable::Execute_HoldInteract(FocusActor, HitResult);
-					InteractionState = EInteractionState::EIS_HOLD;
+					
 				}
 				else
 				{
 					IInteractable::Execute_DragInteract(FocusActor, HitResult);
-					InteractionState = EInteractionState::EIS_DRAG;
 				}
 			}
 		}
-		else
-		 {
-			InteractionState = EInteractionState::EIS_FREE; 
-		}
+		bLookAtInteractionComponent = false;
 	}
 }
 

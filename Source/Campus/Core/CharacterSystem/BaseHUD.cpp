@@ -1,11 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "BaseHUD.h"
 
 #include "Blueprint/UserWidget.h"
 #include "Campus/UserInterface/ChatBox.h"
-
+#include "Campus/UserInterface/Hud/Interaction/InteractionWidget.h"
 
 void ABaseHUD::DrawHUD()
 {
@@ -16,29 +14,23 @@ void ABaseHUD::BeginPlay()
 {
 	Super::BeginPlay();
 	AddCrosshair();
+	AddInteractionWidget();
 }
 
-void ABaseHUD::SwitchChatState()
+void ABaseHUD::AddInteractionWidget()
 {
-	/*if (ChatBox)
+	if(UInteractionWidget* NewInteractionWidget = CreateWidget<UInteractionWidget>(GetWorld(), InteractionWidgetClass))
 	{
-		if (!ChatBox->bIsFocusable)
-		{
-			ChatBox->RemoveFromParent();
-		}
-		else
-		{
-			ChatBox->AddToViewport();
-			
-			ChatBox->SetFocus();
-		}
-	}*/
+		InteractionWidget = NewInteractionWidget;
+
+		UE_LOG(BaseHUDLog, Warning, TEXT("InteractionWidget added to viewport"));
+		InteractionWidget->AddToViewport();
+	}
 }
 
-void ABaseHUD::SwitchEscapeMenuState()
-{
-}
+void ABaseHUD::SwitchChatState(){}
 
+void ABaseHUD::SwitchEscapeMenuState(){}
 
 void ABaseHUD::SetupChat(UChatUserComponent* ChatUserComponent)
 {
@@ -49,9 +41,7 @@ void ABaseHUD::SetupChat(UChatUserComponent* ChatUserComponent)
 		ChatBox->ConnectChatComponent(ChatUserComponent);
 		UE_LOG(LogTemp, Log, TEXT("%"), *ChatBox->GetName())
 	}
-
 }
-
 
 void ABaseHUD::AddCrosshair()
 {

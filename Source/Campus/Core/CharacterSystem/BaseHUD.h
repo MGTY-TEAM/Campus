@@ -7,6 +7,7 @@
 #include "GameFramework/HUD.h"
 #include "BaseHUD.generated.h"
 
+class UInteractionWidget;
 DECLARE_LOG_CATEGORY_CLASS(BaseHUDLog, Log, Log);
 
 class UChatBox;
@@ -29,6 +30,10 @@ protected:
 	TSubclassOf<UChatBox> ChatBoxClass;
 	UChatBox* ChatBox;
 
+	UPROPERTY(EditDefaultsOnly, Category= "UI Classes")
+	TSubclassOf<UInteractionWidget> InteractionWidgetClass;
+	UInteractionWidget* InteractionWidget;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "UI Classes")
 	TSubclassOf<UUserWidget> CrosshairClass;
 	UUserWidget* Crosshair;
@@ -37,10 +42,9 @@ protected:
 	TSubclassOf<UUserWidget> EscapeMenuClass;
 	UUserWidget* EscapeMenu;
 	
-	
 	virtual void DrawHUD() override;
 	virtual void AddCrosshair();
 	
 	virtual void BeginPlay() override;
-	
+	void AddInteractionWidget();
 };

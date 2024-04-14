@@ -62,10 +62,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UWidgetInteractionComponent* WidgetInteractionComponent;
 
-	/** Component for handling character interactions. */
-	UPROPERTY(EditDefaultsOnly, Category = "Components")
-	UInteractionComponent* InteractionComponent;
-
 	/** Component for handling character inventory. */
 	UPROPERTY(EditDefaultsOnly, Category = "Components")
 	UInventoryComponent* InventoryComponent;
@@ -99,5 +95,9 @@ public:
 	
 	/** Function to set up input bindings. */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	/** Component for handling character interactions. */
+   	UPROPERTY(EditDefaultsOnly, Category = "Components")
+   	UInteractionComponent* InteractionComponent;
 };
 
