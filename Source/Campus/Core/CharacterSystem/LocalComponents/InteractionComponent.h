@@ -66,6 +66,8 @@ public:
 	bool bLookAtInteractionComponent = false;
 protected:
 	virtual void BeginPlay() override;
+	void InteractionVisualProcess(AActor* InteractableActor);
+	void ChangeInteractableActorViewState(AActor* InteractableActor, bool State);
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,

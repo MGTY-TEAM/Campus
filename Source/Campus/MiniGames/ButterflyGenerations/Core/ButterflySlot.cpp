@@ -11,7 +11,7 @@ ButterflyGenerationsGame::ButterflySlot::ButterflySlot(Butterfly* butterfly): M_
 
 ButterflyGenerationsGame::ButterflySlot::~ButterflySlot()
 {
-	delete M_Butterfly;
+	delete M_Butterfly; // QUESTIONS 
 	delete M_FirstSlotParent;
 	delete M_SecondSlotParent;
 }
@@ -20,7 +20,7 @@ void ButterflyGenerationsGame::ButterflySlot::AddButterfly(Butterfly* butterfly)
 {
 	if (HasButterfly())
 	{
-		delete M_Butterfly;
+		delete M_Butterfly; // QUESTION
 	}
 	M_Butterfly = butterfly;
 }
@@ -47,13 +47,12 @@ bool ButterflyGenerationsGame::ButterflySlot::IsValidDependency() const
 		return false;
 
 
-	if (!M_FirstSlotParent || !M_SecondSlotParent)
+	if (!M_FirstSlotParent || !M_SecondSlotParent) // QUESTION
 		return true;
             
 	if (!M_FirstSlotParent->HasButterfly() || !M_SecondSlotParent->HasButterfly())
 		return true;
 
-           
 	return ButterflyProperties::IsValidPropertiesChildToParents(
 		M_Butterfly->GetProperties(), M_FirstSlotParent->GetButterfly()->GetProperties(),
 		M_SecondSlotParent->GetButterfly()->GetProperties());

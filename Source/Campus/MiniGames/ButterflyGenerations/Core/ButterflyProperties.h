@@ -9,6 +9,7 @@ namespace ButterflyGenerationsGame
 		
 		ButterflyProperties(const std::vector<uint8_t>& properties);
 		ButterflyProperties(const ButterflyProperties& BP);
+		
 		void ChangeProperties(const std::vector<uint8_t>& properties);
 
 		static bool IsValidPropertiesChildToParents(const ButterflyProperties& child,

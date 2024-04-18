@@ -3,6 +3,7 @@
 
 #include "ComponentUtils.h"
 #include "PickupSocketComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "Engine/TextureRenderTarget2D.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -13,11 +14,14 @@ AInventoryActor::AInventoryActor()
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+	
 	SetRootComponent(SceneComponent);
 
 	StaticMeshComponent->SetupAttachment(RootComponent);
+	AudioComponent->SetupAttachment(StaticMeshComponent);
 
+	AudioComponent->SetAutoActivate(false);
 	CurrentSocket = nullptr;
 }
 
@@ -54,6 +58,15 @@ void AInventoryActor::PickupProcess()
 		CurrentSocket->RemovePickup();
 	}
 	DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+	
+	if(AudioComponent)
+	{
+		if(PickupCue)
+		{
+			AudioComponent->SetSound(PickupCue);
+			AudioComponent->Play();
+		}
+	}
 }
 
 void AInventoryActor::DropProcess()
@@ -62,6 +75,15 @@ void AInventoryActor::DropProcess()
 	
 	CurrentSocket = nullptr;
 	DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+	
+	if(AudioComponent)
+	{
+		if(DropCue)
+		{
+			AudioComponent->SetSound(DropCue);
+			AudioComponent->Play();
+		}
+	}
 }
 
 void AInventoryActor::SetAttachSocket(UPickupSocketComponent* socket)

@@ -31,8 +31,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Item Image")
 	UTexture2D* ItemImageTexture;
 	
-	UPickupSocketComponent* CurrentSocket;
+	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	UAudioComponent* AudioComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category= "Audio")
+	USoundBase* DropCue;
+	UPROPERTY(EditDefaultsOnly, Category= "Audio")
+	USoundBase* PickupCue;
+
+	UPickupSocketComponent* CurrentSocket;
+	
 public:
 	virtual void Tick(float DeltaTime) override;
 

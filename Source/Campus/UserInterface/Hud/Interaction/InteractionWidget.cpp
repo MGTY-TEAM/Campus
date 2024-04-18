@@ -4,14 +4,17 @@
 #include "InteractionWidget.h"
 
 #include "Campus/Core/CharacterSystem/BaseCharacter.h"
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
 
 void UInteractionWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	ABaseCharacter* Character = Cast<ABaseCharacter>(GetOwningPlayerPawn());
-	InteractionComponent = Character->InteractionComponent;
-
+	if(ABaseCharacter* Character = Cast<ABaseCharacter>(GetOwningPlayerPawn()))
+	{
+		InteractionComponent = Character->InteractionComponent;
+	}
+	
 	SetVisibility(ESlateVisibility::Visible);
 }
 
@@ -21,7 +24,7 @@ void UInteractionWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTi
 	
 	if(InteractionComponent)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Interaction Component is valid")); 
-		SetVisibility(InteractionComponent->bLookAtInteractionComponent ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+		HintText->SetVisibility(InteractionComponent->bLookAtInteractionComponent ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+		KeyImage->SetVisibility(InteractionComponent->bLookAtInteractionComponent ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
 	}
 }

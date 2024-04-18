@@ -6,6 +6,7 @@
 #include "Campus/Inventory/InventoryActor.h"
 #include "Campus/Inventory/PickupSocketComponent.h"
 #include "Components/WidgetInteractionComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 UInteractionComponent::UInteractionComponent(): FocusActor(nullptr), OwnedCameraComponent(nullptr)
 {
@@ -72,6 +73,7 @@ bool UInteractionComponent::TryPlaceActorOnHitLocation(AInventoryActor* ToPlaceA
 		if (UPickupSocketComponent* PickupSocketComponent  = Cast<UPickupSocketComponent>(HitResult.GetComponent()))
 		{
 			UE_LOG(LogInteractionComponent, Warning, TEXT("TryPlaceActorOnHitLocation: PickupSocketComponentDetected"));
+			ToPlaceActor->DropProcess();
 			if (PickupSocketComponent->PlacePickup(ToPlaceActor))
 			{
 				UE_LOG(LogInteractionComponent, Warning, TEXT("TryPlaceActorOnHitLocation: Placed"));
@@ -141,11 +143,28 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
 	FHitResult HitResult = GetHitResultByTraceChannel();
-	
-	if (!bInteractHold)
+
+	// InteractionVisualProcess(HitResult.GetActor());
+
+	if(HitResult.GetActor() && FocusActor)
 	{
+		if(UKismetSystemLibrary::DoesImplementInterface(FocusActor,  UInteractable::StaticClass()))
+		{
+			if(HitResult.GetActor() != FocusActor)
+        	{
+        		ChangeInteractableActorViewState(FocusActor, false);
+        		bLookAtInteractionComponent = false;
+        	}
+        	else
+        	{
+        		ChangeInteractableActorViewState(FocusActor, true);
+        		bLookAtInteractionComponent = true;
+        	}
+		}
+	}
+	
+	if (!bInteractHold){
 		FocusActor = HitResult.GetActor();
-		bLookAtInteractionComponent = true;
 	}
 	else
 	{
@@ -156,7 +175,6 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 				if (FocusActor == HitResult.GetActor())
 				{
 					IInteractable::Execute_HoldInteract(FocusActor, HitResult);
-					
 				}
 				else
 				{
@@ -164,7 +182,35 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 				}
 			}
 		}
-		bLookAtInteractionComponent = false;
+		else
+		{
+			bLookAtInteractionComponent = false;
+		}
+	}
+}
+
+void UInteractionComponent::InteractionVisualProcess(AActor* InteractableActor)
+{
+	if(InteractableActor)
+	{
+		if(UKismetSystemLibrary::DoesImplementInterface(InteractableActor, UInteractable::StaticClass()))
+		{
+			UE_LOG(LogInteractionComponent, Warning, TEXT("Interactable detected"));
+			bLookAtInteractionComponent = true;
+			ChangeInteractableActorViewState(InteractableActor, true);
+		}
+		else
+		{
+			bLookAtInteractionComponent = false;
+		}
+	}
+}
+
+void UInteractionComponent::ChangeInteractableActorViewState(AActor* InteractableActor, bool State)
+{
+	if(UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(InteractableActor->GetComponentByClass(UStaticMeshComponent::StaticClass())))
+	{
+		StaticMeshComponent->SetRenderCustomDepth(State);	
 	}
 }
 
