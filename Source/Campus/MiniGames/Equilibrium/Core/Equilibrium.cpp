@@ -7,18 +7,25 @@ using namespace EquilibriumGame;
 
 Equilibrium::Equilibrium()
 {
-	Root = new EquilNode;
-
-	// Root->SetLeftChild(new EquilCup);
-	// Root->SetRightChild(new EquilCup);
+	Root = nullptr;
 }
+
+Equilibrium::Equilibrium(const Equilibrium& Other)
+{
+	Root = new EquilNode;
+	Scales = Other.Scales;
+	
+	CopyEquilibrium(Other);
+}
+
 
 Equilibrium::Equilibrium(const vector<vector<int32_t>>& Cups)
 {
 	Root = new EquilNode;
-
+	
 	for (auto CupCoordinates : Cups)
 	{
+		Scales.push_back(CupCoordinates);
 		EquilNode* Current = Root;
 		while (CupCoordinates.size() - 1 != 0)
 		{
@@ -54,8 +61,21 @@ Equilibrium::Equilibrium(const vector<vector<int32_t>>& Cups)
 		}
 		CupCoordinates.clear();
 	}
-	// Root->CalculateMass();
 }
+
+Equilibrium& Equilibrium::operator=(const Equilibrium& Other)
+{
+	if (&Other == this) return *this;
+	
+	Root = new EquilNode;
+	Scales.clear();
+	Scales = Other.Scales;
+	
+	CopyEquilibrium(Other);
+
+	return *this;
+}
+
 
 ENodeRotationState Equilibrium::GetRootState() const
 {
@@ -70,7 +90,7 @@ void Equilibrium::CheckState(vector<ENodeRotationState>& NodeRotations) const
 	}
 }
 
-void Equilibrium::CheckState(EquilNode* RootEquilNode, vector<ENodeRotationState>& NodeRotations) const
+void Equilibrium::CheckState(const EquilNode* RootEquilNode, vector<ENodeRotationState>& NodeRotations) const
 {
 	switch (RootEquilNode->GetRotationState())
 	{
@@ -90,11 +110,11 @@ void Equilibrium::CheckState(EquilNode* RootEquilNode, vector<ENodeRotationState
 		break;
 	}
 
-	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetLeftChild()))
+	if (const EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetLeftChild()))
 	{
 		CheckState(NodeRoot, NodeRotations);
 	}
-	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetRightChild()))
+	if (const EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetRightChild()))
 	{
 		CheckState(NodeRoot, NodeRotations);
 	}
@@ -102,7 +122,7 @@ void Equilibrium::CheckState(EquilNode* RootEquilNode, vector<ENodeRotationState
 
 bool Equilibrium::IsValidByCups(const vector<vector<int32_t>>& Cups) const
 {
-	for (const auto Cup : Cups)
+	for (const auto& Cup : Cups)
 	{
 		if (!EquilibriumUtils::GetNeededElement(Cup, Root))
 		{
@@ -123,7 +143,7 @@ bool Equilibrium::TryAddWeight(const vector<int32_t>& Array, int32_t Weight) con
 		return true;
 	}
 	return false;
-}
+ }
 
 bool Equilibrium::TryRemoveWeight(const vector<int32_t>& Array) const
 {
@@ -148,12 +168,12 @@ bool Equilibrium::EveryNodeIsStable() const
 	return EveryNodeIsStable(Root);
 }
 
-bool Equilibrium::EveryCupHasWeight(EquilNode* RootEquilNode) const
+bool Equilibrium::EveryCupHasWeight(const EquilNode* RootEquilNode) const
 {
 	bool ResultLeft = true;
 	bool ResultRight = true;
 
-	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetLeftChild()))
+	if (const EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetLeftChild()))
 	{
 		ResultLeft = EveryCupHasWeight(NodeRoot);
 	}
@@ -165,7 +185,7 @@ bool Equilibrium::EveryCupHasWeight(EquilNode* RootEquilNode) const
 		}
 	}
 
-	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetRightChild()))
+	if (const EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetRightChild()))
 	{
 		ResultRight = EveryCupHasWeight(NodeRoot);
 	}
@@ -179,12 +199,12 @@ bool Equilibrium::EveryCupHasWeight(EquilNode* RootEquilNode) const
 	return ResultLeft && ResultRight;
 }
 
-bool Equilibrium::EveryNodeIsStable(EquilNode* RootEquilNode) const
+bool Equilibrium::EveryNodeIsStable(const EquilNode* RootEquilNode) const
 {
 	bool ResultLeft = true;
 	bool ResultRight = true;
 
-	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetLeftChild()))
+	if (const EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetLeftChild()))
 	{
 		if (NodeRoot->GetRotationState() != NRS_Stable)
 		{
@@ -193,7 +213,7 @@ bool Equilibrium::EveryNodeIsStable(EquilNode* RootEquilNode) const
 		ResultLeft = EveryCupHasWeight(NodeRoot);
 	}
 
-	if (EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetRightChild()))
+	if (const EquilNode* NodeRoot = dynamic_cast<EquilNode*>(RootEquilNode->GetRightChild()))
 	{
 		if (NodeRoot->GetRotationState() != NRS_Stable)
 		{
@@ -203,5 +223,61 @@ bool Equilibrium::EveryNodeIsStable(EquilNode* RootEquilNode) const
 	}
 
 	return ResultLeft && ResultRight;
+}
+
+void Equilibrium::CopyEquilibrium(const Equilibrium& Other) const
+{
+	for (auto CupCoordinates : Scales)
+	{
+		EquilNode* Current = Root;
+		const EquilNode* CurrentOther = Other.Root;
+		
+		while (CupCoordinates.size() - 1 != 0)
+		{
+			if (!Current || !CurrentOther) continue;
+
+			if (CupCoordinates[0] == 0)
+			{
+				if (Current->GetLeftChild() == nullptr)
+				{
+					Current->SetLeftChild(new EquilNode);
+				}
+				Current = dynamic_cast<EquilNode*>(Current->GetLeftChild());
+				CurrentOther = dynamic_cast<EquilNode*>(CurrentOther->GetLeftChild());
+			}
+			else if (CupCoordinates[0] == 1)
+			{
+				if (Current->GetRightChild() == nullptr)
+				{
+					Current->SetRightChild(new EquilNode);
+				}
+				Current = dynamic_cast<EquilNode*>(Current->GetRightChild());
+				CurrentOther = dynamic_cast<EquilNode*>(CurrentOther->GetRightChild());
+			}
+
+			CupCoordinates.erase(CupCoordinates.begin());
+		}
+
+		if (CupCoordinates[0] == 0)
+		{
+			Current->SetLeftChild(new EquilCup);
+
+			if (EquilCup* CurrentCup = dynamic_cast<EquilCup*>(Current->GetLeftChild()))
+			{
+				CurrentCup->AddWeight(CurrentOther->GetLeftChild()->GetMass());
+			}
+		}
+		else if (CupCoordinates[0] == 1)
+		{
+			Current->SetRightChild(new EquilCup);
+
+			if (EquilCup* CurrentCup = dynamic_cast<EquilCup*>(Current->GetRightChild()))
+			{
+				CurrentCup->AddWeight(CurrentOther->GetRightChild()->GetMass());
+			}
+		}
+		CupCoordinates.clear();
+	}
+	Root->CalculateMass();
 }
 

@@ -19,12 +19,12 @@ namespace EquilibriumGame
 	class GameEquilibrium
 	{
 	public:
-		GameEquilibrium();
-		GameEquilibrium(const vector<vector<int32_t>>& Cups);
+		GameEquilibrium() : EquilibriumInstance(Equilibrium()), GameState(GS_UnPlaying) {};
+		explicit GameEquilibrium(const vector<vector<int32_t>>& Cups) : EquilibriumInstance(Equilibrium(Cups)), GameState(GS_UnPlaying) {};
 
-		TEvent<> OnAddedWeight;
-		TEvent<> OnRemovedWeight;
-		TEvent<> OnGameEnded;
+		mutable TEvent<> OnAddedWeight;
+		mutable TEvent<> OnRemovedWeight;
+		mutable TEvent<> OnGameEnded;
 		
 		bool TryStartGame();
 
@@ -34,7 +34,7 @@ namespace EquilibriumGame
 		bool CheckWin();
 
 		vector<ENodeRotationState> CheckState();
-		Equilibrium GetEquilibriumInstance() const { return EquilibriumInstance; }
+		Equilibrium* GetEquilibriumInstance() { return &EquilibriumInstance; }
 	private:
 		Equilibrium EquilibriumInstance;
 		EGameState GameState;
