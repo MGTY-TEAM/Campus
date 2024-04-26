@@ -208,9 +208,17 @@ void UInteractionComponent::InteractionVisualProcess(AActor* InteractableActor)
 
 void UInteractionComponent::ChangeInteractableActorViewState(AActor* InteractableActor, bool State)
 {
-	if(UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(InteractableActor->GetComponentByClass(UStaticMeshComponent::StaticClass())))
+
+	TArray<UActorComponent*> OutlineComponents =  InteractableActor->GetComponentsByTag(UActorComponent::StaticClass(),FName("Outline"));
+	if(OutlineComponents.Num())
 	{
-		StaticMeshComponent->SetRenderCustomDepth(State);	
+		for(UActorComponent* ActorComponent : OutlineComponents)
+		{
+			if(UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(ActorComponent))
+			{
+				StaticMeshComponent->SetRenderCustomDepth(State);	
+			}
+		}
 	}
 }
 

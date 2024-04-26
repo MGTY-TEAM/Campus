@@ -15,7 +15,7 @@ void UInteractionWidget::NativeConstruct()
 		InteractionComponent = Character->InteractionComponent;
 	}
 	
-	SetVisibility(ESlateVisibility::Visible);
+	SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UInteractionWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

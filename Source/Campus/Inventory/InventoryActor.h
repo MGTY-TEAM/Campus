@@ -28,7 +28,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* StaticMeshComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Item Image")
+	UPROPERTY(EditAnywhere, Category = "Item Image")
 	UTexture2D* ItemImageTexture;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Audio")
