@@ -47,9 +47,9 @@ void UChatBox::SetFocusOnTextInput()
 bool UChatBox::Initialize()
 {
 	Super::Initialize();
+	SendMessage_TextBox->SetClearKeyboardFocusOnCommit(true);
 	
-	if (Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass())))
-	{
+	if (Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass()))) {
 		Drone = Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass()));
 
 		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
@@ -59,6 +59,7 @@ bool UChatBox::Initialize()
 				UE_LOG(LogTemp, Warning, TEXT("SetRequest"));
 			}, "/start", Drone->BotURL);
 	}
+	
 	return true;
 }
 
@@ -90,6 +91,9 @@ void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type Commi
 		}
 		UpdateChatMessages(Text, FText::FromString("DefaultCharacterName"));
 	}
+
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
+	PlayerController->SetInputMode(FInputModeGameOnly());
 }
 
 void UChatBox::UpdateChatMessages(FText Message, FText Sender)
