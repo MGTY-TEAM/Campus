@@ -1,17 +1,5 @@
 #include "EquilibriumGame.h"
 
-EquilibriumGame::GameEquilibrium::GameEquilibrium()
-{
-	EquilibriumInstance = Equilibrium();
-	GameState = GS_UnPlaying;
-}
-
-EquilibriumGame::GameEquilibrium::GameEquilibrium(const vector<vector<int32_t>>& Cups)
-{
-	EquilibriumInstance = Equilibrium(Cups);
-	GameState = GS_UnPlaying;
-}
-
 bool EquilibriumGame::GameEquilibrium::TryStartGame()
 {
 	if (GameState != GS_NotStart)
