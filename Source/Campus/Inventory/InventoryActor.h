@@ -57,7 +57,8 @@ public:
 	//POOL FUNCTIONS
 	virtual void SetEnabled(bool bEnabled);
     bool IsEnabled() const;
-private:
+	
+protected:
 	bool M_IsEnabled;
 
 	

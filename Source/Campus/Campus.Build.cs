@@ -20,8 +20,8 @@ public class Campus : ModuleRules
 			"JsonUtilities",
 			"UMG",
 			"SlateCore",
-			"Slate",
-
+			"Slate", 
+			"Niagara"
 		});
 
         PublicIncludePaths.AddRange(new string[]
