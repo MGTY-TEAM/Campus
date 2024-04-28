@@ -34,12 +34,6 @@ protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
 	UStaticMeshComponent* StaticMeshComponent;
 
-	// UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
-	// USceneComponent* SceneComponentStars;
-
-	// UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
-	// USceneComponent* SceneComponentCosmicDust;
-
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
 	UNiagaraSystem* NiagaraSystemStars;
 
@@ -52,9 +46,17 @@ protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
 	UNiagaraComponent* NiagaraComponentCosmicDust;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SolarSystemSettings")
+	TArray<AActor*> LampsToOff;
+	
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	TArray<AActor*> GetLampsToOff() const { return LampsToOff; }
+
+	UFUNCTION(BlueprintNativeEvent)
+	void OnGameCompleted();
 private:
 	UFUNCTION(meta = (BlueprintProtected = "true"))
 	void OnChangeState();
@@ -63,4 +65,6 @@ private:
 	void StartSystem();
 	
 	void SpawnVFX(UNiagaraSystem* VFXToSpawn, const FVector& Location, const FVector& SpawnOffset) const;
+
+	void OnGameCompleted_Implementation();
 };

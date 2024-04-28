@@ -6,6 +6,8 @@
 #include "Campus/Inventory/PickupSocketComponent.h"
 #include "Campus/MiniGames/SolarSystem/SpaceObject.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogSpaceObjectSpot, All, All);
+
 ASpaceObjectSpot::ASpaceObjectSpot()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -71,5 +73,10 @@ void ASpaceObjectSpot::CheckCorrectPlanet(ASpaceObject* SpaceObject)
 		HaveCorrectPlanet = false;
 		CorrectPlanet = nullptr;
 	}
+}
+
+void ASpaceObjectSpot::OnGameCompleted_Implementation()
+{
+	UE_LOG(LogSpaceObjectSpot, Warning, TEXT("Function OnGameCompleted isn't override in Blueprints!"));
 }
 

@@ -42,6 +42,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool GetStatus() const { return HaveCorrectPlanet; }
+
+	UFUNCTION(BlueprintNativeEvent)
+	void OnGameCompleted();
 private:
 	ASpaceObject* CorrectPlanet = nullptr;
 	bool HaveCorrectPlanet = false;
@@ -53,4 +56,6 @@ private:
 	void OnPickupRemoved();
 
 	void CheckCorrectPlanet(ASpaceObject* SpaceObject);
+	
+	void OnGameCompleted_Implementation();
 };

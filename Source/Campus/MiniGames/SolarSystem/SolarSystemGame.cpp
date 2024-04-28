@@ -18,12 +18,6 @@ ASolarSystemGame::ASolarSystemGame()
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
 	SetRootComponent(StaticMeshComponent);
 	
-	// SceneComponentStars = CreateDefaultSubobject<USceneComponent>("SceneStars");
-	// SceneComponentStars->SetupAttachment(GetRootComponent());
-
-	// SceneComponentCosmicDust = CreateDefaultSubobject<USceneComponent>("SceneCosmicDust");
-	// SceneComponentCosmicDust->SetupAttachment(GetRootComponent());
-	
 	NiagaraComponentStars = CreateDefaultSubobject<UNiagaraComponent>("Stars");
 	NiagaraComponentStars->SetupAttachment(GetRootComponent());
 
@@ -42,6 +36,7 @@ void ASolarSystemGame::BeginPlay()
 			if (PickupSocket)
 			{
 				PickupSocket->OnChangeState.AddDynamic(this, &ASolarSystemGame::OnChangeState);
+				ExecuteMiniGameCompleted.AddDynamic(PickupSocket, &ASpaceObjectSpot::OnGameCompleted);
 			}
 		}
 	}
@@ -53,6 +48,11 @@ void ASolarSystemGame::BeginPlay()
 
 		NiagaraComponentCosmicDust->SetAsset(NiagaraSystemCosmicDust);
 		NiagaraComponentCosmicDust->Deactivate();
+	}
+
+	if (LampsToOff.Num() != 0)
+	{
+		ExecuteMiniGameCompleted.AddDynamic(this, &ASolarSystemGame::OnGameCompleted);
 	}
 }
 
@@ -97,34 +97,21 @@ void ASolarSystemGame::StartSystem()
 		}
 	}
 
+	ExecuteMiniGameCompleted.Broadcast();
+	UE_LOG(LogSolarSystemGame, Display, TEXT("Solar System Game Was Complited"));
+	
 	if (GetWorld())
 	{
-		/* if (NiagaraSystemStars && SceneComponentStars)
-		{
-			SpawnVFX(NiagaraSystemStars, SceneComponentStars->GetComponentLocation(),  FVector(0.f));
-		}
-		if (NiagaraSystemCosmicDust && SceneComponentCosmicDust)
-		{
-			SpawnVFX(NiagaraSystemCosmicDust, SceneComponentCosmicDust->GetComponentLocation(),  FVector(0.f));
-		} */
-		
 		if (NiagaraComponentStars && NiagaraComponentStars->GetAsset())
 		{
-			// NiagaraComponentStars->SetAsset(NiagaraSystemStars);
 			NiagaraComponentStars->ActivateSystem();
-			// SpawnVFX(NiagaraComponentStars->GetAsset(), NiagaraComponentStars->GetComponentLocation(), FVector(0.f));
 		}
 
 		if (NiagaraComponentCosmicDust && NiagaraComponentCosmicDust->GetAsset())
 		{
-			// NiagaraComponentCosmicDust->SetAsset(NiagaraSystemCosmicDust);
 			NiagaraComponentCosmicDust->ActivateSystem();
-			// SpawnVFX(NiagaraComponentCosmicDust->GetAsset(), NiagaraComponentCosmicDust->GetComponentLocation(), FVector(0.f));
 		}
 	}
-	
-	ExecuteMiniGameCompleted.Broadcast();
-	UE_LOG(LogSolarSystemGame, Display, TEXT("Solar System Game Was Complited"));
 }
 
 void ASolarSystemGame::SpawnVFX(UNiagaraSystem* VFXToSpawn, const FVector& Location, const FVector& SpawnOffset) const
@@ -132,5 +119,10 @@ void ASolarSystemGame::SpawnVFX(UNiagaraSystem* VFXToSpawn, const FVector& Locat
 	if (!VFXToSpawn || !GetWorld()) return;
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFXToSpawn, Location + SpawnOffset);
+}
+
+void ASolarSystemGame::OnGameCompleted_Implementation()
+{
+	UE_LOG(LogSolarSystemGame, Warning, TEXT("Function OnGameCompleted isn't override in Blueprints!"));
 }
 

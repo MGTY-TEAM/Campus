@@ -34,8 +34,9 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	// UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetCanRotateInTrue() { CanRotate = true; }
+	UFUNCTION(BlueprintCallable)
 	void SetCanRotateInFalse() { CanRotate = false; }
 
 	UFUNCTION(BlueprintCallable)
@@ -45,6 +46,7 @@ public:
 
 	ASpaceObject* GetCenterOfRotation() const { return CenterOfRotation; }
 	void SetOldCenterLocation(const FVector& Location) { OldCenterLocation = Location; }
+
 private:
 	void OrthogonalAxis();
 	FVector OldCenterLocation;
