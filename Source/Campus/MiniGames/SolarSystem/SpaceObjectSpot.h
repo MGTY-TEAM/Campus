@@ -39,12 +39,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	ASpaceObject* GetCorrectPlanet() const { return CorrectPlanet; }
-
+	
 	UFUNCTION(BlueprintCallable)
 	bool GetStatus() const { return HaveCorrectPlanet; }
 
+	UFUNCTION(BlueprintCallable)
+	void StopCorrectPlanet();
+
 	UFUNCTION(BlueprintNativeEvent)
 	void OnGameCompleted();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void OnDestroyUniverse();
 private:
 	ASpaceObject* CorrectPlanet = nullptr;
 	bool HaveCorrectPlanet = false;
@@ -57,5 +63,6 @@ private:
 
 	void CheckCorrectPlanet(ASpaceObject* SpaceObject);
 	
-	void OnGameCompleted_Implementation();
+	void OnGameCompleted_Implementation() {};
+	void OnDestroyUniverse_Implementation() {};
 };

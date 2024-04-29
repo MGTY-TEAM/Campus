@@ -33,5 +33,6 @@ public:
 	void DragInteract(const FHitResult& HitResult);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction System")
-	bool CanInteract();	
+	bool CanInteract();
+
 };

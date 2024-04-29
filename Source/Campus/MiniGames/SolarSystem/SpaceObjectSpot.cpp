@@ -36,6 +36,14 @@ void ASpaceObjectSpot::Tick(float DeltaTime)
 
 }
 
+void ASpaceObjectSpot::StopCorrectPlanet()
+{
+	if (CorrectPlanet)
+	{
+		CorrectPlanet->SetCanRotateInFalse();
+	}
+}
+
 void ASpaceObjectSpot::OnPickupPlaced(AInventoryActor* Actor)
 {
 	ASpaceObject* SpaceObject = Cast<ASpaceObject>(Actor);
@@ -75,8 +83,4 @@ void ASpaceObjectSpot::CheckCorrectPlanet(ASpaceObject* SpaceObject)
 	}
 }
 
-void ASpaceObjectSpot::OnGameCompleted_Implementation()
-{
-	UE_LOG(LogSpaceObjectSpot, Warning, TEXT("Function OnGameCompleted isn't override in Blueprints!"));
-}
 
