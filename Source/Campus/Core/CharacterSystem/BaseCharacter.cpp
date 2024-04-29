@@ -135,6 +135,8 @@ void ABaseCharacter::EndInteract()
 	UE_LOG(LogBaseCharacter, Log, TEXT("End interact"))
 	UE_LOG(LogBaseCharacter, Log, TEXT("Set hold status false"))
 #endif
+
+	InteractionComponent->TryEndInteract();
 	InteractionComponent->SetHoldStatus(false);
 }
 

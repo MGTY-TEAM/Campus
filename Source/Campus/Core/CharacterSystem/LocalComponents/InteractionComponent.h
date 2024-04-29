@@ -57,6 +57,7 @@ public:
 	FOnSimpleInteract OnSimpleInteract;
 	
 	void TryInteract();
+	void TryEndInteract();
 
 	bool TryPlaceActorOnHitLocation(AInventoryActor* ToPlaceActor);
 	bool CanPlaceActorOnHitLocation();

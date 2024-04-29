@@ -59,11 +59,8 @@ bool UChatBox::Initialize()
 				UE_LOG(LogTemp, Warning, TEXT("SetRequest"));
 			}, "/start", Drone->BotURL);
 	}
-	
 	return true;
 }
-
-
 
 void UChatBox::NativeConstruct()
 {

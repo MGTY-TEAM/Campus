@@ -61,6 +61,21 @@ void UInteractionComponent::TryInteract()
 	}
 }
 
+void UInteractionComponent::TryEndInteract()
+{
+	FHitResult HitResult = GetHitResultByTraceChannel();
+	if(HitResult.bBlockingHit)
+	{
+		if(AActor* Actor = HitResult.GetActor())
+		{
+			if(UKismetSystemLibrary::DoesImplementInterface(Actor, UInteractable::StaticClass()))
+			{
+				IInteractable::Execute_EndInteract(Actor);
+			}
+		}
+	}
+}
+
 bool UInteractionComponent::TryPlaceActorOnHitLocation(AInventoryActor* ToPlaceActor)
 {
 	if (!ToPlaceActor)
