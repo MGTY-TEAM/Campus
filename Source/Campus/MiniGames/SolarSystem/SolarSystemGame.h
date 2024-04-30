@@ -32,6 +32,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
+	USceneComponent* PlacementSceneComponent;
+	
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
 	ASpaceObject* TheSun;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
@@ -39,6 +42,12 @@ protected:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
 	UStaticMeshComponent* StaticMeshComponent;
+	
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
+	UStaticMeshComponent* StaticMeshComponentButton;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
+	UStaticMeshComponent* StaticMeshComponentGlass;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "NiagaraSystemStarsSettings")
 	UNiagaraSystem* NiagaraSystemStars;
@@ -62,7 +71,10 @@ protected:
 	TArray<AActor*> LampsToOff;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SolarSystemSettings", meta = (ClampMin = "3.0", ClampMax = "10.0"))
-	float DeactivateRate = 3.f;
+	float DeactivateRateStars = 3.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SolarSystemSettings", meta = (ClampMin = "1.0", ClampMax = "10.0"))
+	float DeactivateRateFallingStars = 1.5f;
 public:	
 	virtual void Tick(float DeltaTime) override;
 
@@ -77,8 +89,14 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void OnDestroyUniverseLogic();
+
 private:
 	bool bIsGameCompleted = false;
+	bool bIsSystemWorking = false;
+	bool bIsInvisible = false;
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintProtected = "true"))
+	void SetInvisibleProperty(const bool NewCondition) { bIsInvisible = NewCondition; } ;
 	
 	UFUNCTION(meta = (BlueprintProtected = "true"))
 	void OnChangeState();
@@ -102,4 +120,9 @@ private:
 	FTimerHandle DeactivateFallingStarsHandle;
 	void DeactivateStars();
 	void DeactivateFallingStars();
+
+	FRotator NormalRotationOfGlassCase = FRotator();
+	FRotator DesiredRotationOfGlassCase = FRotator(0.f);
+	bool bIsGlassCaseClose = true;
+	void InterpolateGlassCaseMesh(float DeltaTime);
 };

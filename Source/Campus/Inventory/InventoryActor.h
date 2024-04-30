@@ -18,7 +18,7 @@ class CAMPUS_API AInventoryActor : public AActor, public IInteractable
 
 public:
 	AInventoryActor();
-	bool bCanPickup = true;
+	
 protected:
 	virtual void BeginPlay() override;
 
@@ -39,10 +39,13 @@ protected:
 	USoundBase* DropCue;
 	UPROPERTY(EditDefaultsOnly, Category= "Audio")
 	USoundBase* PickupCue;
-
+	
 	UPickupSocketComponent* CurrentSocket;
 	
 public:
+	UPROPERTY(EditAnywhere, Category = "ItemSettings")
+	bool bCanPickup = true;
+	
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void OnConstruction(const FTransform& Transform) override;

@@ -15,8 +15,17 @@ ASolarSystemGame::ASolarSystemGame()
 	PrimaryActorTick.bCanEverTick = true;
 	TheSun = nullptr;
 
+	PlacementSceneComponent = CreateDefaultSubobject<USceneComponent>("PlacementSceneComponent");
+	SetRootComponent(PlacementSceneComponent);
+	
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
-	SetRootComponent(StaticMeshComponent);
+	StaticMeshComponent->SetupAttachment(GetRootComponent());
+
+	StaticMeshComponentButton = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponentButton");
+	StaticMeshComponentButton->SetupAttachment(StaticMeshComponent);
+
+	StaticMeshComponentGlass = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponentGlass");
+	StaticMeshComponentGlass->SetupAttachment(StaticMeshComponent);
 	
 	NiagaraComponentStars = CreateDefaultSubobject<UNiagaraComponent>("Stars");
 	NiagaraComponentStars->SetupAttachment(GetRootComponent());
@@ -29,6 +38,11 @@ void ASolarSystemGame::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (StaticMeshComponentGlass)
+	{
+		NormalRotationOfGlassCase = StaticMeshComponentGlass->GetComponentRotation();
+	}
+	
 	if (SpaceObjectSpots.Num() != 0)
 	{
 		for (ASpaceObjectSpot* PickupSocket : SpaceObjectSpots)
@@ -64,6 +78,7 @@ void ASolarSystemGame::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	InterpolateGlassCaseMesh(DeltaTime);
 }
 
 void ASolarSystemGame::OnChangeState()
@@ -96,7 +111,8 @@ void ASolarSystemGame::StartSystem()
 			if (ASpaceObject* SpaceObject = PickupSocket->GetCorrectPlanet())
 			{
 				SpaceObject->SetOldCenterLocation(SpaceObject->GetCenterOfRotation()->GetActorLocation());
-				SpaceObject->SetCanRotateInTrue();
+				SpaceObject->StartActive();
+				// SpaceObject->SetCanRotateInTrue();
 			}
 		}
 	}
@@ -123,9 +139,13 @@ void ASolarSystemGame::StartSystem()
 		if (NiagaraComponentCosmicDust && NiagaraComponentCosmicDust->GetAsset())
 		{
 			NiagaraComponentCosmicDust->Deactivate();
+			NiagaraComponentCosmicDust->SetVariableBool("EnableDissolve", false);
+			NiagaraComponentCosmicDust->SetVariableFloat("SpawnDust", 1.f);
 			NiagaraComponentCosmicDust->ActivateSystem();
 		}
 	}
+
+	bIsSystemWorking = true;
 }
 
 void ASolarSystemGame::DestroySystem()
@@ -136,7 +156,8 @@ void ASolarSystemGame::DestroySystem()
 		{
 			if (ASpaceObject* SpaceObject = PickupSocket->GetCorrectPlanet())
 			{
-				SpaceObject->SetCanRotateInFalse();
+				SpaceObject->EndActive();
+				// SpaceObject->SetCanRotateInFalse();
 			}
 		}
 	}
@@ -149,14 +170,18 @@ void ASolarSystemGame::DestroySystem()
 			NiagaraComponentStars->SetVariableFloat("SpawnStars", 0.f);
 			NiagaraComponentStars->SetVariableFloat("SpawnFallingStars", 0.f);
 
-			GetWorldTimerManager().SetTimer(DeactivateStarsHandle, this, &ASolarSystemGame::DeactivateStars, DeactivateRate, false);
+			GetWorldTimerManager().SetTimer(DeactivateStarsHandle, this, &ASolarSystemGame::DeactivateStars, DeactivateRateStars, false);
 		}
 
 		if (NiagaraComponentCosmicDust && NiagaraComponentCosmicDust->GetAsset())
 		{
-			GetWorldTimerManager().SetTimer(DeactivateStarsHandle, this, &ASolarSystemGame::DeactivateFallingStars, DeactivateRate, false);
+			NiagaraComponentCosmicDust->SetVariableBool("EnableDissolve", true);
+			NiagaraComponentCosmicDust->SetVariableFloat("SpawnDust", 0.f);
+			GetWorldTimerManager().SetTimer(DeactivateFallingStarsHandle, this, &ASolarSystemGame::DeactivateFallingStars, DeactivateRateFallingStars, false);
 		}
 	}
+
+	bIsSystemWorking = false;
 }
 
 void ASolarSystemGame::SpawnVFX(UNiagaraSystem* VFXToSpawn, const FVector& Location, const FVector& SpawnOffset) const
@@ -168,15 +193,47 @@ void ASolarSystemGame::SpawnVFX(UNiagaraSystem* VFXToSpawn, const FVector& Locat
 
 void ASolarSystemGame::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal)
 {
+	if (!bIsInvisible) return;
+	
 	IInteractable::Interact(InteractComponent, InteractPoint, InteractionNormal);
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "StartInteract");
-	
+
+	if (bIsGlassCaseClose)
+	{
+		DesiredRotationOfGlassCase = FRotator(0.f, 0.f, -110.f);
+	}
+	else
+	{
+		if (StaticMeshComponentButton)
+		{
+			const FVector InitialLocation = StaticMeshComponentButton->GetComponentLocation();
+			StaticMeshComponentButton->SetWorldLocation(InitialLocation + FVector(1.f, 0.f, 0.0f));
+		}
+	}
 }
 
 void ASolarSystemGame::EndInteract_Implementation()
 {
+	if (!bIsInvisible) return;
+	
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "EndInteract");
-	OnDestroyUniverse.Broadcast();
+
+	if (bIsGlassCaseClose)
+	{
+		bIsGlassCaseClose = false;
+	}
+	else
+	{
+		DesiredRotationOfGlassCase = FRotator(0.f);
+		bIsGlassCaseClose = true;
+		
+		const FVector InitialLocation = StaticMeshComponentButton->GetComponentLocation();
+		StaticMeshComponentButton->SetWorldLocation(InitialLocation + FVector(-1.f, 0.f, 0.0f));
+		if (bIsSystemWorking)
+		{
+			OnDestroyUniverse.Broadcast();
+		}
+	}
 }
 
 void ASolarSystemGame::DeactivateStars()
@@ -187,5 +244,18 @@ void ASolarSystemGame::DeactivateStars()
 void ASolarSystemGame::DeactivateFallingStars()
 {
 	NiagaraComponentCosmicDust->Deactivate();
+}
+
+void ASolarSystemGame::InterpolateGlassCaseMesh(float DeltaTime)
+{
+	if (!StaticMeshComponentGlass) return;
+
+	const FRotator InitialRotation = StaticMeshComponentGlass->GetComponentRotation();
+
+	if (InitialRotation != NormalRotationOfGlassCase + DesiredRotationOfGlassCase)
+	{
+		const FRotator NewRotation = FMath::RInterpTo(InitialRotation,NormalRotationOfGlassCase + DesiredRotationOfGlassCase, DeltaTime, 5.f);
+		StaticMeshComponentGlass->SetWorldRotation(NewRotation);
+	}
 }
 

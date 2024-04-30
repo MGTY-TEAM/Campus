@@ -37,6 +37,18 @@ void ASpaceObject::Tick(float DeltaTime)
 	}
 }
 
+void ASpaceObject::StartActive()
+{
+	SetCanRotateInTrue();
+	SetCanPickup(false);
+}
+
+void ASpaceObject::EndActive()
+{
+	SetCanRotateInFalse();
+	SetCanPickup(true);
+}
+
 void ASpaceObject::SetEnabled(bool bEnabled)
 {
 	M_IsEnabled = bEnabled;
