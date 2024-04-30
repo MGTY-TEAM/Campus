@@ -18,11 +18,12 @@ class CAMPUS_API AInventoryActor : public AActor, public IInteractable
 
 public:
 	AInventoryActor();
-
+	bool bCanPickup = true;
 protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly)
+	
 	USceneComponent* SceneComponent;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")

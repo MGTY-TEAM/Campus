@@ -35,10 +35,13 @@ void UInteractionComponent::TryInteract()
 
 			if (AInventoryActor* InventoryActor = Cast<AInventoryActor>(HitActor))
 			{
-#ifdef INTERACTION_COMPONENT_DEBUG
-				UE_LOG(LogInteractionComponent, Log, TEXT("Interact with inventory actor: %s"), *HitActor->GetName());
-#endif
-				OnInventoryItemPickup.Broadcast(InventoryActor);
+				if(InventoryActor->bCanPickup)
+				{
+	#ifdef INTERACTION_COMPONENT_DEBUG
+    				UE_LOG(LogInteractionComponent, Log, TEXT("Interact with inventory actor: %s"), *HitActor->GetName());
+    #endif
+    				OnInventoryItemPickup.Broadcast(InventoryActor);				
+				}
 			}
 		}
 		if (HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
@@ -51,7 +54,6 @@ void UInteractionComponent::TryInteract()
 	if (UWidgetInteractionComponent* WidgetInteractionComponent = Cast<UWidgetInteractionComponent>(
 		GetOwner()->GetComponentByClass(UWidgetInteractionComponent::StaticClass())))
 	{
-		
 #ifdef INTERACTION_COMPONENT_DEBUG
 		UE_LOG(LogInteractionComponent, Log, TEXT("Widget Interaction"));
 #endif
@@ -63,15 +65,11 @@ void UInteractionComponent::TryInteract()
 
 void UInteractionComponent::TryEndInteract()
 {
-	FHitResult HitResult = GetHitResultByTraceChannel();
-	if(HitResult.bBlockingHit)
+	if(FocusActor)
 	{
-		if(AActor* Actor = HitResult.GetActor())
+		if(UKismetSystemLibrary::DoesImplementInterface(FocusActor, UInteractable::StaticClass()))
 		{
-			if(UKismetSystemLibrary::DoesImplementInterface(Actor, UInteractable::StaticClass()))
-			{
-				IInteractable::Execute_EndInteract(Actor);
-			}
+			IInteractable::Execute_EndInteract(FocusActor);
 		}
 	}
 }
@@ -206,8 +204,16 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 void UInteractionComponent::InteractionVisualProcess(AActor* InteractableActor)
 {
+	
 	if(InteractableActor)
 	{
+		if(AInventoryActor* InventoryActor = Cast<AInventoryActor>(InteractableActor))
+		{
+			if(!InventoryActor->bCanPickup)
+			{
+				return;
+			}
+		}
 		if(UKismetSystemLibrary::DoesImplementInterface(InteractableActor, UInteractable::StaticClass()))
 		{
 			UE_LOG(LogInteractionComponent, Warning, TEXT("Interactable detected"));
@@ -223,7 +229,14 @@ void UInteractionComponent::InteractionVisualProcess(AActor* InteractableActor)
 
 void UInteractionComponent::ChangeInteractableActorViewState(AActor* InteractableActor, bool State)
 {
-
+	if(AInventoryActor* InventoryActor = Cast<AInventoryActor>(InteractableActor))
+	{
+		if(!InventoryActor->bCanPickup)
+		{
+			return;
+		}
+	}
+		
 	TArray<UActorComponent*> OutlineComponents =  InteractableActor->GetComponentsByTag(UActorComponent::StaticClass(),FName("Outline"));
 	if(OutlineComponents.Num())
 	{
