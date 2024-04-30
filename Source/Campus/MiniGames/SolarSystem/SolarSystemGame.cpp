@@ -36,7 +36,8 @@ void ASolarSystemGame::BeginPlay()
 			if (PickupSocket)
 			{
 				PickupSocket->OnChangeState.AddDynamic(this, &ASolarSystemGame::OnChangeState);
-				ExecuteMiniGameCompleted.AddDynamic(PickupSocket, &ASpaceObjectSpot::OnGameCompleted);
+				OnStartUniverse.AddDynamic(PickupSocket, &ASpaceObjectSpot::OnGameCompleted);
+				OnDestroyUniverse.AddDynamic(PickupSocket, &ASpaceObjectSpot::OnDestroyUniverse);
 			}
 		}
 	}
@@ -48,11 +49,14 @@ void ASolarSystemGame::BeginPlay()
 
 		NiagaraComponentCosmicDust->SetAsset(NiagaraSystemCosmicDust);
 		NiagaraComponentCosmicDust->Deactivate();
+
+		OnDestroyUniverse.AddDynamic(this, &ASolarSystemGame::DestroySystem);
 	}
 
 	if (LampsToOff.Num() != 0)
 	{
-		ExecuteMiniGameCompleted.AddDynamic(this, &ASolarSystemGame::OnGameCompleted);
+		OnStartUniverse.AddDynamic(this, &ASolarSystemGame::OnStartUniverseLogic);
+		OnDestroyUniverse.AddDynamic(this, &ASolarSystemGame::OnDestroyUniverseLogic);
 	}
 }
 
@@ -97,19 +101,60 @@ void ASolarSystemGame::StartSystem()
 		}
 	}
 
-	ExecuteMiniGameCompleted.Broadcast();
-	UE_LOG(LogSolarSystemGame, Display, TEXT("Solar System Game Was Complited"));
+	OnStartUniverse.Broadcast();
+	if (!bIsGameCompleted)
+	{
+		ExecuteMiniGameCompleted.Broadcast();
+		bIsGameCompleted = true;
+		UE_LOG(LogSolarSystemGame, Display, TEXT("Solar System Game Was Complited"));
+	}
 	
 	if (GetWorld())
 	{
 		if (NiagaraComponentStars && NiagaraComponentStars->GetAsset())
 		{
+			NiagaraComponentStars->Deactivate();
+			NiagaraComponentStars->SetVariableBool("EnableMoveStars", false);
+			NiagaraComponentStars->SetVariableFloat("SpawnStars", SpawnStars);
+			NiagaraComponentStars->SetVariableFloat("SpawnFallingStars", SpawnFallingStars);
 			NiagaraComponentStars->ActivateSystem();
 		}
 
 		if (NiagaraComponentCosmicDust && NiagaraComponentCosmicDust->GetAsset())
 		{
+			NiagaraComponentCosmicDust->Deactivate();
 			NiagaraComponentCosmicDust->ActivateSystem();
+		}
+	}
+}
+
+void ASolarSystemGame::DestroySystem()
+{
+	for (const ASpaceObjectSpot* PickupSocket : SpaceObjectSpots)
+	{
+		if (PickupSocket)
+		{
+			if (ASpaceObject* SpaceObject = PickupSocket->GetCorrectPlanet())
+			{
+				SpaceObject->SetCanRotateInFalse();
+			}
+		}
+	}
+
+	if (GetWorld())
+	{
+		if (NiagaraComponentStars && NiagaraComponentStars->GetAsset())
+		{
+			NiagaraComponentStars->SetVariableBool("EnableMoveStars", true);
+			NiagaraComponentStars->SetVariableFloat("SpawnStars", 0.f);
+			NiagaraComponentStars->SetVariableFloat("SpawnFallingStars", 0.f);
+
+			GetWorldTimerManager().SetTimer(DeactivateStarsHandle, this, &ASolarSystemGame::DeactivateStars, DeactivateRate, false);
+		}
+
+		if (NiagaraComponentCosmicDust && NiagaraComponentCosmicDust->GetAsset())
+		{
+			GetWorldTimerManager().SetTimer(DeactivateStarsHandle, this, &ASolarSystemGame::DeactivateFallingStars, DeactivateRate, false);
 		}
 	}
 }
@@ -121,8 +166,26 @@ void ASolarSystemGame::SpawnVFX(UNiagaraSystem* VFXToSpawn, const FVector& Locat
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFXToSpawn, Location + SpawnOffset);
 }
 
-void ASolarSystemGame::OnGameCompleted_Implementation()
+void ASolarSystemGame::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal)
 {
-	UE_LOG(LogSolarSystemGame, Warning, TEXT("Function OnGameCompleted isn't override in Blueprints!"));
+	IInteractable::Interact(InteractComponent, InteractPoint, InteractionNormal);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "StartInteract");
+	
+}
+
+void ASolarSystemGame::EndInteract_Implementation()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "EndInteract");
+	OnDestroyUniverse.Broadcast();
+}
+
+void ASolarSystemGame::DeactivateStars()
+{
+	NiagaraComponentStars->Deactivate();
+}
+
+void ASolarSystemGame::DeactivateFallingStars()
+{
+	NiagaraComponentCosmicDust->Deactivate();
 }
 
