@@ -51,7 +51,6 @@ void ASpaceObjectSpot::OnPickupPlaced(AInventoryActor* Actor)
 	{
 		CheckCorrectPlanet(SpaceObject);
 	}
-	// SpaceObject->SetOldCenterLocation(SpaceObject->GetCenterOfRotation()->GetActorLocation());
 }
 
 void ASpaceObjectSpot::OnPickupRemoved()

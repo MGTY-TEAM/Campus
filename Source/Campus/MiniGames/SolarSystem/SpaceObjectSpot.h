@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Campus/Inventory/PickupSocketComponent.h"
 #include "GameFramework/Actor.h"
 #include "SpaceObjectSpot.generated.h"
 
@@ -51,6 +52,8 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void OnDestroyUniverse();
+
+	void RemovePickup() const { PickupSocket->RemovePickup(); }
 private:
 	ASpaceObject* CorrectPlanet = nullptr;
 	bool HaveCorrectPlanet = false;

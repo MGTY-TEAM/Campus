@@ -6,6 +6,8 @@
 #include "Campus/Inventory/InventoryActor.h"
 #include "SpaceObject.generated.h"
 
+class UNiagaraSystem;
+class UNiagaraComponent;
 class UStaticMeshComponent;
 
 UCLASS()
@@ -31,6 +33,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlanetSettings")
 	FName NameOfObject = NAME_None;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
+	UNiagaraSystem* NiagaraSystemExplosion;
+	
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "SolarSystemSettings")
+	UNiagaraComponent* NiagaraComponentExplosion;
 public:	
 	virtual void Tick(float DeltaTime) override;
 
@@ -45,14 +52,29 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FName GetNameOfObject() const { return NameOfObject; }
 
+	UFUNCTION(BlueprintNativeEvent)
+	void ReallocatePlanet();
+
 	virtual void SetEnabled(bool bEnabled) override;
 
 	ASpaceObject* GetCenterOfRotation() const { return CenterOfRotation; }
 	void SetOldCenterLocation(const FVector& Location) { OldCenterLocation = Location; }
 
+	UFUNCTION(BlueprintCallable)
 	void SetCanPickup(const bool NewCondition) { bCanPickup = NewCondition; }
+
+protected:
+	UFUNCTION(BlueprintCallable, meta = (BlueprintProtected = "true"))
+	FVector GetBeginPosition() const { return BeginPosition; }
 private:
+	FTimerHandle ExplosionTimerHandle;
+	
 	void OrthogonalAxis();
 	FVector OldCenterLocation;
 	bool CanRotate = false;
+
+	void OnActivateSystem();
+	FVector BeginPosition = FVector(0.f);
+
+	void ReallocatePlanet_Implementation();
 };

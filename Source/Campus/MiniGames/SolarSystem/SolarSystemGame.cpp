@@ -112,7 +112,6 @@ void ASolarSystemGame::StartSystem()
 			{
 				SpaceObject->SetOldCenterLocation(SpaceObject->GetCenterOfRotation()->GetActorLocation());
 				SpaceObject->StartActive();
-				// SpaceObject->SetCanRotateInTrue();
 			}
 		}
 	}
@@ -156,8 +155,8 @@ void ASolarSystemGame::DestroySystem()
 		{
 			if (ASpaceObject* SpaceObject = PickupSocket->GetCorrectPlanet())
 			{
+				PickupSocket->RemovePickup();
 				SpaceObject->EndActive();
-				// SpaceObject->SetCanRotateInFalse();
 			}
 		}
 	}
