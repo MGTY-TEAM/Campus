@@ -5,10 +5,14 @@
 #include "Campus/UserInterface/Hud/Inventory/UInventoryWidget.h"
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
 
+class UInputAction;
+class UInputMappingContext;
+struct FInputActionValue;
 class AInventoryActor;
 class UInventoryComponent;
 class UWidgetInteractionComponent;
@@ -25,6 +29,31 @@ class CAMPUS_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	/** MappingContext */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* DefaultMappingContext;
+
+	/** Move Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* MoveAction;
+
+	/** Look Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* LookAction;
+
+	/** Interaction Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractionAction;
+
+	/** Drop Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* DropAction;
+	
+	/** Select Input Actions */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* SelectNextAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* SelectPrevAction;
 public:
 	/** Default constructor. */
 	ABaseCharacter();
@@ -41,23 +70,18 @@ protected:
 	/** Function to handle ending interaction. */
 	virtual void EndInteract();
 
-	/** Function to handle moving the character forward. */
-	virtual void MoveForward(float value);
+	/** Function to handle moving the character. */
+	virtual void Move(const FInputActionValue& Value);
 
-	/** Function to handle moving the character right. */
-	virtual void MoveRight(float value);
-
-	/** Function to handle looking up. */
-	virtual void LookUp(float value);
-
-	/** Function to handle looking right. */
-	virtual void LookRight(float value);
+	/** Function to handle looking. */
+	virtual void Look(const FInputActionValue& Value);
 	
 	virtual void SelectNextItem();
 
 	virtual void SelectPrevItem();
 
 	void Drop();
+	
 	/** Widget interaction component for interacting with UI widgets in the world. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UWidgetInteractionComponent* WidgetInteractionComponent;
@@ -99,5 +123,8 @@ public:
 	/** Component for handling character interactions. */
    	UPROPERTY(EditDefaultsOnly, Category = "Components")
    	UInteractionComponent* InteractionComponent;
+
+private:
+	void SetupInitialMouseSense() const;
 };
 

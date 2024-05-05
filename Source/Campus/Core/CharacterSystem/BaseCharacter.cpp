@@ -3,9 +3,14 @@
 
 #include "BaseCharacter.h"
 
+#include "Engine/LocalPlayer.h"
 #include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Campus/Chat/ChatManager.h"
+#include "InputActionValue.h"
+#include "InputMappingContext.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "Campus/Chat/Components/ChatUserComponent.h"
 #include "Components/WidgetInteractionComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -54,6 +59,17 @@ void ABaseCharacter::PostInitializeComponents()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+		}
+	}
+
+	SetupInitialMouseSense();
+	
 #ifdef BASE_CHARACTER_DEBUG
 	UE_CLOG(WidgetInteractionComponent == nullptr, LogBaseCharacter, Error, TEXT("Widget interaction component is not valid"));
 #endif
@@ -96,16 +112,25 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &ABaseCharacter::Interact);
-	PlayerInputComponent->BindAction("Interaction", IE_Released, this, &ABaseCharacter::EndInteract);
-	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &ABaseCharacter::Drop);
-	PlayerInputComponent->BindAction("SelectNextItem", IE_Pressed, this, &ABaseCharacter::SelectNextItem);
-	PlayerInputComponent->BindAction("SelectPrevItem", IE_Pressed, this, &ABaseCharacter::SelectPrevItem);
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		// Interaction
+		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Started, this, &ABaseCharacter::Interact);
+		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndInteract);
 
-	PlayerInputComponent->BindAxis("ForwardAxis", this, &ABaseCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("RightAxis", this, &ABaseCharacter::MoveRight);
-	PlayerInputComponent->BindAxis("MouseX", this, &ABaseCharacter::LookRight);
-	PlayerInputComponent->BindAxis("MouseY", this, &ABaseCharacter::LookUp);
+		// Dropping
+		EnhancedInputComponent->BindAction(DropAction, ETriggerEvent::Started, this, &ABaseCharacter::Drop);
+		
+		// Selection
+		EnhancedInputComponent->BindAction(SelectNextAction, ETriggerEvent::Started, this, &ABaseCharacter::SelectNextItem);
+		EnhancedInputComponent->BindAction(SelectPrevAction, ETriggerEvent::Started, this, &ABaseCharacter::SelectPrevItem);
+
+		// Moving
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Move);
+
+		// Looking
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Look);
+	}
 }
 
 void ABaseCharacter::Interact()
@@ -154,24 +179,32 @@ void ABaseCharacter::Drop()
 	}
 }
 
-void ABaseCharacter::MoveForward(float value)
+void ABaseCharacter::Move(const FInputActionValue& Value)
 {
-	AddMovementInput(GetActorForwardVector() * value);
+	const FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if (Controller)
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
+	}
 }
 
-void ABaseCharacter::MoveRight(float value)
+void ABaseCharacter::Look(const FInputActionValue& Value)
 {
-	AddMovementInput(GetActorRightVector() * value);
-}
-
-void ABaseCharacter::LookUp(float value)
-{
-	AddControllerPitchInput(value * MouseSens * -1);
-}
-
-void ABaseCharacter::LookRight(float value)
-{
-	AddControllerYawInput(value * MouseSens);
+	const FVector2D LookAxisVector = Value.Get<FVector2D>();
+	
+	if (Controller)
+	{
+		AddControllerYawInput(LookAxisVector.X);
+		AddControllerPitchInput(LookAxisVector.Y);
+	}
 }
 
 void ABaseCharacter::SelectNextItem()
@@ -190,4 +223,19 @@ void ABaseCharacter::SelectPrevItem()
 	}
 }
 
-
+void ABaseCharacter::SetupInitialMouseSense() const
+{
+	if (LookAction)
+	{
+		for (auto Modifier : LookAction->Modifiers)
+		{
+			if (UInputModifier* InputModifier = Modifier.Get())
+			{
+				if (UInputModifierFOVScaling* FOVInputModifier = Cast<UInputModifierFOVScaling>(InputModifier))
+				{
+					FOVInputModifier->FOVScale = MouseSens;
+				}
+			}
+		}
+	}
+}

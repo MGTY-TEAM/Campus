@@ -8,7 +8,7 @@ public class Campus : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem","Networking","WebSockets","Sockets" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem","Networking","WebSockets","Sockets", "EnhancedInput" });
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
