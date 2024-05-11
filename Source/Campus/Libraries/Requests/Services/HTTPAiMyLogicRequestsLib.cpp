@@ -36,17 +36,12 @@ void UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
 
 					if (FJsonSerializer::Deserialize(AnswerReader, JsonObjectAnswer))
 					{
-						UE_LOG(HTTPGameApiLog, Warning, TEXT("Выйграли с дересеариазиц"));
 						FString Message = JsonObjectAnswer->GetStringField("message");
 						FString ActionType = JsonObjectAnswer->GetStringField("actionType");
 						int ActionID = JsonObjectAnswer->GetIntegerField("actionID");
 
 						//UE_LOG(LogRequests, Log, TEXT("GET Request Result: %d"), static_cast<int>(ActionID));
 						CallBack(Message, ActionType, ActionID);
-					}
-					else
-					{
-						UE_LOG(HTTPGameApiLog, Warning, TEXT("Проебали с дересеариазиц"));
 					}
 				}
 				else
