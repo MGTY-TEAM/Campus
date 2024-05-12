@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Border.h"
 #include "InventoryItemWidget.generated.h"
 
 class UImage;
+class UBorder;
 /**
  * 
  */
@@ -17,6 +19,13 @@ class CAMPUS_API UInventoryItemWidget : public UUserWidget
 public:
 	UPROPERTY(EditDefaultsOnly, meta =(BindWidget))
 	UImage* ItemImage;
+
+	UPROPERTY(EditDefaultsOnly, meta =(BindWidget))
+	UBorder* OutLine;
+
+	FSlateBrush Brush;
+
+	virtual void NativeConstruct() override;
 	
 	void SetItemImageTexture(UTexture2D* Texture);
 
