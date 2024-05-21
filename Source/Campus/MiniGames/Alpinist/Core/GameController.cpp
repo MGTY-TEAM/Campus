@@ -20,7 +20,8 @@ GameController::GameController(const std::vector<std::string>& map)
 
 bool GameController::MoveForward()
 {
-    return m_world->SwapPlayerMove() == MoveResult::SUCCESS;
+    const MoveResult result = m_world->SwapPlayerMove();
+    return result == MoveResult::SUCCESS || result == MoveResult::FINISH;
 }
 
 bool GameController::RotateRight()
@@ -49,7 +50,7 @@ bool GameController::RotateLeft()
     return false;
 }
 
-bool GameController::WallInDirection(Condition condition)
+bool GameController::WallInDirection(const Condition& condition)
 {
     if(!m_world)
         return false;

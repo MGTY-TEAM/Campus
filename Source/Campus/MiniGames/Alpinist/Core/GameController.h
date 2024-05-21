@@ -17,7 +17,7 @@ namespace AlpinistGame
 		bool RotateRight();
 		bool RotateLeft();
 
-		bool WallInDirection(Condition definition);
+		bool WallInDirection(const Condition& condition);
 
 		World* GetWorld() { return m_world; }
 

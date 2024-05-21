@@ -39,4 +39,16 @@ public:
 
 		return VectorOfVectorOfInt;
 	}
+
+	static std::vector<std::string> TArrayOfStringToVectorOfString(const TArray<FString>& TArrayToConv)
+	{
+		std::vector<std::string> VectorString;
+
+		for (const auto String : TArrayToConv)
+		{
+			VectorString.push_back(std::string(TCHAR_TO_UTF8(*String)));
+		}
+
+		return VectorString;
+	}
 };

@@ -19,6 +19,7 @@ namespace AlpinistGame
 
 		virtual bool Execute()
 		{
+			return false;
 		}
 	};
 
@@ -31,7 +32,7 @@ namespace AlpinistGame
 		{
 		}
 
-		bool Execute() override;
+		virtual bool Execute() override;
 	};
 
 	class RotateLeftCommand : public PlayerCommand
@@ -43,7 +44,7 @@ namespace AlpinistGame
 		{
 		}
 
-		bool Execute() override;
+		virtual bool Execute() override;
 	};
 
 	class MoveCommand : public PlayerCommand
@@ -55,7 +56,7 @@ namespace AlpinistGame
 		{
 		}
 
-		bool Execute() override;
+		virtual bool Execute() override;
 	};
 
 	class MacroCommand : public PlayerCommand
@@ -68,9 +69,11 @@ namespace AlpinistGame
 		{
 		}
 
-		bool Execute() override;
+		virtual bool Execute() override;
 
 		void PushCommand(PlayerCommand* playerCommand);
+
+		std::list<PlayerCommand*> GetList() const { return m_commandList; }
 	};
 
 	class ConditionCommand : public PlayerCommand
@@ -88,13 +91,12 @@ namespace AlpinistGame
 		{
 		}
 
-		bool GetResult() const;
+		bool GetResult() const { return m_shouldBeNegation ? !m_bResult : m_bResult; }
 		void ToggleResult();
 
-		bool Execute() override;
+		virtual bool Execute() override;
 
 		ConditionCommand* operator!()
-
 		{
 			ConditionCommand* NewCommand = new ConditionCommand(this->m_gameController, this->m_definition);
 			NewCommand->ToggleResult();
@@ -108,14 +110,14 @@ namespace AlpinistGame
 		std::list<PlayerCommand*> m_commandListIfTrue;
 		std::list<PlayerCommand*> m_commandListIfFalse;
 
-		bool m_bConditon;
+		ConditionCommand* m_conditionCommand;
 
 	public:
 		IfCommand()
 		{
 		}
 
-		IfCommand(bool Condition) : m_bConditon(Condition)
+		IfCommand(ConditionCommand* ConditionCommand) : m_conditionCommand(ConditionCommand)
 		{
 		}
 
@@ -130,9 +132,9 @@ namespace AlpinistGame
 			m_commandListIfFalse.push_back(playerCommand);
 		}
 
-		void SetCondition(bool Condition) { m_bConditon = Condition; }
+		// void SetCondition(bool Condition) { m_bConditon = Condition; }
 
-		bool Execute() override;
+		virtual bool Execute() override;
 	};
 
 	class WhileCommand : public MacroCommand
@@ -163,6 +165,24 @@ namespace AlpinistGame
 				m_conditionCommand->Execute();
 			}
 			return true;
+		}
+	};
+
+	class Creator
+	{
+	public:
+		virtual PlayerCommand* Create(std::string Command, GameController* controller, ConditionCommand* conditionCommand = nullptr)
+		{
+			if (Command == "move") return new MoveCommand(controller);
+			if (Command == "right") return new RotateRightCommand(controller);
+			if (Command == "left") return new RotateLeftCommand(controller);
+			if (Command == "wallAhead") return new ConditionCommand(controller, WALL_FORWARD);
+			if (Command == "wallRight") return new ConditionCommand(controller, WALL_RIGHT);
+			if (Command == "wallLeft") return new ConditionCommand(controller, WALL_LEFT);
+			if (Command == "while") return new WhileCommand(conditionCommand);
+			if (Command == "if") return new IfCommand(conditionCommand);
+
+			return nullptr;
 		}
 	};
 }

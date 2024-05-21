@@ -67,15 +67,18 @@ MoveResult World::SwapPlayerMove()
 			m_grid[nextPosition.first][nextPosition.second] = m_player;
 			m_grid[position.first][position.second] = nullptr;
 			m_player->SetPos(nextPosition);
+			
+			bFinished = true;
+			
 			return FINISH;
 		}
 	}
 	return ERROR;
 }
 
-bool World::WallInDirection(Condition condition)
+bool World::WallInDirection(const Condition& condition)
 {
-	if (!m_grid.empty() || !m_player)
+	if (m_grid.empty() || !m_player)
 		return false;
 
 	PlayerDirection playerDirection = m_player->GetDirection();

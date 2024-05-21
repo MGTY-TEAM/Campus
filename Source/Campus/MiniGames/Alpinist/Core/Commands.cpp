@@ -40,7 +40,9 @@ void MacroCommand::PushCommand(PlayerCommand* playerCommand)
 }
 
 void ConditionCommand::ToggleResult()
-{ m_shouldBeNegation = !m_shouldBeNegation; }
+{
+	m_shouldBeNegation = !m_shouldBeNegation;
+}
 
 bool ConditionCommand::Execute()
 {
@@ -53,19 +55,23 @@ bool ConditionCommand::Execute()
 
 bool IfCommand::Execute()
 {
-	if (m_bConditon)
+	if (!m_conditionCommand) return false;
+	m_conditionCommand->Execute();
+	if (m_conditionCommand->GetResult())
 	{
 		for (PlayerCommand* playerCommand : m_commandListIfTrue)
 		{
 			if (!playerCommand->Execute())
 				return false;
 		}
-		return true;
 	}
-	for (PlayerCommand* playerCommand : m_commandListIfFalse)
+	else
 	{
-		if (!playerCommand->Execute())
-			return false;
+		for (PlayerCommand* playerCommand : m_commandListIfFalse)
+		{
+			if (!playerCommand->Execute())
+				return false;
+		}
 	}
 	return true;
 }
