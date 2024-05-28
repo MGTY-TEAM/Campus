@@ -2,17 +2,18 @@
 
 AlpinistGame::Parser::~Parser()
 {
-	for (auto token : Tokens)
+	/* for (auto token : Tokens)
 	{
 		delete token;
 	}
 	delete Controller;
 	delete CommandList;
-	delete creator;
+	delete creator; */
 }
 
-AlpinistGame::MacroCommand* AlpinistGame::Parser::SynAnalysis()
+AlpinistGame::MacroCommand* AlpinistGame::Parser::SynAnalysis(AlpinistLog& AlpLog)
 {
+	Log = &AlpLog;
 	while (ContinueSynAnal(CommandList))
 	{
 
@@ -40,6 +41,7 @@ bool AlpinistGame::Parser::ContinueSynAnal(MacroCommand* commandList)
 		{
 			return true;
 		}
+		Log->PushMessageLog("Undefined Command: Can't create command", ErrorMes);
 		// std::cout << "Undefined Command: Can't create command" << std::endl;
 		break;
 	case WhileLoop:
@@ -47,6 +49,7 @@ bool AlpinistGame::Parser::ContinueSynAnal(MacroCommand* commandList)
 		{
 			return true;
 		}
+		Log->PushMessageLog("Incorrect WhileLoop", ErrorMes);
 		// std::cout << "Incorrect WhileLoop" << std::endl;
 		break;
 	case IfElseConditional:
@@ -54,21 +57,26 @@ bool AlpinistGame::Parser::ContinueSynAnal(MacroCommand* commandList)
 		{
 			return true;
 		}
+		Log->PushMessageLog("Incorrect IfElseConditional", ErrorMes);
 		// std::cout << "Incorrect IfElseConditional" << std::endl;
 		break;
 	case ConditionType:
+		Log->PushMessageLog("Expected while Or if Command", ErrorMes);
 		// std::cout << "Expected while Or if Command" << std::endl;
 		break;
 	case BeginScope:
+		Log->PushMessageLog("Expected while Or if Command", ErrorMes);
 		// std::cout << "Expected while Or if Command" << std::endl;
 		break;
 	case EndScope:
+		Log->PushMessageLog("Expected while Or if Command", ErrorMes);
 		// std::cout << "Expected while Or if Command" << std::endl;
 		break;
 	case Space:
 		Tokens.erase(Tokens.begin());
 		return true;
 	default:
+		Log->PushMessageLog("Undefined Type: Can't create command", ErrorMes);
 		break;
 		// std::cout << "Undefined Type: Can't create command" << std::endl;
 	}
@@ -167,7 +175,7 @@ bool AlpinistGame::Parser::DeleteTokenFront()
 	{
 		Tokens.erase(Tokens.begin());
 	}
-	if (Tokens.size() == 0)
+	else if (Tokens.size() == 0)
 	{
 		return false;
 	}

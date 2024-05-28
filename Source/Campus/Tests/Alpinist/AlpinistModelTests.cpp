@@ -80,8 +80,23 @@ bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 
 	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, "-. -. .-. --. . -.- - .. --- . -. - .-. ... --- . -.- - -. .-. ... --. . -.- - .- -.-");
-	TestTrue("Compile Fail", compiler->Run());
+	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, "-. -. .-. --. . -.- - .. --- . -. - .-. ... --- . -.- - -. .-. ... --. . -.- - .- -.-"); // - BigMapTest
+	// AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".-. --- . .- -.- -. -.- -"); // - ZigZag
+
+	AlpinistGame::AlpinistLog Log;
+	const bool CompileSuccess = compiler->Compile(Log);
+	if (!CompileSuccess)
+	{
+		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		{
+			FString Info = FString(ErrorMessage.Message.c_str());
+			AddInfo(Info);
+		}
+	}
+	TestTrue("Compile Fail", CompileSuccess);
+
+	const bool RunSuccess = compiler->Run(Log);
+	TestTrue("Run Fail", RunSuccess);
 
 	const bool IsHeFinished = controller->GetWorld()->IsPlayerFinished();
 	TestTrue("Player Should Be On Finish", IsHeFinished);

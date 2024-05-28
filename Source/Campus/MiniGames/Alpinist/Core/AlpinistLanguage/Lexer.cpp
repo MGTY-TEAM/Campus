@@ -1,12 +1,13 @@
 #include "Lexer.h"
 
-std::vector<AlpinistGame::Token*>& AlpinistGame::Lexer::LexAnalysis()
+std::vector<AlpinistGame::Token*>* AlpinistGame::Lexer::LexAnalysis(AlpinistLog& AlpLog)
 {
+	Log = &AlpLog;
 	while (ContinueLexAnal())
 	{
 
 	}
-	return Tokens;
+	return &Tokens;
 }
 
 bool AlpinistGame::Lexer::ContinueLexAnal()
@@ -31,6 +32,7 @@ bool AlpinistGame::Lexer::ContinueLexAnal()
 		}
 	}
 
+	Log->PushMessageLog("Incorrect Command", ErrorMes);
 	// std::cout << "Incorrect Command" << std::endl;
 	return false;
 }

@@ -27,7 +27,7 @@ namespace AlpinistGame
 		std::regex* Regular;
 
 	public:
-		TokenType(const std::string name, ECommandType commandType, std::regex* regular) : Name(name), CommandType(commandType), Regular(regular) {}
+		TokenType(const std::string name, ECommandType commandType, std::regex* regularexpr) : Name(name), CommandType(commandType), Regular(regularexpr) {}
 		~TokenType()
 		{
 			// delete Regular;

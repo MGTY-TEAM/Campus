@@ -17,6 +17,7 @@ namespace AlpinistGame
 		MacroCommand* CommandList;
 		Creator* creator;
 
+		AlpinistLog* Log = nullptr;
 	public:
 		Parser(const std::vector<Token*>& ListOfTokens, GameController* controller) : Tokens(ListOfTokens), Controller(controller)
 		{
@@ -25,7 +26,7 @@ namespace AlpinistGame
 		}
 		~Parser();
 
-		MacroCommand* SynAnalysis();
+		MacroCommand* SynAnalysis(AlpinistLog& AlpLog);
 	private:
 		bool ContinueSynAnal(MacroCommand* commandList);
 
@@ -99,6 +100,10 @@ namespace AlpinistGame
 			{
 				(Command->*PushCommand)(commandToAdd);
 			}
+		}
+		else
+		{
+			return false;
 		}
 		return true;
 	}

@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Token.h"
+#include "../GameController.h"
 
 namespace AlpinistGame
 {
@@ -12,6 +13,7 @@ namespace AlpinistGame
 		std::vector<Token*> Tokens = {};
 		std::vector<std::string> arr;
 
+		AlpinistLog* Log = nullptr;
 	public:
 		Lexer(const std::string& code) : Code(code)
 		{
@@ -25,7 +27,7 @@ namespace AlpinistGame
 			} */
 		}
 
-		std::vector<Token*>& LexAnalysis();
+		std::vector<Token*>* LexAnalysis(AlpinistLog& AlpLog);
 
 		void GetNamesOfTokens() const;
 	private:
