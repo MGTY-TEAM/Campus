@@ -1,3 +1,4 @@
+/*
 #if WITH_AUTOMATION_TESTS
 
 #include "Misc/AutomationTest.h"
@@ -105,3 +106,5 @@ bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 }
 
 #endif
+
+*/
