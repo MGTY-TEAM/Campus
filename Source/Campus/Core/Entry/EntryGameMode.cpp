@@ -18,6 +18,8 @@ AEntryGameMode::AEntryGameMode()
 
 void AEntryGameMode::BeginPlay()
 {
+	Super::BeginPlay();
+	
 	if (UWorld* World = GetWorld())
 	{
 		World->GetFirstPlayerController()->bShowMouseCursor = true;
@@ -25,12 +27,13 @@ void AEntryGameMode::BeginPlay()
 #ifdef ENTRY_GAME_MODE_DEBUG
 		UE_LOG(LogEntryGameMode, Log, TEXT("Create entry widget"));
 #endif
-		M_EntryWidget = CreateWidget<UEntryWidget>(World, M_EntryWidgetClass);
-		M_EntryWidget->AddToViewport();
-
-		M_EntryWidget->OnEntryExecute.AddDynamic(this, &AEntryGameMode::OnEntryWidgetExecute);
+		if(M_EntryWidget)
+		{
+			M_EntryWidget = CreateWidget<UEntryWidget>(World, M_EntryWidgetClass);
+			M_EntryWidget->AddToViewport();
+			M_EntryWidget->OnEntryExecute.AddDynamic(this, &AEntryGameMode::OnEntryWidgetExecute);
+		}
 	}
-	Super::BeginPlay();
 }
 
 void AEntryGameMode::OnEntryWidgetExecute(const FString& Token)
@@ -46,6 +49,9 @@ void AEntryGameMode::OnEntryWidgetExecute(const FString& Token)
 			UE_LOG(LogEntryGameMode, Log, TEXT("Entry behavior completed"));
 #endif
 		}
-		M_EntryWidget->RemoveFromParent();
+		if(M_EntryWidget)
+		{
+			M_EntryWidget->RemoveFromParent();
+		}
 	}
 }
