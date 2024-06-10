@@ -1,4 +1,4 @@
-/*
+#include "EngineUtils.h"
 #if WITH_AUTOMATION_TESTS
 
 #include "Misc/AutomationTest.h"
@@ -62,11 +62,12 @@ bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 {
 	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/BigMapTest.json";
 	bool SucceededDeserialize = false;
+	
 	FString OutInfoMessage;
 
 	const TSharedPtr<FJsonObject> JsonObject = ReadJson(PathToJson, SucceededDeserialize, OutInfoMessage);
 	TestTrue(OutInfoMessage, SucceededDeserialize);
-
+	
 	TArray<FString> Map;
 	TestTrue("Not Array", JsonObject->TryGetStringArrayField("game_map", Map));
 
@@ -106,5 +107,3 @@ bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 }
 
 #endif
-
-*/
