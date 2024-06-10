@@ -3,7 +3,7 @@
 #include <string>
 #include "Token.h"
 #include "../GameController.h"
-
+#ifdef ALPINIST_GAME
 namespace AlpinistGame
 {
 	class Lexer
@@ -54,3 +54,4 @@ namespace AlpinistGame
 	};
 }
 
+#endif

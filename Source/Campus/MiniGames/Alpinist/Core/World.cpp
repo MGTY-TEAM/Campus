@@ -1,5 +1,6 @@
 ﻿#include "World.h"
 
+#ifdef ALPINIST_GAME
 using namespace AlpinistGame;
 
 bool World::IsValidPosition(std::pair<int8_t, int8_t> position) const
@@ -140,3 +141,4 @@ std::ostream& AlpinistGame::operator<<(std::ostream& os, World* world)
 	}
 	return os;
 }
+#endif

@@ -1,5 +1,6 @@
 #include "Lexer.h"
-
+#include "../GameController.h"
+#ifdef ALPINIST_GAME
 std::vector<AlpinistGame::Token*>* AlpinistGame::Lexer::LexAnalysis(AlpinistLog& AlpLog)
 {
 	Log = &AlpLog;
@@ -88,3 +89,4 @@ void AlpinistGame::Lexer::PushAndAdjustment(std::string str, std::vector<std::st
 		arrToFill.push_back(str);
 	}
 }
+#endif

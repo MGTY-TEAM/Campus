@@ -1,5 +1,6 @@
 ﻿#pragma once
-
+#include "GameController.h"
+#ifdef ALPINIST_GAME
 namespace AlpinistGame
 {
     enum Condition
@@ -58,3 +59,4 @@ namespace AlpinistGame
     }
 }
 
+#endif

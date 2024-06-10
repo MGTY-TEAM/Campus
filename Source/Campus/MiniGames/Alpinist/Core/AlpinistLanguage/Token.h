@@ -2,7 +2,8 @@
 
 #include <string>
 #include "TokenType.h"
-
+#include "../GameController.h"
+#ifdef ALPINIST_GAME
 namespace AlpinistGame
 {
 	class Token
@@ -23,3 +24,4 @@ namespace AlpinistGame
 	};
 }
 
+#endif

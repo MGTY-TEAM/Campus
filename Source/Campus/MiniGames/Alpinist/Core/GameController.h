@@ -1,8 +1,9 @@
 ﻿#pragma once
+// #define ALPINIST_GAME
 
 #include "Commands.h"
 #include "World.h"
-
+#ifdef ALPINIST_GAME
 namespace AlpinistGame
 {
 	enum TypeOfLog
@@ -60,3 +61,4 @@ namespace AlpinistGame
 		bool ExecuteMacroCommand(MacroCommand* macroCommand);
 	};
 }
+#endif

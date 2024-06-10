@@ -1,5 +1,6 @@
 #include "Parser.h"
-
+#include "../GameController.h"
+#ifdef ALPINIST_GAME
 AlpinistGame::Parser::~Parser()
 {
 	/* for (auto token : Tokens)
@@ -246,3 +247,4 @@ void AlpinistGame::Parser::GetNamesOfTokens() const
 		// std::cout << Token->GetText() << std::endl;
 	}
 }
+#endif

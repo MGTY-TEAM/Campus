@@ -4,7 +4,8 @@
 #include <regex>
 #include <string>
 #include "../Commands.h"
-
+#include "../GameController.h"
+#ifdef ALPINIST_GAME
 namespace AlpinistGame
 {
 	enum ECommandType
@@ -38,7 +39,4 @@ namespace AlpinistGame
 		ECommandType GetCommandType() const { return CommandType; }
 	};
 }
-
-
-
-
+#endif

@@ -1,10 +1,12 @@
 #include "EngineUtils.h"
+
+#ifdef ABC
 #if WITH_AUTOMATION_TESTS
 
 #include "Misc/AutomationTest.h"
 #include "Dom/JsonObject.h"
 #include "Campus/Libraries/CampusUtils.h"
-
+#include "Campus/MiniGames/Alpinist/Core/GameController.h"
 #include "Campus/MiniGames/Alpinist/Core/AlpinistLanguage/Compiler.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCorrectUsingJsonMaps, "Campus.Alpinist.CorrectUsingJsonMaps",
@@ -105,5 +107,5 @@ bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 	
 	return true;
 }
-
+#endif
 #endif

@@ -1,4 +1,8 @@
 ﻿#pragma once
+
+#include "GameController.h"
+#ifdef ALPINIST_GAME
+
 #include "GameTypes.h"
 
 namespace AlpinistGame
@@ -186,3 +190,4 @@ namespace AlpinistGame
 		}
 	};
 }
+#endif

@@ -2,6 +2,7 @@
 #include "Commands.h"
 #include <iostream>
 
+#ifdef ALPINIST_GAME
 using namespace AlpinistGame;
 
 GameController::GameController()
@@ -60,4 +61,6 @@ bool GameController::WallInDirection(const Condition& condition)
 bool GameController::ExecuteMacroCommand(MacroCommand* macroCommand)
 {
     return macroCommand->Execute();
-} 
+}
+
+#endif

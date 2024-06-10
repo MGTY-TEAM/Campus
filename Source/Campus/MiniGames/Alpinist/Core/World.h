@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "GameController.h"
+#ifdef ALPINIST_GAME
+
 #include "Entities.h"
 #include "GameTypes.h"
 
@@ -28,3 +31,4 @@ namespace AlpinistGame
 		bool IsPlayerFinished() const { return bFinished; }
 	};
 }
+#endif

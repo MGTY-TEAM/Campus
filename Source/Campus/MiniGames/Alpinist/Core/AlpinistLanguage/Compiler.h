@@ -3,7 +3,7 @@
 #include "../GameController.h"
 #include "Lexer.h"
 #include "Parser.h"
-
+#ifdef ALPINIST_GAME
 namespace AlpinistGame
 {
 	class Compiler
@@ -19,3 +19,5 @@ namespace AlpinistGame
 		bool Run(AlpinistLog& AlpLog);
 	};
 }
+
+#endif

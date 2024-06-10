@@ -1,5 +1,6 @@
 #include "Compiler.h"
-
+#include "../GameController.h"
+#ifdef ALPINIST_GAME
 bool AlpinistGame::Compiler::Compile(AlpinistLog& AlpLog)
 {
 	Lexer lexer = Lexer(Code);
@@ -29,3 +30,4 @@ bool AlpinistGame::Compiler::Run(AlpinistLog& AlpLog)
 	
 	return Commands->Execute();
 }
+#endif
