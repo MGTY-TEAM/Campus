@@ -1,6 +1,6 @@
 #include "EngineUtils.h"
 
-#ifdef ABC
+#ifdef ALPINIST_GAME
 #if WITH_AUTOMATION_TESTS
 
 #include "Misc/AutomationTest.h"
@@ -10,6 +10,12 @@
 #include "Campus/MiniGames/Alpinist/Core/AlpinistLanguage/Compiler.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCorrectUsingJsonMaps, "Campus.Alpinist.CorrectUsingJsonMaps",
+		EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority)
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCorrectResponseZigZag, "Campus.Alpinist.CorrectResponseZigZag",
+		EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority)
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCorrectResponseBigMapTest, "Campus.Alpinist.CorrectResponseBigMapTest",
 		EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority)
 
 namespace
@@ -62,7 +68,29 @@ namespace
 
 bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/BigMapTest.json";
+	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/ZigZag.json";
+	bool SucceededDeserialize = false;
+	FString OutInfoMessage;
+
+	const TSharedPtr<FJsonObject> JsonObject = ReadJson(PathToJson, SucceededDeserialize, OutInfoMessage);
+	TestTrue(OutInfoMessage, SucceededDeserialize);
+
+	TArray<FString> Map;
+	TestTrue("Not Array", JsonObject->TryGetStringArrayField("game_map", Map));
+
+	AddInfo("Startup-Map-JsonChecking------------------------");
+	for (const FString& Str : Map)
+	{
+		AddInfo(Str);
+	}
+	AddInfo("------------------------------------------------");
+	
+	return true;
+}
+
+bool FCorrectResponseZigZag::RunTest(const FString& Parameters)
+{
+	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/ZigZag.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -84,8 +112,7 @@ bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 
 	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, "-. -. .-. --. . -.- - .. --- . -. - .-. ... --- . -.- - -. .-. ... --. . -.- - .- -.-"); // - BigMapTest
-	// AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".-. --- . .- -.- -. -.- -"); // - ZigZag
+	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".-. --- . .- -.- -. -.- -"); // - ZigZag
 
 	AlpinistGame::AlpinistLog Log;
 	const bool CompileSuccess = compiler->Compile(Log);
@@ -107,5 +134,55 @@ bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 	
 	return true;
 }
+
+
+
+
+bool FCorrectResponseBigMapTest::RunTest(const FString& Parameters)
+{
+	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/BigMapTest.json";
+	bool SucceededDeserialize = false;
+	FString OutInfoMessage;
+
+	const TSharedPtr<FJsonObject> JsonObject = ReadJson(PathToJson, SucceededDeserialize, OutInfoMessage);
+	TestTrue(OutInfoMessage, SucceededDeserialize);
+
+	TArray<FString> Map;
+	TestTrue("Not Array", JsonObject->TryGetStringArrayField("game_map", Map));
+
+	AddInfo("Startup-Map-------------------------------------");
+	for (const FString& Str : Map)
+	{
+		AddInfo(Str);
+	}
+	AddInfo("------------------------------------------------");
+
+	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
+
+	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	
+	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, "-. -. .-. --. . -.- - .. --- . -. - .-. ... --- . -.- - -. .-. ... --. . -.- - .- -.-"); // - BigMapTest
+
+	AlpinistGame::AlpinistLog Log;
+	const bool CompileSuccess = compiler->Compile(Log);
+	if (!CompileSuccess)
+	{
+		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		{
+			FString Info = FString(ErrorMessage.Message.c_str());
+			AddInfo(Info);
+		}
+	}
+	TestTrue("Compile Fail", CompileSuccess);
+
+	const bool RunSuccess = compiler->Run(Log);
+	TestTrue("Run Fail", RunSuccess);
+
+	const bool IsHeFinished = controller->GetWorld()->IsPlayerFinished();
+	TestTrue("Player Should Be On Finish", IsHeFinished);
+
+	return true;
+}
+
 #endif
 #endif

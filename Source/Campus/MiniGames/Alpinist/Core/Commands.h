@@ -3,7 +3,7 @@
 #include "GameController.h"
 #ifdef ALPINIST_GAME
 
-#include "GameTypes.h"
+// #include "GameTypes.h"
 
 namespace AlpinistGame
 {

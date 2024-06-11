@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../GameController.h"
+// #include "../GameController.h"
 #include "Lexer.h"
 #include "Parser.h"
+
 #ifdef ALPINIST_GAME
 namespace AlpinistGame
 {

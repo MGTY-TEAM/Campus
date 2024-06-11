@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "GameController.h"
+// #include "GameController.h"
 #ifdef ALPINIST_GAME
 
 #include "Entities.h"
-#include "GameTypes.h"
+// #include "GameTypes.h"
 
 namespace AlpinistGame
 {

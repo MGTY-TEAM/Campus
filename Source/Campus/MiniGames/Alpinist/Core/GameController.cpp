@@ -58,9 +58,9 @@ bool GameController::WallInDirection(const Condition& condition)
     return m_world->WallInDirection(condition);
 }
 
-bool GameController::ExecuteMacroCommand(MacroCommand* macroCommand)
+/*bool GameController::ExecuteMacroCommand(MacroCommand* macroCommand)
 {
     return macroCommand->Execute();
-}
+}*/
 
 #endif

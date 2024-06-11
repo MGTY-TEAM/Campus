@@ -3,8 +3,8 @@
 #include <string>
 #include <stack>
 #include "Token.h"
-#include "../Commands.h"
-#include "../GameController.h"
+// #include "../Commands.h"
+// #include "../GameController.h"
 #ifdef ALPINIST_GAME
 namespace AlpinistGame
 {

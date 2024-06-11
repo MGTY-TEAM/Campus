@@ -1,5 +1,5 @@
 #include "Lexer.h"
-#include "../GameController.h"
+// #include "../GameController.h"
 #ifdef ALPINIST_GAME
 std::vector<AlpinistGame::Token*>* AlpinistGame::Lexer::LexAnalysis(AlpinistLog& AlpLog)
 {

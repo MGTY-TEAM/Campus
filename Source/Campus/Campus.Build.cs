@@ -30,6 +30,9 @@ public class Campus : ModuleRules
         });
 
         bUseRTTI = true;
+        
+        PublicDefinitions.Add("ALPINIST_GAME");
+        
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 

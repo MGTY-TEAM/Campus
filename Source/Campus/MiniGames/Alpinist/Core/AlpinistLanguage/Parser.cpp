@@ -1,5 +1,5 @@
 #include "Parser.h"
-#include "../GameController.h"
+// #include "../GameController.h"
 #ifdef ALPINIST_GAME
 AlpinistGame::Parser::~Parser()
 {

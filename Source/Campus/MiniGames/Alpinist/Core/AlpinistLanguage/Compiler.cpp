@@ -1,5 +1,5 @@
 #include "Compiler.h"
-#include "../GameController.h"
+// #include "../GameController.h"
 #ifdef ALPINIST_GAME
 bool AlpinistGame::Compiler::Compile(AlpinistLog& AlpLog)
 {

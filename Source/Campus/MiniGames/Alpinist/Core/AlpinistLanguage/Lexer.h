@@ -2,7 +2,7 @@
 
 #include <string>
 #include "Token.h"
-#include "../GameController.h"
+// #include "../GameController.h"
 #ifdef ALPINIST_GAME
 namespace AlpinistGame
 {

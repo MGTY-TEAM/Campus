@@ -1,7 +1,7 @@
 ﻿#pragma once
 // #define ALPINIST_GAME
 
-#include "Commands.h"
+// #include "Commands.h"
 #include "World.h"
 #ifdef ALPINIST_GAME
 namespace AlpinistGame
@@ -58,7 +58,7 @@ namespace AlpinistGame
 
 		World* GetWorld() { return m_world; }
 
-		bool ExecuteMacroCommand(MacroCommand* macroCommand);
+		// bool ExecuteMacroCommand(MacroCommand* macroCommand);
 	};
 }
 #endif
