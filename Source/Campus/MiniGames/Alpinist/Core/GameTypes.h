@@ -1,28 +1,27 @@
 ﻿#pragma once
-// #include "GameController.h"
 #ifdef ALPINIST_GAME
 namespace AlpinistGame
 {
     enum Condition
     {
-        WALL_FORWARD,
-        WALL_RIGHT,
-        WALL_LEFT
+        C_WALL_FORWARD,
+        C_WALL_RIGHT,
+        C_WALL_LEFT
     };
 
     enum MoveResult
     {
-        SUCCESS,
-        ERROR,
-        FINISH
+        MR_SUCCESS,
+        MR_ERROR,
+        MR_FINISH
     };
 
     enum PlayerDirection
     {
-        UP = 4,
-        RIGHT = 2,
-        DOWN = 8,
-        LEFT = 1
+        PD_UP = 4,
+        PD_RIGHT = 2,
+        PD_DOWN = 8,
+        PD_LEFT = 1
     };
 
     inline AlpinistGame::PlayerDirection& operator++(AlpinistGame::PlayerDirection& direction)

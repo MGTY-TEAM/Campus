@@ -31,6 +31,7 @@ void UEnvQueryTest_ChooseAPlace::RunTest(FEnvQueryInstance& QueryInstance) const
 		if (Drone->TeleportationPlaces.IsValidIndex(ActionPlace - 1))
 		{
 			It.SetScore(TestPurpose, FilterType, Drone->TeleportationPlaces[It.GetIndex()] == Drone->TeleportationPlaces[ActionPlace - 1], Switch);
+			UE_LOG(LogTemp, Error, TEXT("Current Location Current %s, Selected %s, State %i"), *Drone->TeleportationPlaces[It.GetIndex()]->GetActorNameOrLabel(), *Drone->TeleportationPlaces[ActionPlace - 1]->GetActorNameOrLabel(), Drone->TeleportationPlaces[It.GetIndex()] == Drone->TeleportationPlaces[ActionPlace - 1]);
 		}
 	}
 }

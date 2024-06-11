@@ -1,5 +1,4 @@
 ﻿#pragma once
-// #include "GameController.h"
 #ifdef ALPINIST_GAME
 #include "GameTypes.h"
 
@@ -19,15 +18,15 @@ namespace AlpinistGame
         class Player : public Entity
         {
         protected:
-            PlayerDirection m_direction;
+            AlpinistGame::PlayerDirection m_direction;
             
         public:
-            Player(std::pair<int8_t, int8_t> pos, PlayerDirection direction) : Entity(pos), m_direction(direction){}
+            Player(std::pair<int8_t, int8_t> pos, AlpinistGame::PlayerDirection direction) : Entity(pos), m_direction(direction){}
             
             void RotateRight(){++m_direction;}
             void RotateLeft(){--m_direction;}
         
-            const PlayerDirection& GetDirection() const { return m_direction;}
+            const AlpinistGame::PlayerDirection& GetDirection() const { return m_direction;}
         };
         
         class Wall : public Entity

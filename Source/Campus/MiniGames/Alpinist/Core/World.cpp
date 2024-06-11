@@ -26,7 +26,7 @@ World::World(const std::vector<std::string>& grid)
 				m_grid[i][j] = nullptr;
 				break;
 			case('p'):
-				m_player = new Player(std::make_pair(i, j), PlayerDirection::UP); // TO DO: DIRECTION FIX
+				m_player = new Player(std::make_pair(i, j), PlayerDirection::PD_UP); // TO DO: DIRECTION FIX
 				m_grid[i][j] = m_player;
 				break;
 			case('w'):
@@ -44,7 +44,7 @@ World::World(const std::vector<std::string>& grid)
 MoveResult World::SwapPlayerMove()
 {
 	if (m_grid.empty() || !m_player)
-		return ERROR;
+		return MR_ERROR;
 
 	std::pair<int8_t, int8_t> direction = GetDirectionFromByteCode(m_player->GetDirection());
 	std::pair<int8_t, int8_t> position = m_player->GetPos();
@@ -60,7 +60,7 @@ MoveResult World::SwapPlayerMove()
 			m_grid[nextPosition.first][nextPosition.second] = m_player;
 			m_grid[position.first][position.second] = nullptr;
 			m_player->SetPos(nextPosition);
-			return SUCCESS;
+			return MR_SUCCESS;
 		}
 		else if (Finish* finish = dynamic_cast<Finish*>(entity))
 		{
@@ -71,10 +71,10 @@ MoveResult World::SwapPlayerMove()
 			
 			bFinished = true;
 			
-			return FINISH;
+			return MR_FINISH;
 		}
 	}
-	return ERROR;
+	return MR_ERROR;
 }
 
 bool World::WallInDirection(const Condition& condition)
@@ -87,10 +87,10 @@ bool World::WallInDirection(const Condition& condition)
 	std::pair<int8_t, int8_t> checkedCellPos;
 	switch (condition)
 	{
-	case WALL_RIGHT:
+	case C_WALL_RIGHT:
 		direction = GetDirectionFromByteCode(++playerDirection);
 		break;
-	case WALL_LEFT:
+	case C_WALL_LEFT:
 		direction = GetDirectionFromByteCode(--playerDirection);
 		break;
 	default:

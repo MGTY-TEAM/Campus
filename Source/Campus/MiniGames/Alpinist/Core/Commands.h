@@ -180,9 +180,9 @@ namespace AlpinistGame
 			if (Command == "move") return new MoveCommand(controller);
 			if (Command == "right") return new RotateRightCommand(controller);
 			if (Command == "left") return new RotateLeftCommand(controller);
-			if (Command == "wallAhead") return new ConditionCommand(controller, WALL_FORWARD);
-			if (Command == "wallRight") return new ConditionCommand(controller, WALL_RIGHT);
-			if (Command == "wallLeft") return new ConditionCommand(controller, WALL_LEFT);
+			if (Command == "wallAhead") return new ConditionCommand(controller, C_WALL_FORWARD);
+			if (Command == "wallRight") return new ConditionCommand(controller, C_WALL_RIGHT);
+			if (Command == "wallLeft") return new ConditionCommand(controller, C_WALL_LEFT);
 			if (Command == "while") return new WhileCommand(conditionCommand);
 			if (Command == "if") return new IfCommand(conditionCommand);
 

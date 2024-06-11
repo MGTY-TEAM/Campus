@@ -1,6 +1,5 @@
 ﻿#include "GameController.h"
 #include "Commands.h"
-#include <iostream>
 
 #ifdef ALPINIST_GAME
 using namespace AlpinistGame;
@@ -21,8 +20,8 @@ GameController::GameController(const std::vector<std::string>& map)
 
 bool GameController::MoveForward()
 {
-    const MoveResult result = m_world->SwapPlayerMove();
-    return result == MoveResult::SUCCESS || result == MoveResult::FINISH;
+    const AlpinistGame::MoveResult result = m_world->SwapPlayerMove();
+    return result == AlpinistGame::MoveResult::MR_SUCCESS || result == AlpinistGame::MoveResult::MR_FINISH;
 }
 
 bool GameController::RotateRight()
@@ -51,7 +50,7 @@ bool GameController::RotateLeft()
     return false;
 }
 
-bool GameController::WallInDirection(const Condition& condition)
+bool GameController::WallInDirection(const AlpinistGame::Condition& condition)
 {
     if(!m_world)
         return false;
