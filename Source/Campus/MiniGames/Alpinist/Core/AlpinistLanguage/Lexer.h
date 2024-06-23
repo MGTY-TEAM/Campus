@@ -37,19 +37,20 @@ namespace AlpinistGame
 		void PushAndAdjustment(std::string str, std::vector<std::string>& arr);
 
 		std::list<TokenType*> TokenList = {
-			new TokenType("move", SimpleCommand, new std::regex("(-\\.-)")),
-			new TokenType("right", SimpleCommand, new std::regex("(\\.-)")),
-			new TokenType("left", SimpleCommand, new std::regex("(-\\.)")),
-			new TokenType("wallAhead", ConditionType, new std::regex("(---)")),
-			new TokenType("wallRight", ConditionType, new std::regex("(\\.--)")),
-			new TokenType("wallLeft", ConditionType, new std::regex("(--\\.)")),
-			new TokenType("while", WhileLoop, new std::regex("(\\.-\\.)")),
-			new TokenType("if", IfElseConditional, new std::regex("(\\.\\.)")),
-			new TokenType("else", IfElseConditional, new std::regex("(--)")),
-			new TokenType("begin", BeginScope, new std::regex("(\\.)")),
-			new TokenType("end", EndScope, new std::regex("(-)")),
-			new TokenType("Space", Space, new std::regex("(\\s)")),
-			new TokenType("Negate", Negate, new std::regex("(\\.\\.\\.)")),
+			new TokenType("move", CT_SimpleCommand, new std::regex("(-\\.-)")),
+			new TokenType("right", CT_SimpleCommand, new std::regex("(\\.-)")),
+			new TokenType("left", CT_SimpleCommand, new std::regex("(-\\.)")),
+			new TokenType("wallAhead", CT_ConditionType, new std::regex("(---)")),
+			new TokenType("wallRight", CT_ConditionType, new std::regex("(\\.--)")),
+			new TokenType("wallLeft", CT_ConditionType, new std::regex("(--\\.)")),
+			new TokenType("while", CT_WhileLoop, new std::regex("(\\.-\\.)")),
+			new TokenType("if", CT_IfElseConditional, new std::regex("(\\.\\.)")),
+			new TokenType("else", CT_IfElseConditional, new std::regex("(--)")),
+			new TokenType("begin", CT_BeginScope, new std::regex("(\\.)")),
+			new TokenType("end", CT_EndScope, new std::regex("(-)")),
+			new TokenType("Space", CT_Space, new std::regex("(\\s)")),
+			new TokenType("Negate", CT_Negate, new std::regex("(\\.\\.\\.)")),
+			new TokenType("NotEnd", CT_NotEnd, new std::regex("(-\\.\\.-)"))
 		};
 	};
 }

@@ -54,6 +54,15 @@ bool ConditionCommand::Execute()
 	return true;
 }
 
+bool NotEndCommand::Execute()
+{
+	if (!m_gameController)
+		return false;
+
+	m_bResult = m_gameController->PlayerNotOnFinish();
+	return true;
+}
+
 bool IfCommand::Execute()
 {
 	if (!m_conditionCommand) return false;

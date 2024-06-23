@@ -20,8 +20,12 @@ GameController::GameController(const std::vector<std::string>& map)
 
 bool GameController::MoveForward()
 {
-    const AlpinistGame::MoveResult result = m_world->SwapPlayerMove();
-    return result == AlpinistGame::MoveResult::MR_SUCCESS || result == AlpinistGame::MoveResult::MR_FINISH;
+    if (m_world)
+    {
+        const AlpinistGame::MoveResult result = m_world->SwapPlayerMove();
+        return result == AlpinistGame::MoveResult::MR_SUCCESS || result == AlpinistGame::MoveResult::MR_FINISH;
+    }
+    return false;
 }
 
 bool GameController::RotateRight()
@@ -55,6 +59,14 @@ bool GameController::WallInDirection(const AlpinistGame::Condition& condition)
     if(!m_world)
         return false;
     return m_world->WallInDirection(condition);
+}
+
+bool GameController::PlayerNotOnFinish()
+{
+    if(!m_world)
+        return false;
+    
+    return !m_world->IsPlayerFinished();
 }
 
 /*bool GameController::ExecuteMacroCommand(MacroCommand* macroCommand)

@@ -35,7 +35,8 @@ namespace AlpinistGame
 		bool AddIfElseConditional(const std::string& Command, MacroCommand* commandList);
 
 		template<typename CommandType>
-		CommandType* CreateCommandWithCondtion(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition);
+		CommandType* CreateCommandWithCondition(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition);
+		WhileCommand* CreateWhileCommandWithKeyword(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition);
 
 		template<typename CommandType>
 		bool FillScope(CommandType* Command, void(CommandType::* PushCommand)(PlayerCommand*), const bool HasCondition = true);
@@ -44,16 +45,17 @@ namespace AlpinistGame
 		bool DeleteTokenFront();
 		bool CheckStackScope();
 		void SkipSpaceTokenIfThereItIs(Token* token);
+		bool CheckKeywords();
 	public:
 		void GetNamesOfTokens() const;
 	};
 
 	template<typename CommandT>
-	CommandT* Parser::CreateCommandWithCondtion(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition)
+	CommandT* Parser::CreateCommandWithCondition(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition)
 	{
 		bool NeedToBeNegate = false;
 		Token* NegateToken = Tokens.front();
-		if (NegateToken->GetCommandType() == Negate)
+		if (NegateToken->GetCommandType() == CT_Negate)
 		{
 			NeedToBeNegate = true;
 			DeleteTokenFront();
@@ -61,7 +63,7 @@ namespace AlpinistGame
 
 		Token* conditionToken = Tokens.front();
 		CommandT* instanceCommand = nullptr;
-		if (conditionToken->GetCommandType() == ConditionType)
+		if (conditionToken && conditionToken->GetCommandType() == CT_ConditionType)
 		{
 			if (PlayerCommand* newConditionCommand = creator->Create(conditionToken->GetText(), Controller))
 			{
@@ -82,6 +84,18 @@ namespace AlpinistGame
 				}
 			}
 		}
+		else if (conditionToken && conditionToken->GetCommandType() == CT_NotEnd)
+		{
+			Log->PushMessageLog("Keyword \"NotEnd\" doesn't expect negating...", ErrorMes);
+		}
+		else
+		{
+			const std::string What = Command;
+			const std::string Exactly = " expects ConditionCommand.";
+			const std::string WhatExactly = What + Exactly;
+			
+			Log->PushMessageLog(WhatExactly, ErrorMes);
+		}
 		return instanceCommand;
 	}
 
@@ -90,7 +104,7 @@ namespace AlpinistGame
 	{
 		Token* beginToken = Tokens.front();
 		MacroCommand* macroElseCommandList = new MacroCommand();
-		if (beginToken->GetCommandType() == BeginScope && HasCondition)
+		if (beginToken->GetCommandType() == CT_BeginScope && HasCondition)
 		{
 			if (!FillCommandListScope(macroElseCommandList))
 			{
@@ -103,6 +117,7 @@ namespace AlpinistGame
 		}
 		else
 		{
+			Log->PushMessageLog("While/IfCommand hasn't Scope.", ErrorMes);
 			return false;
 		}
 		return true;

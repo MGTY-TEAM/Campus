@@ -86,7 +86,7 @@ namespace AlpinistGame
 
 		Condition m_definition;
 
-		bool m_bResult;
+		bool m_bResult = false;
 		bool m_shouldBeNegation = false;
 
 	public:
@@ -109,6 +109,21 @@ namespace AlpinistGame
 		}
 	};
 
+	class NotEndCommand : public PlayerCommand
+	{
+		GameController* m_gameController;
+		bool m_bResult = false;
+
+	public:
+		NotEndCommand(GameController* gameController) : m_gameController(gameController)
+		{
+		}
+
+		bool GetResult() const { return m_bResult; }
+		
+		virtual bool Execute() override;
+	};
+	
 	class IfCommand : public PlayerCommand
 	{
 		std::list<PlayerCommand*> m_commandListIfTrue;
@@ -141,34 +156,72 @@ namespace AlpinistGame
 		virtual bool Execute() override;
 	};
 
+	// template<typename TCommand, typename = std::enable_if_t<__is_base_of(PlayerCommand*, TCommand)>>
 	class WhileCommand : public MacroCommand
 	{
 		ConditionCommand* m_conditionCommand;
+		NotEndCommand* m_notEndCommand;
 
+		size_t CountOfExecution = 0;
 	public:
 		WhileCommand()
 		{
 		}
 
-		WhileCommand(ConditionCommand* ConditionCommand) : m_conditionCommand(ConditionCommand)
+		WhileCommand(ConditionCommand* conditionCommand) : m_conditionCommand(conditionCommand)
 		{
+			m_notEndCommand = nullptr;
+		}
+		WhileCommand(NotEndCommand* notEndCommand) : m_notEndCommand(notEndCommand)
+		{
+			m_conditionCommand = nullptr;
 		}
 
-		void SetConditionCommand(ConditionCommand* ConditionCommand) { m_conditionCommand = ConditionCommand; }
+		// void SetConditionCommand(ConditionCommand* ConditionCommand) { m_conditionCommand = ConditionCommand; }
 
 		virtual bool Execute() override
 		{
-			m_conditionCommand->Execute();
-			while (m_conditionCommand->GetResult())
+			if (m_conditionCommand)
 			{
-				for (PlayerCommand* playerCommand : m_commandList)
-				{
-					if (!playerCommand->Execute())
-						return false;
-				}
 				m_conditionCommand->Execute();
+				while (m_conditionCommand->GetResult())
+				{
+					for (PlayerCommand* playerCommand : m_commandList)
+					{
+						if (!playerCommand->Execute())
+							return false;
+					}
+					m_conditionCommand->Execute();
+
+					if (CountOfExecution++ == 100)
+					{
+						return false;
+					}
+				}
+
+				return true;
 			}
-			return true;
+			if (m_notEndCommand)
+			{
+				m_notEndCommand->Execute();
+				while (m_notEndCommand->GetResult())
+				{
+					for (PlayerCommand* playerCommand : m_commandList)
+					{
+						if (!playerCommand->Execute())
+							return false;
+					}
+					m_notEndCommand->Execute();
+
+					if (CountOfExecution++ == 100)
+					{
+						return false;
+					}
+				}
+				
+				return true;
+			}
+			return false;
 		}
 	};
 
@@ -185,6 +238,13 @@ namespace AlpinistGame
 			if (Command == "wallLeft") return new ConditionCommand(controller, C_WALL_LEFT);
 			if (Command == "while") return new WhileCommand(conditionCommand);
 			if (Command == "if") return new IfCommand(conditionCommand);
+			if (Command == "NotEnd") return new NotEndCommand(controller);
+
+			return nullptr;
+		}
+		virtual PlayerCommand* CreateWhileNotEnd(std::string Command, GameController* controller, NotEndCommand* notEndCommand = nullptr)
+		{
+			if (Command == "while" && notEndCommand) return new WhileCommand(notEndCommand);
 
 			return nullptr;
 		}

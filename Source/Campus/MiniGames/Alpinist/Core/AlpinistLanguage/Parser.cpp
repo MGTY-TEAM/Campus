@@ -37,49 +37,45 @@ bool AlpinistGame::Parser::ContinueSynAnal(MacroCommand* commandList)
 	Token* token = Tokens.front();
 	switch (token->GetCommandType())
 	{
-	case SimpleCommand:
+	case CT_SimpleCommand:
 		if (AddSimpleCommand(token->GetText(), commandList))
 		{
 			return true;
 		}
-		Log->PushMessageLog("Undefined Command: Can't create command", ErrorMes);
-		// std::cout << "Undefined Command: Can't create command" << std::endl;
+		Log->PushMessageLog("Undefined Command: Can't create command.", ErrorMes);
 		break;
-	case WhileLoop:
+	case CT_WhileLoop:
 		if (AddWhileLoop(token->GetText(), commandList))
 		{
 			return true;
 		}
-		Log->PushMessageLog("Incorrect WhileLoop", ErrorMes);
-		// std::cout << "Incorrect WhileLoop" << std::endl;
+		Log->PushMessageLog("Incorrect WhileLoop.", ErrorMes);
 		break;
-	case IfElseConditional:
+	case CT_IfElseConditional:
 		if (AddIfElseConditional(token->GetText(), commandList))
 		{
 			return true;
 		}
-		Log->PushMessageLog("Incorrect IfElseConditional", ErrorMes);
-		// std::cout << "Incorrect IfElseConditional" << std::endl;
+		Log->PushMessageLog("Incorrect IfElseConditional.", ErrorMes);
 		break;
-	case ConditionType:
-		Log->PushMessageLog("Expected while Or if Command", ErrorMes);
-		// std::cout << "Expected while Or if Command" << std::endl;
+	case CT_ConditionType:
+		Log->PushMessageLog("Expected while Or if Command.", ErrorMes);
 		break;
-	case BeginScope:
-		Log->PushMessageLog("Expected while Or if Command", ErrorMes);
-		// std::cout << "Expected while Or if Command" << std::endl;
+	case CT_BeginScope:
+		Log->PushMessageLog("Expected while Or if Command.", ErrorMes);
 		break;
-	case EndScope:
-		Log->PushMessageLog("Expected while Or if Command", ErrorMes);
-		// std::cout << "Expected while Or if Command" << std::endl;
+	case CT_EndScope:
+		Log->PushMessageLog("Expected while Or if Command.", ErrorMes);
 		break;
-	case Space:
+	case CT_Space:
 		Tokens.erase(Tokens.begin());
 		return true;
-	default:
-		Log->PushMessageLog("Undefined Type: Can't create command", ErrorMes);
+	case CT_NotEnd:
+		Log->PushMessageLog("Expected while Command.", ErrorMes);
 		break;
-		// std::cout << "Undefined Type: Can't create command" << std::endl;
+	default:
+		Log->PushMessageLog("Undefined Type: Can't create command.", ErrorMes);
+		break;
 	}
 	return false;
 }
@@ -92,6 +88,8 @@ bool AlpinistGame::Parser::AddSimpleCommand(const std::string& Command, MacroCom
 		Tokens.erase(Tokens.begin());
 		return true;
 	}
+	
+	Log->PushMessageLog(std::string("Creator can't create Command: ") + Command ,ErrorMes);
 	return false;
 }
 
@@ -102,16 +100,28 @@ bool AlpinistGame::Parser::AddWhileLoop(const std::string& Command, MacroCommand
 		return false;
 	}
 
-	// Check that next token is condition
-	bool whileHasCondition = false;
-	WhileCommand* whileCommand = CreateCommandWithCondtion<WhileCommand>(Command, commandList, whileHasCondition);
+	bool whileShouldBeFill = false;
+	WhileCommand* whileCommand = nullptr;
+	
+	// Check keywords
+	if (CheckKeywords())
+	{
+		whileCommand = CreateWhileCommandWithKeyword(Command, commandList, whileShouldBeFill);
+	}
+	else
+	{
+		// Check that next token is condition
+		whileCommand = CreateCommandWithCondition<WhileCommand>(Command, commandList, whileShouldBeFill);
+	}
+	
 	if (!whileCommand)
 	{
+		Log->PushMessageLog("Can't create WhileCommand", ErrorMes);
 		return false;
 	}
 
 	// Check that next token is begin for
-	if (FillScope<WhileCommand>(whileCommand, &WhileCommand::PushCommand, whileHasCondition))
+	if (FillScope<WhileCommand>(whileCommand, &WhileCommand::PushCommand, whileShouldBeFill))
 	{
 		return true;
 	}
@@ -127,9 +137,10 @@ bool AlpinistGame::Parser::AddIfElseConditional(const std::string& Command, Macr
 	}
 
 	bool ifHasCondition = false;
-	IfCommand* ifCommand = CreateCommandWithCondtion<IfCommand>(Command, commandList, ifHasCondition);
+	IfCommand* ifCommand = CreateCommandWithCondition<IfCommand>(Command, commandList, ifHasCondition);
 	if (!ifCommand)
 	{
+		Log->PushMessageLog("Can't create IfCommand.", ErrorMes);
 		return false;
 	}
 
@@ -170,6 +181,37 @@ bool AlpinistGame::Parser::AddIfElseConditional(const std::string& Command, Macr
 	return false;
 }
 
+AlpinistGame::WhileCommand* AlpinistGame::Parser::CreateWhileCommandWithKeyword(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition)
+{
+	WhileCommand* whileCommand = nullptr;
+	
+	Token* nextToken = Tokens.front();
+	if (nextToken->GetCommandType() == CT_NotEnd)
+	{
+		if (PlayerCommand* newNotEndCommand = creator->Create(nextToken->GetText(), Controller))
+		{
+			if (NotEndCommand* notEndCommand = dynamic_cast<NotEndCommand*>(newNotEndCommand))
+			{
+				whileCommand = dynamic_cast<WhileCommand*>(creator->CreateWhileNotEnd(Command, Controller, notEndCommand));
+				if (whileCommand)
+				{
+					commandList->PushCommand(whileCommand);
+					DeleteTokenFront();
+
+					CommandHasCondition = true;
+				}
+			}
+		}
+	}
+
+	if (!whileCommand)
+	{
+		Log->PushMessageLog("Can't create NotEndCommand", ErrorMes);
+	}
+
+	return whileCommand;
+}
+
 bool AlpinistGame::Parser::DeleteTokenFront()
 {
 	if (Tokens.size() != 0)
@@ -193,7 +235,7 @@ bool AlpinistGame::Parser::FillCommandListScope(MacroCommand* macroCommandList)
 	StackScope.push(0);
 
 	Token* endToken = Tokens.front();
-	while (endToken->GetCommandType() != EndScope)
+	while (endToken->GetCommandType() != CT_EndScope)
 	{
 		if (!ContinueSynAnal(macroCommandList))
 		{
@@ -234,10 +276,21 @@ bool AlpinistGame::Parser::CheckStackScope()
 
 void AlpinistGame::Parser::SkipSpaceTokenIfThereItIs(Token* token)
 {
-	if (token->GetCommandType() == Space)
+	if (token->GetCommandType() == CT_Space)
 	{
 		Tokens.erase(Tokens.begin());
 	}
+}
+
+bool AlpinistGame::Parser::CheckKeywords()
+{
+	Token* token = Tokens.front();
+	if (token && token->GetCommandType() == CT_NotEnd)
+	{
+		return true;
+	}
+	
+	return false;
 }
 
 void AlpinistGame::Parser::GetNamesOfTokens() const

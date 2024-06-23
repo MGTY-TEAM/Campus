@@ -5,7 +5,6 @@ bool AlpinistGame::Compiler::Compile(AlpinistLog& AlpLog)
 {
 	Lexer lexer = Lexer(Code);
 	std::vector<Token*> Tokens = *lexer.LexAnalysis(AlpLog);
-	// std::vector<Token*> Tokens(std::move(*lexer.LexAnalysis(AlpLog)));
 	if (AlpLog.bHasErrors)
 	{
 		return false;

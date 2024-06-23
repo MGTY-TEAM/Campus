@@ -24,8 +24,6 @@ bool AlpinistGame::Lexer::ContinueLexAnal()
 	{
 		if (std::regex_match(ch, result, *TokenTypeValue->GetRegular()))
 		{
-
-			// std::cout << result[0].str() << std::endl;
 			Token* token = new Token(TokenTypeValue, TokenTypeValue->GetName(), currentPos++);
 			Tokens.push_back(token);
 			arr.erase(arr.begin());
@@ -33,8 +31,13 @@ bool AlpinistGame::Lexer::ContinueLexAnal()
 		}
 	}
 
+	const std::string What = "Undefined Command: ";
+	const std::string Exactly = arr.front();
+	const std::string WhatExactly = What + Exactly;
+	
+	Log->PushMessageLog(WhatExactly, ErrorMes);
+	
 	Log->PushMessageLog("Incorrect Command", ErrorMes);
-	// std::cout << "Incorrect Command" << std::endl;
 	return false;
 }
 
@@ -72,12 +75,9 @@ bool AlpinistGame::Lexer::DivideStr(std::string str, std::vector<std::string>& a
 		std::string tmp = str.substr(prev, next - prev);
 		PushAndAdjustment(tmp, arrToFill);
 		prev = next + delta;
-		// std::cout << tmp << std::endl;
 	}
 	std::string tmp = str.substr(prev);
 	PushAndAdjustment(tmp, arrToFill);
-
-	// std::cout << tmp << std::endl;
 
 	return true;
 }
