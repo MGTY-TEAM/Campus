@@ -21,7 +21,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FExpectInfiniteCycleError, "Campus.Alpinist.Ecp
 
 namespace
 {
-	FString ReadStringFromFile(const FString& FilePath, bool& bOutSuccess, FString& OutInfoMessage)
+	FString ReadStringFromFile_(const FString& FilePath, bool& bOutSuccess, FString& OutInfoMessage)
 	{
 		if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*FilePath))
 		{
@@ -46,7 +46,7 @@ namespace
 	
 	TSharedPtr<FJsonObject> ReadJson(const FString& JsonFilePath, bool& bOutSuccess, FString& OutInfoMessage)
 	{
-		const FString JsonString = ReadStringFromFile(JsonFilePath, bOutSuccess, OutInfoMessage);
+		const FString JsonString = ReadStringFromFile_(JsonFilePath, bOutSuccess, OutInfoMessage);
 		if (!bOutSuccess)
 		{
 			return nullptr;
