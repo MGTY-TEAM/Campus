@@ -155,8 +155,7 @@ namespace AlpinistGame
 
 		virtual bool Execute() override;
 	};
-
-	// template<typename TCommand, typename = std::enable_if_t<__is_base_of(PlayerCommand*, TCommand)>>
+	
 	class WhileCommand : public MacroCommand
 	{
 		ConditionCommand* m_conditionCommand;
@@ -164,9 +163,7 @@ namespace AlpinistGame
 
 		size_t CountOfExecution = 0;
 	public:
-		WhileCommand()
-		{
-		}
+		WhileCommand() {}
 
 		WhileCommand(ConditionCommand* conditionCommand) : m_conditionCommand(conditionCommand)
 		{
@@ -177,53 +174,49 @@ namespace AlpinistGame
 			m_conditionCommand = nullptr;
 		}
 
-		// void SetConditionCommand(ConditionCommand* ConditionCommand) { m_conditionCommand = ConditionCommand; }
-
 		virtual bool Execute() override
 		{
 			if (m_conditionCommand)
 			{
-				m_conditionCommand->Execute();
-				while (m_conditionCommand->GetResult())
-				{
-					for (PlayerCommand* playerCommand : m_commandList)
-					{
-						if (!playerCommand->Execute())
-							return false;
-					}
-					m_conditionCommand->Execute();
-
-					if (CountOfExecution++ == 100)
-					{
-						return false;
-					}
-				}
-
-				return true;
+				return ExecuteCondition(m_conditionCommand, &ConditionCommand::Execute, &ConditionCommand::GetResult);
 			}
 			if (m_notEndCommand)
 			{
-				m_notEndCommand->Execute();
-				while (m_notEndCommand->GetResult())
-				{
-					for (PlayerCommand* playerCommand : m_commandList)
-					{
-						if (!playerCommand->Execute())
-							return false;
-					}
-					m_notEndCommand->Execute();
-
-					if (CountOfExecution++ == 100)
-					{
-						return false;
-					}
-				}
-				
-				return true;
-			}
+				return ExecuteCondition(m_notEndCommand, &NotEndCommand::Execute, &NotEndCommand::GetResult);
+			} 
 			return false;
 		}
+
+	private:
+		template<typename TypeOfConditionCommand>
+		bool ExecuteCondition(TypeOfConditionCommand* Command, bool(TypeOfConditionCommand::* Execute)(), bool(TypeOfConditionCommand::* GetResult)() const);
 	};
+
+	template <typename TypeOfConditionCommand>
+	bool WhileCommand::ExecuteCondition(TypeOfConditionCommand* Command, bool(TypeOfConditionCommand::* Execute)(), bool(TypeOfConditionCommand::* GetResult)() const)
+	{
+		if (Command)
+		{
+			(Command->*Execute)();
+			while ((Command->*GetResult)())
+			{
+				for (PlayerCommand* playerCommand : m_commandList)
+				{
+					if (!playerCommand->Execute())
+						return false;
+				}
+				(Command->*Execute)();
+
+				if (CountOfExecution++ == 100)
+				{
+					return false;
+				}
+			}
+				
+			return true;
+		}
+		return false;
+	}
 
 	class Creator
 	{
