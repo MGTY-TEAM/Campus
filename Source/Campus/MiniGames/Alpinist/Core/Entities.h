@@ -25,7 +25,8 @@ namespace AlpinistGame
             
             void RotateRight(){++m_direction;}
             void RotateLeft(){--m_direction;}
-        
+
+            void SetDirection(const AlpinistGame::PlayerDirection& NewDirection) { m_direction = NewDirection; }
             const AlpinistGame::PlayerDirection& GetDirection() const { return m_direction;}
         };
         

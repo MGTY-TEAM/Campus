@@ -8,21 +8,51 @@ bool RotateRightCommand::Execute()
 {
 	if (!m_gameController)
 		return false;
+
+	m_gameController->SaveCopyOfWorld(this);
 	return m_gameController->RotateRight();
+}
+
+bool RotateRightCommand::Unexecute()
+{
+	if (!m_gameController)
+		return false;
+
+	return m_gameController->RestoreOfWorld(this);
 }
 
 bool RotateLeftCommand::Execute()
 {
 	if (!m_gameController)
 		return false;
+
+	m_gameController->SaveCopyOfWorld(this);
 	return m_gameController->RotateLeft();
+}
+
+bool RotateLeftCommand::Unexecute()
+{
+	if (!m_gameController)
+		return false;
+
+	return m_gameController->RestoreOfWorld(this);
 }
 
 bool MoveCommand::Execute()
 {
 	if (!m_gameController)
 		return false;
+	
+	m_gameController->SaveCopyOfWorld(this);
 	return m_gameController->MoveForward();
+}
+
+bool MoveCommand::Unexecute()
+{
+	if (!m_gameController)
+		return false;
+
+	return m_gameController->RestoreOfWorld(this);
 }
 
 bool MacroCommand::Execute()

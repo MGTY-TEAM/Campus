@@ -18,6 +18,8 @@ namespace AlpinistGame
 
 		bool Compile(AlpinistLog& AlpLog);
 		bool Run(AlpinistLog& AlpLog);
+
+		MacroCommand* GetListOfCommands() { return Commands; };
 	};
 }
 

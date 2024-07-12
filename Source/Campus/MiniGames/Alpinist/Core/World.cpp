@@ -8,8 +8,7 @@ bool World::IsValidPosition(std::pair<int8_t, int8_t> position) const
 	if (m_grid.empty())
 		return false;
 
-	return (position.first >= 0 && position.first < m_grid.size() && position.second >= 0 && position.second < m_grid[
-		position.first].size());
+	return (position.first >= 0 && position.first < m_grid.size() && position.second >= 0 && position.second < m_grid[position.first].size());
 }
 
 World::World(const std::vector<std::string>& grid)
@@ -48,8 +47,7 @@ MoveResult World::SwapPlayerMove()
 
 	std::pair<int8_t, int8_t> direction = GetDirectionFromByteCode(m_player->GetDirection());
 	std::pair<int8_t, int8_t> position = m_player->GetPos();
-	std::pair<int8_t, int8_t> nextPosition = std::make_pair(direction.first + position.first,
-	                                                        direction.second + position.second);
+	std::pair<int8_t, int8_t> nextPosition = std::make_pair(direction.first + position.first, direction.second + position.second);
 
 	if (IsValidPosition(nextPosition))
 	{
@@ -96,8 +94,7 @@ bool World::WallInDirection(const Condition& condition)
 	default:
 		break;
 	}
-	checkedCellPos = std::make_pair(m_player->GetPos().first + direction.first,
-	                                m_player->GetPos().second + direction.second);
+	checkedCellPos = std::make_pair(m_player->GetPos().first + direction.first, m_player->GetPos().second + direction.second);
 	if (IsValidPosition(checkedCellPos))
 	{
 		if (Wall* wall = dynamic_cast<Wall*>(m_grid[checkedCellPos.first][checkedCellPos.second]))
@@ -106,6 +103,73 @@ bool World::WallInDirection(const Condition& condition)
 		}
 	}
 	return false;
+}
+
+void World::SetGrid(const std::vector<std::vector<Entity*>>& OldGrid)
+{
+	if (OldGrid.empty() || m_grid.empty() || OldGrid.size() != m_grid.size() || OldGrid[0].size() != m_grid[0].size())
+		return;
+	
+	for (size_t i = 0; i < OldGrid.size(); ++i)
+	{
+		for (size_t j = 0; j < OldGrid[i].size(); ++j)
+		{
+			if (OldGrid[i][j])
+			{
+				if (const Player* MementoPlayer = dynamic_cast<Player*>(OldGrid[i][j]))
+				{
+					m_grid[m_player->GetPos().first][m_player->GetPos().second] = nullptr;
+					
+					m_grid[i][j] = m_player;
+					m_player->SetPos(MementoPlayer->GetPos());
+					m_player->SetDirection(MementoPlayer->GetDirection());
+				}
+				else if (Finish* MementoFinish = dynamic_cast<Finish*>(OldGrid[i][j]))
+				{
+					m_grid[i][j] = MementoFinish;
+			
+					bFinished = false;
+				}
+			}
+		}
+	}
+}
+
+std::vector<std::vector<Entity*>> World::GetCopyOfGrid() const
+{
+	std::vector<std::vector<Entity*>> SnapshotOfWorld;
+	SnapshotOfWorld.resize(m_grid.size(), std::vector<Entity*>());
+	
+	for (size_t i = 0; i < m_grid.size(); ++i)
+	{
+		SnapshotOfWorld[i].resize(m_grid[i].size(), nullptr);
+		for (size_t j = 0; j < m_grid[i].size(); ++j)
+		{
+			if (m_grid[i][j])
+			{
+				if (const Player* PlayerToSave = dynamic_cast<Player*>(m_grid[i][j]))
+				{
+					Player* MementoPlayer = new Player(PlayerToSave->GetPos(), PlayerToSave->GetDirection());
+					SnapshotOfWorld[i][j] = MementoPlayer;
+				}
+				else if (const Wall* WallToSave = dynamic_cast<Wall*>(m_grid[i][j]))
+				{
+					Wall* MementoWall = new Wall(WallToSave->GetPos());
+					SnapshotOfWorld[i][j] = MementoWall;
+				}
+				else if (const Finish* FinishToSave = dynamic_cast<Finish*>(m_grid[i][j]))
+				{
+					Finish* MementoFinish = new Finish(FinishToSave->GetPos());
+					SnapshotOfWorld[i][j] = MementoFinish;
+				}
+			}
+			else
+			{
+				SnapshotOfWorld[i][j] = nullptr;
+			}
+		}
+	}
+	return SnapshotOfWorld;
 }
 
 std::ostream& AlpinistGame::operator<<(std::ostream& os, World* world)

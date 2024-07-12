@@ -25,6 +25,10 @@ namespace AlpinistGame
 		{
 			return false;
 		}
+		virtual bool Unexecute()
+		{
+			return false;
+		}
 	};
 
 	class RotateRightCommand : public PlayerCommand
@@ -37,6 +41,7 @@ namespace AlpinistGame
 		}
 
 		virtual bool Execute() override;
+		virtual bool Unexecute() override;
 	};
 
 	class RotateLeftCommand : public PlayerCommand
@@ -49,6 +54,7 @@ namespace AlpinistGame
 		}
 
 		virtual bool Execute() override;
+		virtual bool Unexecute() override;
 	};
 
 	class MoveCommand : public PlayerCommand
@@ -61,6 +67,7 @@ namespace AlpinistGame
 		}
 
 		virtual bool Execute() override;
+		virtual bool Unexecute() override;
 	};
 
 	class MacroCommand : public PlayerCommand

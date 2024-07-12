@@ -14,7 +14,7 @@ namespace AlpinistGame
 		Player* m_player;
 
 		bool IsValidPosition(std::pair<int8_t, int8_t>) const;
-		
+
 	public:
 		World(const std::vector<std::string>& grid);
 
@@ -28,6 +28,15 @@ namespace AlpinistGame
 		bool WallInDirection(const Condition& condition);
 
 		bool IsPlayerFinished() const { return bFinished; }
+
+		void SetGrid(const std::vector<std::vector<Entity*>>& OldGrid);
+		std::vector<std::vector<Entity*>> GetCopyOfGrid() const;
 	};
 }
 #endif
+
+/* TODO:
+ * 1) Написать для каждой сущности конструкторы, методы копирования.
+ * 
+
+*/

@@ -1,9 +1,15 @@
 ﻿#pragma once
-// #define ALPINIST_GAME
 
-// #include "Commands.h"
 #include "World.h"
+// #include "Commands.h"
+#include "AlpinistMemento.h"
+
 #ifdef ALPINIST_GAME
+
+class PlayerCommand;
+class AlpinistMemento;
+class AlpinistCaretaker;
+
 namespace AlpinistGame
 {
 	enum TypeOfLog
@@ -46,6 +52,7 @@ namespace AlpinistGame
 	{
 		World* m_world;
 
+		AlpinistGame::AlpinistCaretaker* m_alpinistCaretaker;
 	public:
 		GameController();
 		GameController(const std::vector<std::string>& map);
@@ -59,6 +66,8 @@ namespace AlpinistGame
 
 		World* GetWorld() { return m_world; }
 
+		bool SaveCopyOfWorld(PlayerCommand* Command);
+		bool RestoreOfWorld(PlayerCommand* Command);
 		// bool ExecuteMacroCommand(MacroCommand* macroCommand);
 	};
 }

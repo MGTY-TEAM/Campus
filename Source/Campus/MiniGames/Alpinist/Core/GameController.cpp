@@ -1,5 +1,5 @@
 ﻿#include "GameController.h"
-#include "Commands.h"
+#include "AlpinistMemento.h"
 
 #ifdef ALPINIST_GAME
 using namespace AlpinistGame;
@@ -11,11 +11,13 @@ GameController::GameController()
                                         "........",
                                         "p......."};
     m_world = new World(map);
+    m_alpinistCaretaker = new AlpinistCaretaker();
 }
 
 GameController::GameController(const std::vector<std::string>& map)
 {
     m_world = new World(map);
+    m_alpinistCaretaker = new AlpinistCaretaker();
 }
 
 bool GameController::MoveForward()
@@ -67,6 +69,38 @@ bool GameController::PlayerNotOnFinish()
         return false;
     
     return !m_world->IsPlayerFinished();
+}
+
+bool GameController::SaveCopyOfWorld(PlayerCommand* Command)
+{
+    AlpinistMemento* NewMemento = new AlpinistMemento();
+    if (NewMemento && m_world)
+    {
+        NewMemento->SetState(m_world->GetCopyOfGrid());
+
+        if (m_alpinistCaretaker)
+        {
+            m_alpinistCaretaker->Backup(NewMemento, Command);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool GameController::RestoreOfWorld(PlayerCommand* Command)
+{
+    if (m_alpinistCaretaker)
+    {
+        if (AlpinistMemento* Memento = m_alpinistCaretaker->Undo(Command))
+        {
+            if (m_world)
+            {
+                m_world->SetGrid(Memento->GetState());
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /*bool GameController::ExecuteMacroCommand(MacroCommand* macroCommand)
