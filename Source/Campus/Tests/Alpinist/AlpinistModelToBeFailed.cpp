@@ -2,6 +2,7 @@
 #if WITH_AUTOMATION_TESTS
 
 #include "Misc/AutomationTest.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "UHelperReaderJsonForAlpinist.h"
 #include "Campus/Libraries/CampusUtils.h"
 #include "Campus/MiniGames/Alpinist/Core/GameController.h"
@@ -21,7 +22,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FExpectInfiniteCycleError, "Campus.Alpinist.Ecp
 
 bool FExpectLexerErrors::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -61,7 +62,7 @@ bool FExpectLexerErrors::RunTest(const FString& Parameters)
 
 bool FExpectWhileErrors::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -170,7 +171,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 
 bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -301,7 +302,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 
 bool FExpectInfiniteCycleError::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;

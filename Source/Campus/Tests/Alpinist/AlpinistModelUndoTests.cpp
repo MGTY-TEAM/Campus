@@ -5,6 +5,7 @@
 
 #include "Misc/AutomationTest.h"
 #include "Dom/JsonObject.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "UHelperReaderJsonForAlpinist.h"
 #include "Campus/Libraries/CampusUtils.h"
 #include "Campus/MiniGames/Alpinist/Core/Commands.h"
@@ -17,7 +18,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FExpectUndoCommands, "Campus.Alpinist.ExpectUnd
 
 bool FExpectUndoCommands::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = "D:/A_Repositories/Campus/Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
