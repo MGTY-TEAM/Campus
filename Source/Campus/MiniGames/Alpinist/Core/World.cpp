@@ -1,6 +1,8 @@
-﻿#include "World.h"
+﻿#ifdef ALPINIST_GAME
 
-#ifdef ALPINIST_GAME
+#include "World.h"
+#include "Entities.h"
+
 using namespace AlpinistGame;
 
 bool World::IsValidPosition(std::pair<int8_t, int8_t> position) const

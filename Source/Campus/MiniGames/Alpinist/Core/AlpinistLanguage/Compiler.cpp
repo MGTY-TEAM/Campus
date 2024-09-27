@@ -1,6 +1,11 @@
-#include "Compiler.h"
-// #include "../GameController.h"
 #ifdef ALPINIST_GAME
+
+#include "Compiler.h"
+
+#include "../GameController.h"
+#include "Lexer.h"
+#include "Parser.h"
+
 bool AlpinistGame::Compiler::Compile(AlpinistLog& AlpLog)
 {
 	Lexer lexer = Lexer(Code);

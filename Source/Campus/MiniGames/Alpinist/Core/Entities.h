@@ -1,5 +1,7 @@
 ﻿#pragma once
+
 #ifdef ALPINIST_GAME
+
 #include "GameTypes.h"
 
 namespace AlpinistGame

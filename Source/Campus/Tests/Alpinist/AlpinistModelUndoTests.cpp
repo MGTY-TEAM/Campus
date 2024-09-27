@@ -7,6 +7,8 @@
 #include "Dom/JsonObject.h"
 #include "UHelperReaderJsonForAlpinist.h"
 #include "Campus/Libraries/CampusUtils.h"
+#include "Campus/MiniGames/Alpinist/Core/Commands.h"
+#include "Campus/MiniGames/Alpinist/Core/Entities.h"
 #include "Campus/MiniGames/Alpinist/Core/GameController.h"
 #include "Campus/MiniGames/Alpinist/Core/AlpinistLanguage/Compiler.h"
 

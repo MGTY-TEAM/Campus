@@ -1,14 +1,13 @@
 ﻿#pragma once
 
-#include "GameController.h"
 #ifdef ALPINIST_GAME
 
-// #include "GameTypes.h"
+#include "GameTypes.h"
 
 namespace AlpinistGame
 {
 	class GameController;
-
+	
 	class PlayerCommand
 	{
 	protected:

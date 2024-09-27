@@ -1,12 +1,13 @@
 #pragma once
 
-// #include "../GameController.h"
-#include "Lexer.h"
-#include "Parser.h"
-
 #ifdef ALPINIST_GAME
+
 namespace AlpinistGame
 {
+	class GameController;
+	class MacroCommand;
+	class AlpinistLog;
+	
 	class Compiler
 	{
 		GameController* Controller;

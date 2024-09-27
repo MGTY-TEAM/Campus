@@ -1,7 +1,8 @@
+#ifdef ALPINIST_GAME
+
 #include "Commands.h"
 #include "GameController.h"
 
-#ifdef ALPINIST_GAME
 using namespace AlpinistGame;
 
 bool RotateRightCommand::Execute()

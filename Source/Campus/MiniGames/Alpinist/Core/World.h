@@ -2,11 +2,13 @@
 
 #ifdef ALPINIST_GAME
 
-#include "Entities.h"
 #include "GameTypes.h"
 
 namespace AlpinistGame
 {
+	class Entity;
+	class Player;
+	
 	class World
 	{
 		std::vector<std::vector<Entity*>> m_grid;

@@ -1,4 +1,5 @@
 ﻿#include "GameController.h"
+#include "Entities.h"
 #include "AlpinistMemento.h"
 
 #ifdef ALPINIST_GAME
