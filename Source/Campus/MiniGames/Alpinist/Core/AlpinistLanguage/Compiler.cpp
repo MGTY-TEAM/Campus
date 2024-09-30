@@ -6,6 +6,11 @@
 #include "Lexer.h"
 #include "Parser.h"
 
+void AlpinistGame::Compiler::SetCode(const std::string& NewCode)
+{
+	Code = NewCode;
+}
+
 bool AlpinistGame::Compiler::Compile(AlpinistLog& AlpLog)
 {
 	Lexer lexer = Lexer(Code);

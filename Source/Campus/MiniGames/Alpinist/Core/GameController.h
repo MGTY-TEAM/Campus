@@ -64,6 +64,7 @@ namespace AlpinistGame
 		bool WallInDirection(const Condition& condition);
 		bool PlayerNotOnFinish();
 
+		void SetNewMap(const std::vector<std::string>& map);
 		World* GetWorld() { return m_world; }
 
 		bool SaveCopyOfWorld(PlayerCommand* Command);

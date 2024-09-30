@@ -21,6 +21,15 @@ GameController::GameController(const std::vector<std::string>& map)
     m_alpinistCaretaker = new AlpinistCaretaker();
 }
 
+void GameController::SetNewMap(const std::vector<std::string>& map)
+{
+    if (m_world)
+    {
+        delete m_world;
+    }
+    m_world = new World(map);
+}
+
 bool GameController::MoveForward()
 {
     if (m_world)

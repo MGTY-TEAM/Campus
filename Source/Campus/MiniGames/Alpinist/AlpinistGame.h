@@ -10,6 +10,13 @@
 class UStaticMeshComponent;
 class UAlpinistIDEController;
 
+namespace AlpinistGame
+{
+	class Compiler;
+	class AlpinistLog;
+	class GameController;
+}
+
 UCLASS()
 class CAMPUS_API AAlpinistGame : public AActor, public IMiniGames, public IInteractable
 {
@@ -29,8 +36,23 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UAlpinistIDEController* AlpinistIDEController;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AlpinistsProperties")
+	int32 SelectedLevel = 1;
 public:	
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
+	void BuildGame();
+	void RunGame();
+	void ToStartPosition();
+	void CloseGame();
+	void OpenLevel(int32 Level);
+private:
+	TSharedPtr<AlpinistGame::GameController> m_gameController;
+	TSharedPtr<AlpinistGame::Compiler> m_Compiler;
+	TSharedPtr<AlpinistGame::AlpinistLog> m_AlpinistLog;
+
+	bool InitializeAlpinistGame();
+	bool SetupController();
 };
