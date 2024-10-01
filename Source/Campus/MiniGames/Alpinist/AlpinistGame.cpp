@@ -35,6 +35,11 @@ void AAlpinistGame::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Проверка на работу делегата при имзенении лога
+	/*if (AlpinistIDEController)
+	{
+		AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
+	}*/
 }
 
 void AAlpinistGame::Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal)

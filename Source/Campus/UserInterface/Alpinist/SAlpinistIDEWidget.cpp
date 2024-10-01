@@ -12,6 +12,7 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 
 	const FMargin Padding = FMargin(20.f, 20.f);
 	const FMargin ContentPadding = FMargin(20.f, 0.f, 20.f, 0.f);
+	const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
 
 	ChildSlot
 	[
@@ -77,9 +78,11 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 			[
 				SNew(SBorder)
 				.BorderBackgroundColor(FLinearColor::White)
+				.Padding(FMargin(8.f))
 				[
 					SNew(STextBlock)
 					.Text(FText::FromString("OutputLog"))
+					.Font(RobotoBoldFont)
 				]
 			]
 			// ----- OutputLog -----
