@@ -5,7 +5,7 @@
 
 class UAlpinistIDEController;
 
-class SMainAlpinistWidget : public SCompoundWidget
+class CAMPUS_API SMainAlpinistWidget : public SCompoundWidget
 {
 public:
 	SLATE_BEGIN_ARGS(SMainAlpinistWidget) {}
@@ -19,11 +19,12 @@ public:
 	TWeakObjectPtr<UAlpinistIDEController> AlpinistWidgetOwner;
 
 private:
+	TSharedPtr<SButton> Button;
 	FCurveSequence AnimationSequence;
 	FCurveHandle AnimationCurve;
-	float CurrentLeftWidgetPadding = -75.f;
 	
 	FMargin GetLeftWidgetPadding() const;
 	void OnLeftWidgetHovered();
 	void OnLeftWidgetUnhovered();
+	const float ProtrudingPart = 50.f;
 };

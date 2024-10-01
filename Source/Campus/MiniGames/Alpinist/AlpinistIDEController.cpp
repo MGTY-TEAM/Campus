@@ -4,7 +4,7 @@
 #include "GameFramework/HUD.h"
 #include "Widgets/SWeakWidget.h"
 #include "Campus/MiniGames/Alpinist/AlpinistGame.h"
-#include "Campus/UserInterface/Alpinist/MainAlpinistWidget.h"
+#include "..\..\UserInterface\Alpinist\SMainAlpinistWidget.h"
 
 UAlpinistIDEController::UAlpinistIDEController()
 {
