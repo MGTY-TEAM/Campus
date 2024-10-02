@@ -28,6 +28,7 @@ public:
 	void OnSelectedLevel(int Level);
 	void OnBuildButtonClick();
 	void OnRunButtonClick();
+	void OnClearLogButtonClick();
 	void OnToStartPositionButtonClick();
 	void OnCloseGameButtonClick();
 };

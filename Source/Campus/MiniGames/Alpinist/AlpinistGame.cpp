@@ -120,6 +120,15 @@ void AAlpinistGame::RunGame()
 	// Получить сформированные команды для работы с видом или написать код для связи с видом внутри написанного кода игры
 }
 
+void AAlpinistGame::ClearLog()
+{
+	if (m_AlpinistLog.IsValid() && AlpinistIDEController)
+	{
+		m_AlpinistLog->ClearLog();
+		AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
+	}
+}
+
 void AAlpinistGame::ToStartPosition()
 {
 	// Как возвращать пешку обратно?

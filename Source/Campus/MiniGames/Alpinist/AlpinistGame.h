@@ -45,6 +45,7 @@ public:
 	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
 	void BuildGame();
 	void RunGame();
+	void ClearLog();
 	void ToStartPosition();
 	void CloseGame();
 	void OpenLevel(int32 Level);

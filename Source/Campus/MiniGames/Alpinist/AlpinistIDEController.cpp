@@ -67,6 +67,14 @@ void UAlpinistIDEController::OnRunButtonClick()
 	}
 }
 
+void UAlpinistIDEController::OnClearLogButtonClick()
+{
+	if (AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
+	{
+		AlpinistGame->ClearLog();
+	}
+}
+
 void UAlpinistIDEController::OnToStartPositionButtonClick()
 {
 	if (AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))

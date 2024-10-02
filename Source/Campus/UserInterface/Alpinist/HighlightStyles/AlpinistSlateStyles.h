@@ -32,7 +32,6 @@ public:
 private:
 	static TSharedPtr<FSlateStyleSet> StyleSet;
 };
-TSharedPtr<FSlateStyleSet> FEmptySlateStyle::StyleSet = nullptr;
 
 class FMainCodeSlateStyle
 {
@@ -63,7 +62,6 @@ public:
 private:
 	static TSharedPtr<FSlateStyleSet> StyleSet;
 };
-TSharedPtr<FSlateStyleSet> FMainCodeSlateStyle::StyleSet = nullptr;
 
 class FSimpleCommandSlateStyle
 {
@@ -95,7 +93,6 @@ public:
 private:
 	static TSharedPtr<FSlateStyleSet> StyleSet;
 };
-TSharedPtr<FSlateStyleSet> FSimpleCommandSlateStyle::StyleSet = nullptr;
 
 class FConditionCommandSlateStyle
 {
@@ -126,7 +123,6 @@ public:
 private:
 	static TSharedPtr<FSlateStyleSet> StyleSet;
 };
-TSharedPtr<FSlateStyleSet> FConditionCommandSlateStyle::StyleSet = nullptr;
 
 // -------------------------------------------------------------------------------------
 class FMySlateBrush
@@ -192,4 +188,46 @@ public:
 private:
 	static TSharedPtr<FSlateBrush> MySlateBrush;
 };
-TSharedPtr<FSlateBrush> FMySlateBrush::MySlateBrush = nullptr;
+
+class FMainSlateBrush
+{
+public:
+	static void Initialize(UTexture2D* NewTexture)
+	{
+		if (!MySlateBrush.IsValid())
+		{
+			if (NewTexture)
+			{
+				TArray<FColor> Pixels;
+				Pixels.SetNum(1000 * 1000);  // Задаём нужный размер массива
+
+				for (int32 i = 0; i < Pixels.Num(); i++)
+				{
+					Pixels[i] = FColor(23, 23, 23);
+				}
+				
+				void* TextureData = NewTexture->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE);
+				FMemory::Memcpy(TextureData, Pixels.GetData(), Pixels.Num() * sizeof(FColor));
+				NewTexture->GetPlatformData()->Mips[0].BulkData.Unlock();
+
+				// Обновляем текстуру
+				NewTexture->UpdateResource();
+
+				MySlateBrush = MakeShared<FSlateBrush>();
+				MySlateBrush->SetResourceObject(NewTexture);
+				MySlateBrush->ImageSize = FVector2D(1000, 1000);
+			}
+		}
+	}
+
+	static FSlateBrush& Get() { return *MySlateBrush; }
+	static void Delete()
+	{
+		if (MySlateBrush.IsValid())
+		{
+			MySlateBrush.Reset();
+		}
+	}
+private:
+	static TSharedPtr<FSlateBrush> MySlateBrush;
+};

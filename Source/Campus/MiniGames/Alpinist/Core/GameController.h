@@ -42,6 +42,16 @@ namespace AlpinistGame
 			ListOfLog.push_back(Log);
 		}
 
+		void ClearLog()
+		{
+			ListOfLog.clear();
+			ListOfLog.shrink_to_fit();
+
+			bHasErrors = false;
+			bHasWarnings = false;
+			CountOfLog = 0;
+		}
+
 		std::vector<MessageLog>* GetListOfLog() { return &ListOfLog; }
 		
 		bool bHasWarnings = false;
