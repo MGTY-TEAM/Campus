@@ -16,4 +16,11 @@ public:
 	virtual bool SupportsKeyboardFocus() const override { return true; }
 
 	TWeakObjectPtr<UAlpinistIDEController> AlpinistWidgetOwner;
+private:
+	FReply OnToStartPositionButtonClicked() const;
+	FReply OnQuitGameButtonClicked() const;
+
+	TSharedPtr<SMenuAnchor> MenuAnchor;
+	TSharedRef<SWidget> CreatePopupMenu();
+	FReply OnPopupButtonClick();
 };

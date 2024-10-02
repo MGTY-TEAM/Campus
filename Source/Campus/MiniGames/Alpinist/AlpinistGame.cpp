@@ -54,6 +54,14 @@ void AAlpinistGame::Interact(UActorComponent* InteractComponent, const FVector& 
 	}
 }
 
+void AAlpinistGame::SetCode(const FString& NewCode)
+{
+	if (m_Compiler.IsValid())
+	{
+		m_Compiler->SetCode(TCHAR_TO_UTF8(*NewCode));
+	}
+}
+
 bool AAlpinistGame::InitializeAlpinistGame()
 {
 	if (SetupController())

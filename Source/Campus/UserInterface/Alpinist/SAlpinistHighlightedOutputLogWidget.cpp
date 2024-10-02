@@ -48,7 +48,7 @@ void SAlpinistHighlightedOutputLogWidget::Construct(const FArguments& InArgs)
 
 void SAlpinistHighlightedOutputLogWidget::OnAlpinistLogUpdate(void* InAlpinistLog)
 {
-	if (AlpinistGame::AlpinistLog* AlpinistLog = static_cast<AlpinistGame::AlpinistLog*>(InAlpinistLog))
+	if (const AlpinistGame::AlpinistLog* AlpinistLog = static_cast<AlpinistGame::AlpinistLog*>(InAlpinistLog))
 	{
 		UE_LOG(LogTemp, Display, TEXT("..., %i"), AlpinistLog->bHasErrors);
 	}

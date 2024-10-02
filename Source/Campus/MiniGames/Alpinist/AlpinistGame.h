@@ -38,11 +38,12 @@ protected:
 	UAlpinistIDEController* AlpinistIDEController;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AlpinistsProperties")
-	int32 SelectedLevel = 1;
+	int32 SelectedLevel = 6;
 public:	
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Interact(UActorComponent* InteractComponent, const FVector& InteractPoint, const FVector& InteractionNormal) override;
+	void SetCode(const FString& NewCode);
 	void BuildGame();
 	void RunGame();
 	void ClearLog();

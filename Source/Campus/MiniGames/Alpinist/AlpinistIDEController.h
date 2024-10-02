@@ -26,9 +26,10 @@ protected:
 public:	
 	bool InitializeAlpinistIDE();
 	void OnSelectedLevel(int Level);
+	void OnChangeCode(const FString& NewCode);
 	void OnBuildButtonClick();
 	void OnRunButtonClick();
 	void OnClearLogButtonClick();
 	void OnToStartPositionButtonClick();
-	void OnCloseGameButtonClick();
+	void OnQuitGameButtonClick();
 };

@@ -51,6 +51,14 @@ void UAlpinistIDEController::OnSelectedLevel(int Level)
 	}
 }
 
+void UAlpinistIDEController::OnChangeCode(const FString& NewCode)
+{
+	if (AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
+	{
+		AlpinistGame->SetCode(NewCode);
+	}
+}
+
 void UAlpinistIDEController::OnBuildButtonClick()
 {
 	if (AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
@@ -83,7 +91,7 @@ void UAlpinistIDEController::OnToStartPositionButtonClick()
 	}
 }
 
-void UAlpinistIDEController::OnCloseGameButtonClick()
+void UAlpinistIDEController::OnQuitGameButtonClick()
 {
 	if (GEngine && GEngine->GameViewport && AlpinistWidgetContainer.IsValid())
 	{
@@ -103,6 +111,11 @@ void UAlpinistIDEController::OnCloseGameButtonClick()
 
 		AlpinistWidget.Reset();
 		AlpinistWidgetContainer.Reset();
+	}
+
+	if (OnAlpinistLogUpdate.IsBound())
+	{
+		OnAlpinistLogUpdate.Clear();
 	}
 	
 	if (AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))

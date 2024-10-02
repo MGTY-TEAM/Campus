@@ -108,6 +108,15 @@ void SAlpinistHighlightedTextWidget::OnTextChanged(const FText& NewText)
 	{
 		RichTextBlock->SetText(ApplyHighlighting(NewText.ToString()));
 		// UE_LOG(LogTemp, Warning, TEXT("TEXT: %s"), *RichTextBlock->GetText().ToString());
+		
+		if (EditableTextBox.IsValid())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("TEXT: %s"), *EditableTextBox->GetText().ToString());
+			if (AlpinistWidgetOwner.IsValid())
+			{
+				AlpinistWidgetOwner->OnChangeCode(*EditableTextBox->GetText().ToString());
+			}
+		}
 	}
 }
 

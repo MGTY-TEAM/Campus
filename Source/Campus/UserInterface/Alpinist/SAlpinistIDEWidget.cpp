@@ -62,6 +62,7 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 			+ SVerticalBox::Slot()
 			  .Padding(ContentPadding + FMargin(0.f, 20.f, 0.f, 0.f))
 			  .FillHeight(1.0f)
+			  //.HAlign(HAlign_Left)
 			[
 				SNew(SAlpinistToolBar)
 				.AlpinistWidgetOwner(InArgs._AlpinistWidgetOwner)
