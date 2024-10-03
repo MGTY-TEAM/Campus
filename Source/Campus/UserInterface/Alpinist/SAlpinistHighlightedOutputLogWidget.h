@@ -5,6 +5,7 @@
 
 struct FTextBlockStyle;
 
+class SRichTextBlock;
 class UAlpinistIDEController;
 
 class CAMPUS_API SAlpinistHighlightedOutputLogWidget : public SCompoundWidget
@@ -20,6 +21,8 @@ public:
 
 	TWeakObjectPtr<UAlpinistIDEController> AlpinistWidgetOwner;
 private:
+	TSharedPtr<SRichTextBlock> RichTextBlock;
+	
 	void OnAlpinistLogUpdate(void* InAlpinistLog);
 	FTextBlockStyle* TextBlock;
 };

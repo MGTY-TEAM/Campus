@@ -231,3 +231,46 @@ public:
 private:
 	static TSharedPtr<FSlateBrush> MySlateBrush;
 };
+
+class FMovableSlateBrush
+{
+public:
+	static void Initialize(UTexture2D* NewTexture)
+	{
+		if (!MySlateBrush.IsValid())
+		{
+			if (NewTexture)
+			{
+				TArray<FColor> Pixels;
+				Pixels.SetNum(700 * 1000);  // Задаём нужный размер массива
+
+				for (int32 i = 0; i < Pixels.Num(); i++)
+				{
+					Pixels[i] = FColor(35, 35, 35);
+				}
+				
+				void* TextureData = NewTexture->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE);
+				FMemory::Memcpy(TextureData, Pixels.GetData(), Pixels.Num() * sizeof(FColor));
+				NewTexture->GetPlatformData()->Mips[0].BulkData.Unlock();
+
+				// Обновляем текстуру
+				NewTexture->UpdateResource();
+
+				MySlateBrush = MakeShared<FSlateBrush>();
+				MySlateBrush->SetResourceObject(NewTexture);
+				MySlateBrush->ImageSize = FVector2D(700, 1000);
+			}
+		}
+	}
+
+	static FSlateBrush& Get() { return *MySlateBrush; }
+	static void Delete()
+	{
+		if (MySlateBrush.IsValid())
+		{
+			MySlateBrush.Reset();
+		}
+	}
+private:
+	static TSharedPtr<FSlateBrush> MySlateBrush;
+};

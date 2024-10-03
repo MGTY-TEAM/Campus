@@ -42,7 +42,7 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 			//.ColorAndOpacity(FColor::Black)
 			.Image(BackSlateBrush)
 		]
-		/*+ SOverlay::Slot()
+		+ SOverlay::Slot()
 		  .HAlign(HAlign_Fill)
 		  .VAlign(VAlign_Fill)
 		  .Padding(Padding - FMargin(5.f, 5.f))
@@ -54,7 +54,7 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 				SNew(SImage)
 				.ColorAndOpacity(FColor::Black)
 			]
-		]*/
+		]
 		+ SOverlay::Slot()
 		[
 			SNew(SVerticalBox)

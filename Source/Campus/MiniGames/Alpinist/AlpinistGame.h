@@ -38,7 +38,7 @@ protected:
 	UAlpinistIDEController* AlpinistIDEController;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AlpinistsProperties")
-	int32 SelectedLevel = 6;
+	int32 SelectedLevel = 5;
 public:	
 	virtual void Tick(float DeltaTime) override;
 

@@ -39,7 +39,7 @@ void SAlpinistHighlightedOutputLogWidget::Construct(const FArguments& InArgs)
 		  .VAlign(VAlign_Fill)
 		  .Padding(FMargin(7.f))
 		[
-			SNew(SRichTextBlock)
+			SAssignNew(RichTextBlock, SRichTextBlock)
 			.Text(FText::FromString("Log Message..."))
 			.TextStyle(TextBlock)
 		]
@@ -48,8 +48,19 @@ void SAlpinistHighlightedOutputLogWidget::Construct(const FArguments& InArgs)
 
 void SAlpinistHighlightedOutputLogWidget::OnAlpinistLogUpdate(void* InAlpinistLog)
 {
-	if (const AlpinistGame::AlpinistLog* AlpinistLog = static_cast<AlpinistGame::AlpinistLog*>(InAlpinistLog))
+	if (AlpinistGame::AlpinistLog* AlpinistLog = static_cast<AlpinistGame::AlpinistLog*>(InAlpinistLog))
 	{
-		UE_LOG(LogTemp, Display, TEXT("..., %i"), AlpinistLog->bHasErrors);
+		FString OutputLogInformation = FString();
+		
+		for (AlpinistGame::MessageLog messageLog : *AlpinistLog->GetListOfLog())
+		{
+			OutputLogInformation.Append(FString(messageLog.Message.c_str()) + "\n");
+			UE_LOG(LogTemp, Display, TEXT("%s"), *FString(messageLog.Message.c_str()));
+		}
+
+		if (RichTextBlock.IsValid())
+		{
+			RichTextBlock->SetText(FText::FromString(OutputLogInformation));
+		}
 	}
 }

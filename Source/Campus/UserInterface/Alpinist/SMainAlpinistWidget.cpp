@@ -25,8 +25,7 @@ void SMainAlpinistWidget::Construct(const FArguments& InArgs)
 			.AlpinistWidgetOwner(InArgs._AlpinistWidgetOwner)
 		]
 		+ SConstraintCanvas::Slot()
-		  .Offset(TAttribute<FMargin>::Create(
-			  TAttribute<FMargin>::FGetter::CreateSP(this, &SMainAlpinistWidget::GetLeftWidgetPadding)))
+		  .Offset(TAttribute<FMargin>::Create(TAttribute<FMargin>::FGetter::CreateSP(this, &SMainAlpinistWidget::GetLeftWidgetPadding)))
 		  .Anchors(FAnchors(0, 0, 0, 1))
 		  .AutoSize(true)
 		  .Alignment(FVector2D(0.0f, 0.0f))
@@ -86,6 +85,7 @@ void SMainAlpinistWidget::OnLeftWidgetHovered()
 {
 	if (!AnimationSequence.IsPlaying())
 	{
+		UE_LOG(LogTemp, Display, TEXT("Hovered"));
 		AnimationSequence.Play(AsShared()); // Воспроизводим анимацию вперёд
 	}
 }
@@ -94,6 +94,7 @@ void SMainAlpinistWidget::OnLeftWidgetUnhovered()
 {
 	if (!AnimationSequence.IsPlaying())
 	{
+		UE_LOG(LogTemp, Display, TEXT("Unovered"));
 		AnimationSequence.Reverse(); // Воспроизводим анимацию в обратном направлении
 	}
 }

@@ -27,6 +27,7 @@ namespace AlpinistGame
 		MoveResult SwapPlayerMove();
 
 		friend std::ostream& operator<<(std::ostream& os, World* world);
+		void LogWorld();
 		bool WallInDirection(const Condition& condition);
 
 		bool IsPlayerFinished() const { return bFinished; }

@@ -13,6 +13,8 @@ void AlpinistGame::Compiler::SetCode(const std::string& NewCode)
 
 bool AlpinistGame::Compiler::Compile(AlpinistLog& AlpLog)
 {
+	AlpLog.ClearLog();
+	
 	Lexer lexer = Lexer(Code);
 	std::vector<Token*> Tokens = *lexer.LexAnalysis(AlpLog);
 	if (AlpLog.bHasErrors)

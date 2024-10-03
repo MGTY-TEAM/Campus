@@ -5,6 +5,8 @@
 
 using namespace AlpinistGame;
 
+DEFINE_LOG_CATEGORY_STATIC(LogWorldAlpinist, All, All);
+
 bool World::IsValidPosition(std::pair<int8_t, int8_t> position) const
 {
 	if (m_grid.empty())
@@ -75,6 +77,47 @@ MoveResult World::SwapPlayerMove()
 		}
 	}
 	return MR_ERROR;
+}
+
+void World::LogWorld()
+{
+	if (m_grid.empty())
+		return;
+
+	UE_LOG(LogWorldAlpinist, Display, TEXT("--------------------------------------------------"));
+	TArray<FString> OutArray = TArray<FString>();
+	for (size_t i = 0; i < m_grid.size(); ++i)
+	{
+		FString OutString = FString();
+		for (size_t j = 0; j < m_grid[i].size(); ++j)
+		{
+			if (m_grid[i][j])
+			{
+				if (dynamic_cast<Player*>(m_grid[i][j]))
+				{
+					OutString.Append("p");
+				}
+				else if (dynamic_cast<Wall*>(m_grid[i][j]))
+				{
+					OutString.Append("w");
+				}
+				else if (dynamic_cast<Finish*>(m_grid[i][j]))
+				{
+					OutString.Append("f");
+				}
+			}
+			else
+			{
+				OutString.Append(".");
+			}
+		}
+		OutArray.Add(OutString);
+	}
+
+	for (const FString& Out : OutArray)
+	{
+		UE_LOG(LogWorldAlpinist, Display, TEXT("%s"), *Out);
+	}
 }
 
 bool World::WallInDirection(const Condition& condition)

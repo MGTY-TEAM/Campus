@@ -61,6 +61,7 @@ namespace AlpinistGame
 	class GameController
 	{
 		World* m_world;
+		std::vector<std::string> m_initialWorld;
 
 		AlpinistGame::AlpinistCaretaker* m_alpinistCaretaker;
 	public:
@@ -77,6 +78,7 @@ namespace AlpinistGame
 		void SetNewMap(const std::vector<std::string>& map);
 		World* GetWorld() { return m_world; }
 
+		void ToStartPositions();
 		bool SaveCopyOfWorld(PlayerCommand* Command);
 		bool RestoreOfWorld(PlayerCommand* Command);
 		// bool ExecuteMacroCommand(MacroCommand* macroCommand);

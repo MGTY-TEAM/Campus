@@ -124,6 +124,15 @@ void AAlpinistGame::RunGame()
 	{
 		m_Compiler->Run(*m_AlpinistLog);
 		AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
+
+		if (m_gameController->GetWorld()->IsPlayerFinished())
+		{
+			UE_LOG(LogAlpinistGame, Warning, TEXT("Player finished!"));
+		}
+		else
+		{
+			UE_LOG(LogAlpinistGame, Warning, TEXT("Player didn't finish!"));
+		}
 	}
 	// Получить сформированные команды для работы с видом или написать код для связи с видом внутри написанного кода игры
 }
@@ -139,6 +148,10 @@ void AAlpinistGame::ClearLog()
 
 void AAlpinistGame::ToStartPosition()
 {
+	if (m_gameController.IsValid())
+	{
+		m_gameController->ToStartPositions();
+	}
 	// Как возвращать пешку обратно?
 }
 
@@ -171,6 +184,6 @@ void AAlpinistGame::OpenLevel(int32 Level)
 		UE_LOG(LogAlpinistGame, Display, TEXT("Path Of Selected Level: %s"), *UAlpinistGameHelper::GetSelectedLevelPath(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels", SelectedLevel));
 	}
 
-	// Удалание нынешней карты, процедурная генерация выбранной карты
+	// Удаление нынешней карты, процедурная генерация выбранной карты
 }
 
