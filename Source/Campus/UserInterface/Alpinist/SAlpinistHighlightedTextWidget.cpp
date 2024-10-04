@@ -50,7 +50,7 @@ void SAlpinistHighlightedTextWidget::Construct(const FArguments& InArgs)
 	const FTextBlockStyle* MainTextStyle = &FMainCodeSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("MainCodeSlateStyle.MainText");
 	const FTextBlockStyle* SimpleCommandStyle = &FSimpleCommandSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("FSimpleCommandSlateStyle.SimpleCommand");
 	const FTextBlockStyle* ConditionCommandStyle = &FConditionCommandSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("FConditionCommandSlateStyle.ConditionCommand");
-
+	
 	if (StyleSet)
 	{
 		StyleSet->Set("SimpleCommand", *SimpleCommandStyle);
@@ -90,7 +90,7 @@ void SAlpinistHighlightedTextWidget::Construct(const FArguments& InArgs)
 		+ SOverlay::Slot()
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(Padding - FMargin(6.f, 1.f))
+		.Padding(Padding - FMargin(6.f, 2.f))
 		[
 			SAssignNew(EditableTextBox, SMultiLineEditableTextBox)
 			.OnTextChanged(this, &SAlpinistHighlightedTextWidget::OnTextChanged)

@@ -111,8 +111,9 @@ bool AAlpinistGame::SetupController()
 
 void AAlpinistGame::BuildGame()
 {
-	if (m_Compiler.IsValid() && AlpinistIDEController)
+	if (m_Compiler.IsValid() && m_AlpinistLog.IsValid()  && AlpinistIDEController)
 	{
+		m_AlpinistLog->PushMessageLog("Build Processing...", AlpinistGame::DisplayMes);
 		m_Compiler->Compile(*m_AlpinistLog);
 		AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
 	}
@@ -120,18 +121,34 @@ void AAlpinistGame::BuildGame()
 
 void AAlpinistGame::RunGame()
 {
-	if (m_Compiler.IsValid() && AlpinistIDEController)
+	if (m_Compiler.IsValid() && m_AlpinistLog.IsValid() && AlpinistIDEController)
 	{
+		m_AlpinistLog->PushMessageLog("Run Processing...", AlpinistGame::DisplayMes);
 		m_Compiler->Run(*m_AlpinistLog);
-		AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
-
+		
 		if (m_gameController->GetWorld()->IsPlayerFinished())
 		{
+			PassedLevels.Add(SelectedLevel);
+			m_AlpinistLog->PushMessageLog("Successful completion of level " + std::to_string(SelectedLevel), AlpinistGame::SuccessMes);
 			UE_LOG(LogAlpinistGame, Warning, TEXT("Player finished!"));
 		}
 		else
 		{
 			UE_LOG(LogAlpinistGame, Warning, TEXT("Player didn't finish!"));
+		}
+		AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
+	}
+
+	if (!bAlpinistGameCompleted && PassedLevels.Num() == UAlpinistGameHelper::DetermineNumberOfLevels(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels"))
+	{
+		ExecuteMiniGameCompleted.Broadcast();
+		bAlpinistGameCompleted = true;
+		UE_LOG(LogAlpinistGame, Warning, TEXT("Alpinist Game Completed!"));
+
+		if (m_AlpinistLog.IsValid() && AlpinistIDEController)
+		{
+			m_AlpinistLog->PushMessageLog("Alpinist Game Completed!", AlpinistGame::SuccessMes);
+			AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
 		}
 	}
 	// Получить сформированные команды для работы с видом или написать код для связи с видом внутри написанного кода игры
@@ -151,6 +168,12 @@ void AAlpinistGame::ToStartPosition()
 	if (m_gameController.IsValid())
 	{
 		m_gameController->ToStartPositions();
+
+		if (m_AlpinistLog.IsValid() && AlpinistIDEController)
+		{
+			m_AlpinistLog->PushMessageLog("ToStartPosition Processing...", AlpinistGame::DisplayMes);
+			AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
+		}
 	}
 	// Как возвращать пешку обратно?
 }
@@ -182,6 +205,12 @@ void AAlpinistGame::OpenLevel(int32 Level)
 		SelectedLevel = Level;
 		SetupController();
 		UE_LOG(LogAlpinistGame, Display, TEXT("Path Of Selected Level: %s"), *UAlpinistGameHelper::GetSelectedLevelPath(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels", SelectedLevel));
+
+		if (m_AlpinistLog.IsValid() && AlpinistIDEController)
+		{
+			m_AlpinistLog->PushMessageLog("Level Opening: " + std::to_string(SelectedLevel), AlpinistGame::DisplayMes);
+			AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
+		}
 	}
 
 	// Удаление нынешней карты, процедурная генерация выбранной карты

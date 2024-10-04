@@ -15,7 +15,8 @@ public:
 			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 36);
 			StyleSet->Set("EmptySlateStyle.Empty", FTextBlockStyle()
 				.SetFont(RobotoBoldFont)
-				.SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 0.0f))));
+				.SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 0.0f)))
+				.SetSelectedBackgroundColor(FSlateColor(FLinearColor(0.f, 1.f, 0.f, 0.25f))));
 		}
 		FSlateStyleRegistry::RegisterSlateStyle(*StyleSet);
 	}

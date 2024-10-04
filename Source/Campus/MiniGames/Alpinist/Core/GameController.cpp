@@ -30,6 +30,7 @@ void GameController::SetNewMap(const std::vector<std::string>& map)
         delete m_world;
     }
     m_world = new World(map);
+    m_initialWorld = map;
 }
 
 bool GameController::MoveForward()

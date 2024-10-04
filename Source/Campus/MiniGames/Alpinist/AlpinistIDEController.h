@@ -32,4 +32,7 @@ public:
 	void OnClearLogButtonClick();
 	void OnToStartPositionButtonClick();
 	void OnQuitGameButtonClick();
+
+	int32 GetSelectedLevel() const;
+	TSet<int32> GetPassedLevels() const;
 };

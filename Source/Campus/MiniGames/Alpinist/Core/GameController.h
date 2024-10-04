@@ -16,7 +16,8 @@ namespace AlpinistGame
 	{
 		DisplayMes = 0,
 		WarningMes = 1,
-		ErrorMes = 2
+		ErrorMes = 2,
+		SuccessMes = 3
 	};
 
 	struct MessageLog

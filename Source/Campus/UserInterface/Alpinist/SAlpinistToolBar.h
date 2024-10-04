@@ -3,6 +3,8 @@
 
 #include "CoreMinimal.h"
 
+struct FSlateColor;
+
 class UAlpinistIDEController;
 
 class CAMPUS_API SAlpinistToolBar : public SCompoundWidget
@@ -19,8 +21,13 @@ public:
 private:
 	FReply OnToStartPositionButtonClicked() const;
 	FReply OnQuitGameButtonClicked() const;
+	FReply OnLevelSelected(int32 SelectedLevel) const;
 
 	TSharedPtr<SMenuAnchor> MenuAnchor;
 	TSharedRef<SWidget> CreatePopupMenu();
 	FReply OnPopupButtonClick();
+
+	TArray<TSharedPtr<SButton>> LevelButtons;
+	bool GetButtonLevelEnable(int32 ButtonIndex) const;
+	FSlateColor GetButtonLevelSlateColor(int32 ButtonIndex) const;
 };

@@ -123,3 +123,23 @@ void UAlpinistIDEController::OnQuitGameButtonClick()
 		AlpinistGame->CloseGame();
 	}
 }
+
+int32 UAlpinistIDEController::GetSelectedLevel() const
+{
+	if (const AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
+	{
+		return AlpinistGame->GetSelectedLevel();
+	}
+
+	return -1;
+}
+
+TSet<int32> UAlpinistIDEController::GetPassedLevels() const
+{
+	if (const AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
+	{
+		return AlpinistGame->GetPassedLevels();
+	}
+
+	return TSet<int32>();
+}

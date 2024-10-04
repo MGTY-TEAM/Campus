@@ -34,10 +34,11 @@ bool AlpinistGame::Lexer::ContinueLexAnal()
 	const std::string What = "Undefined Command: ";
 	const std::string Exactly = arr.front();
 	const std::string WhatExactly = What + Exactly;
+	const std::string In = std::to_string(currentPos);
 	
-	Log->PushMessageLog(WhatExactly, ErrorMes);
+	Log->PushMessageLog(In + ": " + WhatExactly, AlpinistGame::ErrorMes);
 	
-	Log->PushMessageLog("Incorrect Command", ErrorMes);
+	Log->PushMessageLog(In + ": " + "Incorrect Command", AlpinistGame::ErrorMes);
 	return false;
 }
 

@@ -38,7 +38,7 @@ protected:
 	UAlpinistIDEController* AlpinistIDEController;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AlpinistsProperties")
-	int32 SelectedLevel = 5;
+	int32 SelectedLevel = 1;
 public:	
 	virtual void Tick(float DeltaTime) override;
 
@@ -50,11 +50,17 @@ public:
 	void ToStartPosition();
 	void CloseGame();
 	void OpenLevel(int32 Level);
+
+	int32 GetSelectedLevel() const { return SelectedLevel; }
+	TSet<int32> GetPassedLevels() const { return PassedLevels; }
 private:
 	TSharedPtr<AlpinistGame::GameController> m_gameController;
 	TSharedPtr<AlpinistGame::Compiler> m_Compiler;
 	TSharedPtr<AlpinistGame::AlpinistLog> m_AlpinistLog;
+	TSet<int32> PassedLevels;
 
 	bool InitializeAlpinistGame();
 	bool SetupController();
+
+	bool bAlpinistGameCompleted = false;
 };
