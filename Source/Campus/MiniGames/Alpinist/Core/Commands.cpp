@@ -1,11 +1,11 @@
 #ifdef ALPINIST_GAME
 
 #include "Commands.h"
-#include "GameController.h"
+//#include "GameController.h"
 
 using namespace AlpinistGame;
 
-bool RotateRightCommand::Execute()
+bool RotateRightCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
 {
 	if (!m_gameController)
 		return false;
@@ -22,7 +22,7 @@ bool RotateRightCommand::Unexecute()
 	return m_gameController->RestoreOfWorld(this);
 }
 
-bool RotateLeftCommand::Execute()
+bool RotateLeftCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
 {
 	if (!m_gameController)
 		return false;
@@ -39,7 +39,7 @@ bool RotateLeftCommand::Unexecute()
 	return m_gameController->RestoreOfWorld(this);
 }
 
-bool MoveCommand::Execute()
+bool MoveCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
 {
 	if (!m_gameController)
 		return false;
@@ -56,11 +56,11 @@ bool MoveCommand::Unexecute()
 	return m_gameController->RestoreOfWorld(this);
 }
 
-bool MacroCommand::Execute()
+bool MacroCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
 {
 	for (PlayerCommand* playerCommand : m_commandList)
 	{
-		if (!playerCommand->Execute())
+		if (!playerCommand->Execute(AlpLog))
 			return false;
 	}
 	return true;
@@ -76,7 +76,7 @@ void ConditionCommand::ToggleResult()
 	m_shouldBeNegation = !m_shouldBeNegation;
 }
 
-bool ConditionCommand::Execute()
+bool ConditionCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
 {
 	if (!m_gameController)
 		return false;
@@ -85,7 +85,7 @@ bool ConditionCommand::Execute()
 	return true;
 }
 
-bool NotEndCommand::Execute()
+bool NotEndCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
 {
 	if (!m_gameController)
 		return false;
@@ -94,15 +94,15 @@ bool NotEndCommand::Execute()
 	return true;
 }
 
-bool IfCommand::Execute()
+bool IfCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
 {
 	if (!m_conditionCommand) return false;
-	m_conditionCommand->Execute();
+	m_conditionCommand->Execute(AlpLog);
 	if (m_conditionCommand->GetResult())
 	{
 		for (PlayerCommand* playerCommand : m_commandListIfTrue)
 		{
-			if (!playerCommand->Execute())
+			if (!playerCommand->Execute(AlpLog))
 				return false;
 		}
 	}
@@ -110,7 +110,7 @@ bool IfCommand::Execute()
 	{
 		for (PlayerCommand* playerCommand : m_commandListIfFalse)
 		{
-			if (!playerCommand->Execute())
+			if (!playerCommand->Execute(AlpLog))
 				return false;
 		}
 	}

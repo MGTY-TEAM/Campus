@@ -113,8 +113,8 @@ void AAlpinistGame::BuildGame()
 {
 	if (m_Compiler.IsValid() && m_AlpinistLog.IsValid()  && AlpinistIDEController)
 	{
-		m_AlpinistLog->PushMessageLog("Build Processing...", AlpinistGame::DisplayMes);
 		m_Compiler->Compile(*m_AlpinistLog);
+		m_AlpinistLog->PushMessageLog("Build Processing Finished...", AlpinistGame::DisplayMes);
 		AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
 	}
 }
@@ -123,13 +123,21 @@ void AAlpinistGame::RunGame()
 {
 	if (m_Compiler.IsValid() && m_AlpinistLog.IsValid() && AlpinistIDEController)
 	{
-		m_AlpinistLog->PushMessageLog("Run Processing...", AlpinistGame::DisplayMes);
 		m_Compiler->Run(*m_AlpinistLog);
+		m_AlpinistLog->PushMessageLog("Run Processing Finished...", AlpinistGame::DisplayMes);
 		
 		if (m_gameController->GetWorld()->IsPlayerFinished())
 		{
+			if (!PassedLevels.Contains(SelectedLevel))
+			{
+				m_AlpinistLog->PushMessageLog("Player finished, Successful completion of level " + std::to_string(SelectedLevel), AlpinistGame::SuccessMes);
+			}
+			else
+			{
+				m_AlpinistLog->PushMessageLog("Player finished!", AlpinistGame::SuccessMes);
+			}
 			PassedLevels.Add(SelectedLevel);
-			m_AlpinistLog->PushMessageLog("Successful completion of level " + std::to_string(SelectedLevel), AlpinistGame::SuccessMes);
+			
 			UE_LOG(LogAlpinistGame, Warning, TEXT("Player finished!"));
 		}
 		else
@@ -171,7 +179,7 @@ void AAlpinistGame::ToStartPosition()
 
 		if (m_AlpinistLog.IsValid() && AlpinistIDEController)
 		{
-			m_AlpinistLog->PushMessageLog("ToStartPosition Processing...", AlpinistGame::DisplayMes);
+			m_AlpinistLog->PushMessageLog("ToStartPosition Processing Finished...", AlpinistGame::DisplayMes);
 			AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
 		}
 	}

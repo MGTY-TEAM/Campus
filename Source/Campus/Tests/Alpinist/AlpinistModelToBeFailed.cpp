@@ -105,7 +105,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	AlpinistGame::AlpinistLog LogConditionCommand;
 	CompileSuccess = compilerConditionCommand->Compile(LogConditionCommand);
 
-	ExpectedErrorMessage = "while expects ConditionCommand.";
+	ExpectedErrorMessage = "while expects ConditionCommand...";
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
@@ -127,7 +127,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	AlpinistGame::AlpinistLog LogBeginCommand;
 	CompileSuccess = compilerBeginCommand->Compile(LogBeginCommand);
 
-	ExpectedErrorMessage = "While/IfCommand hasn't Scope.";
+	ExpectedErrorMessage = "While/IfCommand hasn't Scope...";
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
@@ -149,7 +149,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	AlpinistGame::AlpinistLog LogEndCommand;
 	CompileSuccess = compilerEndCommand->Compile(LogEndCommand);
 
-	ExpectedErrorMessage = "While/IfCommand hasn't Scope.";
+	ExpectedErrorMessage = "While/IfCommand hasn't Scope...";
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
@@ -192,7 +192,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	AlpinistGame::AlpinistLog LogNotEnd;
 	bool CompileSuccess = compilerNotEnd->Compile(LogNotEnd);
 
-	FString ExpectedErrorMessage = "Can't create IfCommand.";
+	FString ExpectedErrorMessage = "Can't create IfCommand...";
 	bool ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
@@ -214,7 +214,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	AlpinistGame::AlpinistLog LogConditionCommand;
 	CompileSuccess = compilerConditionCommand->Compile(LogConditionCommand);
 
-	ExpectedErrorMessage = "if expects ConditionCommand.";
+	ExpectedErrorMessage = "if expects ConditionCommand...";
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
@@ -236,7 +236,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	AlpinistGame::AlpinistLog LogBeginCommand;
 	CompileSuccess = compilerBeginCommand->Compile(LogBeginCommand);
 
-	ExpectedErrorMessage = "While/IfCommand hasn't Scope.";
+	ExpectedErrorMessage = "While/IfCommand hasn't Scope...";
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
@@ -258,7 +258,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	AlpinistGame::AlpinistLog LogEndCommand;
 	CompileSuccess = compilerEndCommand->Compile(LogEndCommand);
 
-	ExpectedErrorMessage = "While/IfCommand hasn't Scope.";
+	ExpectedErrorMessage = "While/IfCommand hasn't Scope...";
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
@@ -280,7 +280,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	AlpinistGame::AlpinistLog LogElse;
 	CompileSuccess = compilerElse->Compile(LogElse);
 
-	ExpectedErrorMessage = "Incorrect IfElseConditional.";
+	ExpectedErrorMessage = "Incorrect IfElseConditional...";
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{

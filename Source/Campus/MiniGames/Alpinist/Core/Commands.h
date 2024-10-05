@@ -3,6 +3,13 @@
 #ifdef ALPINIST_GAME
 
 #include "GameTypes.h"
+#include "GameController.h"
+
+namespace AlpinistGame
+{
+	class AlpinistLog;
+}
+
 
 namespace AlpinistGame
 {
@@ -20,7 +27,7 @@ namespace AlpinistGame
 		{
 		}
 
-		virtual bool Execute()
+		virtual bool Execute(AlpinistGame::AlpinistLog* AlpLog)
 		{
 			return false;
 		}
@@ -39,7 +46,7 @@ namespace AlpinistGame
 		{
 		}
 
-		virtual bool Execute() override;
+		virtual bool Execute(AlpinistGame::AlpinistLog* AlpLog) override;
 		virtual bool Unexecute() override;
 	};
 
@@ -52,7 +59,7 @@ namespace AlpinistGame
 		{
 		}
 
-		virtual bool Execute() override;
+		virtual bool Execute(AlpinistGame::AlpinistLog* AlpLog) override;
 		virtual bool Unexecute() override;
 	};
 
@@ -65,7 +72,7 @@ namespace AlpinistGame
 		{
 		}
 
-		virtual bool Execute() override;
+		virtual bool Execute(AlpinistGame::AlpinistLog* AlpLog) override;
 		virtual bool Unexecute() override;
 	};
 
@@ -79,7 +86,7 @@ namespace AlpinistGame
 		{
 		}
 
-		virtual bool Execute() override;
+		virtual bool Execute(AlpinistGame::AlpinistLog* AlpLog) override;
 
 		void PushCommand(PlayerCommand* playerCommand);
 
@@ -104,7 +111,7 @@ namespace AlpinistGame
 		bool GetResult() const { return m_shouldBeNegation ? !m_bResult : m_bResult; }
 		void ToggleResult();
 
-		virtual bool Execute() override;
+		virtual bool Execute(AlpinistGame::AlpinistLog* AlpLog) override;
 
 		ConditionCommand* operator!()
 		{
@@ -127,7 +134,7 @@ namespace AlpinistGame
 
 		bool GetResult() const { return m_bResult; }
 		
-		virtual bool Execute() override;
+		virtual bool Execute(AlpinistGame::AlpinistLog* AlpLog) override;
 	};
 	
 	class IfCommand : public PlayerCommand
@@ -159,7 +166,7 @@ namespace AlpinistGame
 
 		// void SetCondition(bool Condition) { m_bConditon = Condition; }
 
-		virtual bool Execute() override;
+		virtual bool Execute(AlpinistGame::AlpinistLog* AlpLog) override;
 	};
 	
 	class WhileCommand : public MacroCommand
@@ -180,41 +187,45 @@ namespace AlpinistGame
 			m_conditionCommand = nullptr;
 		}
 
-		virtual bool Execute() override
+		virtual bool Execute(AlpinistGame::AlpinistLog* AlpLog) override
 		{
 			if (m_conditionCommand)
 			{
-				return ExecuteCondition(m_conditionCommand, &ConditionCommand::Execute, &ConditionCommand::GetResult);
+				return ExecuteCondition(m_conditionCommand, &ConditionCommand::Execute, AlpLog, &ConditionCommand::GetResult);
 			}
 			if (m_notEndCommand)
 			{
-				return ExecuteCondition(m_notEndCommand, &NotEndCommand::Execute, &NotEndCommand::GetResult);
+				return ExecuteCondition(m_notEndCommand, &NotEndCommand::Execute, AlpLog, &NotEndCommand::GetResult);
 			} 
 			return false;
 		}
 
 	private:
 		template<typename TypeOfConditionCommand>
-		bool ExecuteCondition(TypeOfConditionCommand* Command, bool(TypeOfConditionCommand::* Execute)(), bool(TypeOfConditionCommand::* GetResult)() const);
+		bool ExecuteCondition(TypeOfConditionCommand* Command, bool(TypeOfConditionCommand::* Execute)(AlpinistGame::AlpinistLog*), AlpinistGame::AlpinistLog* AlpLog, bool(TypeOfConditionCommand::* GetResult)() const);
 	};
 
 	template <typename TypeOfConditionCommand>
-	bool WhileCommand::ExecuteCondition(TypeOfConditionCommand* Command, bool(TypeOfConditionCommand::* Execute)(), bool(TypeOfConditionCommand::* GetResult)() const)
+	bool WhileCommand::ExecuteCondition(TypeOfConditionCommand* Command, bool(TypeOfConditionCommand::* Execute)(AlpinistGame::AlpinistLog*), AlpinistGame::AlpinistLog* AlpLog, bool(TypeOfConditionCommand::* GetResult)() const)
 	{
 		if (Command)
 		{
-			(Command->*Execute)();
+			(Command->*Execute)(AlpLog);
 			while ((Command->*GetResult)())
 			{
 				for (PlayerCommand* playerCommand : m_commandList)
 				{
-					if (!playerCommand->Execute())
+					if (!playerCommand->Execute(AlpLog))
 						return false;
 				}
-				(Command->*Execute)();
+				(Command->*Execute)(AlpLog);
 
 				if (CountOfExecution++ == 100)
 				{
+					if (AlpLog)
+					{
+						AlpLog->PushMessageLog("Warning: Infinite Circle in WhileLoop...", AlpinistGame::WarningMes);
+					}
 					return false;
 				}
 			}

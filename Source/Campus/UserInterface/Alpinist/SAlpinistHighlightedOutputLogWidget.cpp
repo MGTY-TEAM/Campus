@@ -1,14 +1,33 @@
 #include "SAlpinistHighlightedOutputLogWidget.h"
 
+#include "BehaviorTree/Decorators/BTDecorator_SetTagCooldown.h"
 #include "Widgets/Text/SRichTextBlock.h"
+#include "HighlightStyles/AlpinistTextDecorators.h"
+#include "Framework/Text/RichTextLayoutMarshaller.h"
+#include "HighlightStyles/FAlpinistMarkupProcessing.h"
 #include "Campus/MiniGames/Alpinist/Core/GameController.h"
 #include "Campus/MiniGames/Alpinist/AlpinistIDEController.h"
+#include "Framework/Text/RichTextMarkupProcessing.h"
 
 SAlpinistHighlightedOutputLogWidget::SAlpinistHighlightedOutputLogWidget()
 {
-	TextBlock = new FTextBlockStyle();
-	TextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 16));
-	TextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+	StyleSet = new FSlateStyleSet("OutputLogStyleSet");
+
+	DisplayTextBlock = new FTextBlockStyle();
+	DisplayTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 16));
+	DisplayTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
+
+	WarningTextBlock = new FTextBlockStyle();
+	WarningTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 16));
+	WarningTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Yellow));
+
+	ErrorTextBlock = new FTextBlockStyle();
+	ErrorTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 16));
+	ErrorTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Red));
+	
+	SuccessTextBlock = new FTextBlockStyle();
+	SuccessTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 16));
+	SuccessTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
 }
 
 void SAlpinistHighlightedOutputLogWidget::Construct(const FArguments& InArgs)
@@ -19,6 +38,19 @@ void SAlpinistHighlightedOutputLogWidget::Construct(const FArguments& InArgs)
 	{
 		AlpinistWidgetOwner->OnAlpinistLogUpdate.AddRaw(this, &SAlpinistHighlightedOutputLogWidget::OnAlpinistLogUpdate);
 	}
+
+	if (StyleSet)
+	{
+		StyleSet->Set("DisplayText", *DisplayTextBlock);
+		StyleSet->Set("WarningText", *WarningTextBlock);
+		StyleSet->Set("ErrorText", *ErrorTextBlock);
+		StyleSet->Set("SuccessText", *SuccessTextBlock);
+	}
+	TArray<TSharedRef<ITextDecorator>> Decorators;
+	Decorators.Add(FAlpinistCommandDecorator::Create(*DisplayTextBlock, "DisplayText"));
+	Decorators.Add(FAlpinistCommandDecorator::Create(*DisplayTextBlock, "WarningText"));
+	Decorators.Add(FAlpinistCommandDecorator::Create(*DisplayTextBlock, "ErrorText"));
+	Decorators.Add(FAlpinistCommandDecorator::Create(*DisplayTextBlock, "SuccessText"));
 	
 	ChildSlot
 	[
@@ -39,9 +71,15 @@ void SAlpinistHighlightedOutputLogWidget::Construct(const FArguments& InArgs)
 		  .VAlign(VAlign_Fill)
 		  .Padding(FMargin(7.f))
 		[
-			SAssignNew(RichTextBlock, SRichTextBlock)
-			.Text(FText::FromString("Log Message..."))
-			.TextStyle(TextBlock)
+			SNew(SScrollBox)
+			+ SScrollBox::Slot()
+			[
+				SAssignNew(RichTextBlock, SRichTextBlock)
+				.Text(FText::FromString("<SuccessText>Log Message...</>"))
+				.TextStyle(DisplayTextBlock)
+				.Marshaller(FRichTextLayoutMarshaller::Create(FDefaultRichTextMarkupParser::Create(), nullptr, Decorators, StyleSet))
+			]
+			
 		]
 	];
 }
@@ -54,7 +92,23 @@ void SAlpinistHighlightedOutputLogWidget::OnAlpinistLogUpdate(void* InAlpinistLo
 		
 		for (AlpinistGame::MessageLog messageLog : *AlpinistLog->GetListOfLog())
 		{
-			OutputLogInformation.Append(FString(messageLog.Message.c_str()) + "\n");
+			if (messageLog.Type == AlpinistGame::DisplayMes)
+			{
+				OutputLogInformation.Append(FString("<DisplayText>") + FString(messageLog.Message.c_str()) + FString("</>") + "\n");
+			}
+			else if (messageLog.Type == AlpinistGame::WarningMes)
+			{
+				OutputLogInformation.Append(FString("<WarningText>") + FString(messageLog.Message.c_str()) + FString("</>") + "\n");
+			}
+			else if (messageLog.Type == AlpinistGame::ErrorMes)
+			{
+				OutputLogInformation.Append(FString("<ErrorText>") + FString(messageLog.Message.c_str()) + FString("</>") + "\n");
+			}
+			else if (messageLog.Type == AlpinistGame::SuccessMes)
+			{
+				OutputLogInformation.Append(FString("<SuccessText>") + FString(messageLog.Message.c_str()) + FString("</>") + "\n");
+			}
+			// OutputLogInformation.Append(FString(messageLog.Message.c_str()) + "\n");
 			UE_LOG(LogTemp, Display, TEXT("%s"), *FString(messageLog.Message.c_str()));
 		}
 

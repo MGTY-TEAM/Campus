@@ -42,39 +42,39 @@ bool AlpinistGame::Parser::ContinueSynAnal(MacroCommand* commandList)
 		{
 			return true;
 		}
-		Log->PushMessageLog("Undefined Command: Can't create command.", ErrorMes);
+		Log->PushMessageLog("Undefined Command: Can't create command...", ErrorMes);
 		break;
 	case CT_WhileLoop:
 		if (AddWhileLoop(token->GetText(), commandList))
 		{
 			return true;
 		}
-		Log->PushMessageLog("Incorrect WhileLoop.", ErrorMes);
+		Log->PushMessageLog("Incorrect WhileLoop...", ErrorMes);
 		break;
 	case CT_IfElseConditional:
 		if (AddIfElseConditional(token->GetText(), commandList))
 		{
 			return true;
 		}
-		Log->PushMessageLog("Incorrect IfElseConditional.", ErrorMes);
+		Log->PushMessageLog("Incorrect IfElseConditional...", ErrorMes);
 		break;
 	case CT_ConditionType:
-		Log->PushMessageLog("Expected while Or if Command.", ErrorMes);
+		Log->PushMessageLog("Expected while Or if Command...", ErrorMes);
 		break;
 	case CT_BeginScope:
-		Log->PushMessageLog("Expected while Or if Command.", ErrorMes);
+		Log->PushMessageLog("Expected while Or if Command...", ErrorMes);
 		break;
 	case CT_EndScope:
-		Log->PushMessageLog("Expected while Or if Command.", ErrorMes);
+		Log->PushMessageLog("Expected while Or if Command...", ErrorMes);
 		break;
 	case CT_Space:
 		Tokens.erase(Tokens.begin());
 		return true;
 	case CT_NotEnd:
-		Log->PushMessageLog("Expected while Command.", ErrorMes);
+		Log->PushMessageLog("Expected while Command...", ErrorMes);
 		break;
 	default:
-		Log->PushMessageLog("Undefined Type: Can't create command.", ErrorMes);
+		Log->PushMessageLog("Undefined Type: Can't create command...", ErrorMes);
 		break;
 	}
 	return false;
@@ -116,7 +116,7 @@ bool AlpinistGame::Parser::AddWhileLoop(const std::string& Command, MacroCommand
 	
 	if (!whileCommand)
 	{
-		Log->PushMessageLog("Can't create WhileCommand", ErrorMes);
+		Log->PushMessageLog("Can't create WhileCommand...", ErrorMes);
 		return false;
 	}
 
@@ -140,7 +140,7 @@ bool AlpinistGame::Parser::AddIfElseConditional(const std::string& Command, Macr
 	IfCommand* ifCommand = CreateCommandWithCondition<IfCommand>(Command, commandList, ifHasCondition);
 	if (!ifCommand)
 	{
-		Log->PushMessageLog("Can't create IfCommand.", ErrorMes);
+		Log->PushMessageLog("Can't create IfCommand...", ErrorMes);
 		return false;
 	}
 
@@ -206,7 +206,7 @@ AlpinistGame::WhileCommand* AlpinistGame::Parser::CreateWhileCommandWithKeyword(
 
 	if (!whileCommand)
 	{
-		Log->PushMessageLog("Can't create NotEndCommand", ErrorMes);
+		Log->PushMessageLog("Can't create NotEndCommand...", ErrorMes);
 	}
 
 	return whileCommand;

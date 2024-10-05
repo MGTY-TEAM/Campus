@@ -86,12 +86,12 @@ namespace AlpinistGame
 		}
 		else if (conditionToken && conditionToken->GetCommandType() == CT_NotEnd)
 		{
-			Log->PushMessageLog("Keyword \"NotEnd\" doesn't expect negating...", ErrorMes);
+			Log->PushMessageLog("Keyword \"NotEnd\" doesn't expect negating...", WarningMes);
 		}
 		else
 		{
 			const std::string What = Command;
-			const std::string Exactly = " expects ConditionCommand.";
+			const std::string Exactly = " expects ConditionCommand...";
 			const std::string WhatExactly = What + Exactly;
 			
 			Log->PushMessageLog(WhatExactly, ErrorMes);
@@ -117,7 +117,7 @@ namespace AlpinistGame
 		}
 		else
 		{
-			Log->PushMessageLog("While/IfCommand hasn't Scope.", ErrorMes);
+			Log->PushMessageLog("While/IfCommand hasn't Scope...", ErrorMes);
 			return false;
 		}
 		return true;

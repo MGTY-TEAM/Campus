@@ -63,14 +63,14 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	const std::pair<int8_t, int8_t> StartedPos = controller->GetWorld()->GetPlayer()->GetPos();
 	auto FirstIt = m_commandList.begin();
 	const auto FirstCommand = *FirstIt;
-	FirstCommand->Execute();
+	FirstCommand->Execute(&Log);
 	std::pair<int8_t, int8_t> CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Move Command UP first", (StartedPos.first - 1) == CurrentPos.first && StartedPos.second == CurrentPos.second);
 
 	auto SecondIt = ++FirstIt;
 	const auto SecondCommand = *SecondIt;
 	TestNotNull("1 item of m_commandList is nullptr", SecondCommand);
-	SecondCommand->Execute();
+	SecondCommand->Execute(&Log);
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Move Command UP second", (StartedPos.first - 2) == CurrentPos.first && StartedPos.second == CurrentPos.second);
 
@@ -86,27 +86,27 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected UNEXECUTE Move Command UP first", StartedPos.first == CurrentPos.first && StartedPos.second == CurrentPos.second);
 
-	FirstCommand->Execute();
-	SecondCommand->Execute();
+	FirstCommand->Execute(&Log);
+	SecondCommand->Execute(&Log);
 
 	auto ThirdIt = ++SecondIt;
 	const auto ThirdCommand = *ThirdIt;
 	TestNotNull("2 item of m_commandList is nullptr", ThirdCommand);
-	ThirdCommand->Execute();
+	ThirdCommand->Execute(&Log);
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Right Command", (StartedPos.first - 2) == CurrentPos.first && StartedPos.second == CurrentPos.second);
 
 	auto FourthIt = ++ThirdIt;
 	const auto FourthCommand = *FourthIt;
 	TestNotNull("3 item of m_commandList is nullptr", FourthCommand);
-	FourthCommand->Execute();
+	FourthCommand->Execute(&Log);
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Move Command RIGHT first", (StartedPos.first - 2) == CurrentPos.first && (StartedPos.second + 1) == CurrentPos.second);
 
 	const auto FifthIt = ++FourthIt;
 	const auto FifthCommand = *FifthIt;
 	TestNotNull("4 item of m_commandList is nullptr", FifthCommand);
-	FifthCommand->Execute();
+	FifthCommand->Execute(&Log);
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Move Command RIGHT second", (StartedPos.first - 2) == CurrentPos.first && (StartedPos.second + 2) == CurrentPos.second);
 	
@@ -120,7 +120,7 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	IsHeFinished = controller->GetWorld()->IsPlayerFinished();
 	TestFalse("Player Shouldn't Be On Finish", IsHeFinished);
 
-	FifthCommand->Execute();
+	FifthCommand->Execute(&Log);
 	IsHeFinished = controller->GetWorld()->IsPlayerFinished();
 	TestTrue("Player Should Be On Finish", IsHeFinished);
 

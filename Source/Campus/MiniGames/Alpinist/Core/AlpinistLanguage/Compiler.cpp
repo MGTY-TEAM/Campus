@@ -24,7 +24,7 @@ bool AlpinistGame::Compiler::Compile(AlpinistLog& AlpLog)
 
 	Parser parser(Tokens, Controller);
 	Commands = parser.SynAnalysis(AlpLog);
-	if (AlpLog.bHasErrors || !Commands)
+	if (AlpLog.bHasErrors || AlpLog.bHasWarnings || !Commands)
 	{
 		return false;
 	}
@@ -39,6 +39,6 @@ bool AlpinistGame::Compiler::Run(AlpinistLog& AlpLog)
 	    return false;
     }
 	
-	return Commands->Execute();
+	return Commands->Execute(&AlpLog);
 }
 #endif
