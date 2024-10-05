@@ -28,6 +28,7 @@ public:
 private:
 	void OnTextChanged(const FText& NewText);
 	FText ApplyHighlighting(const FString& InText);
+	FString ReplaceCommand(const FString& SourceText, const FString& CommandToFind, const FString& CommandWithTags);
 
 	TSharedPtr<SRichTextBlock> RichTextBlock;
 	TSharedPtr<SMultiLineEditableTextBox> EditableTextBox;

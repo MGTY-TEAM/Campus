@@ -127,9 +127,45 @@ FText SAlpinistHighlightedTextWidget::ApplyHighlighting(const FString& InText)
 	// TODO: Написать код для добавления тегов
 	
 	const FString Keyword = TEXT("-.-");
-	UpdatedText = UpdatedText.Replace(*Keyword, *FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *Keyword));
+	UpdatedText = ReplaceCommand(UpdatedText, Keyword, FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *Keyword));
+	// UpdatedText = UpdatedText.Replace(*Keyword, *FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *Keyword));
+	
 	const FString Keyword2 = TEXT("---");
-	UpdatedText = UpdatedText.Replace(*Keyword2, *FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *Keyword2));
+	UpdatedText = ReplaceCommand(UpdatedText, Keyword2, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *Keyword2));
+	// UpdatedText = UpdatedText.Replace(*Keyword2, *FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *Keyword2));
 	
 	return FText::FromString(UpdatedText);
+}
+
+FString SAlpinistHighlightedTextWidget::ReplaceCommand(const FString& SourceText, const FString& CommandToFind, const FString& CommandWithTags)
+{
+	FString ResultString = FString();
+
+	const int32 SubstringLength = CommandToFind.Len();
+	int32 StartIndex = 0;
+	while (StartIndex < SourceText.Len())
+	{
+		const int32 FoundIndex = SourceText.Find(CommandToFind, ESearchCase::IgnoreCase, ESearchDir::FromStart, StartIndex);
+		if (FoundIndex == INDEX_NONE)
+		{
+			ResultString.Append(SourceText.Mid(StartIndex));
+			break;
+		}
+
+		const bool bIsStartOfWord = (FoundIndex == 0) || (SourceText[FoundIndex - 1] == ' ') || (SourceText[FoundIndex - 1] == '\n') || (SourceText[FoundIndex - 1] == '\r');
+		const bool bIsEndOfWord = (FoundIndex + SubstringLength == SourceText.Len()) || (SourceText[FoundIndex + SubstringLength] == ' ')
+									|| (SourceText[FoundIndex + SubstringLength] == '\n') || (SourceText[FoundIndex + SubstringLength] == '\r');
+		if (bIsStartOfWord && bIsEndOfWord)
+		{
+			ResultString.Append(SourceText.Mid(StartIndex, FoundIndex - StartIndex));
+			ResultString.Append(CommandWithTags);
+		}
+		else
+		{
+			ResultString.Append(SourceText.Mid(StartIndex, FoundIndex + SubstringLength - StartIndex));
+		}
+		StartIndex = FoundIndex + SubstringLength;
+	}
+
+	return ResultString;
 }

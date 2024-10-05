@@ -212,7 +212,7 @@ void AAlpinistGame::OpenLevel(int32 Level)
 	{
 		SelectedLevel = Level;
 		SetupController();
-		UE_LOG(LogAlpinistGame, Display, TEXT("Path Of Selected Level: %s"), *UAlpinistGameHelper::GetSelectedLevelPath(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels", SelectedLevel));
+		UE_LOG(LogAlpinistGame, Display, TEXT("Path Of Selected Level: %s"), *UAlpinistGameHelper::GetSelectedLevelPath(UKismetSystemLibrary::GetProjectDirectory() /= "Alpinist/Levels", SelectedLevel));
 
 		if (m_AlpinistLog.IsValid() && AlpinistIDEController)
 		{
