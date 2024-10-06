@@ -25,6 +25,9 @@ SAlpinistHighlightedTextWidget::~SAlpinistHighlightedTextWidget()
 	FMainCodeSlateStyle::Delete();
 	FSimpleCommandSlateStyle::Delete();
 	FConditionCommandSlateStyle::Delete();
+	FCheckCommandSlateStyle::Delete();
+	FScopeCommandSlateStyle::Delete();
+	FNegateCommandSlateStyle::Delete();
 	
 	BackTexture->RemoveFromRoot();
 }
@@ -43,6 +46,9 @@ void SAlpinistHighlightedTextWidget::Construct(const FArguments& InArgs)
 	FMainCodeSlateStyle::Initialize();
 	FSimpleCommandSlateStyle::Initialize();
 	FConditionCommandSlateStyle::Initialize();
+	FCheckCommandSlateStyle::Initialize();
+	FScopeCommandSlateStyle::Initialize();
+	FNegateCommandSlateStyle::Initialize();
 
 	const FTextBlockStyle* EmptyStyle = &FEmptySlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("EmptySlateStyle.Empty");
 	if (TextBoxStyle) TextBoxStyle->TextStyle = *EmptyStyle;
@@ -50,16 +56,25 @@ void SAlpinistHighlightedTextWidget::Construct(const FArguments& InArgs)
 	const FTextBlockStyle* MainTextStyle = &FMainCodeSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("MainCodeSlateStyle.MainText");
 	const FTextBlockStyle* SimpleCommandStyle = &FSimpleCommandSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("FSimpleCommandSlateStyle.SimpleCommand");
 	const FTextBlockStyle* ConditionCommandStyle = &FConditionCommandSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("FConditionCommandSlateStyle.ConditionCommand");
+	const FTextBlockStyle* CheckCommandStyle = &FCheckCommandSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("FCheckCommandSlateStyle.CheckCommand");
+	const FTextBlockStyle* ScopeCommandStyle = &FScopeCommandSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("FScopeCommandSlateStyle.ScopeCommand");
+	const FTextBlockStyle* NegateCommandStyle = &FNegateCommandSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("FNegateCommandSlateStyle.NegateCommand");
 	
 	if (StyleSet)
 	{
 		StyleSet->Set("SimpleCommand", *SimpleCommandStyle);
 		StyleSet->Set("ConditionCommand", *ConditionCommandStyle);
+		StyleSet->Set("CheckCommand", *CheckCommandStyle);
+		StyleSet->Set("ScopeCommand", *ScopeCommandStyle);
+		StyleSet->Set("NegateCommand", *NegateCommandStyle);
 	}
 
 	TArray<TSharedRef<ITextDecorator>> Decorators;
 	Decorators.Add(FAlpinistCommandDecorator::Create(*MainTextStyle, "SimpleCommand"));
 	Decorators.Add(FAlpinistCommandDecorator::Create(*MainTextStyle, "ConditionCommand"));
+	Decorators.Add(FAlpinistCommandDecorator::Create(*MainTextStyle, "CheckCommand"));
+	Decorators.Add(FAlpinistCommandDecorator::Create(*MainTextStyle, "ScopeCommand"));
+	Decorators.Add(FAlpinistCommandDecorator::Create(*MainTextStyle, "NegateCommand"));
 	
 	ChildSlot
 	[
@@ -126,13 +141,38 @@ FText SAlpinistHighlightedTextWidget::ApplyHighlighting(const FString& InText)
 
 	// TODO: Написать код для добавления тегов
 	
-	const FString Keyword = TEXT("-.-");
-	UpdatedText = ReplaceCommand(UpdatedText, Keyword, FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *Keyword));
+	const FString KeywordMove = TEXT("-.-");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordMove, FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *KeywordMove));
 	// UpdatedText = UpdatedText.Replace(*Keyword, *FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *Keyword));
+	const FString KeywordLeft = TEXT("-.");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordLeft, FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *KeywordLeft));
+	const FString KeywordRight = TEXT(".-");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordRight, FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *KeywordRight));
 	
-	const FString Keyword2 = TEXT("---");
-	UpdatedText = ReplaceCommand(UpdatedText, Keyword2, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *Keyword2));
+	const FString KeywordWallAhead = TEXT("---");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordWallAhead, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *KeywordWallAhead));
 	// UpdatedText = UpdatedText.Replace(*Keyword2, *FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *Keyword2));
+	const FString KeywordWallLeft = TEXT("--.");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordWallLeft, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *KeywordWallLeft));
+	const FString KeywordWallRight = TEXT(".--");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordWallRight, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *KeywordWallRight));
+	const FString KeywordNotEnd = TEXT("-..-");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordNotEnd, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *KeywordNotEnd));
+
+	const FString KeywordWhile = TEXT(".-.");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordWhile, FString::Printf(TEXT("<CheckCommand>%s</CheckCommand>"), *KeywordWhile));
+
+	const FString KeywordIf = TEXT("..");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordIf, FString::Printf(TEXT("<CheckCommand>%s</CheckCommand>"), *KeywordIf));
+	const FString KeywordElse = TEXT("--");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordElse, FString::Printf(TEXT("<CheckCommand>%s</CheckCommand>"), *KeywordElse));
+
+	const FString KeywordBegin = TEXT(".");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordBegin, FString::Printf(TEXT("<ScopeCommand>%s</ScopeCommand>"), *KeywordBegin));
+	const FString KeywordEnd = TEXT("-");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordEnd, FString::Printf(TEXT("<ScopeCommand>%s</ScopeCommand>"), *KeywordEnd));
+	const FString KeywordNegate = TEXT("...");
+	UpdatedText = ReplaceCommand(UpdatedText, KeywordNegate, FString::Printf(TEXT("<NegateCommand>%s</NegateCommand>"), *KeywordNegate));
 	
 	return FText::FromString(UpdatedText);
 }
