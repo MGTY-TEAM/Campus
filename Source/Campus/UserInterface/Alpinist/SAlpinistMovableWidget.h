@@ -9,11 +9,19 @@ public:
 	SAlpinistMovableWidget();
 	virtual ~SAlpinistMovableWidget() override;
 	SLATE_BEGIN_ARGS(SAlpinistMovableWidget) {}
+		SLATE_ARGUMENT(TWeakPtr<SWidget>, WidgetOwner)
+		SLATE_ARGUMENT(FCurveSequence*, CurveSequence)
 	SLATE_END_ARGS()
-
+	
 	void Construct(const FArguments& InArgs);
 	virtual bool SupportsKeyboardFocus() const override { return true; }
+
+	TWeakPtr<SWidget> WidgetOwner;
+	FCurveSequence* CurveSequence;
 private:
 	UTexture2D* BackTexture;
 	FSlateBrush* BackSlateBrush;
+
+	FReply OnClueClicked();
+	bool bIsOpen = false;
 };

@@ -16,6 +16,21 @@ SAlpinistHighlightedTextWidget::SAlpinistHighlightedTextWidget()
 	StyleSet = new FSlateStyleSet("MyStyleSet");
 	BackTexture = UTexture2D::CreateTransient(1000, 1000);
 	BackSlateBrush = nullptr;
+
+	CommandsTags = TMap<FString, FString>();
+	CommandsTags.Add(TEXT("-.-"), TEXT("<SimpleCommand>-.-</SimpleCommand>"));
+	CommandsTags.Add(TEXT("-."), TEXT("<SimpleCommand>-.</SimpleCommand>"));
+	CommandsTags.Add(TEXT(".-"), TEXT("<SimpleCommand>.-</SimpleCommand>"));
+	CommandsTags.Add(TEXT("---"), TEXT("<ConditionCommand>---</ConditionCommand>"));
+	CommandsTags.Add(TEXT("--."), TEXT("<ConditionCommand>--.</ConditionCommand>"));
+	CommandsTags.Add(TEXT(".--"), TEXT("<ConditionCommand>.--</ConditionCommand>"));
+	CommandsTags.Add(TEXT("-..-"), TEXT("<ConditionCommand>-..-</ConditionCommand>"));
+	CommandsTags.Add(TEXT(".-."), TEXT("<CheckCommand>.-.</CheckCommand>"));
+	CommandsTags.Add(TEXT(".."), TEXT("<CheckCommand>..</CheckCommand>"));
+	CommandsTags.Add(TEXT("--"), TEXT("<CheckCommand>--</CheckCommand>"));
+	CommandsTags.Add(TEXT("."), TEXT("<ScopeCommand>.</ScopeCommand>"));
+	CommandsTags.Add(TEXT("-"), TEXT("<ScopeCommand>-</ScopeCommand>"));
+	CommandsTags.Add(TEXT("..."), TEXT("<NegateCommand>...</NegateCommand>"));
 }
 
 SAlpinistHighlightedTextWidget::~SAlpinistHighlightedTextWidget()
@@ -126,7 +141,7 @@ void SAlpinistHighlightedTextWidget::OnTextChanged(const FText& NewText)
 		
 		if (EditableTextBox.IsValid())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("TEXT: %s"), *EditableTextBox->GetText().ToString());
+			// UE_LOG(LogTemp, Warning, TEXT("TEXT: %s"), *EditableTextBox->GetText().ToString());
 			if (AlpinistWidgetOwner.IsValid())
 			{
 				AlpinistWidgetOwner->OnChangeCode(*EditableTextBox->GetText().ToString());
@@ -139,42 +154,31 @@ FText SAlpinistHighlightedTextWidget::ApplyHighlighting(const FString& InText)
 {
 	FString UpdatedText = InText;
 
-	// TODO: Написать код для добавления тегов
-	
-	const FString KeywordMove = TEXT("-.-");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordMove, FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *KeywordMove));
-	// UpdatedText = UpdatedText.Replace(*Keyword, *FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *Keyword));
-	const FString KeywordLeft = TEXT("-.");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordLeft, FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *KeywordLeft));
-	const FString KeywordRight = TEXT(".-");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordRight, FString::Printf(TEXT("<SimpleCommand>%s</SimpleCommand>"), *KeywordRight));
-	
-	const FString KeywordWallAhead = TEXT("---");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordWallAhead, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *KeywordWallAhead));
-	// UpdatedText = UpdatedText.Replace(*Keyword2, *FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *Keyword2));
-	const FString KeywordWallLeft = TEXT("--.");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordWallLeft, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *KeywordWallLeft));
-	const FString KeywordWallRight = TEXT(".--");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordWallRight, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *KeywordWallRight));
-	const FString KeywordNotEnd = TEXT("-..-");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordNotEnd, FString::Printf(TEXT("<ConditionCommand>%s</ConditionCommand>"), *KeywordNotEnd));
+	FString ResultString = FString();
+	FString CommandString = FString();
+	int32 NumOfChar = 0;
+	for (const TCHAR& Char : UpdatedText.GetCharArray())
+	{
+		++NumOfChar;
+		if (Char == ' ' || Char == '\n' || Char == '\r' || NumOfChar == UpdatedText.GetCharArray().Num())
+		{
+			if (!CommandString.IsEmpty())
+			{
+				if (CommandsTags.Contains(CommandString))
+				{
+					CommandString = FString(*CommandsTags.Find(CommandString));
+				}
+			}
 
-	const FString KeywordWhile = TEXT(".-.");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordWhile, FString::Printf(TEXT("<CheckCommand>%s</CheckCommand>"), *KeywordWhile));
+			ResultString.Append(CommandString);
+			ResultString.AppendChar(Char);
+			CommandString.Empty();
+			continue;
+		}
+		CommandString.AppendChar(Char);
+	}
 
-	const FString KeywordIf = TEXT("..");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordIf, FString::Printf(TEXT("<CheckCommand>%s</CheckCommand>"), *KeywordIf));
-	const FString KeywordElse = TEXT("--");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordElse, FString::Printf(TEXT("<CheckCommand>%s</CheckCommand>"), *KeywordElse));
-
-	const FString KeywordBegin = TEXT(".");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordBegin, FString::Printf(TEXT("<ScopeCommand>%s</ScopeCommand>"), *KeywordBegin));
-	const FString KeywordEnd = TEXT("-");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordEnd, FString::Printf(TEXT("<ScopeCommand>%s</ScopeCommand>"), *KeywordEnd));
-	const FString KeywordNegate = TEXT("...");
-	UpdatedText = ReplaceCommand(UpdatedText, KeywordNegate, FString::Printf(TEXT("<NegateCommand>%s</NegateCommand>"), *KeywordNegate));
-	
-	return FText::FromString(UpdatedText);
+	return FText::FromString(ResultString);
 }
 
 FString SAlpinistHighlightedTextWidget::ReplaceCommand(const FString& SourceText, const FString& CommandToFind, const FString& CommandWithTags)

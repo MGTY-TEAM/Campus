@@ -6,6 +6,7 @@ SAlpinistMovableWidget::SAlpinistMovableWidget()
 {
 	BackTexture = UTexture2D::CreateTransient(700, 1000);
 	BackSlateBrush = nullptr;
+	CurveSequence = nullptr;
 }
 
 SAlpinistMovableWidget::~SAlpinistMovableWidget()
@@ -17,8 +18,11 @@ SAlpinistMovableWidget::~SAlpinistMovableWidget()
 void SAlpinistMovableWidget::Construct(const FArguments& InArgs)
 {
 	bCanSupportFocus = true;
+	WidgetOwner = InArgs._WidgetOwner;
+	CurveSequence = InArgs._CurveSequence;
 
 	const FSlateFontInfo ButtonTextStyle = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+	const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 24);
 
 	FMovableSlateBrush::Initialize(BackTexture);
 	BackSlateBrush = &FMovableSlateBrush::Get();
@@ -74,11 +78,46 @@ void SAlpinistMovableWidget::Construct(const FArguments& InArgs)
 			[
 				SNew(SBox)
 				.HeightOverride(50.f)
+				.WidthOverride(50.f)
 				[
-					SNew(SImage)
-					.ColorAndOpacity(FColor::Red)
+					SNew(SButton)
+					.HAlign(HAlign_Center)
+					.VAlign(VAlign_Center)
+					.OnClicked(this, &SAlpinistMovableWidget::OnClueClicked)
+					.ButtonColorAndOpacity(FSlateColor(FLinearColor(0.f, 10.f, 0.01f, 0.5f)))
+					[
+						SNew(STextBlock)
+						.Text(FText::FromString("  ?"))
+						.Font(RobotoBoldFont)
+					]
 				]
 			]
 		]
 	];
+}
+
+FReply SAlpinistMovableWidget::OnClueClicked()
+{
+	if (bIsOpen)
+	{
+		if (CurveSequence)
+		{
+			UE_LOG(LogTemp, Display, TEXT("Clue Close"));
+			CurveSequence->Reverse(); // Воспроизводим анимацию вперёд
+		}
+		
+		bIsOpen = false;
+	}
+	else
+	{
+		if (CurveSequence)
+		{
+			UE_LOG(LogTemp, Display, TEXT("Clue Open"));
+			CurveSequence->Play(WidgetOwner.Pin().ToSharedRef()); // Воспроизводим анимацию вперёд
+		}
+		
+		bIsOpen = true;
+	}
+	
+	return FReply::Handled();
 }

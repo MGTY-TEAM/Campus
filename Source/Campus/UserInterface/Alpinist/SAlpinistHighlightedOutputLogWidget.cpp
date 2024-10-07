@@ -79,7 +79,6 @@ void SAlpinistHighlightedOutputLogWidget::Construct(const FArguments& InArgs)
 				.TextStyle(DisplayTextBlock)
 				.Marshaller(FRichTextLayoutMarshaller::Create(FDefaultRichTextMarkupParser::Create(), nullptr, Decorators, StyleSet))
 			]
-			
 		]
 	];
 }

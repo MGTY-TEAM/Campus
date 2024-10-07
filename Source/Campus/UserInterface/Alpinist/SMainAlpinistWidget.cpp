@@ -40,10 +40,12 @@ void SMainAlpinistWidget::Construct(const FArguments& InArgs)
 			[
 				SAssignNew(Button, SButton)
 				.ButtonStyle(&FCoreStyle::Get().GetWidgetStyle<FButtonStyle>("NoBorder"))
-				.OnHovered(this, &SMainAlpinistWidget::OnLeftWidgetHovered) // Наведение на левый виджет
-				.OnUnhovered(this, &SMainAlpinistWidget::OnLeftWidgetUnhovered) // Убираем наведение с виджета
+				// .OnHovered(this, &SMainAlpinistWidget::OnLeftWidgetHovered) // Наведение на левый виджет
+				// .OnUnhovered(this, &SMainAlpinistWidget::OnLeftWidgetUnhovered) // Убираем наведение с виджета
 				[
 					SNew(SAlpinistMovableWidget)
+					.WidgetOwner(AsWeak())
+					.CurveSequence(&AnimationSequence)
 				]
 			]
 		]
