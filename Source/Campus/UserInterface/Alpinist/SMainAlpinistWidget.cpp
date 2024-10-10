@@ -38,15 +38,9 @@ void SMainAlpinistWidget::Construct(const FArguments& InArgs)
 			]
 			+ SOverlay::Slot()
 			[
-				SAssignNew(Button, SButton)
-				.ButtonStyle(&FCoreStyle::Get().GetWidgetStyle<FButtonStyle>("NoBorder"))
-				// .OnHovered(this, &SMainAlpinistWidget::OnLeftWidgetHovered) // Наведение на левый виджет
-				// .OnUnhovered(this, &SMainAlpinistWidget::OnLeftWidgetUnhovered) // Убираем наведение с виджета
-				[
-					SNew(SAlpinistMovableWidget)
-					.WidgetOwner(AsWeak())
-					.CurveSequence(&AnimationSequence)
-				]
+				SAssignNew(AlpinistMovableWidget, SAlpinistMovableWidget)
+				.WidgetOwner(AsWeak())
+				.CurveSequence(&AnimationSequence)
 			]
 		]
 	];
@@ -64,7 +58,9 @@ void SMainAlpinistWidget::Tick(const FGeometry& AllottedGeometry, const double I
 
 FMargin SMainAlpinistWidget::GetLeftWidgetPadding() const
 {
-	const UE::Slate::FDeprecateVector2DResult ButtonSize = Button.Get()->GetDesiredSize();
+	if (!AlpinistMovableWidget.IsValid()) return FMargin(0.f);
+	
+	const UE::Slate::FDeprecateVector2DResult ButtonSize = AlpinistMovableWidget.Get()->GetDesiredSize();
 	const float ContentWidth = ButtonSize.X;
 	const FVector2D ViewportSize = GEngine->GameViewport->Viewport->GetSizeXY();
 
@@ -81,22 +77,4 @@ FMargin SMainAlpinistWidget::GetLeftWidgetPadding() const
 	PaddingValue = FMath::Clamp(PaddingValue, -ContentWidth + ProtrudingPart, ViewportSize.X);
 
 	return FMargin(PaddingValue, 0, 0, 0); // Возвращаем отступ
-}
-
-void SMainAlpinistWidget::OnLeftWidgetHovered()
-{
-	if (!AnimationSequence.IsPlaying())
-	{
-		UE_LOG(LogTemp, Display, TEXT("Hovered"));
-		AnimationSequence.Play(AsShared()); // Воспроизводим анимацию вперёд
-	}
-}
-
-void SMainAlpinistWidget::OnLeftWidgetUnhovered()
-{
-	if (!AnimationSequence.IsPlaying())
-	{
-		UE_LOG(LogTemp, Display, TEXT("Unovered"));
-		AnimationSequence.Reverse(); // Воспроизводим анимацию в обратном направлении
-	}
 }

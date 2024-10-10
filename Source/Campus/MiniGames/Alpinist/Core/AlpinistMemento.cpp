@@ -5,7 +5,7 @@
 #include "Commands.h"
 namespace AlpinistGame
 {
-	void AlpinistMemento::SetState(const std::vector<std::vector<Entity*>>& StateGrid)
+	void AlpinistMemento::SetState(const std::vector<std::vector<TSharedPtr<Entity>>>& StateGrid)
 	{
 		m_grid = StateGrid;
 	}

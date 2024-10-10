@@ -38,9 +38,9 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, "-.- -.- .- -.- -.-");
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller.Get(), "-.- -.- .- -.- -.-");
 
 	AlpinistGame::AlpinistLog Log;
 	const bool CompileSuccess = compiler->Compile(Log);
@@ -54,8 +54,8 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	}
 	TestTrue("Compile Fail", CompileSuccess);
 
-	const AlpinistGame::MacroCommand* Commands = compiler->GetListOfCommands();
-	TestNotNull("Commands is nullptr", Commands);
+	const TSharedPtr<AlpinistGame::MacroCommand> Commands = compiler->GetListOfCommands();
+	TestNotNull("Commands is nullptr", Commands.Get());
 	
 	const std::list<AlpinistGame::PlayerCommand*> m_commandList = Commands->GetList();
 	TestNotNull("0 item of m_commandList is nullptr", m_commandList.front());

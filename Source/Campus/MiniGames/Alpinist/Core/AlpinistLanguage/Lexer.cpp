@@ -1,7 +1,7 @@
 #include "Lexer.h"
 // #include "../GameController.h"
 #ifdef ALPINIST_GAME
-std::vector<AlpinistGame::Token*>* AlpinistGame::Lexer::LexAnalysis(AlpinistLog& AlpLog)
+std::vector<TSharedPtr<AlpinistGame::Token>>* AlpinistGame::Lexer::LexAnalysis(AlpinistLog& AlpLog)
 {
 	Log = &AlpLog;
 	while (ContinueLexAnal())
@@ -20,11 +20,11 @@ bool AlpinistGame::Lexer::ContinueLexAnal()
 	std::cmatch result;
 
 	const char* ch = &arr.front()[0];
-	for (TokenType* TokenTypeValue : TokenList)
+	for (TSharedPtr<TokenType> TokenTypeValue : TokenList)
 	{
-		if (std::regex_match(ch, result, *TokenTypeValue->GetRegular()))
+		if (std::regex_match(ch, result, TokenTypeValue->GetRegular()))
 		{
-			Token* token = new Token(TokenTypeValue, TokenTypeValue->GetName(), currentPos++);
+			TSharedPtr<Token> token = MakeShared<Token>(TokenTypeValue, TokenTypeValue->GetName(), currentPos++);
 			Tokens.push_back(token);
 			arr.erase(arr.begin());
 			return true;

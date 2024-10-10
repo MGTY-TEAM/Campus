@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 
+class SAlpinistMovableWidget;
 class UAlpinistIDEController;
 
 class CAMPUS_API SMainAlpinistWidget : public SCompoundWidget
@@ -17,14 +18,12 @@ public:
 	virtual bool SupportsKeyboardFocus() const override { return true; }
 
 	TWeakObjectPtr<UAlpinistIDEController> AlpinistWidgetOwner;
-
+	
 private:
-	TSharedPtr<SButton> Button;
+	TSharedPtr<SAlpinistMovableWidget> AlpinistMovableWidget;
 	FCurveSequence AnimationSequence;
 	FCurveHandle AnimationCurve;
 	
 	FMargin GetLeftWidgetPadding() const;
-	void OnLeftWidgetHovered();
-	void OnLeftWidgetUnhovered();
 	const float ProtrudingPart = 50.f;
 };

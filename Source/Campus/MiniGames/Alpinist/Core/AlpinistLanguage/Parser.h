@@ -11,22 +11,22 @@ namespace AlpinistGame
 	class Parser
 	{
 		std::stack<int8_t> StackScope;
-		std::vector<Token*> Tokens;
+		std::vector<TSharedPtr<Token>> Tokens;
 		size_t Pos = 0;
 		GameController* Controller;
-		MacroCommand* CommandList;
-		Creator* creator;
+		TSharedPtr<MacroCommand> CommandList;
+		TSharedPtr<Creator> creator;
 
 		AlpinistLog* Log = nullptr;
 	public:
-		Parser(const std::vector<Token*>& ListOfTokens, GameController* controller) : Tokens(ListOfTokens), Controller(controller)
+		Parser(const std::vector<TSharedPtr<Token>>& ListOfTokens, GameController* controller) : Tokens(ListOfTokens), Controller(controller)
 		{
-			CommandList = new MacroCommand();
-			creator = new Creator();
+			CommandList = MakeShared<MacroCommand>();
+			creator = MakeShared<Creator>();
 		}
 		~Parser();
 
-		MacroCommand* SynAnalysis(AlpinistLog& AlpLog);
+		TSharedPtr<MacroCommand> SynAnalysis(AlpinistLog& AlpLog);
 	private:
 		bool ContinueSynAnal(MacroCommand* commandList);
 
@@ -54,14 +54,14 @@ namespace AlpinistGame
 	CommandT* Parser::CreateCommandWithCondition(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition)
 	{
 		bool NeedToBeNegate = false;
-		Token* NegateToken = Tokens.front();
+		Token* NegateToken = Tokens.front().Get();
 		if (NegateToken->GetCommandType() == CT_Negate)
 		{
 			NeedToBeNegate = true;
 			DeleteTokenFront();
 		}
 
-		Token* conditionToken = Tokens.front();
+		Token* conditionToken = Tokens.front().Get();
 		CommandT* instanceCommand = nullptr;
 		if (conditionToken && conditionToken->GetCommandType() == CT_ConditionType)
 		{
@@ -102,7 +102,7 @@ namespace AlpinistGame
 	template<typename CommandType>
 	bool Parser::FillScope(CommandType* Command, void(CommandType::* PushCommand)(PlayerCommand*), const bool HasCondition)
 	{
-		Token* beginToken = Tokens.front();
+		Token* beginToken = Tokens.front().Get();
 		MacroCommand* macroElseCommandList = new MacroCommand();
 		if (beginToken->GetCommandType() == CT_BeginScope && HasCondition)
 		{

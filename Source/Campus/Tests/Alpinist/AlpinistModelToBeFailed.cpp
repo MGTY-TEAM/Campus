@@ -35,9 +35,9 @@ bool FExpectLexerErrors::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, "--.-.-");
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller.Get(), "--.-.-");
 
 	AlpinistGame::AlpinistLog Log;
 	const bool CompileSuccess = compiler->Compile(Log);
@@ -75,10 +75,10 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 
 	// Check that NotEnd shouldn't use negate---------------------------------------------------------------------------
-	AlpinistGame::Compiler* compilerNotEnd = new AlpinistGame::Compiler(controller, ".-. ... -..- . -.- -");
+	TSharedPtr<AlpinistGame::Compiler> compilerNotEnd = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".-. ... -..- . -.- -");
 
 	AlpinistGame::AlpinistLog LogNotEnd;
 	bool CompileSuccess = compilerNotEnd->Compile(LogNotEnd);
@@ -101,7 +101,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	TestTrue("NotEnd Error Message Isn't Correct", ErrorMessageIsCorrect);
 	
 	// Check that while expects ConditionCommand------------------------------------------------------------------------
-	AlpinistGame::Compiler* compilerConditionCommand = new AlpinistGame::Compiler(controller, ".-. -. . -.- -");
+	TSharedPtr<AlpinistGame::Compiler> compilerConditionCommand = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".-. -. . -.- -");
 	AlpinistGame::AlpinistLog LogConditionCommand;
 	CompileSuccess = compilerConditionCommand->Compile(LogConditionCommand);
 
@@ -123,7 +123,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	TestTrue("while expects ConditionCommand Error Message Isn't Correct", ErrorMessageIsCorrect);
 
 	// Check that while expects BeginCommand----------------------------------------------------------------------------
-	AlpinistGame::Compiler* compilerBeginCommand = new AlpinistGame::Compiler(controller, ".-. ... --- .- -");
+	TSharedPtr<AlpinistGame::Compiler> compilerBeginCommand = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".-. ... --- .- -");
 	AlpinistGame::AlpinistLog LogBeginCommand;
 	CompileSuccess = compilerBeginCommand->Compile(LogBeginCommand);
 
@@ -145,7 +145,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	TestTrue("while expects BeginCommand Error Message Isn't Correct", ErrorMessageIsCorrect);
 
 	// Check that while expects EndCommand------------------------------------------------------------------------------
-	AlpinistGame::Compiler* compilerEndCommand = new AlpinistGame::Compiler(controller, ".-. ... --- . .-");
+	TSharedPtr<AlpinistGame::Compiler> compilerEndCommand = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".-. ... --- . .-");
 	AlpinistGame::AlpinistLog LogEndCommand;
 	CompileSuccess = compilerEndCommand->Compile(LogEndCommand);
 
@@ -184,10 +184,10 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 
 	// Check that NotEnd shouldn't use with IfElse----------------------------------------------------------------------
-	AlpinistGame::Compiler* compilerNotEnd = new AlpinistGame::Compiler(controller, ".. -..- . -.- -");
+	TSharedPtr<AlpinistGame::Compiler> compilerNotEnd = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".. -..- . -.- -");
 
 	AlpinistGame::AlpinistLog LogNotEnd;
 	bool CompileSuccess = compilerNotEnd->Compile(LogNotEnd);
@@ -210,7 +210,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	TestTrue("NotEnd Error Message Isn't Correct", ErrorMessageIsCorrect);
 	
 	// Check that if expects ConditionCommand---------------------------------------------------------------------------
-	AlpinistGame::Compiler* compilerConditionCommand = new AlpinistGame::Compiler(controller, ".. -. . -.- -");
+	TSharedPtr<AlpinistGame::Compiler> compilerConditionCommand = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".. -. . -.- -");
 	AlpinistGame::AlpinistLog LogConditionCommand;
 	CompileSuccess = compilerConditionCommand->Compile(LogConditionCommand);
 
@@ -232,7 +232,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	TestTrue("if expects ConditionCommand Error Message Isn't Correct", ErrorMessageIsCorrect);
 
 	// Check that if/else expects BeginCommand---------------------------------------------------------------------------
-	AlpinistGame::Compiler* compilerBeginCommand = new AlpinistGame::Compiler(controller, ".. --. -. - -- . .- -");
+	TSharedPtr<AlpinistGame::Compiler> compilerBeginCommand = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".. --. -. - -- . .- -");
 	AlpinistGame::AlpinistLog LogBeginCommand;
 	CompileSuccess = compilerBeginCommand->Compile(LogBeginCommand);
 
@@ -254,7 +254,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	TestTrue("if expects BeginCommand Error Message Isn't Correct", ErrorMessageIsCorrect);
 
 	// Check that if/else expects EndCommand----------------------------------------------------------------------------
-	AlpinistGame::Compiler* compilerEndCommand = new AlpinistGame::Compiler(controller, ".. . -. .-. ... --- . -.- -");
+	TSharedPtr<AlpinistGame::Compiler> compilerEndCommand = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".. . -. .-. ... --- . -.- -");
 	AlpinistGame::AlpinistLog LogEndCommand;
 	CompileSuccess = compilerEndCommand->Compile(LogEndCommand);
 
@@ -276,7 +276,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	TestTrue("if expects EndCommand Error Message Isn't Correct", ErrorMessageIsCorrect);
 
 	// Check that else can't be created without ifCommand---------------------------------------------------------------
-	AlpinistGame::Compiler* compilerElse = new AlpinistGame::Compiler(controller, "-- . -. .-. ... --- . -.- -");
+	TSharedPtr<AlpinistGame::Compiler> compilerElse = MakeShared<AlpinistGame::Compiler>(controller.Get(), "-- . -. .-. ... --- . -.- -");
 	AlpinistGame::AlpinistLog LogElse;
 	CompileSuccess = compilerElse->Compile(LogElse);
 
@@ -315,9 +315,9 @@ bool FExpectInfiniteCycleError::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".-. -..- . .- -");
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".-. -..- . .- -");
 
 	AlpinistGame::AlpinistLog Log;
 

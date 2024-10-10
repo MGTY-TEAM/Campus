@@ -61,10 +61,10 @@ namespace AlpinistGame
 	
 	class GameController
 	{
-		World* m_world;
+		TSharedPtr<World> m_world;
 		std::vector<std::string> m_initialWorld;
 
-		AlpinistGame::AlpinistCaretaker* m_alpinistCaretaker;
+		TSharedPtr<AlpinistGame::AlpinistCaretaker> m_alpinistCaretaker;
 	public:
 		GameController();
 		GameController(const std::vector<std::string>& map);
@@ -77,7 +77,7 @@ namespace AlpinistGame
 		bool PlayerNotOnFinish();
 
 		void SetNewMap(const std::vector<std::string>& map);
-		World* GetWorld() { return m_world; }
+		TSharedPtr<World> GetWorld() { return m_world; }
 
 		void ToStartPositions();
 		bool SaveCopyOfWorld(PlayerCommand* Command);

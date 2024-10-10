@@ -69,9 +69,9 @@ bool FCorrectResponseZigZag::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".-. --- . .- -.- -. -.- -"); // - ZigZag
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".-. --- . .- -.- -. -.- -"); // - ZigZag
 	// AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".-. -..- . .- -.- -. -.- -");
 
 	AlpinistGame::AlpinistLog Log;
@@ -116,9 +116,9 @@ bool FCorrectResponseBigMapTest::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, "-. -. .-. --. . -.- - .. --- . -. - .-. ... --- . -.- - -. .-. ... --. . -.- - .- -.-"); // - BigMapTest
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller.Get(), "-. -. .-. --. . -.- - .. --- . -. - .-. ... --- . -.- - -. .-. ... --. . -.- - .- -.-"); // - BigMapTest
 
 	AlpinistGame::AlpinistLog Log;
 	const bool CompileSuccess = compiler->Compile(Log);
@@ -162,9 +162,9 @@ bool FCorrectResponseNotEndMiniTest::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".- .-. -..- . -.- -"); // - BigMapTest
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".- .-. -..- . -.- -"); // - BigMapTest
 
 	AlpinistGame::AlpinistLog Log;
 	const bool CompileSuccess = compiler->Compile(Log);
@@ -208,9 +208,9 @@ bool FCorrectResponseNotEndBigTest::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".- .-. -..- . .. ... --. . -. -.- - -- . .. ... --- . -.- - -- . .- - - -"); // - BigMapTest
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller.Get(), ".- .-. -..- . .. ... --. . -. -.- - -- . .. ... --- . -.- - -- . .- - - -"); // - BigMapTest
 
 	AlpinistGame::AlpinistLog Log;
 	const bool CompileSuccess = compiler->Compile(Log);

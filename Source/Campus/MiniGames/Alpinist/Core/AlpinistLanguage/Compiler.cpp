@@ -16,7 +16,7 @@ bool AlpinistGame::Compiler::Compile(AlpinistLog& AlpLog)
 	AlpLog.ClearLog();
 	
 	Lexer lexer = Lexer(Code);
-	std::vector<Token*> Tokens = *lexer.LexAnalysis(AlpLog);
+	std::vector<TSharedPtr<Token>> Tokens = *lexer.LexAnalysis(AlpLog);
 	if (AlpLog.bHasErrors)
 	{
 		return false;

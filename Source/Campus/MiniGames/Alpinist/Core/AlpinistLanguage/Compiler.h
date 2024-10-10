@@ -13,7 +13,7 @@ namespace AlpinistGame
 		GameController* Controller;
 		std::string Code;
 
-		MacroCommand* Commands = nullptr;
+		TSharedPtr<MacroCommand> Commands = nullptr;
 	public:
 		Compiler(GameController* controller, const std::string& code) : Controller(controller), Code(code) {}
 
@@ -21,7 +21,7 @@ namespace AlpinistGame
 		bool Compile(AlpinistLog& AlpLog);
 		bool Run(AlpinistLog& AlpLog);
 
-		MacroCommand* GetListOfCommands() { return Commands; };
+		TSharedPtr<MacroCommand> GetListOfCommands() { return Commands; };
 	};
 }
 

@@ -12,10 +12,10 @@ AlpinistGame::Parser::~Parser()
 	delete creator; */
 }
 
-AlpinistGame::MacroCommand* AlpinistGame::Parser::SynAnalysis(AlpinistLog& AlpLog)
+TSharedPtr<AlpinistGame::MacroCommand> AlpinistGame::Parser::SynAnalysis(AlpinistLog& AlpLog)
 {
 	Log = &AlpLog;
-	while (ContinueSynAnal(CommandList))
+	while (ContinueSynAnal(CommandList.Get()))
 	{
 
 	}
@@ -34,7 +34,7 @@ bool AlpinistGame::Parser::ContinueSynAnal(MacroCommand* commandList)
 		return false;
 	}
 
-	Token* token = Tokens.front();
+	Token* token = Tokens.front().Get();
 	switch (token->GetCommandType())
 	{
 	case CT_SimpleCommand:
@@ -152,7 +152,7 @@ bool AlpinistGame::Parser::AddIfElseConditional(const std::string& Command, Macr
 
 	if (Tokens.size() != 0)
 	{
-		if (Token* elseToken = Tokens.front())
+		if (Token* elseToken = Tokens.front().Get())
 		{
 			if (elseToken->GetText() == "else")
 			{
@@ -185,7 +185,7 @@ AlpinistGame::WhileCommand* AlpinistGame::Parser::CreateWhileCommandWithKeyword(
 {
 	WhileCommand* whileCommand = nullptr;
 	
-	Token* nextToken = Tokens.front();
+	Token* nextToken = Tokens.front().Get();
 	if (nextToken->GetCommandType() == CT_NotEnd)
 	{
 		if (PlayerCommand* newNotEndCommand = creator->Create(nextToken->GetText(), Controller))
@@ -222,7 +222,7 @@ bool AlpinistGame::Parser::DeleteTokenFront()
 	{
 		return false;
 	}
-	SkipSpaceTokenIfThereItIs(Tokens.front());
+	SkipSpaceTokenIfThereItIs(Tokens.front().Get());
 	return true;
 }
 
@@ -234,14 +234,14 @@ bool AlpinistGame::Parser::FillCommandListScope(MacroCommand* macroCommandList)
 	}
 	StackScope.push(0);
 
-	Token* endToken = Tokens.front();
+	Token* endToken = Tokens.front().Get();
 	while (endToken->GetCommandType() != CT_EndScope)
 	{
 		if (!ContinueSynAnal(macroCommandList))
 		{
 			return false;
 		}
-		endToken = Tokens.front();
+		endToken = Tokens.front().Get();
 	}
 	if (!DeleteTokenFront())
 	{
@@ -284,7 +284,7 @@ void AlpinistGame::Parser::SkipSpaceTokenIfThereItIs(Token* token)
 
 bool AlpinistGame::Parser::CheckKeywords()
 {
-	Token* token = Tokens.front();
+	Token* token = Tokens.front().Get();
 	if (token && token->GetCommandType() == CT_NotEnd)
 	{
 		return true;

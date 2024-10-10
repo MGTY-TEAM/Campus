@@ -11,9 +11,9 @@ namespace AlpinistGame
 	
 	class World
 	{
-		std::vector<std::vector<Entity*>> m_grid;
+		std::vector<std::vector<TSharedPtr<Entity>>> m_grid;
 		bool bFinished = false;
-		Player* m_player;
+		TSharedPtr<Player> m_player;
 
 		bool IsValidPosition(std::pair<int8_t, int8_t>) const;
 
@@ -23,7 +23,7 @@ namespace AlpinistGame
 		~World()
 		{
 		}
-		Player* GetPlayer() { return m_player; }
+		TSharedPtr<Player> GetPlayer() { return m_player; }
 		MoveResult SwapPlayerMove();
 
 		friend std::ostream& operator<<(std::ostream& os, World* world);
@@ -32,8 +32,8 @@ namespace AlpinistGame
 
 		bool IsPlayerFinished() const { return bFinished; }
 
-		void SetGrid(const std::vector<std::vector<Entity*>>& OldGrid);
-		std::vector<std::vector<Entity*>> GetCopyOfGrid() const;
+		void SetGrid(const std::vector<std::vector<TSharedPtr<Entity>>>& OldGrid);
+		std::vector<std::vector<TSharedPtr<Entity>>> GetCopyOfGrid() const;
 	};
 }
 #endif

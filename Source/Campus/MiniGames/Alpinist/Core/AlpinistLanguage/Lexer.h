@@ -10,7 +10,7 @@ namespace AlpinistGame
 	{
 		std::string Code;
 		size_t currentPos = 0;
-		std::vector<Token*> Tokens = {};
+		std::vector<TSharedPtr<Token>> Tokens = {};
 		std::vector<std::string> arr;
 
 		AlpinistLog* Log = nullptr;
@@ -21,13 +21,13 @@ namespace AlpinistGame
 		}
 		~Lexer()
 		{
-			/* for (auto token : Tokens)
+			for (auto token : Tokens)
 			{
-				delete token;
-			} */
+				// token.reset();
+			} 
 		}
 
-		std::vector<Token*>* LexAnalysis(AlpinistLog& AlpLog);
+		std::vector<TSharedPtr<Token>>* LexAnalysis(AlpinistLog& AlpLog);
 
 		void GetNamesOfTokens() const;
 	private:
@@ -36,21 +36,21 @@ namespace AlpinistGame
 		bool DivideStr(std::string str, std::vector<std::string>& arr);
 		void PushAndAdjustment(std::string str, std::vector<std::string>& arr);
 
-		std::list<TokenType*> TokenList = {
-			new TokenType("move", CT_SimpleCommand, new std::regex("(-\\.-)")),
-			new TokenType("right", CT_SimpleCommand, new std::regex("(\\.-)")),
-			new TokenType("left", CT_SimpleCommand, new std::regex("(-\\.)")),
-			new TokenType("wallAhead", CT_ConditionType, new std::regex("(---)")),
-			new TokenType("wallRight", CT_ConditionType, new std::regex("(\\.--)")),
-			new TokenType("wallLeft", CT_ConditionType, new std::regex("(--\\.)")),
-			new TokenType("while", CT_WhileLoop, new std::regex("(\\.-\\.)")),
-			new TokenType("if", CT_IfElseConditional, new std::regex("(\\.\\.)")),
-			new TokenType("else", CT_IfElseConditional, new std::regex("(--)")),
-			new TokenType("begin", CT_BeginScope, new std::regex("(\\.)")),
-			new TokenType("end", CT_EndScope, new std::regex("(-)")),
-			new TokenType("Space", CT_Space, new std::regex("(\\s)")),
-			new TokenType("Negate", CT_Negate, new std::regex("(\\.\\.\\.)")),
-			new TokenType("NotEnd", CT_NotEnd, new std::regex("(-\\.\\.-)"))
+		std::list<TSharedPtr<TokenType>> TokenList = {
+			MakeShared<TokenType>("move", CT_SimpleCommand, std::regex("(-\\.-)")),
+			MakeShared<TokenType>("right", CT_SimpleCommand, std::regex("(\\.-)")),
+			MakeShared<TokenType>("left", CT_SimpleCommand, std::regex("(-\\.)")),
+			MakeShared<TokenType>("wallAhead", CT_ConditionType, std::regex("(---)")),
+			MakeShared<TokenType>("wallRight", CT_ConditionType, std::regex("(\\.--)")),
+			MakeShared<TokenType>("wallLeft", CT_ConditionType, std::regex("(--\\.)")),
+			MakeShared<TokenType>("while", CT_WhileLoop, std::regex("(\\.-\\.)")),
+			MakeShared<TokenType>("if", CT_IfElseConditional, std::regex("(\\.\\.)")),
+			MakeShared<TokenType>("else", CT_IfElseConditional, std::regex("(--)")),
+			MakeShared<TokenType>("begin", CT_BeginScope, std::regex("(\\.)")),
+			MakeShared<TokenType>("end", CT_EndScope, std::regex("(-)")),
+			MakeShared<TokenType>("Space", CT_Space, std::regex("(\\s)")),
+			MakeShared<TokenType>("Negate", CT_Negate, std::regex("(\\.\\.\\.)")),
+			MakeShared<TokenType>("NotEnd", CT_NotEnd, std::regex("(-\\.\\.-)"))
 		};
 	};
 }

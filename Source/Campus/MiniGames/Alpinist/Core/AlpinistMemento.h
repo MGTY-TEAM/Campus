@@ -20,8 +20,8 @@ namespace AlpinistGame
 	protected:
 		BaseMemento() {};
 	private:
-		virtual void SetState(const std::vector<std::vector<Entity*>>& StateGrid) = 0;
-		virtual const std::vector<std::vector<Entity*>>& GetState() = 0;
+		virtual void SetState(const std::vector<std::vector<TSharedPtr<Entity>>>& StateGrid) = 0;
+		virtual const std::vector<std::vector<TSharedPtr<Entity>>>& GetState() = 0;
 	};
 
 	class AlpinistMemento : public BaseMemento
@@ -32,10 +32,10 @@ namespace AlpinistGame
 	private:
 		AlpinistMemento() {};
 
-		virtual void SetState(const std::vector<std::vector<Entity*>>& StateGrid) override;
-		virtual const std::vector<std::vector<Entity*>>& GetState() override { return m_grid; };
+		virtual void SetState(const std::vector<std::vector<TSharedPtr<Entity>>>& StateGrid) override;
+		virtual const std::vector<std::vector<TSharedPtr<Entity>>>& GetState() override { return m_grid; };
 
-		std::vector<std::vector<Entity*>> m_grid;
+		std::vector<std::vector<TSharedPtr<Entity>>> m_grid;
 	};
 
 	class AlpinistCaretaker
