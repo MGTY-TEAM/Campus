@@ -12,7 +12,7 @@ public:
 		{
 			StyleSet = MakeShareable(new FSlateStyleSet("EmptyStyle"));
 
-			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 36);
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 27);
 			StyleSet->Set("EmptySlateStyle.Empty", FTextBlockStyle()
 				.SetFont(RobotoBoldFont)
 				.SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 0.0f)))
@@ -43,7 +43,7 @@ public:
 		{
 			StyleSet = MakeShareable(new FSlateStyleSet("MainCodeStyle"));
 
-			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 36);
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 27);
 			StyleSet->Set("MainCodeSlateStyle.MainText", FTextBlockStyle()
 				.SetFont(RobotoBoldFont)
 				.SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 1.0f))));
@@ -73,7 +73,7 @@ public:
 		{
 			StyleSet = MakeShareable(new FSlateStyleSet("SimpleCommand"));
 
-			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 36);
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 27);
 			StyleSet->Set("FSimpleCommandSlateStyle.SimpleCommand", FTextBlockStyle()
 				.SetFont(RobotoBoldFont)
 				//.SetColorAndOpacity(FSlateColor(FLinearColor(0.4f, 0.9f, 0.9f, 1.0f))));
@@ -104,7 +104,7 @@ public:
 		{
 			StyleSet = MakeShareable(new FSlateStyleSet("ConditionCommand"));
 
-			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 36);
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 27);
 			StyleSet->Set("FConditionCommandSlateStyle.ConditionCommand", FTextBlockStyle()
 				.SetFont(RobotoBoldFont)
 				.SetColorAndOpacity(FSlateColor(FLinearColor(0.87f, 0.1f, 0.87f, 1.0f))));
@@ -134,7 +134,7 @@ public:
 		{
 			StyleSet = MakeShareable(new FSlateStyleSet("CheckCommand"));
 
-			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 36);
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 27);
 			StyleSet->Set("FCheckCommandSlateStyle.CheckCommand", FTextBlockStyle()
 				.SetFont(RobotoBoldFont)
 				//.SetColorAndOpacity(FSlateColor(FLinearColor(0.4f, 0.9f, 0.9f, 1.0f))));
@@ -165,7 +165,7 @@ public:
 		{
 			StyleSet = MakeShareable(new FSlateStyleSet("ScopeCommand"));
 
-			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 36);
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 27);
 			StyleSet->Set("FScopeCommandSlateStyle.ScopeCommand", FTextBlockStyle()
 				.SetFont(RobotoBoldFont)
 				//.SetColorAndOpacity(FSlateColor(FLinearColor(0.4f, 0.9f, 0.9f, 1.0f))));
@@ -196,7 +196,7 @@ public:
 		{
 			StyleSet = MakeShareable(new FSlateStyleSet("NegateCommand"));
 
-			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 36);
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 27);
 			StyleSet->Set("FNegateCommandSlateStyle.NegateCommand", FTextBlockStyle()
 				.SetFont(RobotoBoldFont)
 				//.SetColorAndOpacity(FSlateColor(FLinearColor(0.4f, 0.9f, 0.9f, 1.0f))));

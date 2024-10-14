@@ -9,7 +9,7 @@ void SAlpinistToolBar::Construct(const FArguments& InArgs)
 	bCanSupportFocus = true;
 	AlpinistWidgetOwner = InArgs._AlpinistWidgetOwner;
 
-	const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+	const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 8);
 
 	ChildSlot
 	[
@@ -123,7 +123,7 @@ TSharedRef<SWidget> SAlpinistToolBar::CreatePopupMenu()
 {
 	const int32 CountOfButtons = UAlpinistGameHelper::DetermineNumberOfLevels(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels");
 	constexpr float ButtonSize = 75.f;
-	const FSlateFontInfo ButtonFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+	const FSlateFontInfo ButtonFont = FCoreStyle::GetDefaultFontStyle("Regular", 12);
 	const FMargin ButtonPadding = FMargin(5.f);
 
 	TSharedRef<SGridPanel> GridPanel = SNew(SGridPanel);

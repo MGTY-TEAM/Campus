@@ -15,32 +15,43 @@ void SMainAlpinistWidget::Construct(const FArguments& InArgs)
 
 	ChildSlot
 	[
-		SNew(SConstraintCanvas)
-		+ SConstraintCanvas::Slot()
-		  .Anchors(FAnchors(0, 0, 1, 1))
-		  .Offset(FMargin(ProtrudingPart, 0, 0, 0))
-		  .Alignment(FVector2D(0.0f, 0.0f))
+		SNew(SOverlay)
+		+ SOverlay::Slot()
+		.HAlign(HAlign_Left)
+		.VAlign(VAlign_Top)
 		[
-			SNew(SAlpinistIDEWidget)
-			.AlpinistWidgetOwner(InArgs._AlpinistWidgetOwner)
-		]
-		+ SConstraintCanvas::Slot()
-		  .Offset(TAttribute<FMargin>::Create(TAttribute<FMargin>::FGetter::CreateSP(this, &SMainAlpinistWidget::GetLeftWidgetPadding)))
-		  .Anchors(FAnchors(0, 0, 0, 1))
-		  .AutoSize(true)
-		  .Alignment(FVector2D(0.0f, 0.0f))
-		[
-			SNew(SOverlay)
-			+ SOverlay::Slot()
+			SNew(SBox)
+			.WidthOverride(900.f)
+			.HeightOverride(500.f)
 			[
-				SNew(SImage)
-				.ColorAndOpacity(FColor::Black)
-			]
-			+ SOverlay::Slot()
-			[
-				SAssignNew(AlpinistMovableWidget, SAlpinistMovableWidget)
-				.WidgetOwner(AsWeak())
-				.CurveSequence(&AnimationSequence)
+				SNew(SConstraintCanvas)
+				+ SConstraintCanvas::Slot()
+				  .Anchors(FAnchors(0, 0, 1, 1))
+				  .Offset(FMargin(ProtrudingPart, 0, 0, 0))
+				  .Alignment(FVector2D(0.0f, 0.0f))
+				[
+					SNew(SAlpinistIDEWidget)
+					.AlpinistWidgetOwner(InArgs._AlpinistWidgetOwner)
+				]
+				+ SConstraintCanvas::Slot()
+				  .Offset(TAttribute<FMargin>::Create(TAttribute<FMargin>::FGetter::CreateSP(this, &SMainAlpinistWidget::GetLeftWidgetPadding)))
+				  .Anchors(FAnchors(0, 0, 0, 1))
+				  .AutoSize(true)
+				  .Alignment(FVector2D(0.0f, 0.0f))
+				[
+					SNew(SOverlay)
+					+ SOverlay::Slot()
+					[
+						SNew(SImage)
+						.ColorAndOpacity(FColor::Black)
+					]
+					+ SOverlay::Slot()
+					[
+						SAssignNew(AlpinistMovableWidget, SAlpinistMovableWidget)
+						.WidgetOwner(AsWeak())
+						.CurveSequence(&AnimationSequence)
+					]
+				]
 			]
 		]
 	];

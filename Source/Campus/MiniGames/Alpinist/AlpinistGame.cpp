@@ -1,11 +1,15 @@
 
 #include "Campus/MiniGames/Alpinist/AlpinistGame.h"
 
+#include "Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Campus/Libraries/CampusUtils.h"
 #include "Components/StaticMeshcomponent.h"
+#include "Components/InstancedStaticMeshComponent.h"
 #include "Campus/MiniGames/Alpinist/Core/GameController.h"
 #include "Campus/MiniGames/Alpinist/AlpinistIDEController.h"
+#include "Campus/MiniGames/Alpinist/AlpinistViewComponent.h"
 #include "Campus/Tests/Alpinist/UHelperReaderJsonForAlpinist.h"
 #include "Campus/Libraries/MiniGames/Alpinist/AlpinistGameHelper.h"
 #include "Campus/MiniGames/Alpinist/Core/AlpinistLanguage/Compiler.h"
@@ -21,6 +25,20 @@ AAlpinistGame::AAlpinistGame()
 
 	TelegraphShoulderMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("TelegraphShoulderMeshComponent");
 	TelegraphShoulderMeshComponent->SetupAttachment(TelegraphBaseMeshComponent);
+
+	AlpinistViewComponent = CreateDefaultSubobject<UAlpinistViewComponent>("AlpinistViewComponent");
+	AlpinistViewComponent->SetupAttachment(GetRootComponent());
+
+	MainMountainMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("MainMountainMeshComponent");
+	MainMountainMeshComponent->SetupAttachment(GetRootComponent());
+	SecondMountainMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("SecondMountainMeshComponent");
+	SecondMountainMeshComponent->SetupAttachment(GetRootComponent());
+	MainSnowMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("MainSnowMeshComponent");
+	MainSnowMeshComponent->SetupAttachment(GetRootComponent());
+	SecondSnowMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("SecondSnowMeshComponent");
+	SecondSnowMeshComponent->SetupAttachment(GetRootComponent());
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 
 	AlpinistIDEController = CreateDefaultSubobject<UAlpinistIDEController>("AlpinistIDEController");
 }
@@ -48,6 +66,12 @@ void AAlpinistGame::Interact(UActorComponent* InteractComponent, const FVector& 
 	{
 		if (AlpinistIDEController && AlpinistIDEController->InitializeAlpinistIDE())
 		{
+			APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+			if (PlayerController && CameraComponent)
+			{
+				PlayerController->SetViewTargetWithBlend(this, CameraSmoothTime); // Плавный переход на статичную камеру за 1 секунду
+			}
+			
 			// Перемещение камеры, процедурная генерация карты
 			UE_LOG(LogAlpinistGame, Display, TEXT("Alpinost Game Started"));
 		}
@@ -87,11 +111,12 @@ bool AAlpinistGame::SetupController()
 	FString OutInfoMessage = FString();
 
 	const TSharedPtr<FJsonObject> JsonObject = UHelperReaderJsonForAlpinist::ReadJson(PathToJson, SucceededDeserialize, OutInfoMessage);
-	if (JsonObject.Get() && SucceededDeserialize)
+	if (AlpinistViewComponent && JsonObject.Get() && SucceededDeserialize)
 	{
 		TArray<FString> Map;
 		if (JsonObject->TryGetStringArrayField("game_map", Map))
 		{
+			AlpinistViewComponent->InitializeLevel(Map);
 			const std::vector<std::string> STDMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 			if (m_gameController.IsValid())
 			{
@@ -188,8 +213,16 @@ void AAlpinistGame::ToStartPosition()
 
 void AAlpinistGame::CloseGame()
 {
-	// Возвращение камеры персонажу, удаление карты
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (PlayerController && CameraComponent)
+	{
+		if (PlayerController->GetPawn())
+		{
+			PlayerController->SetViewTargetWithBlend(PlayerController->GetPawn(), CameraSmoothTime); // Плавный переход на статичную камеру за 1 секунду
+		}
+	}
 	
+	// Возвращение камеры персонажу, удаление карты
 	if (m_Compiler.IsValid())
 	{
 		m_Compiler.Reset();
@@ -221,6 +254,19 @@ void AAlpinistGame::OpenLevel(int32 Level)
 		}
 	}
 
-	// Удаление нынешней карты, процедурная генерация выбранной карты
+	// Удаление нынешней карты, генерация выбранной карты
+	const FString PathToJson = UAlpinistGameHelper::GetSelectedLevelPath(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels", SelectedLevel);
+	bool SucceededDeserialize = false;
+	FString OutInfoMessage = FString();
+
+	const TSharedPtr<FJsonObject> JsonObject = UHelperReaderJsonForAlpinist::ReadJson(PathToJson, SucceededDeserialize, OutInfoMessage);
+	if (JsonObject.Get() && SucceededDeserialize)
+	{
+		TArray<FString> Map;
+		if (JsonObject->TryGetStringArrayField("game_map", Map) /* && AlpinistViewComponent */)
+		{
+			AlpinistViewComponent->InitializeLevel(Map);
+		}
+	}
 }
 

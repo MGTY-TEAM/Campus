@@ -14,19 +14,19 @@ SAlpinistHighlightedOutputLogWidget::SAlpinistHighlightedOutputLogWidget()
 	StyleSet = new FSlateStyleSet("OutputLogStyleSet");
 
 	DisplayTextBlock = new FTextBlockStyle();
-	DisplayTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 16));
+	DisplayTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 12));
 	DisplayTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
 
 	WarningTextBlock = new FTextBlockStyle();
-	WarningTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 16));
+	WarningTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 12));
 	WarningTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Yellow));
 
 	ErrorTextBlock = new FTextBlockStyle();
-	ErrorTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 16));
+	ErrorTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 12));
 	ErrorTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Red));
 	
 	SuccessTextBlock = new FTextBlockStyle();
-	SuccessTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 16));
+	SuccessTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 12));
 	SuccessTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
 }
 

@@ -25,7 +25,7 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 
 	const FMargin Padding = FMargin(20.f, 20.f);
 	const FMargin ContentPadding = FMargin(20.f, 0.f, 20.f, 0.f);
-	const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+	const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 8);
 
 	FMainSlateBrush::Initialize(BackTexture);
 	BackSlateBrush = &FMainSlateBrush::Get();
@@ -131,7 +131,7 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 			[
 				SNew(SBorder)
 				.BorderBackgroundColor(FLinearColor::White)
-				.Padding(FMargin(8.f))
+				.Padding(FMargin(4.f))
 				[
 					SNew(STextBlock)
 					.Text(FText::FromString("OutputLog"))
@@ -141,7 +141,7 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 			// ----- OutputLog -----
 			+ SVerticalBox::Slot()
 			  .Padding(ContentPadding)
-			  .FillHeight(9.0f)
+			  .FillHeight(6.0f)
 			[
 				SNew(SAlpinistHighlightedOutputLogWidget)
 				.AlpinistWidgetOwner(InArgs._AlpinistWidgetOwner)

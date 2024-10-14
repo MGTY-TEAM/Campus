@@ -7,8 +7,10 @@
 #include "Campus/Interfaces/Interaction/Interactable.h"
 #include "AlpinistGame.generated.h"
 
+class UCameraComponent;
 class UStaticMeshComponent;
 class UAlpinistIDEController;
+class UAlpinistViewComponent;
 
 namespace AlpinistGame
 {
@@ -37,6 +39,27 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UAlpinistIDEController* AlpinistIDEController;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UAlpinistViewComponent* AlpinistViewComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EntityComponents")
+	UInstancedStaticMeshComponent* MainMountainMeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EntityComponents")
+	UInstancedStaticMeshComponent* SecondMountainMeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EntityComponents")
+	UInstancedStaticMeshComponent* MainSnowMeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EntityComponents")
+	UInstancedStaticMeshComponent* SecondSnowMeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components", meta = (ClampMin = "0.1", ClampMax = "5"))
+	float CameraSmoothTime = 1.f;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AlpinistsProperties")
 	int32 SelectedLevel = 1;
 public:	
@@ -53,6 +76,11 @@ public:
 
 	int32 GetSelectedLevel() const { return SelectedLevel; }
 	TSet<int32> GetPassedLevels() const { return PassedLevels; }
+
+	UInstancedStaticMeshComponent* GetMainMountainMeshComponent() const { return MainMountainMeshComponent; }
+	UInstancedStaticMeshComponent* GetSecondMountainMeshComponent() const { return SecondMountainMeshComponent; }
+	UInstancedStaticMeshComponent* GetMainSnowMeshComponent() const { return MainSnowMeshComponent; }
+	UInstancedStaticMeshComponent* GetSecondSnowMeshComponent() const { return SecondSnowMeshComponent; }
 private:
 	TSharedPtr<AlpinistGame::GameController> m_gameController;
 	TSharedPtr<AlpinistGame::Compiler> m_Compiler;
