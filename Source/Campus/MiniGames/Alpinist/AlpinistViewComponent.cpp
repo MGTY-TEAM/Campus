@@ -2,6 +2,7 @@
 #include "Campus/MiniGames/Alpinist/AlpinistViewComponent.h"
 
 #include "AlpinistGame.h"
+#include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
 #include "AlpinistMapEntity.h"
 #include "Components/SceneComponent.h"
@@ -10,26 +11,16 @@
 UAlpinistViewComponent::UAlpinistViewComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-
-	MapViewSceneComponent = CreateDefaultSubobject<USceneComponent>("MapViewSceneComponent");
-	// MapViewSceneComponent->SetupAttachment(this);
-
-	PlayersNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>("PlayersNiagaraComponent");
-	// PlayersNiagaraComponent->SetupAttachment(this);
+	
+	InnerPlayersNiagaraComponent = nullptr;
 }
 
 void UAlpinistViewComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (PlayersNiagaraComponent && MapViewSceneComponent)
-	{
-		MapViewSceneComponent->RegisterComponent();
-		MapViewSceneComponent->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
-		PlayersNiagaraComponent->RegisterComponent();
-		PlayersNiagaraComponent->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
-	}
-
+	OnUpdatePosition.BindUObject(this, &UAlpinistViewComponent::UpdatePosition);
+	
 	if (const AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
 	{
 		MountainMeshComponents.Add(AlpinistGame->GetMainMountainMeshComponent());
@@ -37,24 +28,44 @@ void UAlpinistViewComponent::BeginPlay()
 		SnowMeshComponents.Add(AlpinistGame->GetMainSnowMeshComponent());
 		SnowMeshComponents.Add(AlpinistGame->GetSecondSnowMeshComponent());
 	}
-
-	if (PlayersNiagaraComponent && !PlayersNiagaraComponent->IsPaused())
-	{
-		PlayersNiagaraComponent->SetActive(false);
-		// PlayersNiagaraComponent->Deactivate();
-		// PlayersNiagaraComponent->SetPaused(true);
-		// PlayersNiagaraComponent->SetVisibility(false);
-	}
 }
 
 void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if (bShouldPlay)
+	{
+		const TPair<int32, int32> CurrentCoordinate = CoordinateHistory[CurrentSnapshot].Value;
+		const TPair<int32, int32> NextCoordinate = CoordinateHistory[CurrentSnapshot + 1].Value;
+
+		const AAlpinistMapEntity* CurrentEntity = AlpinistMapEntities[CurrentCoordinate.Key][CurrentCoordinate.Value];
+		const AAlpinistMapEntity* NextEntity = AlpinistMapEntities[NextCoordinate.Key][NextCoordinate.Value];
+
+		if (CurrentEntity && NextEntity && InnerPlayersNiagaraComponent)
+		{
+			const FVector CurrentLocation = CurrentEntity->GetMarkLocation();
+			const FVector NextLocation = NextEntity->GetMarkLocation();
+			const FVector NewLocation = FMath::VInterpTo(CurrentLocation, NextLocation, DeltaTime, MarkMovingSpeed);
+			
+			if (NewLocation == NextLocation)
+			{
+				OnUpdatePosition.Execute(NewLocation);
+				++CurrentSnapshot;
+
+				if (CurrentSnapshot == CoordinateHistory.Num() - 1)
+				{
+					bShouldPlay = false;
+				}
+			}
+		}
+	}
 }
 
-bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map)
+bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const USceneComponent* MapViewSceneComponent, UNiagaraComponent* PlayersNiagaraComponent)
 {
+	if (!MapViewSceneComponent || !PlayersNiagaraComponent) return false;
+	
 	AlpinistMapEntities.Empty();
 	if (GetWorld() && AlpinistMapEntityClass->IsValidLowLevel())
 	{
@@ -73,7 +84,15 @@ bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map)
 					if (AAlpinistMapEntity* Entity = GetWorld()->SpawnActor<AAlpinistMapEntity>(AlpinistMapEntityClass, AnchorLocation, FRotator(0.f)))
 					{
 						Entity->CreateEntity(SnowMeshComponents, AnchorLocation, Density);
+						Entity->SetMarkLocation(AnchorLocation + FVector(5.f, Density * 0.4f, Density * 0.3f));
 						LineEntities.Add(Entity);
+
+						if (EntityType == 'p' && PlayersNiagaraComponent && PlayersNiagaraComponent->GetAsset())
+						{
+							InnerPlayersNiagaraComponent = PlayersNiagaraComponent;
+							PlayersNiagaraComponent->SetVariablePosition("PlayerPosition", Entity->GetMarkLocation());
+							PlayersNiagaraComponent->Activate(true);
+						}
 					}
 				}
 				else
@@ -82,17 +101,6 @@ bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map)
 					{
 						Entity->CreateEntity(MountainMeshComponents, AnchorLocation, Density);
 						LineEntities.Add(Entity);
-
-						if (EntityType == 'p' && PlayersNiagaraComponent)
-						{
-							PlayersNiagaraComponent->SetActive(true);
-							PlayersNiagaraComponent->SetVectorParameter("PlayerLocation",  AnchorLocation/*FVector(-835.0f, -501.0f, 104.f)*/);
-							
-							// PlayersNiagaraComponent->ActivateSystem();
-							// PlayersNiagaraComponent->SetVariablePosition("PlayerPosition", AnchorLocation/*FVector(-835.0f, -501.0f, 104.f)*/);
-							// PlayersNiagaraComponent->SetPaused(false);
-							// PlayersNiagaraComponent->SetVisibility(true);
-						}
 					}
 				}
 			
@@ -109,8 +117,10 @@ bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map)
 	return false;
 }
 
-bool UAlpinistViewComponent::DestroyLevel()
+bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentAround, UNiagaraComponent* PlayersNiagaraComponent)
 {
+	bShouldPlay = false;
+	
 	for (UInstancedStaticMeshComponent* InstancedStaticMeshComponent : MountainMeshComponents)
 	{
 		InstancedStaticMeshComponent->ClearInstances();
@@ -136,11 +146,9 @@ bool UAlpinistViewComponent::DestroyLevel()
 	}
 	AlpinistMapEntities.Empty();
 
-	if (PlayersNiagaraComponent && !PlayersNiagaraComponent->IsPaused())
+	if (PlayersNiagaraComponent && PlayersNiagaraComponent->GetAsset())
 	{
-		// PlayersNiagaraComponent->Deactivate();
-		/*PlayersNiagaraComponent->SetPaused(true);
-		PlayersNiagaraComponent->SetVisibility(false);*/
+		PlayersNiagaraComponent->Deactivate();
 	}
 	
 	return true;
@@ -173,5 +181,13 @@ void UAlpinistViewComponent::StartPlayByHistory(const TArray<TPair<int32, TPair<
 		}
 		
 		UE_LOG(LogTemp, Warning, TEXT("%s: %i, %i"), *Direction, Pair.Value.Key, Pair.Value.Value);
+	}
+}
+
+void UAlpinistViewComponent::UpdatePosition(FVector NewPosition)
+{
+	if (InnerPlayersNiagaraComponent)
+	{
+		InnerPlayersNiagaraComponent->SetVariablePosition("PlayerPosition", NewPosition);
 	}
 }

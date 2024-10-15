@@ -7,7 +7,10 @@
 #include "Campus/Interfaces/Interaction/Interactable.h"
 #include "AlpinistGame.generated.h"
 
+class UNiagaraSystem;
+class USceneComponent;
 class UCameraComponent;
+class UNiagaraComponent;
 class UStaticMeshComponent;
 class UAlpinistIDEController;
 class UAlpinistViewComponent;
@@ -41,6 +44,15 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UAlpinistViewComponent* AlpinistViewComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	USceneComponent* MapViewSceneComponent;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "NiagaraPlayersSettings")
+	UNiagaraSystem* PlayersNiagaraSystem;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UNiagaraComponent* PlayersNiagaraComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EntityComponents")
 	UInstancedStaticMeshComponent* MainMountainMeshComponent;

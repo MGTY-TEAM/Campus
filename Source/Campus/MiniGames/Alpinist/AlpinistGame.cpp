@@ -1,8 +1,10 @@
 
 #include "Campus/MiniGames/Alpinist/AlpinistGame.h"
 
+#include "NiagaraComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Campus/Libraries/CampusUtils.h"
 #include "Components/StaticMeshcomponent.h"
@@ -26,6 +28,12 @@ AAlpinistGame::AAlpinistGame()
 	TelegraphShoulderMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("TelegraphShoulderMeshComponent");
 	TelegraphShoulderMeshComponent->SetupAttachment(TelegraphBaseMeshComponent);
 
+	MapViewSceneComponent = CreateDefaultSubobject<USceneComponent>("MapViewSceneComponent");
+	MapViewSceneComponent->SetupAttachment(GetRootComponent());
+
+	PlayersNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>("PlayersNiagaraComponent");
+	PlayersNiagaraComponent->SetupAttachment(GetRootComponent());
+
 	MainMountainMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("MainMountainMeshComponent");
 	MainMountainMeshComponent->SetupAttachment(GetRootComponent());
 	SecondMountainMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("SecondMountainMeshComponent");
@@ -34,19 +42,23 @@ AAlpinistGame::AAlpinistGame()
 	MainSnowMeshComponent->SetupAttachment(GetRootComponent());
 	SecondSnowMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("SecondSnowMeshComponent");
 	SecondSnowMeshComponent->SetupAttachment(GetRootComponent());
-
-	AlpinistViewComponent = CreateDefaultSubobject<UAlpinistViewComponent>("AlpinistViewComponent");
-	AlpinistViewComponent->SetupAttachment(GetRootComponent());
-
+	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-
 	AlpinistIDEController = CreateDefaultSubobject<UAlpinistIDEController>("AlpinistIDEController");
+	AlpinistViewComponent = CreateDefaultSubobject<UAlpinistViewComponent>("AlpinistViewComponent");
 }
 
 void AAlpinistGame::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (PlayersNiagaraComponent)
+	{
+		PlayersNiagaraComponent->SetComponentTickEnabled(true);
+		PlayersNiagaraComponent->PrimaryComponentTick.bCanEverTick = true;
+		PlayersNiagaraComponent->SetAsset(PlayersNiagaraSystem);
+		PlayersNiagaraComponent->Deactivate();
+	}
 }
 
 void AAlpinistGame::Tick(float DeltaTime)
@@ -116,7 +128,7 @@ bool AAlpinistGame::SetupController()
 		TArray<FString> Map;
 		if (JsonObject->TryGetStringArrayField("game_map", Map))
 		{
-			AlpinistViewComponent->InitializeLevel(Map);
+			AlpinistViewComponent->InitializeLevel(Map, MapViewSceneComponent, PlayersNiagaraComponent);
 			const std::vector<std::string> STDMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 			if (m_gameController.IsValid())
 			{
@@ -224,7 +236,7 @@ void AAlpinistGame::CloseGame()
 	}
 	if (AlpinistViewComponent)
 	{
-		AlpinistViewComponent->DestroyLevel();
+		AlpinistViewComponent->DestroyLevel(MapViewSceneComponent, PlayersNiagaraComponent);
 	}
 	
 	// Возвращение камеры персонажу, удаление карты
@@ -262,7 +274,7 @@ void AAlpinistGame::OpenLevel(int32 Level)
 	// Удаление нынешней карты, генерация выбранной карты
 	if (AlpinistViewComponent)
 	{
-		AlpinistViewComponent->DestroyLevel();
+		AlpinistViewComponent->DestroyLevel(MapViewSceneComponent, PlayersNiagaraComponent);
 		
 		const FString PathToJson = UAlpinistGameHelper::GetSelectedLevelPath(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels", SelectedLevel);
 		bool SucceededDeserialize = false;
@@ -274,7 +286,7 @@ void AAlpinistGame::OpenLevel(int32 Level)
 			TArray<FString> Map;
 			if (JsonObject->TryGetStringArrayField("game_map", Map) /* && AlpinistViewComponent */)
 			{
-				AlpinistViewComponent->InitializeLevel(Map);
+				AlpinistViewComponent->InitializeLevel(Map, MapViewSceneComponent, PlayersNiagaraComponent);
 			}
 		}
 	}

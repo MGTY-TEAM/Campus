@@ -20,4 +20,9 @@ protected:
 
 public:	
 	void CreateEntity(const TArray<UInstancedStaticMeshComponent*>& InstancedStaticMeshes, const FVector& Anchor, const int32 Density);
+	
+	void SetMarkLocation(const FVector& InLocation) { MarkLocation = InLocation; }
+	FVector GetMarkLocation() const { return MarkLocation; }
+private:
+	FVector MarkLocation = FVector();
 };
