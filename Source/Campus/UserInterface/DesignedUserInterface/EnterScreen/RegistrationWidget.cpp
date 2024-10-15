@@ -17,6 +17,7 @@ void URegistrationWidget::OnButtonAuthorizationFormClick()
 {
 	TextBoxLogin->SetText(FText::FromString(""));
 	TextBoxPassword->SetText(FText::FromString(""));
+
 	TextBoxRetryPassword->SetText(FText::FromString(""));
 	TextBoxNickName->SetText(FText::FromString(""));
 }

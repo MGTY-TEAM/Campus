@@ -4,6 +4,7 @@
 #include "BaseController.h"
 
 #include "BaseHUD.h"
+#include "EnhancedInputSubsystems.h"
 #include "Campus/Chat/ChatManager.h"
 
 ABaseController::ABaseController()
@@ -54,6 +55,20 @@ void ABaseController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	/*InputComponent->BindAction("OpenChat", IE_Pressed, this, &ABaseController::OnChatButtonClicked);
-	InputComponent->BindAction("OpenEscapeMenu", IE_Pressed, this, &ABaseController::OnEscapeMenuButtonClicked);*/
+}
+
+void ABaseController::SetupPCInputContext()
+{
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		Subsystem->AddMappingContext(PCMappingContext, 0);
+	}
+}
+
+void ABaseController::SetupVRInputContext()
+{
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		Subsystem->AddMappingContext(VRMappingContext, 0);
+	}
 }

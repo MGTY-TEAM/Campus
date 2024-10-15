@@ -15,7 +15,14 @@ AEquilibriumView::AEquilibriumView()
 	SetRootComponent(SceneComponent);
 
 	EquilibriumViewModelComponent = CreateDefaultSubobject<UEquilibriumViewModelComponent>("EquilibriumViewModel");
+
+	MiniGameInfo = NewObject<UMiniGameInfo>();
+	if(MiniGameInfo)
+	{
+		MiniGameInfo->Title = "Весы";
+	}
 }
+
 
 void AEquilibriumView::CreateEquilibrium(const TArray<FString>& CupsCoor)
 {
@@ -126,10 +133,21 @@ void AEquilibriumView::BeginPlay()
 	{
 		EquilibriumViewModelComponent->CreateModelInstance(CampusUtils::TArrayOfFStringToVectorOfVectorOfInt(CupsCoo));
 		EquilibriumViewModelComponent->OnChangeStates.AddUObject(this, &AEquilibriumView::CalculateRotation);
+
+		IMiniGames* MiniGame = Cast<UEquilibriumViewModelComponent>(UMiniGames::StaticClass());
+
+		if(MiniGame)
+		{
+			MiniGame->ExecuteMiniGameCompleted.AddDynamic(this, &AEquilibriumView::OnGameCompleted);
+		}
 	}
 	SetCoordinatesForCups();
 }
 
+void AEquilibriumView::OnGameCompleted(UMiniGameInfo* GameInfo)
+{
+	ExecuteMiniGameCompleted.Broadcast(MiniGameInfo);
+}
 void AEquilibriumView::AddCupToArrayOfCups(AEquilCup* NewCup)
 {
 	if (NewCup)

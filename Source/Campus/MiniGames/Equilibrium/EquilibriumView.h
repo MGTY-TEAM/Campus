@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Campus/Interfaces/MiniGames/MiniGames.h"
 #include "Campus/MiniGames/Equilibrium/Core/EquilibriumTypes.h"
 #include "GameFramework/Actor.h"
 #include "EquilibriumView.generated.h"
@@ -13,7 +14,7 @@ class AEquilNode;
 class AEquilCup;
 
 UCLASS()
-class CAMPUS_API AEquilibriumView : public AActor
+class CAMPUS_API AEquilibriumView : public AActor, public IMiniGames
 {
 	GENERATED_BODY()
 	
@@ -21,6 +22,8 @@ public:
 	AEquilibriumView();
 
 protected:
+	UFUNCTION()
+	void OnGameCompleted(UMiniGameInfo* MiniGameInfo);
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Equilibrium")

@@ -3,28 +3,28 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MiniGameInfo.h"
 #include "UObject/Interface.h"
+
 #include "MiniGames.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMiniGameComplited);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMiniGameComplited, UMiniGameInfo*, MiniGameInfo);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMiniGameError);
-// This class does not need to be modified.
+
 UINTERFACE()
 class UMiniGames : public UInterface
 {
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class CAMPUS_API IMiniGames
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	FOnMiniGameComplited ExecuteMiniGameCompleted;
 	FOnMiniGameError ExecuteMiniGameError;
+
+	UMiniGameInfo* MiniGameInfo = nullptr;
 };

@@ -21,7 +21,9 @@ public class Campus : ModuleRules
 			"UMG",
 			"SlateCore",
 			"Slate", 
-			"Niagara"
+			"Niagara",
+			"OpenXR",
+			"HeadMountedDisplay"
 		});
 
         PublicIncludePaths.AddRange(new string[]

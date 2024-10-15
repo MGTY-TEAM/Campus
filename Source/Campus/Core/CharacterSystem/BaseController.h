@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BaseController.generated.h"
 
+class UInputMappingContext;
 // Define a logging category for the BaseController class
 DEFINE_LOG_CATEGORY_STATIC(LogBaseController, Log, Log);
 
@@ -35,6 +36,11 @@ public:
 	// Overrides the SetupInputComponent method of APlayerController
 	virtual void SetupInputComponent() override;
 
+public:
+	void SetupPCInputContext();
+
+	void SetupVRInputContext();
+
 private:
 	ABaseHUD* M_BaseHUD; // Instance of the base HUD
 
@@ -44,4 +50,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Classes")
 	TSubclassOf<ABaseHUD> M_BaseHudClass; // Class of the base HUD
 
+	UPROPERTY(EditDefaultsOnly)
+	UInputMappingContext* PCMappingContext;
+
+	UPROPERTY(EditDefaultsOnly)
+	UInputMappingContext* VRMappingContext;
 };

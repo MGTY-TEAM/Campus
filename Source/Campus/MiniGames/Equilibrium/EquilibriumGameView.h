@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Campus/Interfaces/MiniGames/MiniGames.h"
 #include "GameFramework/Actor.h"
 #include "EquilibriumGameView.generated.h"
 

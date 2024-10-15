@@ -4,6 +4,7 @@
 #include "PanalButtonsWidget.h"
 #include "PanalWidget.h"
 #include "Blueprint/WidgetTree.h"
+#include "Campus/Interfaces/MiniGames/MiniGameInfo.h"
 #include "Engine/AssetManager.h"
 #define BINARY_TREE_DEBUG = false
 
@@ -60,7 +61,14 @@ void UPanalButtonsWidget::NativeConstruct()
 	ImagesYes.Add(YesPineBrush.GetResourceObject());
 	ImagesYes.Add(YesStrawberryBrush.GetResourceObject());
 	ImagesYes.Add(YesPearBrush.GetResourceObject());
-	
+
+	UMiniGameInfo* GameInfo = NewObject<UMiniGameInfo>();
+	MiniGameInfo = GameInfo;
+
+	if(MiniGameInfo)
+	{
+		MiniGameInfo->Title = "Бинарное дерево";
+	}
 	// Аналогично для ImagesYes
 	//FSlateBrush ButtonImage;
 	/*ButtonImage.SetResourceObject(LoadObject<UObject>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Mesh/BinaryTree/FruitsPanel/UApple.UApple'")));
@@ -283,7 +291,7 @@ void UPanalButtonsWidget::CheckAnswers()
 		AnswerNumber = 0;
 		PlaySound(GameEndRight);
 		SetToOriginalImage();
-		ExecuteMiniGameCompleted.Broadcast();
+		ExecuteMiniGameCompleted.Broadcast(MiniGameInfo);
 	}
 	else
 	{

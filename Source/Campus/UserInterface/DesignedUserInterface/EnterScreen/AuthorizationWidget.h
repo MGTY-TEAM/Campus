@@ -22,19 +22,21 @@ class CAMPUS_API UAuthorizationWidget : public UUserWidget
 	void OnRegistrationFormButtonCLick();
 
 protected:
-	
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* TextIncorrect;
+
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextForgotPassword;
 	
 	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* TextBoxLogin;
+
 	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* TextBoxPassword;
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ButtonAuthorization;
+
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	UButton* ButtonRegistrationForm;
 };
