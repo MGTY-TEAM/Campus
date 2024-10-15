@@ -82,6 +82,7 @@ namespace AlpinistGame
 		void ToStartPositions();
 		bool SaveCopyOfWorld(PlayerCommand* Command);
 		bool RestoreOfWorld(PlayerCommand* Command);
+		TWeakPtr<AlpinistGame::AlpinistCaretaker> GetAlpinistCaretaker() const { return m_alpinistCaretaker.ToWeakPtr(); }
 		// bool ExecuteMacroCommand(MacroCommand* macroCommand);
 	};
 }

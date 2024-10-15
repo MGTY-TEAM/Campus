@@ -1,5 +1,10 @@
 #pragma once
 
+namespace AlpinistGame
+{
+	class AlpinistCaretaker;
+}
+
 class UAlpinistGameHelper
 {
 public:
@@ -47,4 +52,6 @@ public:
 		
 		return Path;
 	}
+
+	static TArray<TPair<int32, TPair<int32, int32>>> GetAlpinistCoordinateHistory(const TWeakPtr<AlpinistGame::AlpinistCaretaker>& AlpMemento);
 };

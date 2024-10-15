@@ -26,9 +26,6 @@ AAlpinistGame::AAlpinistGame()
 	TelegraphShoulderMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("TelegraphShoulderMeshComponent");
 	TelegraphShoulderMeshComponent->SetupAttachment(TelegraphBaseMeshComponent);
 
-	AlpinistViewComponent = CreateDefaultSubobject<UAlpinistViewComponent>("AlpinistViewComponent");
-	AlpinistViewComponent->SetupAttachment(GetRootComponent());
-
 	MainMountainMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("MainMountainMeshComponent");
 	MainMountainMeshComponent->SetupAttachment(GetRootComponent());
 	SecondMountainMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("SecondMountainMeshComponent");
@@ -37,6 +34,9 @@ AAlpinistGame::AAlpinistGame()
 	MainSnowMeshComponent->SetupAttachment(GetRootComponent());
 	SecondSnowMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("SecondSnowMeshComponent");
 	SecondSnowMeshComponent->SetupAttachment(GetRootComponent());
+
+	AlpinistViewComponent = CreateDefaultSubobject<UAlpinistViewComponent>("AlpinistViewComponent");
+	AlpinistViewComponent->SetupAttachment(GetRootComponent());
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 
@@ -146,10 +146,11 @@ void AAlpinistGame::BuildGame()
 
 void AAlpinistGame::RunGame()
 {
-	if (m_Compiler.IsValid() && m_AlpinistLog.IsValid() && AlpinistIDEController)
+	if (m_Compiler.IsValid() && m_AlpinistLog.IsValid() && AlpinistIDEController && AlpinistViewComponent)
 	{
 		m_Compiler->Run(*m_AlpinistLog);
 		m_AlpinistLog->PushMessageLog("Run Processing Finished...", AlpinistGame::DisplayMes);
+		AlpinistViewComponent->StartPlayByHistory(UAlpinistGameHelper::GetAlpinistCoordinateHistory(m_gameController->GetAlpinistCaretaker()));
 		
 		if (m_gameController->GetWorld()->IsPlayerFinished())
 		{
@@ -221,6 +222,10 @@ void AAlpinistGame::CloseGame()
 			PlayerController->SetViewTargetWithBlend(PlayerController->GetPawn(), CameraSmoothTime); // Плавный переход на статичную камеру за 1 секунду
 		}
 	}
+	if (AlpinistViewComponent)
+	{
+		AlpinistViewComponent->DestroyLevel();
+	}
 	
 	// Возвращение камеры персонажу, удаление карты
 	if (m_Compiler.IsValid())
@@ -255,17 +260,22 @@ void AAlpinistGame::OpenLevel(int32 Level)
 	}
 
 	// Удаление нынешней карты, генерация выбранной карты
-	const FString PathToJson = UAlpinistGameHelper::GetSelectedLevelPath(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels", SelectedLevel);
-	bool SucceededDeserialize = false;
-	FString OutInfoMessage = FString();
-
-	const TSharedPtr<FJsonObject> JsonObject = UHelperReaderJsonForAlpinist::ReadJson(PathToJson, SucceededDeserialize, OutInfoMessage);
-	if (JsonObject.Get() && SucceededDeserialize)
+	if (AlpinistViewComponent)
 	{
-		TArray<FString> Map;
-		if (JsonObject->TryGetStringArrayField("game_map", Map) /* && AlpinistViewComponent */)
+		AlpinistViewComponent->DestroyLevel();
+		
+		const FString PathToJson = UAlpinistGameHelper::GetSelectedLevelPath(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels", SelectedLevel);
+		bool SucceededDeserialize = false;
+		FString OutInfoMessage = FString();
+
+		const TSharedPtr<FJsonObject> JsonObject = UHelperReaderJsonForAlpinist::ReadJson(PathToJson, SucceededDeserialize, OutInfoMessage);
+		if (JsonObject.Get() && SucceededDeserialize)
 		{
-			AlpinistViewComponent->InitializeLevel(Map);
+			TArray<FString> Map;
+			if (JsonObject->TryGetStringArrayField("game_map", Map) /* && AlpinistViewComponent */)
+			{
+				AlpinistViewComponent->InitializeLevel(Map);
+			}
 		}
 	}
 }

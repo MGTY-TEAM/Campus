@@ -19,9 +19,5 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void Tick(float DeltaTime) override;
-
 	void CreateEntity(const TArray<UInstancedStaticMeshComponent*>& InstancedStaticMeshes, const FVector& Anchor, const int32 Density);
-private:
-	
 };

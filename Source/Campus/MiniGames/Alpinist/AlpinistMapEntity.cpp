@@ -5,7 +5,7 @@
 
 AAlpinistMapEntity::AAlpinistMapEntity()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -15,17 +15,11 @@ void AAlpinistMapEntity::BeginPlay()
 	
 }
 
-void AAlpinistMapEntity::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void AAlpinistMapEntity::CreateEntity(const TArray<UInstancedStaticMeshComponent*>& InstancedStaticMeshes, const FVector& Anchor, const int32 Density)
 {
 	if (InstancedStaticMeshes.Num() != 2) return;
 	
-	UE_LOG(LogTemp, Warning, TEXT("X: %f, Y: %f, Z: %f"), Anchor.X, Anchor.Y, Anchor.Z);
+	// UE_LOG(LogTemp, Warning, TEXT("X: %f, Y: %f, Z: %f"), Anchor.X, Anchor.Y, Anchor.Z);
 
 	float Extrusion = 1.f / Density;
 	if (InstancedStaticMeshes[0] && InstancedStaticMeshes[1])

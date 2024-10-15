@@ -19,9 +19,10 @@ namespace AlpinistGame
 		virtual ~BaseMemento() {};
 	protected:
 		BaseMemento() {};
-	private:
+	public:
 		virtual void SetState(const std::vector<std::vector<TSharedPtr<Entity>>>& StateGrid) = 0;
 		virtual const std::vector<std::vector<TSharedPtr<Entity>>>& GetState() = 0;
+	private:
 	};
 
 	class AlpinistMemento : public BaseMemento
@@ -33,7 +34,7 @@ namespace AlpinistGame
 		AlpinistMemento() {};
 
 		virtual void SetState(const std::vector<std::vector<TSharedPtr<Entity>>>& StateGrid) override;
-		virtual const std::vector<std::vector<TSharedPtr<Entity>>>& GetState() override { return m_grid; };
+		virtual const std::vector<std::vector<TSharedPtr<Entity>>>& GetState() override { return m_grid; }
 
 		std::vector<std::vector<TSharedPtr<Entity>>> m_grid;
 	};
@@ -46,6 +47,8 @@ namespace AlpinistGame
 	
 		void Backup(AlpinistMemento*& NewMemento, PlayerCommand*& Command);
 		AlpinistMemento* Undo(PlayerCommand*& Command);
+
+		std::vector<std::pair<AlpinistGame::PlayerDirection, std::pair<int8_t, int8_t>>> GetPlayersHistory() const;
 	};
 }
 #endif
