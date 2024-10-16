@@ -18,8 +18,6 @@ UAlpinistViewComponent::UAlpinistViewComponent()
 void UAlpinistViewComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	OnUpdatePosition.BindUObject(this, &UAlpinistViewComponent::UpdatePosition);
 	
 	if (const AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
 	{
@@ -36,9 +34,17 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 	if (bShouldPlay)
 	{
+		if (CurrentSnapshot == CoordinateHistory.Num() - 1 || CoordinateHistory.Num() - 1 == -1)
+		{
+			bShouldPlay = false;
+			return;
+		}
+		
 		const TPair<int32, int32> CurrentCoordinate = CoordinateHistory[CurrentSnapshot].Value;
+		UE_LOG(LogTemp, Warning, TEXT("%i, %i"), CurrentCoordinate.Key, CurrentCoordinate.Value);
 		const TPair<int32, int32> NextCoordinate = CoordinateHistory[CurrentSnapshot + 1].Value;
-		UE_LOG(LogTemp, Warning, TEXT("%i, %i"), CurrentSnapshot, CoordinateHistory.Num());
+		UE_LOG(LogTemp, Warning, TEXT("%i, %i"), NextCoordinate.Key, NextCoordinate.Value);
+		
 		const AAlpinistMapEntity* CurrentEntity = AlpinistMapEntities[CurrentCoordinate.Key][CurrentCoordinate.Value];
 		const AAlpinistMapEntity* NextEntity = AlpinistMapEntities[NextCoordinate.Key][NextCoordinate.Value];
 		
@@ -60,11 +66,6 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			{
 				++CurrentSnapshot;
 				bOnEntity = true;
-
-				if (CurrentSnapshot == CoordinateHistory.Num() - 1)
-				{
-					bShouldPlay = false;
-				}
 			}
 		}
 	}
@@ -72,6 +73,8 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const USceneComponent* MapViewSceneComponent, UNiagaraComponent* PlayersNiagaraComponent)
 {
+	ToStartPosition(nullptr);
+	
 	if (!MapViewSceneComponent || !PlayersNiagaraComponent) return false;
 	
 	AlpinistMapEntities.Empty();
@@ -98,8 +101,11 @@ bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const U
 						if (EntityType == 'p' && PlayersNiagaraComponent && PlayersNiagaraComponent->GetAsset())
 						{
 							InnerPlayersNiagaraComponent = PlayersNiagaraComponent;
-							PlayersNiagaraComponent->SetVariablePosition("PlayerPosition", Entity->GetMarkLocation());
+							PlayerPosition = Entity->GetMarkLocation();
+							PlayersNiagaraComponent->SetVariablePosition("PlayerPosition", PlayerPosition);
 							PlayersNiagaraComponent->Activate(true);
+							
+							CurrentLocation = PlayerPosition;
 						}
 					}
 				}
@@ -118,7 +124,7 @@ bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const U
 
 			AlpinistMapEntities.Add(LineEntities);
 		}
-	
+		
 		return true;
 	}
 	
@@ -128,6 +134,8 @@ bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const U
 bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentAround, UNiagaraComponent* PlayersNiagaraComponent)
 {
 	bShouldPlay = false;
+	CurrentSnapshot = 0;
+	CoordinateHistory = TArray<TPair<int32, TPair<int32, int32>>>();
 	
 	for (UInstancedStaticMeshComponent* InstancedStaticMeshComponent : MountainMeshComponents)
 	{
@@ -165,7 +173,9 @@ bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentA
 void UAlpinistViewComponent::StartPlayByHistory(const TArray<TPair<int32, TPair<int32, int32>>>& InCoordinateHistory)
 {
 	CoordinateHistory = InCoordinateHistory;
+	CurrentSnapshot = 0;
 	bShouldPlay = true;
+	CurrentLocation = PlayerPosition;
 
 	for (const TPair<int32, TPair<int32, int32>>& Pair : CoordinateHistory)
 	{
@@ -190,12 +200,18 @@ void UAlpinistViewComponent::StartPlayByHistory(const TArray<TPair<int32, TPair<
 		
 		UE_LOG(LogTemp, Warning, TEXT("%s: %i, %i"), *Direction, Pair.Value.Key, Pair.Value.Value);
 	}
+	UE_LOG(LogTemp, Warning, TEXT("%i, %i"), AlpinistMapEntities.Num(), AlpinistMapEntities[0].Num());
 }
 
-void UAlpinistViewComponent::UpdatePosition(FVector NewPosition)
+void UAlpinistViewComponent::ToStartPosition(UNiagaraComponent* PlayersNiagaraComponent)
 {
-	if (InnerPlayersNiagaraComponent)
+	bShouldPlay = false;
+	CurrentSnapshot = 0;
+	CoordinateHistory = TArray<TPair<int32, TPair<int32, int32>>>();
+
+	if (PlayersNiagaraComponent)
 	{
-		InnerPlayersNiagaraComponent->SetVariablePosition("PlayerPosition", NewPosition);
+		PlayersNiagaraComponent->SetVariablePosition("PlayerPosition", PlayerPosition);
 	}
 }
+

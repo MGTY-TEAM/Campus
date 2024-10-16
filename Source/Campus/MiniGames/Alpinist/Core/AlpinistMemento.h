@@ -48,6 +48,7 @@ namespace AlpinistGame
 		void Backup(AlpinistMemento*& NewMemento, PlayerCommand*& Command);
 		AlpinistMemento* Undo(PlayerCommand*& Command);
 
+		void ClearHistory();
 		std::vector<std::pair<AlpinistGame::PlayerDirection, std::pair<int8_t, int8_t>>> GetPlayersHistory() const;
 	};
 }

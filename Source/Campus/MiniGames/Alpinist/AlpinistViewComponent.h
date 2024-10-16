@@ -10,8 +10,6 @@ class UNiagaraComponent;
 class AAlpinistMapEntity;
 class UInstancedStaticMeshComponent;
 
-DECLARE_DELEGATE_OneParam(FOnUpdatePosition, FVector);
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CAMPUS_API UAlpinistViewComponent : public UActorComponent
 {
@@ -37,14 +35,14 @@ public:
 	bool InitializeLevel(const TArray<FString>& Map, const USceneComponent* MapViewSceneComponent, UNiagaraComponent* PlayersNiagaraComponent);
 	bool DestroyLevel(const USceneComponent* SceneComponentAround, UNiagaraComponent* PlayersNiagaraComponent);
 	void StartPlayByHistory(const TArray<TPair<int32, TPair<int32, int32>>>& InCoordinateHistory);
+	void ToStartPosition(UNiagaraComponent* PlayersNiagaraComponent);
 private:
 	TArray<TArray<AAlpinistMapEntity*>> AlpinistMapEntities;
 	TArray<UInstancedStaticMeshComponent*> MountainMeshComponents;
 	TArray<UInstancedStaticMeshComponent*> SnowMeshComponents;
 
-	void UpdatePosition(FVector NewPosition);
-	FOnUpdatePosition OnUpdatePosition;
 	TArray<TPair<int32, TPair<int32, int32>>> CoordinateHistory;
+	FVector PlayerPosition;
 	FVector CurrentLocation;
 	UNiagaraComponent* InnerPlayersNiagaraComponent;
 	int32 CurrentSnapshot = 0;

@@ -30,6 +30,11 @@ namespace AlpinistGame
 		return Memento;
 	}
 
+	void AlpinistCaretaker::ClearHistory()
+	{
+		m_vectorMementos.clear();
+	}
+
 	std::vector<std::pair<AlpinistGame::PlayerDirection, std::pair<int8_t, int8_t>>> AlpinistCaretaker::GetPlayersHistory() const
 	{
 		std::vector<std::pair<AlpinistGame::PlayerDirection, std::pair<int8_t, int8_t>>> PlayersHistory = std::vector<std::pair<AlpinistGame::PlayerDirection, std::pair<int8_t, int8_t>>>();

@@ -14,6 +14,10 @@ void AlpinistGame::Compiler::SetCode(const std::string& NewCode)
 bool AlpinistGame::Compiler::Compile(AlpinistLog& AlpLog)
 {
 	AlpLog.ClearLog();
+	if (Controller)
+	{
+		Controller->ClearHistory();
+	}
 	
 	Lexer lexer = Lexer(Code);
 	std::vector<TSharedPtr<Token>> Tokens = *lexer.LexAnalysis(AlpLog);

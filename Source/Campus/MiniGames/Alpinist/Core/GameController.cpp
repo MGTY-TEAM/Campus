@@ -39,7 +39,12 @@ bool GameController::MoveForward()
     {
         const AlpinistGame::MoveResult result = m_world->SwapPlayerMove();
         m_world->LogWorld();
-        return result == AlpinistGame::MoveResult::MR_SUCCESS || result == AlpinistGame::MoveResult::MR_FINISH;
+
+        if (result == AlpinistGame::MoveResult::MR_SUCCESS || result == AlpinistGame::MoveResult::MR_FINISH)
+        {
+            SaveCopyOfWorld(nullptr);
+            return true;
+        }
     }
     return false;
 }
@@ -127,6 +132,14 @@ bool GameController::RestoreOfWorld(PlayerCommand* Command)
         }
     }
     return false;
+}
+
+void GameController::ClearHistory()
+{
+    if (m_alpinistCaretaker.IsValid())
+    {
+        m_alpinistCaretaker->ClearHistory();
+    }
 }
 
 /*bool GameController::ExecuteMacroCommand(MacroCommand* macroCommand)

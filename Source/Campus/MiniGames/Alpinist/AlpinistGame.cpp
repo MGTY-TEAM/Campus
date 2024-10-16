@@ -158,6 +158,7 @@ void AAlpinistGame::BuildGame()
 
 void AAlpinistGame::RunGame()
 {
+	ToStartPosition();
 	if (m_Compiler.IsValid() && m_AlpinistLog.IsValid() && AlpinistIDEController && AlpinistViewComponent)
 	{
 		m_Compiler->Run(*m_AlpinistLog);
@@ -220,6 +221,11 @@ void AAlpinistGame::ToStartPosition()
 			m_AlpinistLog->PushMessageLog("ToStartPosition Processing Finished...", AlpinistGame::DisplayMes);
 			AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
 		}
+	}
+
+	if (AlpinistViewComponent)
+	{
+		AlpinistViewComponent->ToStartPosition(PlayersNiagaraComponent);
 	}
 	// Как возвращать пешку обратно?
 }
