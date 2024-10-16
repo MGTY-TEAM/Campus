@@ -45,7 +45,9 @@ private:
 	void UpdatePosition(FVector NewPosition);
 	FOnUpdatePosition OnUpdatePosition;
 	TArray<TPair<int32, TPair<int32, int32>>> CoordinateHistory;
+	FVector CurrentLocation;
 	UNiagaraComponent* InnerPlayersNiagaraComponent;
 	int32 CurrentSnapshot = 0;
 	bool bShouldPlay = false;
+	bool bOnEntity = true;
 };

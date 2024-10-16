@@ -38,20 +38,28 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	{
 		const TPair<int32, int32> CurrentCoordinate = CoordinateHistory[CurrentSnapshot].Value;
 		const TPair<int32, int32> NextCoordinate = CoordinateHistory[CurrentSnapshot + 1].Value;
-
+		UE_LOG(LogTemp, Warning, TEXT("%i, %i"), CurrentSnapshot, CoordinateHistory.Num());
 		const AAlpinistMapEntity* CurrentEntity = AlpinistMapEntities[CurrentCoordinate.Key][CurrentCoordinate.Value];
 		const AAlpinistMapEntity* NextEntity = AlpinistMapEntities[NextCoordinate.Key][NextCoordinate.Value];
-
+		
 		if (CurrentEntity && NextEntity && InnerPlayersNiagaraComponent)
 		{
-			const FVector CurrentLocation = CurrentEntity->GetMarkLocation();
-			const FVector NextLocation = NextEntity->GetMarkLocation();
-			const FVector NewLocation = FMath::VInterpTo(CurrentLocation, NextLocation, DeltaTime, MarkMovingSpeed);
-			
-			if (NewLocation == NextLocation)
+			if (bOnEntity)
 			{
-				OnUpdatePosition.Execute(NewLocation);
+				CurrentLocation = CurrentEntity->GetMarkLocation();
+				bOnEntity = false;
+			}
+			
+			const FVector NextLocation = NextEntity->GetMarkLocation();
+			CurrentLocation = FMath::VInterpConstantTo(CurrentLocation, NextLocation, DeltaTime, MarkMovingSpeed);
+
+			InnerPlayersNiagaraComponent->SetVariablePosition("PlayerPosition", CurrentLocation);
+			// UE_LOG(LogTemp, Warning, TEXT("%f, %f, %f"), CurrentLocation.X, CurrentLocation.Y, CurrentLocation.Z);
+			
+			if (FVector::Dist(CurrentLocation, NextLocation) < KINDA_SMALL_NUMBER)
+			{
 				++CurrentSnapshot;
+				bOnEntity = true;
 
 				if (CurrentSnapshot == CoordinateHistory.Num() - 1)
 				{
