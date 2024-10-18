@@ -119,7 +119,7 @@ void ASolarSystemGame::StartSystem()
 	OnStartUniverse.Broadcast();
 	if (!bIsGameCompleted)
 	{
-		ExecuteMiniGameCompleted.Broadcast();
+		// ExecuteMiniGameCompleted.Broadcast();
 		bIsGameCompleted = true;
 		UE_LOG(LogSolarSystemGame, Display, TEXT("Solar System Game Was Complited"));
 	}

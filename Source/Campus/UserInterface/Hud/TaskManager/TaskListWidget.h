@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+/*#include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "TaskListWidget.generated.h"
 
@@ -25,4 +25,4 @@ public:
 	void AddTask(const FString& Task, const bool State, const uint16 ID);
 	void CompleteTask(uint16 ID);
 	void RemoveTask(uint16 ID);
-};
+};*/

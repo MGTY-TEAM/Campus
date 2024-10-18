@@ -7,7 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 
 
-UTaskManagerComponent::UTaskManagerComponent()
+/*UTaskManagerComponent::UTaskManagerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
@@ -40,5 +40,5 @@ void UTaskManagerComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-}
+}*/
 

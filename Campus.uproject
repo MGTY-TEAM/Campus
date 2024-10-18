@@ -46,15 +46,17 @@
 			]
 		},
 		{
-			"Name": "PICOOpenXR",
-			"Enabled": true,
-			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/2debc028cd90414f97f308c74a3d6a32",
+			"Name": "PICOEnterprise",
+			"Enabled": false,
 			"SupportedTargetPlatforms": [
 				"Win64",
-				"Linux",
-				"Android",
-				"Mac"
+				"Android"
 			]
+		},
+		{
+			"Name": "OnlineSubsystemPico",
+			"Enabled": false,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/6b674b5eed7343eda5d3f2ab8030b50f"
 		}
 	]
 }

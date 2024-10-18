@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+/*#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "TaskManagerComponent.generated.h"
+#include "TaskManagerComponent.generated.h"*/
 
 
-class IMiniGames;
+/*class IMiniGames;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CAMPUS_API UTaskManagerComponent : public UActorComponent
@@ -24,4 +24,4 @@ protected:
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
-};
+};*/

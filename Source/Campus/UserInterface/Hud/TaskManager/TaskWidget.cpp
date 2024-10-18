@@ -3,7 +3,7 @@
 
 #include "TaskWidget.h"
 
-#include "Components/CheckBox.h"
+/*#include "Components/CheckBox.h"
 #include "Components/TextBlock.h"
 
 void UTaskWidget::NativeConstruct()
@@ -70,4 +70,4 @@ bool UTaskWidget::GetTaskState()
 uint16 UTaskWidget::GetTaskID()
 {
 	return TaskID;
-}
+}*/

@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+/*#include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "TaskWidget.generated.h"
 
@@ -37,4 +37,4 @@ private:
 
 	void SetTaskText(const FString& TaskText);
 	void SetTaskID(uint16 ID);
-};
+};*/

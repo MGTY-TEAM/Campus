@@ -3,7 +3,7 @@
 
 #include "TaskListWidget.h"
 
-#include "TaskWidget.h"
+/*#include "TaskWidget.h"
 
 void UTaskListWidget::NativeConstruct()
 {
@@ -57,4 +57,4 @@ void UTaskListWidget::RemoveTask(uint16 ID)
 			}
 		}
 	}
-}
+}*/
