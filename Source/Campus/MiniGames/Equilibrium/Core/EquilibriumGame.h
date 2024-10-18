@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include "Equilibrium.h"
 #include "EventSystem/EquilibBaseEventClasses.h"
 

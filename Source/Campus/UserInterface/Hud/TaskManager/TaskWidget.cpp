@@ -32,9 +32,9 @@ void UTaskWidget::SetTaskID(uint16 ID)
 	TaskID = ID;
 }
 
-void UTaskWidget::SetupTask(const FString& TaskText, bool State, uint16 ID)
+void UTaskWidget::SetupTask(const FString& NewTaskText, bool State, uint16 ID)
 {
-	SetTaskText(TaskText);
+	SetTaskText(NewTaskText);
 	SetTaskState(State);
 	SetTaskID(ID);
 }
@@ -52,16 +52,14 @@ bool UTaskWidget::GetTaskState()
 {
 	if(TaskStateBox)
 	{
-		switch (TaskStateBox)
+		switch (TaskStateBox->GetCheckedState())
 		{
 			case (ECheckBoxState::Checked):
 				return true;
 			case (ECheckBoxState::Unchecked):
-				return false;
+				break;
 			case (ECheckBoxState::Undetermined):
-				return false;
-			case default:
-				return false;
+				break;
 		}
 	}
 	return false;

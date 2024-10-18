@@ -4,18 +4,13 @@
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 #include "Campus/AI/AIDroneController.h"
 #include "Campus/Drone/TeleportationPlane.h"
-#include "Campus/UserInterface/ChatBox.h"
 #include "Campus/UserInterface/DarkeningScreen.h"
-#include "BehaviorTree/BlackboardComponent.h"
 #include "Engine/Engine.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TimerManager.h"
-#include "Campus/Chat/ChatManager.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SplineComponent.h"
-#include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
-#include "Kismet/GameplayStatics.h"
 
 AAIAnimDrone::AAIAnimDrone()
 {

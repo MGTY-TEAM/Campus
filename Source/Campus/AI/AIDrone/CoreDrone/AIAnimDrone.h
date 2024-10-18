@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Campus/AI/AIDrone/CoreDrone/PlayerInteractionDrone.h"
-#include "Campus/Chat/MessageInstance.h"
 #include "AIAnimDrone.generated.h"
 
 class UBehaviorTree;

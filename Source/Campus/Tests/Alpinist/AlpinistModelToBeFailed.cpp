@@ -43,7 +43,7 @@ bool FExpectLexerErrors::RunTest(const FString& Parameters)
 	const bool CompileSuccess = compiler->Compile(Log);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);
@@ -87,7 +87,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	bool ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *LogNotEnd.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *LogNotEnd.GetListOfLog())
 		{
 			const FString Info = FString(ErrorMessage.Message.c_str());
 			if (Info == ExpectedErrorMessage)
@@ -109,7 +109,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *LogConditionCommand.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *LogConditionCommand.GetListOfLog())
 		{
 			const FString Info = FString(ErrorMessage.Message.c_str());
 			if (Info == ExpectedErrorMessage)
@@ -131,7 +131,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
 		{
 			const FString Info = FString(ErrorMessage.Message.c_str());
 			if (Info == ExpectedErrorMessage)
@@ -153,7 +153,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
 		{
 			const FString Info = FString(ErrorMessage.Message.c_str());
 			if (Info == ExpectedErrorMessage)
@@ -196,7 +196,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	bool ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *LogNotEnd.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *LogNotEnd.GetListOfLog())
 		{
 			const FString Info = FString(ErrorMessage.Message.c_str());
 			if (Info == ExpectedErrorMessage)
@@ -218,7 +218,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *LogConditionCommand.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *LogConditionCommand.GetListOfLog())
 		{
 			const FString Info = FString(ErrorMessage.Message.c_str());
 			if (Info == ExpectedErrorMessage)
@@ -240,7 +240,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
 		{
 			const FString Info = FString(ErrorMessage.Message.c_str());
 			if (Info == ExpectedErrorMessage)
@@ -262,7 +262,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
 		{
 			const FString Info = FString(ErrorMessage.Message.c_str());
 			if (Info == ExpectedErrorMessage)
@@ -284,7 +284,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 	ErrorMessageIsCorrect = false;
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *LogBeginCommand.GetListOfLog())
 		{
 			const FString Info = FString(ErrorMessage.Message.c_str());
 			if (Info == ExpectedErrorMessage)

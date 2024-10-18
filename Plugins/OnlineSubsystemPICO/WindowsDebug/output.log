@@ -1,0 +1,250 @@
+2024-10-16 18:27:10,930 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:27:10,931 WARN  [default] parse config successful
+2024-10-16 18:27:10,931 WARN  [default] language:en
+2024-10-16 18:27:10,931 WARN  [default] host:https://platform-us.picovr.com
+2024-10-16 18:27:10,931 WARN  [default] matrixAppId:308733
+2024-10-16 18:27:10,931 WARN  [default] oauthHost:https://matrix-us.picovr.com
+2024-10-16 18:27:10,931 WARN  [default] accessToken:act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH
+2024-10-16 18:27:10,931 WARN  [default] packageName:com.company.default
+2024-10-16 18:27:10,932 WARN  [default] packageVersionCode:1
+2024-10-16 18:27:10,932 WARN  [default] packageVersionName:1.0
+2024-10-16 18:27:10,932 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:27:10,932 WARN  [default] initializeAndroid_HeavyPart: logPath=../../../../../../Users/mikhail/Documents/GitHub/Campus/Plugins/OnlineSubsystemPICO/WindowsDebug/
+2024-10-16 18:27:10,932 INFO  [default] initializeAndroid_HeavyPart: Before initAccountServer appId=a1e14f53d0d2dad048010e6add624928
+2024-10-16 18:27:10,944 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/configuration/v1/module/get, json={"modules":["all"]}
+2024-10-16 18:27:11,717 INFO  [default] ppf::Config::FetchAllModuleConfig::<lambda_996d037ea976f6541d19670b8a666aca>::operator (): global config response statusCode=200, body={"code":0,"em":"The request succeeded.","et":"trace id: 20241016132708CF326387C169A881B2BB, message: The request succeeded.","trace_id":"20241016132708CF326387C169A881B2BB","data":{"configurations":{"asr":"{\"app_id\":\"o3hgtb0krlf7ku5l\",\"token\":\"y2aVdRrsUaNGy01B+8q8Fxbyh5qE7YMVEKMD3oFxEQ4=\",\"host\":\"wss://speech-maliva.byteoversea.com\",\"path\":\"/api/v2/asr\",\"cluster\":\"volc_input_en\"}","game":"{\"code\":-98,\"msg\":\"app not found\",\"conf\":{\"address\":\"\",\"status\":0,\"available\":[]}}","rtc":"{\"rtc_app_id\":\"\",\"log_url\":\"\",\"is_boe\":false,\"access_hosts\":[],\"config_hosts\":[]}"}}}, isSuccess=1
+2024-10-16 18:27:11,723 INFO  [default] ppf::ModuleManager::Init: moduleManager Init
+2024-10-16 18:27:11,723 INFO  [default] GetPassportOpenUserinfo: begin.
+2024-10-16 18:27:11,723 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/passport/open/userinfo/, json={"access_token":"act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH","open_id":"1"}
+2024-10-16 18:27:12,295 INFO  [default] GetPassportOpenUserinfo::<lambda_5636465e5a011353dd842a1a24a1e422>::operator (): response statusCode=200, body={"data":{"avatar":"https://sf16-passport-va.ibytedtos.com/obj/user-avatar-musically/552df423a53d7d4587a520e702fcbc53.png","captcha":"","client_key":"a1e14f53d0d2dad048010e6add624928","desc_url":"","description":"","error_code":0,"log_id":"20241016132708EC1FF7392E05B8C41BA2","nickname":"PicoFans_19600HG","open_id":"7424915670418326534"},"message":"success"}, isSuccess=1
+2024-10-16 18:27:12,772 INFO  [default] OnGameLog: [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED546A9A8
+2024-10-16 18:27:12,772 INFO  [default] [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED546A9A8
+2024-10-16 18:27:12,772 ERROR [default] initializeAndroid_HeavyPart: >>> InitializeAndroid success
+2024-10-16 18:27:12,773 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion end result=0(Success)
+2024-10-16 18:27:12,774 INFO  [default] ppf_Game_InitializeAuto: begin.
+2024-10-16 18:27:12,774 INFO  [default] ppfMessageQueue_SendMessage: ppfMessageQueue_SendMessage messageType=10700,requestId=3
+2024-10-16 18:27:12,774 WARN  [default] ppf::MsgQueue::Push: MsgQueue top size grow to 1
+2024-10-16 18:27:21,783 INFO  [default] ppfMessageQueue_RecvMessage: ppfMessageQueue_RecvMessage:pop a message messageType=10700,requestId=3
+2024-10-16 18:29:08,892 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:29:08,892 WARN  [default] parse config successful
+2024-10-16 18:29:08,892 WARN  [default] language:en
+2024-10-16 18:29:08,892 WARN  [default] host:https://platform-us.picovr.com
+2024-10-16 18:29:08,892 WARN  [default] matrixAppId:308733
+2024-10-16 18:29:08,892 WARN  [default] oauthHost:https://matrix-us.picovr.com
+2024-10-16 18:29:08,892 WARN  [default] accessToken:act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH
+2024-10-16 18:29:08,892 WARN  [default] packageName:com.company.default
+2024-10-16 18:29:08,892 WARN  [default] packageVersionCode:1
+2024-10-16 18:29:08,892 WARN  [default] packageVersionName:1.0
+2024-10-16 18:29:08,892 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:29:08,892 WARN  [default] initializeAndroid_HeavyPart: logPath=C:/Users/mikhail/Documents/GitHub/Campus/Plugins/OnlineSubsystemPICO/WindowsDebug/
+2024-10-16 18:29:08,892 INFO  [default] initializeAndroid_HeavyPart: Before initAccountServer appId=a1e14f53d0d2dad048010e6add624928
+2024-10-16 18:29:08,895 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/configuration/v1/module/get, json={"modules":["all"]}
+2024-10-16 18:29:09,299 INFO  [default] ppf::Config::FetchAllModuleConfig::<lambda_996d037ea976f6541d19670b8a666aca>::operator (): global config response statusCode=200, body={"code":0,"em":"The request succeeded.","et":"trace id: 202410161329056DFA19E8A4D0D9A7A238, message: The request succeeded.","trace_id":"202410161329056DFA19E8A4D0D9A7A238","data":{"configurations":{"asr":"{\"app_id\":\"o3hgtb0krlf7ku5l\",\"token\":\"y2aVdRrsUaNGy01B+8q8Fxbyh5qE7YMVEKMD3oFxEQ4=\",\"host\":\"wss://speech-maliva.byteoversea.com\",\"path\":\"/api/v2/asr\",\"cluster\":\"volc_input_en\"}","game":"{\"code\":-98,\"msg\":\"app not found\",\"conf\":{\"address\":\"\",\"status\":0,\"available\":[]}}","rtc":"{\"rtc_app_id\":\"\",\"log_url\":\"\",\"is_boe\":false,\"access_hosts\":[],\"config_hosts\":[]}"}}}, isSuccess=1
+2024-10-16 18:29:09,299 INFO  [default] ppf::ModuleManager::Init: moduleManager Init
+2024-10-16 18:29:09,299 INFO  [default] GetPassportOpenUserinfo: begin.
+2024-10-16 18:29:09,299 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/passport/open/userinfo/, json={"access_token":"act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH","open_id":"1"}
+2024-10-16 18:29:09,628 INFO  [default] GetPassportOpenUserinfo::<lambda_5636465e5a011353dd842a1a24a1e422>::operator (): response statusCode=200, body={"data":{"avatar":"https://sf16-passport-va.ibytedtos.com/obj/user-avatar-musically/552df423a53d7d4587a520e702fcbc53.png","captcha":"","client_key":"a1e14f53d0d2dad048010e6add624928","desc_url":"","description":"","error_code":0,"log_id":"202410161329065884A3949643DEA460F3","nickname":"PicoFans_19600HG","open_id":"7424915670418326534"},"message":"success"}, isSuccess=1
+2024-10-16 18:29:10,316 INFO  [default] OnGameLog: [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED546A9A8
+2024-10-16 18:29:10,316 INFO  [default] [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED546A9A8
+2024-10-16 18:29:10,316 ERROR [default] initializeAndroid_HeavyPart: >>> InitializeAndroid success
+2024-10-16 18:29:10,316 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion end result=0(Success)
+2024-10-16 18:29:10,316 INFO  [default] ppf_Game_InitializeAuto: begin.
+2024-10-16 18:29:10,316 INFO  [default] ppfMessageQueue_SendMessage: ppfMessageQueue_SendMessage messageType=10700,requestId=3
+2024-10-16 18:29:10,316 WARN  [default] ppf::MsgQueue::Push: MsgQueue top size grow to 1
+2024-10-16 18:36:14,863 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:36:14,863 WARN  [default] parse config successful
+2024-10-16 18:36:14,863 WARN  [default] language:en
+2024-10-16 18:36:14,863 WARN  [default] host:https://platform-us.picovr.com
+2024-10-16 18:36:14,863 WARN  [default] matrixAppId:308733
+2024-10-16 18:36:14,863 WARN  [default] oauthHost:https://matrix-us.picovr.com
+2024-10-16 18:36:14,863 WARN  [default] accessToken:act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH
+2024-10-16 18:36:14,863 WARN  [default] packageName:com.company.default
+2024-10-16 18:36:14,863 WARN  [default] packageVersionCode:1
+2024-10-16 18:36:14,863 WARN  [default] packageVersionName:1.0
+2024-10-16 18:36:14,863 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:36:14,863 WARN  [default] initializeAndroid_HeavyPart: logPath=../../../../../../Users/mikhail/Documents/GitHub/Campus/Plugins/OnlineSubsystemPICO/WindowsDebug/
+2024-10-16 18:36:14,863 INFO  [default] initializeAndroid_HeavyPart: Before initAccountServer appId=a1e14f53d0d2dad048010e6add624928
+2024-10-16 18:36:14,865 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/configuration/v1/module/get, json={"modules":["all"]}
+2024-10-16 18:36:15,268 INFO  [default] ppf::Config::FetchAllModuleConfig::<lambda_996d037ea976f6541d19670b8a666aca>::operator (): global config response statusCode=200, body={"code":0,"em":"The request succeeded.","et":"trace id: 2024101613361157082BA9942418ACD84A, message: The request succeeded.","trace_id":"2024101613361157082BA9942418ACD84A","data":{"configurations":{"asr":"{\"app_id\":\"o3hgtb0krlf7ku5l\",\"token\":\"y2aVdRrsUaNGy01B+8q8Fxbyh5qE7YMVEKMD3oFxEQ4=\",\"host\":\"wss://speech-maliva.byteoversea.com\",\"path\":\"/api/v2/asr\",\"cluster\":\"volc_input_en\"}","game":"{\"code\":-98,\"msg\":\"app not found\",\"conf\":{\"address\":\"\",\"status\":0,\"available\":[]}}","rtc":"{\"rtc_app_id\":\"\",\"log_url\":\"\",\"is_boe\":false,\"access_hosts\":[],\"config_hosts\":[]}"}}}, isSuccess=1
+2024-10-16 18:36:15,268 INFO  [default] ppf::ModuleManager::Init: moduleManager Init
+2024-10-16 18:36:15,268 INFO  [default] GetPassportOpenUserinfo: begin.
+2024-10-16 18:36:15,268 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/passport/open/userinfo/, json={"access_token":"act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH","open_id":"1"}
+2024-10-16 18:36:15,721 INFO  [default] GetPassportOpenUserinfo::<lambda_5636465e5a011353dd842a1a24a1e422>::operator (): response statusCode=200, body={"data":{"avatar":"https://sf16-passport-va.ibytedtos.com/obj/user-avatar-musically/552df423a53d7d4587a520e702fcbc53.png","captcha":"","client_key":"a1e14f53d0d2dad048010e6add624928","desc_url":"","description":"","error_code":0,"log_id":"2024101613361215491C5B96CC82AE2BDB","nickname":"PicoFans_19600HG","open_id":"7424915670418326534"},"message":"success"}, isSuccess=1
+2024-10-16 18:36:16,281 INFO  [default] OnGameLog: [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED60AA9A8
+2024-10-16 18:36:16,281 INFO  [default] [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED60AA9A8
+2024-10-16 18:36:16,281 ERROR [default] initializeAndroid_HeavyPart: >>> InitializeAndroid success
+2024-10-16 18:36:16,281 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion end result=0(Success)
+2024-10-16 18:36:16,281 INFO  [default] ppf_Game_InitializeAuto: begin.
+2024-10-16 18:36:16,281 INFO  [default] ppfMessageQueue_SendMessage: ppfMessageQueue_SendMessage messageType=10700,requestId=3
+2024-10-16 18:36:16,281 WARN  [default] ppf::MsgQueue::Push: MsgQueue top size grow to 1
+2024-10-16 18:36:27,929 INFO  [default] ppfMessageQueue_RecvMessage: ppfMessageQueue_RecvMessage:pop a message messageType=10700,requestId=3
+2024-10-16 18:49:30,798 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:49:30,799 WARN  [default] parse config successful
+2024-10-16 18:49:30,799 WARN  [default] language:en
+2024-10-16 18:49:30,799 WARN  [default] host:https://platform-us.picovr.com
+2024-10-16 18:49:30,799 WARN  [default] matrixAppId:308733
+2024-10-16 18:49:30,799 WARN  [default] oauthHost:https://matrix-us.picovr.com
+2024-10-16 18:49:30,799 WARN  [default] accessToken:act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH
+2024-10-16 18:49:30,799 WARN  [default] packageName:com.company.default
+2024-10-16 18:49:30,799 WARN  [default] packageVersionCode:1
+2024-10-16 18:49:30,799 WARN  [default] packageVersionName:1.0
+2024-10-16 18:49:30,799 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:49:30,799 WARN  [default] initializeAndroid_HeavyPart: logPath=../../../../../../Users/mikhail/Documents/GitHub/Campus/Plugins/OnlineSubsystemPICO/WindowsDebug/
+2024-10-16 18:49:30,799 INFO  [default] initializeAndroid_HeavyPart: Before initAccountServer appId=a1e14f53d0d2dad048010e6add624928
+2024-10-16 18:49:30,800 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/configuration/v1/module/get, json={"modules":["all"]}
+2024-10-16 18:49:31,477 INFO  [default] ppf::Config::FetchAllModuleConfig::<lambda_996d037ea976f6541d19670b8a666aca>::operator (): global config response statusCode=200, body={"code":0,"em":"The request succeeded.","et":"trace id: 20241016134928A04408EC4BFBF9BC2076, message: The request succeeded.","trace_id":"20241016134928A04408EC4BFBF9BC2076","data":{"configurations":{"asr":"{\"app_id\":\"o3hgtb0krlf7ku5l\",\"token\":\"y2aVdRrsUaNGy01B+8q8Fxbyh5qE7YMVEKMD3oFxEQ4=\",\"host\":\"wss://speech-maliva.byteoversea.com\",\"path\":\"/api/v2/asr\",\"cluster\":\"volc_input_en\"}","game":"{\"code\":-98,\"msg\":\"app not found\",\"conf\":{\"address\":\"\",\"status\":0,\"available\":[]}}","rtc":"{\"rtc_app_id\":\"\",\"log_url\":\"\",\"is_boe\":false,\"access_hosts\":[],\"config_hosts\":[]}"}}}, isSuccess=1
+2024-10-16 18:49:31,477 INFO  [default] ppf::ModuleManager::Init: moduleManager Init
+2024-10-16 18:49:31,477 INFO  [default] GetPassportOpenUserinfo: begin.
+2024-10-16 18:49:31,477 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/passport/open/userinfo/, json={"access_token":"act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH","open_id":"1"}
+2024-10-16 18:49:31,992 INFO  [default] GetPassportOpenUserinfo::<lambda_5636465e5a011353dd842a1a24a1e422>::operator (): response statusCode=200, body={"data":{"avatar":"https://sf16-passport-va.ibytedtos.com/obj/user-avatar-musically/552df423a53d7d4587a520e702fcbc53.png","captcha":"","client_key":"a1e14f53d0d2dad048010e6add624928","desc_url":"","description":"","error_code":0,"log_id":"2024101613492885D7321625B260D21315","nickname":"PicoFans_19600HG","open_id":"7424915670418326534"},"message":"success"}, isSuccess=1
+2024-10-16 18:49:32,489 INFO  [default] OnGameLog: [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 18:49:32,489 INFO  [default] [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 18:49:32,489 ERROR [default] initializeAndroid_HeavyPart: >>> InitializeAndroid success
+2024-10-16 18:49:32,489 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion end result=0(Success)
+2024-10-16 18:49:32,489 INFO  [default] ppf_Game_InitializeAuto: begin.
+2024-10-16 18:49:32,489 INFO  [default] ppfMessageQueue_SendMessage: ppfMessageQueue_SendMessage messageType=10700,requestId=3
+2024-10-16 18:49:32,489 WARN  [default] ppf::MsgQueue::Push: MsgQueue top size grow to 1
+2024-10-16 18:49:41,674 INFO  [default] ppfMessageQueue_RecvMessage: ppfMessageQueue_RecvMessage:pop a message messageType=10700,requestId=3
+2024-10-16 18:49:43,842 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion is called
+2024-10-16 18:49:43,842 ERROR [default] ppf::ThreadPool::Start: ThreadPool::Start num_threads=32
+2024-10-16 18:49:43,843 INFO  [default] initializeAndroid_Prepare: PlatformSDKInitialize:appPackageName=com.company.default,appVersionCode=1,appVersionName=1.0,matrixVersionCode=1,matrixVersionName=1.0,appId=a1e14f53d0d2dad048010e6add624928,loaderVersion=1
+2024-10-16 18:49:43,843 INFO  [default] ppf_InitializeAndroidByVersion: initializeAndroid_Prepare end,initializeAndroid_HeavyPart started
+2024-10-16 18:49:43,843 INFO  [default] ppf::ModuleManager::RegisterModule: moduleManager RegisterModule 'user'
+2024-10-16 18:49:43,843 INFO  [default] ppf::ModuleManager::RegisterModule: moduleManager RegisterModule 'rtc'
+2024-10-16 18:49:43,843 INFO  [default] ppf::ModuleManager::RegisterModule: moduleManager RegisterModule 'social'
+2024-10-16 18:49:43,843 INFO  [default] ppf::ModuleManager::RegisterModule: moduleManager RegisterModule 'game'
+2024-10-16 18:49:43,843 INFO  [default] ppf::ModuleManager::RegisterModule: moduleManager RegisterModule 'iap'
+2024-10-16 18:49:43,844 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:49:43,844 WARN  [default] parse config successful
+2024-10-16 18:49:43,844 WARN  [default] language:en
+2024-10-16 18:49:43,844 WARN  [default] host:https://platform-us.picovr.com
+2024-10-16 18:49:43,844 WARN  [default] matrixAppId:308733
+2024-10-16 18:49:43,844 WARN  [default] oauthHost:https://matrix-us.picovr.com
+2024-10-16 18:49:43,844 WARN  [default] accessToken:act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH
+2024-10-16 18:49:43,844 WARN  [default] packageName:com.company.default
+2024-10-16 18:49:43,844 WARN  [default] packageVersionCode:1
+2024-10-16 18:49:43,844 WARN  [default] packageVersionName:1.0
+2024-10-16 18:49:43,844 WARN  [default] -----------------------------------------------------------------
+2024-10-16 18:49:43,844 WARN  [default] initializeAndroid_HeavyPart: logPath=../../../../../../Users/mikhail/Documents/GitHub/Campus/Plugins/OnlineSubsystemPICO/WindowsDebug/
+2024-10-16 18:49:43,844 INFO  [default] initializeAndroid_HeavyPart: Before initAccountServer appId=a1e14f53d0d2dad048010e6add624928
+2024-10-16 18:49:43,844 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/configuration/v1/module/get, json={"modules":["all"]}
+2024-10-16 18:49:44,428 INFO  [default] ppf::Config::FetchAllModuleConfig::<lambda_996d037ea976f6541d19670b8a666aca>::operator (): global config response statusCode=200, body={"code":0,"em":"The request succeeded.","et":"trace id: 202410161349415E5711365FB7ACAB782C, message: The request succeeded.","trace_id":"202410161349415E5711365FB7ACAB782C","data":{"configurations":{"asr":"{\"app_id\":\"o3hgtb0krlf7ku5l\",\"token\":\"y2aVdRrsUaNGy01B+8q8Fxbyh5qE7YMVEKMD3oFxEQ4=\",\"host\":\"wss://speech-maliva.byteoversea.com\",\"path\":\"/api/v2/asr\",\"cluster\":\"volc_input_en\"}","game":"{\"code\":-98,\"msg\":\"app not found\",\"conf\":{\"address\":\"\",\"status\":0,\"available\":[]}}","rtc":"{\"rtc_app_id\":\"\",\"log_url\":\"\",\"is_boe\":false,\"access_hosts\":[],\"config_hosts\":[]}"}}}, isSuccess=1
+2024-10-16 18:49:44,428 INFO  [default] ppf::ModuleManager::Init: moduleManager Init
+2024-10-16 18:49:44,428 INFO  [default] GetPassportOpenUserinfo: begin.
+2024-10-16 18:49:44,428 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/passport/open/userinfo/, json={"access_token":"act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH","open_id":"1"}
+2024-10-16 18:49:44,792 INFO  [default] GetPassportOpenUserinfo::<lambda_5636465e5a011353dd842a1a24a1e422>::operator (): response statusCode=200, body={"data":{"avatar":"https://sf16-passport-va.ibytedtos.com/obj/user-avatar-musically/552df423a53d7d4587a520e702fcbc53.png","captcha":"","client_key":"a1e14f53d0d2dad048010e6add624928","desc_url":"","description":"","error_code":0,"log_id":"202410161349416F0D4A2C8EAD07B96DD0","nickname":"PicoFans_19600HG","open_id":"7424915670418326534"},"message":"success"}, isSuccess=1
+2024-10-16 18:49:45,429 INFO  [default] OnGameLog: [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 18:49:45,429 INFO  [default] [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 18:49:45,429 ERROR [default] initializeAndroid_HeavyPart: >>> InitializeAndroid success
+2024-10-16 18:49:45,429 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion end result=0(Success)
+2024-10-16 18:49:45,429 INFO  [default] ppf_Game_InitializeAuto: begin.
+2024-10-16 18:49:45,429 INFO  [default] ppfMessageQueue_SendMessage: ppfMessageQueue_SendMessage messageType=10700,requestId=6
+2024-10-16 18:49:45,761 INFO  [default] ppfMessageQueue_RecvMessage: ppfMessageQueue_RecvMessage:pop a message messageType=10700,requestId=6
+2024-10-16 19:06:00,533 WARN  [default] -----------------------------------------------------------------
+2024-10-16 19:06:00,533 WARN  [default] parse config successful
+2024-10-16 19:06:00,533 WARN  [default] language:en
+2024-10-16 19:06:00,533 WARN  [default] host:https://platform-us.picovr.com
+2024-10-16 19:06:00,533 WARN  [default] matrixAppId:308733
+2024-10-16 19:06:00,533 WARN  [default] oauthHost:https://matrix-us.picovr.com
+2024-10-16 19:06:00,533 WARN  [default] accessToken:act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH
+2024-10-16 19:06:00,533 WARN  [default] packageName:com.company.default
+2024-10-16 19:06:00,533 WARN  [default] packageVersionCode:1
+2024-10-16 19:06:00,533 WARN  [default] packageVersionName:1.0
+2024-10-16 19:06:00,533 WARN  [default] -----------------------------------------------------------------
+2024-10-16 19:06:00,533 WARN  [default] initializeAndroid_HeavyPart: logPath=../../../../../../Users/mikhail/Documents/GitHub/Campus/Plugins/OnlineSubsystemPICO/WindowsDebug/
+2024-10-16 19:06:00,533 INFO  [default] initializeAndroid_HeavyPart: Before initAccountServer appId=a1e14f53d0d2dad048010e6add624928
+2024-10-16 19:06:00,534 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/configuration/v1/module/get, json={"modules":["all"]}
+2024-10-16 19:06:01,238 INFO  [default] ppf::Config::FetchAllModuleConfig::<lambda_996d037ea976f6541d19670b8a666aca>::operator (): global config response statusCode=200, body={"code":0,"em":"The request succeeded.","et":"trace id: 20241016140557C394454D05E45A587CD8, message: The request succeeded.","trace_id":"20241016140557C394454D05E45A587CD8","data":{"configurations":{"asr":"{\"app_id\":\"o3hgtb0krlf7ku5l\",\"token\":\"y2aVdRrsUaNGy01B+8q8Fxbyh5qE7YMVEKMD3oFxEQ4=\",\"host\":\"wss://speech-maliva.byteoversea.com\",\"path\":\"/api/v2/asr\",\"cluster\":\"volc_input_en\"}","game":"{\"code\":-98,\"msg\":\"app not found\",\"conf\":{\"address\":\"\",\"status\":0,\"available\":[]}}","rtc":"{\"rtc_app_id\":\"\",\"log_url\":\"\",\"is_boe\":false,\"access_hosts\":[],\"config_hosts\":[]}"}}}, isSuccess=1
+2024-10-16 19:06:01,238 INFO  [default] ppf::ModuleManager::Init: moduleManager Init
+2024-10-16 19:06:01,238 INFO  [default] GetPassportOpenUserinfo: begin.
+2024-10-16 19:06:01,238 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/passport/open/userinfo/, json={"access_token":"act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH","open_id":"1"}
+2024-10-16 19:06:01,740 INFO  [default] GetPassportOpenUserinfo::<lambda_5636465e5a011353dd842a1a24a1e422>::operator (): response statusCode=200, body={"data":{"avatar":"https://sf16-passport-va.ibytedtos.com/obj/user-avatar-musically/552df423a53d7d4587a520e702fcbc53.png","captcha":"","client_key":"a1e14f53d0d2dad048010e6add624928","desc_url":"","description":"","error_code":0,"log_id":"202410161405584E7965D73B8725D2E94F","nickname":"PicoFans_19600HG","open_id":"7424915670418326534"},"message":"success"}, isSuccess=1
+2024-10-16 19:06:02,241 INFO  [default] OnGameLog: [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 19:06:02,241 INFO  [default] [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 19:06:02,278 ERROR [default] initializeAndroid_HeavyPart: >>> InitializeAndroid success
+2024-10-16 19:06:02,278 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion end result=0(Success)
+2024-10-16 19:06:02,278 INFO  [default] ppf_Game_InitializeAuto: begin.
+2024-10-16 19:06:02,278 INFO  [default] ppfMessageQueue_SendMessage: ppfMessageQueue_SendMessage messageType=10700,requestId=3
+2024-10-16 19:06:02,278 WARN  [default] ppf::MsgQueue::Push: MsgQueue top size grow to 1
+2024-10-16 19:06:11,405 INFO  [default] ppfMessageQueue_RecvMessage: ppfMessageQueue_RecvMessage:pop a message messageType=10700,requestId=3
+2024-10-16 19:09:12,260 WARN  [default] -----------------------------------------------------------------
+2024-10-16 19:09:12,260 WARN  [default] parse config successful
+2024-10-16 19:09:12,260 WARN  [default] language:en
+2024-10-16 19:09:12,260 WARN  [default] host:https://platform-us.picovr.com
+2024-10-16 19:09:12,260 WARN  [default] matrixAppId:308733
+2024-10-16 19:09:12,260 WARN  [default] oauthHost:https://matrix-us.picovr.com
+2024-10-16 19:09:12,260 WARN  [default] accessToken:act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH
+2024-10-16 19:09:12,260 WARN  [default] packageName:com.company.default
+2024-10-16 19:09:12,260 WARN  [default] packageVersionCode:1
+2024-10-16 19:09:12,260 WARN  [default] packageVersionName:1.0
+2024-10-16 19:09:12,260 WARN  [default] -----------------------------------------------------------------
+2024-10-16 19:09:12,260 WARN  [default] initializeAndroid_HeavyPart: logPath=../../../../../../Users/mikhail/Documents/GitHub/Campus/Plugins/OnlineSubsystemPICO/WindowsDebug/
+2024-10-16 19:09:12,260 INFO  [default] initializeAndroid_HeavyPart: Before initAccountServer appId=a1e14f53d0d2dad048010e6add624928
+2024-10-16 19:09:12,261 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/configuration/v1/module/get, json={"modules":["all"]}
+2024-10-16 19:09:12,651 INFO  [default] ppf::Config::FetchAllModuleConfig::<lambda_996d037ea976f6541d19670b8a666aca>::operator (): global config response statusCode=200, body={"code":0,"em":"The request succeeded.","et":"trace id: 202410161409093C81B44483D604D773BB, message: The request succeeded.","trace_id":"202410161409093C81B44483D604D773BB","data":{"configurations":{"asr":"{\"app_id\":\"o3hgtb0krlf7ku5l\",\"token\":\"y2aVdRrsUaNGy01B+8q8Fxbyh5qE7YMVEKMD3oFxEQ4=\",\"host\":\"wss://speech-maliva.byteoversea.com\",\"path\":\"/api/v2/asr\",\"cluster\":\"volc_input_en\"}","game":"{\"code\":-98,\"msg\":\"app not found\",\"conf\":{\"address\":\"\",\"status\":0,\"available\":[]}}","rtc":"{\"rtc_app_id\":\"\",\"log_url\":\"\",\"is_boe\":false,\"access_hosts\":[],\"config_hosts\":[]}"}}}, isSuccess=1
+2024-10-16 19:09:12,651 INFO  [default] ppf::ModuleManager::Init: moduleManager Init
+2024-10-16 19:09:12,651 INFO  [default] GetPassportOpenUserinfo: begin.
+2024-10-16 19:09:12,651 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/passport/open/userinfo/, json={"access_token":"act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH","open_id":"1"}
+2024-10-16 19:09:13,029 INFO  [default] GetPassportOpenUserinfo::<lambda_5636465e5a011353dd842a1a24a1e422>::operator (): response statusCode=200, body={"data":{"avatar":"https://sf16-passport-va.ibytedtos.com/obj/user-avatar-musically/552df423a53d7d4587a520e702fcbc53.png","captcha":"","client_key":"a1e14f53d0d2dad048010e6add624928","desc_url":"","description":"","error_code":0,"log_id":"202410161409093FB8A09952C54BF1FCED","nickname":"PicoFans_19600HG","open_id":"7424915670418326534"},"message":"success"}, isSuccess=1
+2024-10-16 19:09:13,657 INFO  [default] OnGameLog: [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 19:09:13,657 INFO  [default] [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 19:09:13,657 ERROR [default] initializeAndroid_HeavyPart: >>> InitializeAndroid success
+2024-10-16 19:09:13,657 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion end result=0(Success)
+2024-10-16 19:09:13,657 INFO  [default] ppf_Game_InitializeAuto: begin.
+2024-10-16 19:09:13,657 INFO  [default] ppfMessageQueue_SendMessage: ppfMessageQueue_SendMessage messageType=10700,requestId=3
+2024-10-16 19:09:13,657 WARN  [default] ppf::MsgQueue::Push: MsgQueue top size grow to 1
+2024-10-16 19:09:23,028 INFO  [default] ppfMessageQueue_RecvMessage: ppfMessageQueue_RecvMessage:pop a message messageType=10700,requestId=3
+2024-10-16 19:12:10,164 WARN  [default] -----------------------------------------------------------------
+2024-10-16 19:12:10,164 WARN  [default] parse config successful
+2024-10-16 19:12:10,164 WARN  [default] language:en
+2024-10-16 19:12:10,164 WARN  [default] host:https://platform-us.picovr.com
+2024-10-16 19:12:10,164 WARN  [default] matrixAppId:308733
+2024-10-16 19:12:10,164 WARN  [default] oauthHost:https://matrix-us.picovr.com
+2024-10-16 19:12:10,164 WARN  [default] accessToken:act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH
+2024-10-16 19:12:10,164 WARN  [default] packageName:com.company.default
+2024-10-16 19:12:10,164 WARN  [default] packageVersionCode:1
+2024-10-16 19:12:10,164 WARN  [default] packageVersionName:1.0
+2024-10-16 19:12:10,164 WARN  [default] -----------------------------------------------------------------
+2024-10-16 19:12:10,164 WARN  [default] initializeAndroid_HeavyPart: logPath=../../../../../../Users/mikhail/Documents/GitHub/Campus/Plugins/OnlineSubsystemPICO/WindowsDebug/
+2024-10-16 19:12:10,164 INFO  [default] initializeAndroid_HeavyPart: Before initAccountServer appId=a1e14f53d0d2dad048010e6add624928
+2024-10-16 19:12:10,165 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/configuration/v1/module/get, json={"modules":["all"]}
+2024-10-16 19:12:10,795 INFO  [default] ppf::Config::FetchAllModuleConfig::<lambda_996d037ea976f6541d19670b8a666aca>::operator (): global config response statusCode=200, body={"code":0,"em":"The request succeeded.","et":"trace id: 202410161412071599B1CCEB3EAEE4FBF5, message: The request succeeded.","trace_id":"202410161412071599B1CCEB3EAEE4FBF5","data":{"configurations":{"asr":"{\"app_id\":\"o3hgtb0krlf7ku5l\",\"token\":\"y2aVdRrsUaNGy01B+8q8Fxbyh5qE7YMVEKMD3oFxEQ4=\",\"host\":\"wss://speech-maliva.byteoversea.com\",\"path\":\"/api/v2/asr\",\"cluster\":\"volc_input_en\"}","game":"{\"code\":-98,\"msg\":\"app not found\",\"conf\":{\"address\":\"\",\"status\":0,\"available\":[]}}","rtc":"{\"rtc_app_id\":\"\",\"log_url\":\"\",\"is_boe\":false,\"access_hosts\":[],\"config_hosts\":[]}"}}}, isSuccess=1
+2024-10-16 19:12:10,795 INFO  [default] ppf::ModuleManager::Init: moduleManager Init
+2024-10-16 19:12:10,795 INFO  [default] GetPassportOpenUserinfo: begin.
+2024-10-16 19:12:10,795 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/passport/open/userinfo/, json={"access_token":"act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH","open_id":"1"}
+2024-10-16 19:12:11,201 INFO  [default] GetPassportOpenUserinfo::<lambda_5636465e5a011353dd842a1a24a1e422>::operator (): response statusCode=200, body={"data":{"avatar":"https://sf16-passport-va.ibytedtos.com/obj/user-avatar-musically/552df423a53d7d4587a520e702fcbc53.png","captcha":"","client_key":"a1e14f53d0d2dad048010e6add624928","desc_url":"","description":"","error_code":0,"log_id":"2024101614120794DED15737A239C1156B","nickname":"PicoFans_19600HG","open_id":"7424915670418326534"},"message":"success"}, isSuccess=1
+2024-10-16 19:12:11,798 INFO  [default] OnGameLog: [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 19:12:11,798 INFO  [default] [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFED547A9A8
+2024-10-16 19:12:11,798 ERROR [default] initializeAndroid_HeavyPart: >>> InitializeAndroid success
+2024-10-16 19:12:11,798 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion end result=0(Success)
+2024-10-16 19:12:11,798 INFO  [default] ppf_Game_InitializeAuto: begin.
+2024-10-16 19:12:11,798 INFO  [default] ppfMessageQueue_SendMessage: ppfMessageQueue_SendMessage messageType=10700,requestId=3
+2024-10-16 19:12:11,798 WARN  [default] ppf::MsgQueue::Push: MsgQueue top size grow to 1
+2024-10-16 19:12:20,845 INFO  [default] ppfMessageQueue_RecvMessage: ppfMessageQueue_RecvMessage:pop a message messageType=10700,requestId=3
+2024-10-17 16:38:54,281 WARN  [default] -----------------------------------------------------------------
+2024-10-17 16:38:54,283 WARN  [default] parse config successful
+2024-10-17 16:38:54,283 WARN  [default] language:en
+2024-10-17 16:38:54,283 WARN  [default] host:https://platform-us.picovr.com
+2024-10-17 16:38:54,283 WARN  [default] matrixAppId:308733
+2024-10-17 16:38:54,283 WARN  [default] oauthHost:https://matrix-us.picovr.com
+2024-10-17 16:38:54,283 WARN  [default] accessToken:act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH
+2024-10-17 16:38:54,283 WARN  [default] packageName:com.company.default
+2024-10-17 16:38:54,284 WARN  [default] packageVersionCode:1
+2024-10-17 16:38:54,284 WARN  [default] packageVersionName:1.0
+2024-10-17 16:38:54,284 WARN  [default] -----------------------------------------------------------------
+2024-10-17 16:38:54,284 WARN  [default] initializeAndroid_HeavyPart: logPath=../../../../../../Users/mikhail/Documents/GitHub/Campus/Plugins/OnlineSubsystemPICO/WindowsDebug/
+2024-10-17 16:38:54,284 INFO  [default] initializeAndroid_HeavyPart: Before initAccountServer appId=a1e14f53d0d2dad048010e6add624928
+2024-10-17 16:38:54,292 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/configuration/v1/module/get, json={"modules":["all"]}
+2024-10-17 16:38:54,878 INFO  [default] ppf::Config::FetchAllModuleConfig::<lambda_996d037ea976f6541d19670b8a666aca>::operator (): global config response statusCode=200, body={"code":0,"em":"The request succeeded.","et":"trace id: 20241017113851253EA9F6A4DB53C615EE, message: The request succeeded.","trace_id":"20241017113851253EA9F6A4DB53C615EE","data":{"configurations":{"asr":"{\"app_id\":\"o3hgtb0krlf7ku5l\",\"token\":\"y2aVdRrsUaNGy01B+8q8Fxbyh5qE7YMVEKMD3oFxEQ4=\",\"host\":\"wss://speech-maliva.byteoversea.com\",\"path\":\"/api/v2/asr\",\"cluster\":\"volc_input_en\"}","game":"{\"code\":-98,\"msg\":\"app not found\",\"conf\":{\"address\":\"\",\"status\":0,\"available\":[]}}","rtc":"{\"rtc_app_id\":\"\",\"log_url\":\"\",\"is_boe\":false,\"access_hosts\":[],\"config_hosts\":[]}"}}}, isSuccess=1
+2024-10-17 16:38:54,882 INFO  [default] ppf::ModuleManager::Init: moduleManager Init
+2024-10-17 16:38:54,883 INFO  [default] GetPassportOpenUserinfo: begin.
+2024-10-17 16:38:54,883 INFO  [default] ppfModule_SendHttpRequestWithCallback: ppfModule_SendHttpRequestWithCallback path=/passport/open/userinfo/, json={"access_token":"act.d4f732722ae6b727300ec5d3d35a4b3fVM03jrE2hbk9Esjm6fPwIeGA6pdH","open_id":"1"}
+2024-10-17 16:38:55,402 INFO  [default] GetPassportOpenUserinfo::<lambda_5636465e5a011353dd842a1a24a1e422>::operator (): response statusCode=200, body={"data":{"avatar":"https://sf16-passport-va.ibytedtos.com/obj/user-avatar-musically/552df423a53d7d4587a520e702fcbc53.png","captcha":"","client_key":"a1e14f53d0d2dad048010e6add624928","desc_url":"","description":"","error_code":0,"log_id":"20241017113852B717BDAFF156DEE24D53","nickname":"PicoFans_19600HG","open_id":"7424915670418326534"},"message":"success"}, isSuccess=1
+2024-10-17 16:38:55,923 INFO  [default] OnGameLog: [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFFEB06A9A8
+2024-10-17 16:38:55,923 INFO  [default] [PPF_GAME_BASIC][INFO](ppf_platform_game.cc:1077)(ppf_Game_SetEventDelegate) set event delegate: 00007FFFEB06A9A8
+2024-10-17 16:38:55,923 ERROR [default] initializeAndroid_HeavyPart: >>> InitializeAndroid success
+2024-10-17 16:38:55,925 INFO  [default] ppf_InitializeAndroidByVersion: ppf_InitializeAndroidByVersion end result=0(Success)
+2024-10-17 16:38:55,929 INFO  [default] ppf_Game_InitializeAuto: begin.
+2024-10-17 16:38:55,929 INFO  [default] ppfMessageQueue_SendMessage: ppfMessageQueue_SendMessage messageType=10700,requestId=3
+2024-10-17 16:38:55,929 WARN  [default] ppf::MsgQueue::Push: MsgQueue top size grow to 1
+2024-10-17 16:39:06,105 INFO  [default] ppfMessageQueue_RecvMessage: ppfMessageQueue_RecvMessage:pop a message messageType=10700,requestId=3

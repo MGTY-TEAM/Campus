@@ -1,6 +1,5 @@
 ﻿#include "ButterflyGenerationRegistry.h"
 
-#include "GameExceptions.h"
 
 using namespace ButterflyGenerationsGame;
 
@@ -43,7 +42,7 @@ void ButterflyGenerationRegistry::RemoveButterfly(const std::pair<uint8_t, uint8
 
 bool ButterflyGenerationRegistry::ValidateGenerations() const
 {
-	for (const std::vector<ButterflySlot*> generationLayer : M_GenerationLayers)
+	for (std::vector<ButterflySlot*> generationLayer : M_GenerationLayers)
 	{
 		for (const ButterflySlot* element : generationLayer)
 		{

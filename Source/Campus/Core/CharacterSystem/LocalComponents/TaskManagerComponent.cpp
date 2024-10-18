@@ -29,7 +29,6 @@ void UTaskManagerComponent::BeginPlay()
 			if(IMiniGames* MiniGame = Cast<IMiniGames>(Actor))
 			{
 				MiniGames.Add(MiniGame);
-				MiniGame->ExecuteMiniGameCompleted.AddDynamic();
 			}
 		}
 	}

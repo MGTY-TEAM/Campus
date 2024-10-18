@@ -1,6 +1,5 @@
 ﻿#include "ButterflyGame.h"
 
-#include "GameExceptions.h"
 using namespace ButterflyGenerationsGame;
 
 ButterflyGame::ButterflyGame(): M_GameState(GS_NOT_STARTED)
@@ -22,7 +21,7 @@ bool ButterflyGame::TryStartGameWithPosition(const std::vector<uint8_t>& layers,
 		M_GameState = GameState::GS_IN_PROGRESS;
 		return true;
 	default:
-		throw GameException("Game is already in progress");
+		return false;
 	}
 }
 
@@ -33,9 +32,8 @@ bool ButterflyGame::TryAddButterfly(const std::pair<uint8_t, uint8_t>& butterfly
 	case GameState::GS_IN_PROGRESS:
 		M_ButterflyGenerationRegistry->AddButterfly(butterflyPosition, butterflyProperties);
 		return true;
-	default:
-		return false;
 	}
+	return false;
 }
 
 bool ButterflyGame::TryRemoveButterfly(const std::pair<uint8_t, uint8_t> butterflyPosition)

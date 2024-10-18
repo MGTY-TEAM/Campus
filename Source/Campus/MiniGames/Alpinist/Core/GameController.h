@@ -23,6 +23,12 @@ namespace AlpinistGame
 	{
 		std::string Message;
 		TypeOfLog Type;
+
+		MessageLog(const std::string& message, TypeOfLog type)
+		{
+			Message = message;
+			Type = type;
+		}
 	};
 	
 	class AlpinistLog

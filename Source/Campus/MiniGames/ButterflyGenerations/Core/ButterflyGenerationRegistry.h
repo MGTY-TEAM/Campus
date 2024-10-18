@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "Butterfly.h"
 #include "ButterflySlot.h"
 #include "InheritanceConnection.h"
 

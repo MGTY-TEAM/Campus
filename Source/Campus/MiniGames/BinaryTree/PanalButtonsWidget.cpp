@@ -163,12 +163,13 @@ void UPanalButtonsWidget::RandomMyImages()
 			{
 				R = FMath::RandRange(0, 8);
 			}
+
 			Buttons[i]->WidgetStyle.Normal.SetResourceObject(Images[R]);
 			Buttons[R]->WidgetStyle.Normal.SetResourceObject(Images[i]);
 
 			Buttons[i]->WidgetStyle.Hovered.SetResourceObject(Images[R]);
 			Buttons[R]->WidgetStyle.Hovered.SetResourceObject(Images[i]);
-		
+
 			ImageOld = Images[i];
 			Images[i] = Images[R];
 			Images[R] = ImageOld;
@@ -203,8 +204,10 @@ void UPanalButtonsWidget::ButtonClick(int32 N)
 #ifdef BINARY_TREE_DEBUG
 		UE_LOG(LogTemp, Warning, TEXT("Номер %d"), MyButtonsInt[N]);
 #endif
+
 		Buttons[N]->WidgetStyle.Normal.SetResourceObject(ImagesYes[N]);
 		Buttons[N]->WidgetStyle.Hovered.SetResourceObject(ImagesYes[N]);
+
 		Buttons[N]->SetIsEnabled(false);
 		Buttons[N]->SynchronizeProperties();
 
@@ -282,6 +285,7 @@ void UPanalButtonsWidget::CheckAnswers()
 	}
 	if (RightAnswers == 3)
 	{
+
 #ifdef BINARY_TREE_DEBUG
 		UE_LOG(LogTemp, Warning, TEXT("You win"));
 #endif
@@ -295,9 +299,11 @@ void UPanalButtonsWidget::CheckAnswers()
 	}
 	else
 	{
+
 #ifdef BINARY_TREE_DEBUG
 		UE_LOG(LogTemp, Warning, TEXT("You lose"));
 # endif
+
 		RightAnswers = 0;
 		AnswerNumber = 0;
 		PlaySound(GameNotEnd);

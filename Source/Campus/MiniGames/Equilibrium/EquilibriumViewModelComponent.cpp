@@ -10,11 +10,6 @@ UEquilibriumViewModelComponent::UEquilibriumViewModelComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	EquilibriumGameModelInstance = nullptr;
 
-	MiniGameInfo = NewObject<UMiniGameInfo>();
-	if(MiniGameInfo)
-	{
-		MiniGameInfo->Title = "Весы";
-	}
 }
 
 void UEquilibriumViewModelComponent::BeginPlay()
@@ -65,7 +60,6 @@ void UEquilibriumViewModelComponent::OnRemovedWeight()
 
 void UEquilibriumViewModelComponent::OnGameEnded()
 {
-	ExecuteMiniGameCompleted.Broadcast(MiniGameInfo);
 	UE_LOG(LogTemp, Log, TEXT("EQUILIBRIUM GAME ENDED"));
 }
 

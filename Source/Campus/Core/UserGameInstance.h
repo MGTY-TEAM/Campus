@@ -4,8 +4,6 @@
 #define USER_GAME_INSTANCE_DEBUG false
 
 #include "CoreMinimal.h"
-#include "OnlineSessionSettings.h"
-#include "Interfaces/OnlineSessionInterface.h"
 #include "Engine/GameInstance.h"
 #include "UserGameInstance.generated.h"
 

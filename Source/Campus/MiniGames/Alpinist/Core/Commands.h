@@ -1,7 +1,6 @@
 ﻿#pragma once
-
 #ifdef ALPINIST_GAME
-
+#include "list"
 #include "GameTypes.h"
 
 namespace AlpinistGame
@@ -213,8 +212,7 @@ namespace AlpinistGame
 				}
 				(Command->*Execute)();
 
-				if (CountOfExecution++ == 100)
-				{
+				if (CountOfExecution++ == 100) {
 					return false;
 				}
 			}
@@ -235,8 +233,8 @@ namespace AlpinistGame
 			if (Command == "wallAhead") return new ConditionCommand(controller, C_WALL_FORWARD);
 			if (Command == "wallRight") return new ConditionCommand(controller, C_WALL_RIGHT);
 			if (Command == "wallLeft") return new ConditionCommand(controller, C_WALL_LEFT);
-			if (Command == "while") return new WhileCommand(conditionCommand);
-			if (Command == "if") return new IfCommand(conditionCommand);
+			if (Command == "while") return new WhileCommand(static_cast<WhileCommand>(conditionCommand));
+			if (Command == "if") return new IfCommand(static_cast<IfCommand>(conditionCommand));
 			if (Command == "NotEnd") return new NotEndCommand(controller);
 
 			return nullptr;

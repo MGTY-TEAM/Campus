@@ -7,8 +7,8 @@ public class Campus : ModuleRules
 	public Campus(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem","Networking","WebSockets","Sockets", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
@@ -22,17 +22,24 @@ public class Campus : ModuleRules
 			"SlateCore",
 			"Slate", 
 			"Niagara",
-			"OpenXR",
-			"HeadMountedDisplay"
 		});
+
+		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
+		PrivateDependencyModuleNames.AddRange(new string[]{"HeadMountedDisplay", "OpenXR"});
 
         PublicIncludePaths.AddRange(new string[]
         {
             "Campus/AI/AIDrone/CoreDrone"
         });
 
-        bUseRTTI = true;
-        
+        if (Target.Platform == UnrealTargetPlatform.Android)
+        {
+	        PrivateDependencyModuleNames.AddRange(new string[]{"Launch"});
+        }
+
+		bUseRTTI = true;
+		bEnableExceptions = true;
+
         PublicDefinitions.Add("ALPINIST_GAME");
         
         // Uncomment if you are using Slate UI

@@ -44,7 +44,7 @@ public:
 	{
 		std::vector<std::string> VectorString;
 
-		for (const auto String : TArrayToConv)
+		for (auto String : TArrayToConv)
 		{
 			VectorString.push_back(std::string(TCHAR_TO_UTF8(*String)));
 		}

@@ -134,12 +134,6 @@ void AEquilibriumView::BeginPlay()
 		EquilibriumViewModelComponent->CreateModelInstance(CampusUtils::TArrayOfFStringToVectorOfVectorOfInt(CupsCoo));
 		EquilibriumViewModelComponent->OnChangeStates.AddUObject(this, &AEquilibriumView::CalculateRotation);
 
-		IMiniGames* MiniGame = Cast<UEquilibriumViewModelComponent>(UMiniGames::StaticClass());
-
-		if(MiniGame)
-		{
-			MiniGame->ExecuteMiniGameCompleted.AddDynamic(this, &AEquilibriumView::OnGameCompleted);
-		}
 	}
 	SetCoordinatesForCups();
 }

@@ -78,7 +78,7 @@ bool FCorrectResponseZigZag::RunTest(const FString& Parameters)
 	const bool CompileSuccess = compiler->Compile(Log);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);
@@ -124,7 +124,7 @@ bool FCorrectResponseBigMapTest::RunTest(const FString& Parameters)
 	const bool CompileSuccess = compiler->Compile(Log);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);
@@ -170,7 +170,7 @@ bool FCorrectResponseNotEndMiniTest::RunTest(const FString& Parameters)
 	const bool CompileSuccess = compiler->Compile(Log);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);
@@ -216,7 +216,7 @@ bool FCorrectResponseNotEndBigTest::RunTest(const FString& Parameters)
 	const bool CompileSuccess = compiler->Compile(Log);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);

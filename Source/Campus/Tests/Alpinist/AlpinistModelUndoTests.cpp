@@ -2,7 +2,7 @@
 
 #ifdef ALPINIST_GAME
 #if WITH_AUTOMATION_TESTS
-
+#include "list"
 #include "Misc/AutomationTest.h"
 #include "Dom/JsonObject.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -46,7 +46,7 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	const bool CompileSuccess = compiler->Compile(Log);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);

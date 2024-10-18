@@ -72,7 +72,7 @@ namespace AlpinistGame
 					instanceCommand = dynamic_cast<CommandT*>(creator->Create(Command, Controller, condCommand));
 					if (instanceCommand)
 					{
-						commandList->PushCommand(instanceCommand);
+						commandList->PushCommand(static_cast<PlayerCommand*>(instanceCommand));
 						DeleteTokenFront();
 						CommandHasCondition = true;
 

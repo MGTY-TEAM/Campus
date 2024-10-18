@@ -2,14 +2,9 @@
 
 #include "SinglePlayerGameMode.h"
 
-#include "EnhancedInputSubsystems.h"
 #include "IHeadMountedDisplay.h"
 #include "IXRTrackingSystem.h"
-#include "Campus/Core/CharacterSystem/BaseCharacter.h"
-#include "Campus/Core/CharacterSystem/BaseController.h"
-#include "Campus/Core/CharacterSystem/Custom/VRCharacter.h"
 #include "Engine/World.h"
-#include "GameFramework/GameSession.h"
 #include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -20,6 +15,7 @@ void ASinglePlayerGameMode::BeginPlay()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	UWorld* World =	GetWorld();
 
+	/*
 	if(PlayerController && World)
 	{
 		if(CheckHMDConnection())
@@ -45,6 +41,7 @@ void ASinglePlayerGameMode::BeginPlay()
 			}
 		}
 	}
+*/
 }
 
 bool ASinglePlayerGameMode::CheckHMDConnection()

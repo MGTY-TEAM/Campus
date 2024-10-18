@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Campus/Interfaces/MiniGames/MiniGames.h"
 #include "Campus/MiniGames/Equilibrium/Core/EquilibriumGame.h"
 #include "Components/ActorComponent.h"
 #include "EquilibriumViewModelComponent.generated.h"
@@ -11,7 +10,7 @@
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnChangeStates, const vector<ENodeRotationState>&);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class CAMPUS_API UEquilibriumViewModelComponent : public UActorComponent, public IMiniGames
+class CAMPUS_API UEquilibriumViewModelComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
