@@ -1,4 +1,3 @@
-
 #include "Campus/MiniGames/Alpinist/AlpinistViewComponent.h"
 
 #include "AlpinistGame.h"
@@ -11,14 +10,14 @@
 UAlpinistViewComponent::UAlpinistViewComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	
+
 	InnerPlayersNiagaraComponent = nullptr;
 }
 
 void UAlpinistViewComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	if (const AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
 	{
 		MountainMeshComponents.Add(AlpinistGame->GetMainMountainMeshComponent());
@@ -28,7 +27,8 @@ void UAlpinistViewComponent::BeginPlay()
 	}
 }
 
-void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+                                           FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -39,15 +39,15 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			bShouldPlay = false;
 			return;
 		}
-		
+
 		const TPair<int32, int32> CurrentCoordinate = CoordinateHistory[CurrentSnapshot].Value;
 		UE_LOG(LogTemp, Warning, TEXT("%i, %i"), CurrentCoordinate.Key, CurrentCoordinate.Value);
 		const TPair<int32, int32> NextCoordinate = CoordinateHistory[CurrentSnapshot + 1].Value;
 		UE_LOG(LogTemp, Warning, TEXT("%i, %i"), NextCoordinate.Key, NextCoordinate.Value);
-		
+
 		const AAlpinistMapEntity* CurrentEntity = AlpinistMapEntities[CurrentCoordinate.Key][CurrentCoordinate.Value];
 		const AAlpinistMapEntity* NextEntity = AlpinistMapEntities[NextCoordinate.Key][NextCoordinate.Value];
-		
+
 		if (CurrentEntity && NextEntity && InnerPlayersNiagaraComponent)
 		{
 			if (bOnEntity)
@@ -55,13 +55,13 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 				CurrentLocation = CurrentEntity->GetMarkLocation();
 				bOnEntity = false;
 			}
-			
+
 			const FVector NextLocation = NextEntity->GetMarkLocation();
 			CurrentLocation = FMath::VInterpConstantTo(CurrentLocation, NextLocation, DeltaTime, MarkMovingSpeed);
 
 			InnerPlayersNiagaraComponent->SetVariablePosition("PlayerPosition", CurrentLocation);
 			// UE_LOG(LogTemp, Warning, TEXT("%f, %f, %f"), CurrentLocation.X, CurrentLocation.Y, CurrentLocation.Z);
-			
+
 			if (FVector::Dist(CurrentLocation, NextLocation) < KINDA_SMALL_NUMBER)
 			{
 				++CurrentSnapshot;
@@ -71,72 +71,41 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	}
 }
 
-bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const USceneComponent* MapViewSceneComponent, UNiagaraComponent* PlayersNiagaraComponent)
+bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const USceneComponent* MapViewSceneComponent,
+                                             UNiagaraComponent* PlayersNiagaraComponent)
 {
 	ToStartPosition(nullptr);
-	
+
 	if (!MapViewSceneComponent || !PlayersNiagaraComponent) return false;
-	
+
 	AlpinistMapEntities.Empty();
 	if (GetWorld() && AlpinistMapEntityClass->IsValidLowLevel())
 	{
-		FVector AnchorLocation = MapViewSceneComponent->GetComponentLocation();
-		const float AnchorY = MapViewSceneComponent->GetComponentLocation().Y;
+		AnchorLocation = MapViewSceneComponent->GetComponentLocation();
+		AnchorY = MapViewSceneComponent->GetComponentLocation().Y;
 		// UE_LOG(LogTemp, Warning, TEXT("X: %f, Y: %f, Z: %f"), AnchorLocation.X, AnchorLocation.Y, AnchorLocation.Z);
-		for (const FString& Line : Map)
-		{
-			TArray<AAlpinistMapEntity*> LineEntities = TArray<AAlpinistMapEntity*>();
-		
-			AnchorLocation = FVector(AnchorLocation.X, AnchorY, AnchorLocation.Z);
-			for (const TCHAR& EntityType : Line)
-			{
-				if (EntityType != 'w')
-				{
-					if (AAlpinistMapEntity* Entity = GetWorld()->SpawnActor<AAlpinistMapEntity>(AlpinistMapEntityClass, AnchorLocation, FRotator(0.f)))
-					{
-						Entity->CreateEntity(SnowMeshComponents, AnchorLocation, Density);
-						Entity->SetMarkLocation(AnchorLocation + FVector(5.f, Density * 0.4f, Density * 0.3f));
-						LineEntities.Add(Entity);
 
-						if (EntityType == 'p' && PlayersNiagaraComponent && PlayersNiagaraComponent->GetAsset())
-						{
-							InnerPlayersNiagaraComponent = PlayersNiagaraComponent;
-							PlayerPosition = Entity->GetMarkLocation();
-							PlayersNiagaraComponent->SetVariablePosition("PlayerPosition", PlayerPosition);
-							PlayersNiagaraComponent->Activate(true);
-							
-							CurrentLocation = PlayerPosition;
-						}
-					}
-				}
-				else
-				{
-					if (AAlpinistMapEntity* Entity = GetWorld()->SpawnActor<AAlpinistMapEntity>(AlpinistMapEntityClass, AnchorLocation, FRotator(0.f)))
-					{
-						Entity->CreateEntity(MountainMeshComponents, AnchorLocation, Density);
-						LineEntities.Add(Entity);
-					}
-				}
-			
-				AnchorLocation = AnchorLocation + FVector(0.f, -Density, 0.f);
-			}
-			AnchorLocation = AnchorLocation + FVector(1.5f, 0.f, -Density);
+		SpawnLineIndex = 0;
+		constexpr float InitialDelay = 0.1f;
+		constexpr float BatchInterval = 0.1f;
+		FTimerDelegate SpawnLineDelegate;
+		SpawnLineDelegate.BindUFunction(this, FName("SpawnLine"), Map, PlayersNiagaraComponent);
+		GetWorld()->GetTimerManager().SetTimer(SpawnLineTimerHandle, SpawnLineDelegate, BatchInterval, true,
+		                                       InitialDelay);
 
-			AlpinistMapEntities.Add(LineEntities);
-		}
-		
 		return true;
 	}
-	
+
 	return false;
 }
 
-bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentAround, UNiagaraComponent* PlayersNiagaraComponent)
+bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentAround,
+                                          UNiagaraComponent* PlayersNiagaraComponent)
 {
 	bShouldPlay = false;
 	CurrentSnapshot = 0;
 	CoordinateHistory = TArray<TPair<int32, TPair<int32, int32>>>();
-	
+
 	for (UInstancedStaticMeshComponent* InstancedStaticMeshComponent : MountainMeshComponents)
 	{
 		InstancedStaticMeshComponent->ClearInstances();
@@ -145,7 +114,7 @@ bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentA
 	{
 		InstancedStaticMeshComponent->ClearInstances();
 	}
-	
+
 	for (TArray<AAlpinistMapEntity*>& LineEntity : AlpinistMapEntities)
 	{
 		for (AAlpinistMapEntity* Entity : LineEntity)
@@ -166,7 +135,7 @@ bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentA
 	{
 		PlayersNiagaraComponent->Deactivate();
 	}
-	
+
 	return true;
 }
 
@@ -197,7 +166,7 @@ void UAlpinistViewComponent::StartPlayByHistory(const TArray<TPair<int32, TPair<
 		{
 			Direction = FString("RIGHT");
 		}
-		
+
 		UE_LOG(LogTemp, Warning, TEXT("%s: %i, %i"), *Direction, Pair.Value.Key, Pair.Value.Value);
 	}
 	UE_LOG(LogTemp, Warning, TEXT("%i, %i"), AlpinistMapEntities.Num(), AlpinistMapEntities[0].Num());
@@ -215,3 +184,50 @@ void UAlpinistViewComponent::ToStartPosition(UNiagaraComponent* PlayersNiagaraCo
 	}
 }
 
+void UAlpinistViewComponent::SpawnLine(const TArray<FString>& Map, UNiagaraComponent* PlayersNiagaraComponent)
+{
+	TArray<AAlpinistMapEntity*> LineEntities = TArray<AAlpinistMapEntity*>();
+
+	AnchorLocation = FVector(AnchorLocation.X, AnchorY, AnchorLocation.Z);
+	for (const TCHAR& EntityType : Map[SpawnLineIndex++])
+	{
+		if (EntityType != 'w')
+		{
+			if (AAlpinistMapEntity* Entity = GetWorld()->SpawnActor<AAlpinistMapEntity>(AlpinistMapEntityClass, AnchorLocation, FRotator(0.f)))
+			{
+				Entity->CreateEntity(SnowMeshComponents, AnchorLocation, Density);
+				Entity->SetMarkLocation(AnchorLocation + FVector(5.f, Density * 0.4f, Density * 0.3f));
+				LineEntities.Add(Entity);
+
+				if (EntityType == 'p' && PlayersNiagaraComponent && PlayersNiagaraComponent->GetAsset())
+				{
+					InnerPlayersNiagaraComponent = PlayersNiagaraComponent;
+					PlayerPosition = Entity->GetMarkLocation();
+					PlayersNiagaraComponent->SetVariablePosition("PlayerPosition", PlayerPosition);
+					PlayersNiagaraComponent->Activate(true);
+
+					CurrentLocation = PlayerPosition;
+				}
+			}
+		}
+		else
+		{
+			if (AAlpinistMapEntity* Entity = GetWorld()->SpawnActor<AAlpinistMapEntity>(AlpinistMapEntityClass, AnchorLocation, FRotator(0.f)))
+			{
+				Entity->CreateEntity(MountainMeshComponents, AnchorLocation, Density);
+				LineEntities.Add(Entity);
+			}
+		}
+
+		AnchorLocation = AnchorLocation + FVector(0.f, -Density, 0.f);
+	}
+	AnchorLocation = AnchorLocation + FVector(1.5f, 0.f, -Density);
+
+	AlpinistMapEntities.Add(LineEntities);
+
+	if (SpawnLineIndex == Map.Num())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(SpawnLineTimerHandle);
+		OnMapOpen.Broadcast();
+	}
+}

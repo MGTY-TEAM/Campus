@@ -22,7 +22,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FExpectInfiniteCycleError, "Campus.Alpinist.Ecp
 
 bool FExpectLexerErrors::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -62,7 +62,7 @@ bool FExpectLexerErrors::RunTest(const FString& Parameters)
 
 bool FExpectWhileErrors::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -171,7 +171,7 @@ bool FExpectWhileErrors::RunTest(const FString& Parameters)
 
 bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -302,7 +302,7 @@ bool FExpectIfElseErrors::RunTest(const FString& Parameters)
 
 bool FExpectInfiniteCycleError::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;

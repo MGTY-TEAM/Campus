@@ -27,7 +27,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCorrectResponseNotEndBigTest, "Campus.Alpinist
 
 bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ZigZag.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/ZigZag.json";
 	bool SucceededDeserialize = false;
 	FString OutInfoMessage;
 
@@ -49,7 +49,7 @@ bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 
 bool FCorrectResponseZigZag::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ZigZag.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/ZigZag.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -97,7 +97,7 @@ bool FCorrectResponseZigZag::RunTest(const FString& Parameters)
 
 bool FCorrectResponseBigMapTest::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/BigMapTest.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/BigMapTest.json";
 	bool SucceededDeserialize = false;
 	FString OutInfoMessage;
 
@@ -143,7 +143,7 @@ bool FCorrectResponseBigMapTest::RunTest(const FString& Parameters)
 
 bool FCorrectResponseNotEndMiniTest::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/NotEndMiniTest.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/NotEndMiniTest.json";
 	bool SucceededDeserialize = false;
 	FString OutInfoMessage;
 
@@ -189,7 +189,7 @@ bool FCorrectResponseNotEndMiniTest::RunTest(const FString& Parameters)
 
 bool FCorrectResponseNotEndBigTest::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/NotEndBigTest.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/NotEndBigTest.json";
 	bool SucceededDeserialize = false;
 	FString OutInfoMessage;
 

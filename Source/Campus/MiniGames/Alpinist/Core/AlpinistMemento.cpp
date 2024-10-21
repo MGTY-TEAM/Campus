@@ -30,6 +30,11 @@ namespace AlpinistGame
 		return Memento;
 	}
 
+	void AlpinistCaretaker::UndoEmptyLastCommandAfterFinished()
+	{
+		m_vectorMementos.pop_back();
+	}
+
 	void AlpinistCaretaker::ClearHistory()
 	{
 		m_vectorMementos.clear();

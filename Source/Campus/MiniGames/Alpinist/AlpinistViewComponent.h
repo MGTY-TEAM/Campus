@@ -10,6 +10,8 @@ class UNiagaraComponent;
 class AAlpinistMapEntity;
 class UInstancedStaticMeshComponent;
 
+DECLARE_MULTICAST_DELEGATE(FOnMapOpen);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CAMPUS_API UAlpinistViewComponent : public UActorComponent
 {
@@ -36,7 +38,16 @@ public:
 	bool DestroyLevel(const USceneComponent* SceneComponentAround, UNiagaraComponent* PlayersNiagaraComponent);
 	void StartPlayByHistory(const TArray<TPair<int32, TPair<int32, int32>>>& InCoordinateHistory);
 	void ToStartPosition(UNiagaraComponent* PlayersNiagaraComponent);
+
+	FOnMapOpen OnMapOpen;
 private:
+	FVector AnchorLocation;
+	float AnchorY;
+	int32 SpawnLineIndex;
+	FTimerHandle SpawnLineTimerHandle;
+	UFUNCTION()
+	void SpawnLine(const TArray<FString>& Map, UNiagaraComponent* PlayersNiagaraComponent);
+	
 	TArray<TArray<AAlpinistMapEntity*>> AlpinistMapEntities;
 	TArray<UInstancedStaticMeshComponent*> MountainMeshComponents;
 	TArray<UInstancedStaticMeshComponent*> SnowMeshComponents;

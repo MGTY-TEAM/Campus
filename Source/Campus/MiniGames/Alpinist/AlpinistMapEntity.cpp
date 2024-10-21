@@ -33,7 +33,7 @@ void AAlpinistMapEntity::CreateEntity(const TArray<UInstancedStaticMeshComponent
 			{
 				FTransform InstanceTransform;
 				InstanceTransform.SetLocation(FVector(Anchor.X + Extrusion, Anchor.Y + i * 1.f, Height));
-				InstanceTransform.SetScale3D(FVector(FMath::RandRange(0.005f, 0.02f), 0.01f, 0.01f));
+				InstanceTransform.SetScale3D(FVector(FMath::RandRange(0.012f, 0.028f), 0.01f, 0.01f));
 
 				const float Value = FMath::RandRange(0.f, 1.f);
 				if (Value < 0.92f)

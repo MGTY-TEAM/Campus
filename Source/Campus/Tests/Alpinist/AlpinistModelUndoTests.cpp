@@ -18,7 +18,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FExpectUndoCommands, "Campus.Alpinist.ExpectUnd
 
 bool FExpectUndoCommands::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ToBeFailedTestsMap.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/ToBeFailedTestsMap.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -113,6 +113,8 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	bool IsHeFinished = controller->GetWorld()->IsPlayerFinished();
 	TestTrue("Player Should Be On Finish", IsHeFinished);
 
+	controller->GetAlpinistCaretaker().Pin().Get()->UndoEmptyLastCommandAfterFinished();
+
 	FifthCommand->Unexecute();
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected UNEXECUTE Move Command RIGHT first", (StartedPos.first - 2) == CurrentPos.first && (StartedPos.second + 1) == CurrentPos.second);
@@ -123,6 +125,8 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	FifthCommand->Execute(&Log);
 	IsHeFinished = controller->GetWorld()->IsPlayerFinished();
 	TestTrue("Player Should Be On Finish", IsHeFinished);
+
+	controller->GetAlpinistCaretaker().Pin().Get()->UndoEmptyLastCommandAfterFinished();
 
 	FifthCommand->Unexecute();
 	FourthCommand->Unexecute();
