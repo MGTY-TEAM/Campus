@@ -12,6 +12,7 @@ UAlpinistViewComponent::UAlpinistViewComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	InnerPlayersNiagaraComponent = nullptr;
+	InnerWeatherNiagaraComponent = nullptr;
 }
 
 void UAlpinistViewComponent::BeginPlay()
@@ -27,8 +28,7 @@ void UAlpinistViewComponent::BeginPlay()
 	}
 }
 
-void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                           FActorComponentTickFunction* ThisTickFunction)
+void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -71,8 +71,7 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	}
 }
 
-bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const USceneComponent* MapViewSceneComponent,
-                                             UNiagaraComponent* PlayersNiagaraComponent)
+bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const USceneComponent* MapViewSceneComponent, UNiagaraComponent* PlayersNiagaraComponent)
 {
 	ToStartPosition(nullptr);
 
@@ -90,8 +89,7 @@ bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const U
 		constexpr float BatchInterval = 0.1f;
 		FTimerDelegate SpawnLineDelegate;
 		SpawnLineDelegate.BindUFunction(this, FName("SpawnLine"), Map, PlayersNiagaraComponent);
-		GetWorld()->GetTimerManager().SetTimer(SpawnLineTimerHandle, SpawnLineDelegate, BatchInterval, true,
-		                                       InitialDelay);
+		GetWorld()->GetTimerManager().SetTimer(SpawnLineTimerHandle, SpawnLineDelegate, BatchInterval, true, InitialDelay);
 
 		return true;
 	}
@@ -99,8 +97,7 @@ bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const U
 	return false;
 }
 
-bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentAround,
-                                          UNiagaraComponent* PlayersNiagaraComponent)
+bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentAround, UNiagaraComponent* PlayersNiagaraComponent)
 {
 	bShouldPlay = false;
 	CurrentSnapshot = 0;
@@ -199,6 +196,10 @@ void UAlpinistViewComponent::SpawnLine(const TArray<FString>& Map, UNiagaraCompo
 				Entity->SetMarkLocation(AnchorLocation + FVector(5.f, Density * 0.4f, Density * 0.3f));
 				LineEntities.Add(Entity);
 
+				if (EntityType == 'f' && PlayersNiagaraComponent && PlayersNiagaraComponent->GetAsset())
+				{
+					PlayersNiagaraComponent->SetVariablePosition("FinishPosition", Entity->GetMarkLocation());
+				}
 				if (EntityType == 'p' && PlayersNiagaraComponent && PlayersNiagaraComponent->GetAsset())
 				{
 					InnerPlayersNiagaraComponent = PlayersNiagaraComponent;
@@ -228,6 +229,6 @@ void UAlpinistViewComponent::SpawnLine(const TArray<FString>& Map, UNiagaraCompo
 	if (SpawnLineIndex == Map.Num())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(SpawnLineTimerHandle);
-		OnMapOpen.Broadcast();
+		OnMapOpen.Broadcast(true);
 	}
 }

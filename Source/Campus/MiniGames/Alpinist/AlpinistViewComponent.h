@@ -10,7 +10,7 @@ class UNiagaraComponent;
 class AAlpinistMapEntity;
 class UInstancedStaticMeshComponent;
 
-DECLARE_MULTICAST_DELEGATE(FOnMapOpen);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMapOpen, bool);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CAMPUS_API UAlpinistViewComponent : public UActorComponent
@@ -42,8 +42,8 @@ public:
 	FOnMapOpen OnMapOpen;
 private:
 	FVector AnchorLocation;
-	float AnchorY;
-	int32 SpawnLineIndex;
+	float AnchorY = 0.f;
+	int32 SpawnLineIndex = 0;
 	FTimerHandle SpawnLineTimerHandle;
 	UFUNCTION()
 	void SpawnLine(const TArray<FString>& Map, UNiagaraComponent* PlayersNiagaraComponent);
@@ -56,6 +56,7 @@ private:
 	FVector PlayerPosition;
 	FVector CurrentLocation;
 	UNiagaraComponent* InnerPlayersNiagaraComponent;
+	UNiagaraComponent* InnerWeatherNiagaraComponent;
 	int32 CurrentSnapshot = 0;
 	bool bShouldPlay = false;
 	bool bOnEntity = true;

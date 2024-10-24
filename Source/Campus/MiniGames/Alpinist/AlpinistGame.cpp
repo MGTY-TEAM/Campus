@@ -33,6 +33,8 @@ AAlpinistGame::AAlpinistGame()
 
 	PlayersNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>("PlayersNiagaraComponent");
 	PlayersNiagaraComponent->SetupAttachment(GetRootComponent());
+	WeatherNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>("WeatherNiagaraComponent");
+	WeatherNiagaraComponent->SetupAttachment(GetRootComponent());
 
 	MainMountainMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>("MainMountainMeshComponent");
 	MainMountainMeshComponent->SetupAttachment(GetRootComponent());
@@ -54,10 +56,11 @@ void AAlpinistGame::BeginPlay()
 
 	if (PlayersNiagaraComponent)
 	{
-		PlayersNiagaraComponent->SetComponentTickEnabled(true);
-		PlayersNiagaraComponent->PrimaryComponentTick.bCanEverTick = true;
 		PlayersNiagaraComponent->SetAsset(PlayersNiagaraSystem);
-		PlayersNiagaraComponent->Deactivate();
+	}
+	if (WeatherNiagaraComponent)
+	{
+		WeatherNiagaraComponent->SetAsset(WeatherNiagaraSystem);
 	}
 }
 
@@ -290,7 +293,7 @@ void AAlpinistGame::OpenLevel(int32 Level)
 		if (JsonObject.Get() && SucceededDeserialize)
 		{
 			TArray<FString> Map;
-			if (JsonObject->TryGetStringArrayField("game_map", Map) /* && AlpinistViewComponent */)
+			if (JsonObject->TryGetStringArrayField("game_map", Map))
 			{
 				AlpinistViewComponent->InitializeLevel(Map, MapViewSceneComponent, PlayersNiagaraComponent);
 			}

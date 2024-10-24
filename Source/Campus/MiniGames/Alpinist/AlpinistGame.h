@@ -54,6 +54,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UNiagaraComponent* PlayersNiagaraComponent;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "NiagaraPlayersSettings")
+	UNiagaraSystem* WeatherNiagaraSystem;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UNiagaraComponent* WeatherNiagaraComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EntityComponents")
 	UInstancedStaticMeshComponent* MainMountainMeshComponent;
 
