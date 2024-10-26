@@ -82,6 +82,13 @@ public:
 	 */
 	bool TryToGetAndFillUserInfoAndTransitToMainMenu();
 
+protected:
+	virtual void Init() override;
+	
+	virtual void Shutdown() override;
+
+	UPROPERTY(EditDefaultsOnly)
+	UDataTable* QuestTable;	
 private:
 	FUserInfo M_UserInfo; // User information
 	FString M_UserToken; // User authentication token

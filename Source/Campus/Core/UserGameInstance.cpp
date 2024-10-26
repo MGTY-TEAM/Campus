@@ -6,8 +6,30 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Libraries/Requests/GameAPI/HTTPGameAPIRequestsLib.h"
 #include "../Libraries/Requests/GameAPI/HTTPGameAPIStructures.h"
+#include "Campus/IncentiveSystem/QuestSystem/Quest.h"
+#include "Campus/IncentiveSystem/QuestSystem/QuestManager.h"
+#include "Campus/IncentiveSystem/QuestSystem/Data/QuestRowBase.h"
+
+void UUserGameInstance::Init()
+{
+	Super::Init();
+
+	if(QuestTable)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *QuestTable->GetTableAsString());
 
 
+		TArray<FQuestRowBase*> QuestRows;
+		QuestTable->GetAllRows("", QuestRows);
+
+		UQuestManager::FillQuestsByData(QuestRows);
+	}
+}
+
+void UUserGameInstance::Shutdown()
+{
+	Super::Shutdown();
+}
 
 const FString& UUserGameInstance::GetUserID() const
 {
@@ -63,5 +85,6 @@ bool UUserGameInstance::TryToGetAndFillUserInfoAndTransitToMainMenu()
 		}, UserInfoRequest);
 	return false;
 }
+
 
 

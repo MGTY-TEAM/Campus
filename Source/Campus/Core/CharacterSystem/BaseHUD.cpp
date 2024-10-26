@@ -2,6 +2,8 @@
 #include "BaseHUD.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Campus/IncentiveSystem/QuestSystem/QuestsAssigner.h"
+#include "Campus/IncentiveSystem/QuestSystem/QuestViewController.h"
 #include "Campus/UserInterface/ChatBox.h"
 #include "Campus/UserInterface/Hud/Interaction/InteractionWidget.h"
 
@@ -15,6 +17,8 @@ void ABaseHUD::BeginPlay()
 	Super::BeginPlay();
 	AddCrosshair();
 	AddInteractionWidget();
+	QuestViewController = NewObject<UQuestViewController>();
+	AddSimpleQuestView();
 }
 
 void ABaseHUD::AddInteractionWidget()
@@ -50,5 +54,22 @@ void ABaseHUD::AddCrosshair()
 	{
 		Crosshair->AddToViewport();
 		UE_LOG(BaseHUDLog, Log, TEXT("Crosshair Succesfully Added"));
+	}
+}
+
+void ABaseHUD::AddSimpleQuestView()
+{
+	SimpleQuestView = CreateWidget(GetWorld(), SimpleQuestViewClass);
+	if(SimpleQuestView)
+	{
+		SimpleQuestView->AddToViewport();
+		UE_LOG(BaseHUDLog, Log, TEXT("Simple quest view succesfully added"));
+		if(QuestViewController)
+		{
+			if(SimpleQuestView->GetClass()->ImplementsInterface(UQuestsAssigner::StaticClass()))
+			{
+				QuestViewController->AddQuestView(SimpleQuestView);
+			}
+		}
 	}
 }

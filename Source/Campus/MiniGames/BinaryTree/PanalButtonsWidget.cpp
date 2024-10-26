@@ -4,6 +4,7 @@
 #include "PanalButtonsWidget.h"
 #include "PanalWidget.h"
 #include "Blueprint/WidgetTree.h"
+#include "Campus/IncentiveSystem/QuestSystem/QuestManager.h"
 #include "Campus/Interfaces/MiniGames/MiniGameInfo.h"
 #include "Engine/AssetManager.h"
 #define BINARY_TREE_DEBUG = false
@@ -292,6 +293,7 @@ void UPanalButtonsWidget::CheckAnswers()
 		PlaySound(GameEndRight);
 		SetToOriginalImage();
 		ExecuteMiniGameCompleted.Broadcast(MiniGameInfo);
+		UQuestManager::CompleteQuest("BinaryTree");
 	}
 	else
 	{

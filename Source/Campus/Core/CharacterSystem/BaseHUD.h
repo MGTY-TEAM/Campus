@@ -7,6 +7,8 @@
 #include "GameFramework/HUD.h"
 #include "BaseHUD.generated.h"
 
+class IQuestsAssigner;
+class UQuestViewController;
 class UInteractionWidget;
 DECLARE_LOG_CATEGORY_CLASS(BaseHUDLog, Log, Log);
 
@@ -24,8 +26,8 @@ public:
 	void SwitchEscapeMenuState();
 	
 	void SetupChat(UChatUserComponent* ChatUserComponent);
+
 protected:
-	
 	UPROPERTY(EditDefaultsOnly, Category = "UI Classes")
 	TSubclassOf<UChatBox> ChatBoxClass;
 	UChatBox* ChatBox;
@@ -41,9 +43,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI Classes")
 	TSubclassOf<UUserWidget> EscapeMenuClass;
 	UUserWidget* EscapeMenu;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI Classes")
+	TSubclassOf<UUserWidget> SimpleQuestViewClass;
+	UUserWidget* SimpleQuestView;
+
+	UQuestViewController* QuestViewController;
 	
 	virtual void DrawHUD() override;
 	virtual void AddCrosshair();
+	virtual void AddSimpleQuestView();
 	
 	virtual void BeginPlay() override;
 	void AddInteractionWidget();
