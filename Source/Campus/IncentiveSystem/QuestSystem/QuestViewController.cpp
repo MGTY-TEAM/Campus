@@ -6,20 +6,22 @@
 #include "QuestManager.h"
 #include "QuestsAssigner.h"
 
-void UQuestViewController::AddQuestView(UObject* QuestView)
+UQuestViewController::UQuestViewController()
 {
-	if(QuestView)
-	{
-		TArray<UQuest*> Quests = UQuestManager::GetQuests();
+	QuestViews = TArray<TWeakObjectPtr<UObject>>();
+	
+	UQuestManager::OnQuestsUpdated.AddUObject(this, &UQuestViewController::QuestsUpdated);
+}
 
-		for(UQuest* Quest : Quests)
+void UQuestViewController::AddQuestView(TWeakObjectPtr<UObject> QuestView)
+{
+	if(QuestView.IsValid() && QuestView->GetClass()->ImplementsInterface(UQuestsAssigner::StaticClass()))
+	{
+		TArray<UQuest*> Quests = UQuestManager::GetQuestPTRs();
+		if(!Quests.IsEmpty())
 		{
-			if(Quest)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Quest is valid"));
-			}
+			IQuestsAssigner::Execute_LoadQuestList(QuestView.Get(), Quests);
 		}
-		IQuestsAssigner::Execute_LoadQuestList(QuestView, UQuestManager::GetQuests());
 		QuestViews.Add(QuestView);
 	}
 }
@@ -27,22 +29,35 @@ void UQuestViewController::AddQuestView(UObject* QuestView)
 void UQuestViewController::PostInitProperties()
 {
 	UObject::PostInitProperties();
-	
-	QuestViews = TArray<UObject*>();
-
-	UQuestManager::OnQuestsUpdated.AddUObject(this, &UQuestViewController::QuestsUpdated);
-	
 }
 
-void UQuestViewController::QuestsUpdated(TArray<UQuest*> Quests)
+void UQuestViewController::BeginDestroy()
+{
+	UObject::BeginDestroy();
+	
+	if(UQuestManager::OnQuestsUpdated.IsBoundToObject(this))
+	{
+		UQuestManager::OnQuestsUpdated.RemoveAll(this);
+	}
+}
+
+void UQuestViewController::QuestsUpdated(TArray<TWeakObjectPtr<UQuest>> Quests)
 {
 	if(!QuestViews.IsEmpty())
 	{
-		for (UObject* QuestView : QuestViews)
+		TArray<UQuest*> QuestPTRs = TArray<UQuest*>();
+		for(TWeakObjectPtr<UQuest> QuestPtr : Quests)
 		{
-			if(QuestView)
+			if(QuestPtr.IsValid())
 			{
-				IQuestsAssigner::Execute_UpdateQuestList(QuestView, Quests);
+				QuestPTRs.Add(QuestPtr.Get());
+			}
+		}
+		for (TWeakObjectPtr<UObject> QuestView : QuestViews)
+		{
+			if(QuestView.IsValid())
+			{
+				IQuestsAssigner::Execute_UpdateQuestList(QuestView.Get(), QuestPTRs);
 			}
 		}
 	}

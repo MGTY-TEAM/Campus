@@ -6,19 +6,20 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Libraries/Requests/GameAPI/HTTPGameAPIRequestsLib.h"
 #include "../Libraries/Requests/GameAPI/HTTPGameAPIStructures.h"
-#include "Campus/IncentiveSystem/QuestSystem/Quest.h"
 #include "Campus/IncentiveSystem/QuestSystem/QuestManager.h"
 #include "Campus/IncentiveSystem/QuestSystem/Data/QuestRowBase.h"
 
 void UUserGameInstance::Init()
 {
 	Super::Init();
+}
 
+void UUserGameInstance::LoadComplete(const float LoadTime, const FString& MapName)
+{
+	Super::LoadComplete(LoadTime, MapName);
+	
 	if(QuestTable)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *QuestTable->GetTableAsString());
-
-
 		TArray<FQuestRowBase*> QuestRows;
 		QuestTable->GetAllRows("", QuestRows);
 

@@ -27,6 +27,8 @@ public:
 	
 	void SetupChat(UChatUserComponent* ChatUserComponent);
 
+	UFUNCTION(BlueprintCallable)
+	void AddExternalQuestView(UObject* QuestsView);
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI Classes")
 	TSubclassOf<UChatBox> ChatBoxClass;
@@ -46,14 +48,20 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI Classes")
 	TSubclassOf<UUserWidget> SimpleQuestViewClass;
-	UUserWidget* SimpleQuestView;
+	TWeakObjectPtr<UUserWidget> SimpleQuestView;
 
-	UQuestViewController* QuestViewController;
+	TWeakObjectPtr<UQuestViewController> QuestViewController;
 	
 	virtual void DrawHUD() override;
+	
 	virtual void AddCrosshair();
+	
 	virtual void AddSimpleQuestView();
 	
-	virtual void BeginPlay() override;
 	void AddInteractionWidget();
+	
+	virtual void PostLoad() override;
+	
+	virtual void BeginPlay() override;
+	
 };

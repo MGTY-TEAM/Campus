@@ -54,6 +54,7 @@ protected:
     // Overrides the BeginDestroy method of UObject
     virtual void BeginDestroy() override;
 
+	virtual void PostLoad() override;
 private:
     // Pointer to the singleton instance of ChatManager
     static UChatManager* ChatManagerInstance;

@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "MotionControllerComponent.h"
 #include "Camera/CameraComponent.h"
 #include "VRCharacter.generated.h"
 
@@ -26,11 +25,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(EditDefaultsOnly)
-	UMotionControllerComponent* RightMotionControllerComponent;
-
-	UPROPERTY(EditDefaultsOnly)
-	UMotionControllerComponent* LeftMotionControllerComponent;
 
 	virtual void BeginPlay() override;
 

@@ -1,30 +1,39 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿#include "QuestManager.h"
 
-
-#include "QuestManager.h"
 #include "Campus/IncentiveSystem/QuestSystem/Quest.h"
+#include "Data/QuestRowBase.h"
 
-TArray<UQuest*> UQuestManager::Quests = TArray<UQuest*>();
+TArray<TWeakObjectPtr<UQuest>> UQuestManager::Quests = TArray<TWeakObjectPtr<UQuest>>();
 
 FOnQuestUpdated UQuestManager::OnQuestsUpdated;
 
 void UQuestManager::ClearQuestList()
 {
-	if(!Quests.IsEmpty())
+	if (!Quests.IsEmpty())
 	{
 		Quests.Empty();
+	}
+
+	if (OnQuestsUpdated.IsBound())
+	{
+		OnQuestsUpdated.Broadcast(Quests);
 	}
 }
 
 void UQuestManager::CompleteQuest(const FString& QuestPath)
 {
-	if(!Quests.IsEmpty())
+	if (!Quests.IsEmpty())
 	{
-		for(UQuest* Quest : Quests)
+		for (TWeakObjectPtr<UQuest> WeakQuest : Quests)
 		{
-			if(Quest && Quest->QuestID == QuestPath)
+			UE_LOG(LogTemp, Warning, TEXT("Quests Num: %i"), Quests.Num());
+			if (WeakQuest.IsValid())
 			{
-				Quest->Complete();	
+				if(WeakQuest->QuestID == QuestPath)
+				{
+					WeakQuest->Complete();
+					break;
+				}
 			}
 		}
 	}
@@ -32,43 +41,70 @@ void UQuestManager::CompleteQuest(const FString& QuestPath)
 
 void UQuestManager::UpdateState(const FString& QuestPath)
 {
+	// Реализация метода обновления состояния квеста
 }
 
-void UQuestManager::FillQuests(const TArray<UQuest*> NewQuests)
+void UQuestManager::FillQuests(const TArray<TWeakObjectPtr<UQuest>> NewQuests)
 {
+	ClearQuestList();
+	Quests = NewQuests;
 	
+	if(OnQuestsUpdated.IsBound())
+	{
+		OnQuestsUpdated.Broadcast(Quests);
+	}
 }
 
 void UQuestManager::FillQuestsByData(const TArray<FQuestRowBase*> QuestRowBases)
 {
 	ClearQuestList();
-	if(!QuestRowBases.IsEmpty())
+	if (!QuestRowBases.IsEmpty())
 	{
 		for (FQuestRowBase* QuestRowBase : QuestRowBases)
 		{
-			if(QuestRowBase)
+			if (QuestRowBase)
 			{
-				if(QuestRowBase->ParentQuestID.IsEmpty())
+				if (QuestRowBase->ParentQuestID.IsEmpty())
 				{
-					if(UQuest* Quest = NewObject<UQuest>())
+					if (UQuest* Quest = NewObject<UQuest>())
 					{
 						Quest->SetupQuestByData(QuestRowBase->SubQuestIDs, QuestRowBase->NextQuestIDs, QuestRowBase->QuestID, QuestRowBase->QuestName, QuestRowBase->QuestDescription, QuestRowBase->ParentQuestID);
-						Quests.Add(Quest);
+						TWeakObjectPtr<UQuest> WeakQuestPtr = Quest;
+						Quests.Add(WeakQuestPtr);
 					}
 				}
 			}
 		}
-		OnQuestsUpdated.Broadcast(Quests);
+		if(OnQuestsUpdated.IsBound())
+		{
+			OnQuestsUpdated.Broadcast(Quests);
+		}
 	}
 }
 
-TArray<UQuest*> UQuestManager::GetQuests()
+TArray<TWeakObjectPtr<UQuest>> UQuestManager::GetQuests()
 {
 	return Quests;
 }
 
-void UQuestManager::UpdateQuestState(UQuest* UpdatedQuest)
+TArray<UQuest*> UQuestManager::GetQuestPTRs()
 {
-	OnQuestsUpdated.Broadcast(Quests);
+	TArray<UQuest*> QuestsPTRs = TArray<UQuest*>();
+	for(TWeakObjectPtr<UQuest> WeakQuest : Quests)
+	{
+		if(WeakQuest.IsValid())
+		{
+			QuestsPTRs.Add(WeakQuest.Get());
+		}
+	}
+	return QuestsPTRs;
+}
+
+void UQuestManager::UpdateQuestState(TWeakObjectPtr<UQuest> UpdatedQuest)
+{
+	if(OnQuestsUpdated.IsBound())
+	{
+		OnQuestsUpdated.Broadcast(Quests);
+	}
 }
 

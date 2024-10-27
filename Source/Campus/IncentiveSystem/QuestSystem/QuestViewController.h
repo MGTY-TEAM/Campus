@@ -16,15 +16,16 @@ class CAMPUS_API UQuestViewController : public UObject
 {
 	GENERATED_BODY()
 
-	TArray<UObject*> QuestViews;
-
+	TArray<TWeakObjectPtr<UObject>> QuestViews;
 public:
-
-	void AddQuestView(UObject* QuestView);
+	UQuestViewController();
+	
+	void AddQuestView(TWeakObjectPtr<UObject> QuestView);
 
 protected:
 	UFUNCTION()
-	void QuestsUpdated(TArray<UQuest*> Quests);
-	
+	void QuestsUpdated(TArray<TWeakObjectPtr<UQuest>> Quests);
+
 	virtual void PostInitProperties() override;
+	virtual void BeginDestroy() override;
 };

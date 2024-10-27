@@ -32,6 +32,15 @@ void UChatManager::BeginDestroy()
 	}
 }
 
+void UChatManager::PostLoad()
+{
+	UObject::PostLoad();
+	if(!RegisteredUsers.IsEmpty())
+	{
+		RegisteredUsers.Empty();
+	}
+}
+
 
 bool UChatManager::RegisterUser(const FName& UserID, UChatUserComponent* User)
 {

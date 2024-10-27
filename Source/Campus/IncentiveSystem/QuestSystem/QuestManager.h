@@ -8,14 +8,15 @@
 #include "QuestManager.generated.h"
 
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnQuestUpdated, TArray<UQuest*>);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnQuestUpdated, TArray<TWeakObjectPtr<UQuest>>);
 
 UCLASS()
 class CAMPUS_API UQuestManager : public UObject
 {
 	GENERATED_BODY()
+
 	
-	static TArray<UQuest*> Quests;
+	static TArray<TWeakObjectPtr<UQuest>> Quests;
 
 	static void ClearQuestList();
 public:
@@ -25,10 +26,11 @@ public:
 	static void CompleteQuest(const FString& QuestPath);
 	static void UpdateState(const FString& QuestPath);
 
-	static void FillQuests(TArray<UQuest*> NewQuests);
+	static void FillQuests(TArray<TWeakObjectPtr<UQuest>> NewQuests);
 	static void FillQuestsByData(const TArray<FQuestRowBase*> QuestRowBases);
 		
-	static TArray<UQuest*> GetQuests();
+	static TArray<TWeakObjectPtr<UQuest>> GetQuests();
+	static TArray<UQuest*> GetQuestPTRs();
 
-	static void UpdateQuestState(UQuest* UpdatedQuest);
+	static void UpdateQuestState(TWeakObjectPtr<UQuest> UpdatedQuest);
 };

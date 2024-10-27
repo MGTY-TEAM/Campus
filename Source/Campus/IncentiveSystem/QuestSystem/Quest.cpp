@@ -31,7 +31,7 @@ void UQuest::SetupQuestByData(const TArray<FString>& SubQuestsID, const TArray<F
 	bCompleted = false;
 }
 
-void UQuest::SetupQuestByObjectList(TArray<UQuest*> NewSubQuests, TArray<UQuest*> NewNextQuests, const FString& NewQuestID,
+void UQuest::SetupQuestByObjectList(TArray<TWeakObjectPtr<UQuest>> NewSubQuests, TArray<TWeakObjectPtr<UQuest>> NewNextQuests, const FString& NewQuestID,
                         const FString& NewQuestName, const FString& NewQuestDescription, const FString& NewParentQuestID,
                         float CurrentProgress, bool NewbCompleted)
 {

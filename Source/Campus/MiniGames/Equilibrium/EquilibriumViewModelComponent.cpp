@@ -1,5 +1,7 @@
 
 #include "Campus/MiniGames/Equilibrium/EquilibriumViewModelComponent.h"
+
+#include "Campus/IncentiveSystem/QuestSystem/QuestManager.h"
 #include "Campus/MiniGames/Equilibrium/EquilibriumView.h"
 #include "Types/EquilCup.h"
 
@@ -65,7 +67,7 @@ void UEquilibriumViewModelComponent::OnRemovedWeight()
 
 void UEquilibriumViewModelComponent::OnGameEnded()
 {
-	ExecuteMiniGameCompleted.Broadcast(MiniGameInfo);
+	UQuestManager::CompleteQuest("WeightsAndCups");
 	UE_LOG(LogTemp, Log, TEXT("EQUILIBRIUM GAME ENDED"));
 }
 

@@ -17,9 +17,11 @@ void ABaseHUD::BeginPlay()
 	Super::BeginPlay();
 	AddCrosshair();
 	AddInteractionWidget();
+	
 	QuestViewController = NewObject<UQuestViewController>();
 	AddSimpleQuestView();
 }
+
 
 void ABaseHUD::AddInteractionWidget()
 {
@@ -47,6 +49,18 @@ void ABaseHUD::SetupChat(UChatUserComponent* ChatUserComponent)
 	}
 }
 
+void ABaseHUD::AddExternalQuestView(UObject* QuestView)
+{
+	if(QuestView && QuestView->GetClass()->ImplementsInterface(UQuestsAssigner::StaticClass()))
+	{
+		if(QuestViewController.IsValid())
+		{
+			QuestViewController->AddQuestView(QuestView);
+		}
+	}
+}
+
+
 void ABaseHUD::AddCrosshair()
 {
 	Crosshair = CreateWidget(GetWorld(), CrosshairClass);
@@ -60,11 +74,12 @@ void ABaseHUD::AddCrosshair()
 void ABaseHUD::AddSimpleQuestView()
 {
 	SimpleQuestView = CreateWidget(GetWorld(), SimpleQuestViewClass);
-	if(SimpleQuestView)
+	if(SimpleQuestView.IsValid())
 	{
 		SimpleQuestView->AddToViewport();
 		UE_LOG(BaseHUDLog, Log, TEXT("Simple quest view succesfully added"));
-		if(QuestViewController)
+		
+		if(QuestViewController.IsValid())
 		{
 			if(SimpleQuestView->GetClass()->ImplementsInterface(UQuestsAssigner::StaticClass()))
 			{
@@ -72,4 +87,10 @@ void ABaseHUD::AddSimpleQuestView()
 			}
 		}
 	}
+}
+
+void ABaseHUD::PostLoad()
+{
+	Super::PostLoad();
+	
 }

@@ -3,6 +3,7 @@
 #include "Campus/MiniGames/SolarSystem/SolarSystemGame.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Campus/IncentiveSystem/QuestSystem/QuestManager.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Campus/MiniGames/SolarSystem/SpaceObject.h"
@@ -120,6 +121,7 @@ void ASolarSystemGame::StartSystem()
 	if (!bIsGameCompleted)
 	{
 		// ExecuteMiniGameCompleted.Broadcast();
+		UQuestManager::CompleteQuest("SolarSystem");
 		bIsGameCompleted = true;
 		UE_LOG(LogSolarSystemGame, Display, TEXT("Solar System Game Was Complited"));
 	}

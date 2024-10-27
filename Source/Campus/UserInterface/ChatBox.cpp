@@ -25,12 +25,14 @@ void UChatBox::ConnectChatComponent(UChatUserComponent* ChatUserComponent)
 
 void UChatBox::ReceiveMessage(UMessageInstance* MessageInstance)
 {
+	if(GetWorld())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Catch Chat from bot message : %s"), *MessageInstance->GetMessageInfo().Get<2>().ToString());
 	
-	UE_LOG(LogTemp, Warning, TEXT("Catch Chat from bot message : %s"), *MessageInstance->GetMessageInfo().Get<2>().ToString());
-	
-	TTuple<FName, FName, FText> MessageInfo = MessageInstance->GetMessageInfo();
+		TTuple<FName, FName, FText> MessageInfo = MessageInstance->GetMessageInfo();
 
-	UpdateChatMessages(MessageInfo.Get<2>(),FText::FromName(MessageInfo.Get<0>()));
+		UpdateChatMessages(MessageInfo.Get<2>(),FText::FromName(MessageInfo.Get<0>()));
+	}
 	
 }
 ////////////////////
@@ -95,19 +97,23 @@ void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type Commi
 
 void UChatBox::UpdateChatMessages(FText Message, FText Sender)
 {
-	UChat_Message* WidgetInstance = CreateWidget<UChat_Message>(GetWorld()->GetFirstPlayerController(),
-	                                                            BlueprintWidgetClass);
-	Chat_ScrollBox->ScrollToEnd();
-	
-	if (WidgetInstance)
+	if(APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
 	{
-		WidgetInstance->AddToViewport();
 		
-		Chat_ScrollBox->AddChild(WidgetInstance);
+		UChat_Message* WidgetInstance = CreateWidget<UChat_Message>(PlayerController,
+	                                                            BlueprintWidgetClass);
+		Chat_ScrollBox->ScrollToEnd();
+	
+		if (WidgetInstance)
+		{
+			WidgetInstance->AddToViewport();
+			
+			Chat_ScrollBox->AddChild(WidgetInstance);
 		
-		WidgetInstance->Message->SetText(Message);
-		WidgetInstance->Sender->SetText(Sender);
-		SendMessage_TextBox->SetText(FText::GetEmpty());
+			WidgetInstance->Message->SetText(Message);
+			WidgetInstance->Sender->SetText(Sender);
+			SendMessage_TextBox->SetText(FText::GetEmpty());
+		}
 	}
 }
 

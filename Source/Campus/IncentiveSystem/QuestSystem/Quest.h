@@ -7,7 +7,7 @@
 #include "Quest.generated.h"
 
 class UQuest;
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnQuestStateChanged, UQuest*)
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnQuestStateChanged, TWeakObjectPtr<UQuest>)
 
 /**
  * 
@@ -17,11 +17,9 @@ class CAMPUS_API UQuest : public UObject
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<UQuest*> SubQuests;
+	TArray<TWeakObjectPtr<UQuest>> SubQuests;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<UQuest*>	NextQuests;
+	TArray<TWeakObjectPtr<UQuest>> NextQuests;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString QuestID;
@@ -73,6 +71,6 @@ public:
 	 * @param NewQuestDescription Quest description
 	 * @param NewParentQuestID Parent Quest
 	 */
-	void SetupQuestByObjectList(TArray<UQuest*> NewSubQuests, TArray<UQuest*> NewNextQuests,const FString& NewQuestID,
+	void SetupQuestByObjectList(TArray<TWeakObjectPtr<UQuest>> NewSubQuests, TArray<TWeakObjectPtr<UQuest>> NewNextQuests,const FString& NewQuestID,
 		const FString& NewQuestName, const FString& NewQuestDescription, const FString& NewParentQuestID, float CurrentProgress, bool NewbCompleted);
 };

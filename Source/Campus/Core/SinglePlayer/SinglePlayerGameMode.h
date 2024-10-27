@@ -28,8 +28,4 @@ protected:
 
 	virtual void BeginPlay() override;;
 
-private:
-	bool CheckHMDConnection();
-
-	FTransform GetFirstPlayerStartTransform() const;
 };

@@ -8,12 +8,11 @@ public class Campus : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem","Networking","WebSockets","Sockets", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
 			"AIModule",
-			"GameplayTasks",
 			"NavigationSystem",
 			"HTTP",
 			"Json",
@@ -22,8 +21,6 @@ public class Campus : ModuleRules
 			"SlateCore",
 			"Slate", 
 			"Niagara",
-			"OpenXR",
-			"HeadMountedDisplay"
 		});
 
         PublicIncludePaths.AddRange(new string[]
