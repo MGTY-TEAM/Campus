@@ -57,10 +57,12 @@ void AAlpinistGame::BeginPlay()
 	if (PlayersNiagaraComponent)
 	{
 		PlayersNiagaraComponent->SetAsset(PlayersNiagaraSystem);
+		PlayersNiagaraComponent->Deactivate();
 	}
 	if (WeatherNiagaraComponent)
 	{
 		WeatherNiagaraComponent->SetAsset(WeatherNiagaraSystem);
+		WeatherNiagaraComponent->Deactivate();
 	}
 }
 
@@ -132,6 +134,7 @@ bool AAlpinistGame::SetupController()
 		if (JsonObject->TryGetStringArrayField("game_map", Map))
 		{
 			AlpinistViewComponent->InitializeLevel(Map, MapViewSceneComponent, PlayersNiagaraComponent);
+			AlpinistViewComponent->InitializeWeather(WeatherNiagaraComponent);
 			const std::vector<std::string> STDMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 			if (m_gameController.IsValid())
 			{
@@ -246,6 +249,7 @@ void AAlpinistGame::CloseGame()
 	if (AlpinistViewComponent)
 	{
 		AlpinistViewComponent->DestroyLevel(MapViewSceneComponent, PlayersNiagaraComponent);
+		AlpinistViewComponent->DestroyWeather(WeatherNiagaraComponent);
 	}
 	
 	// Возвращение камеры персонажу, удаление карты

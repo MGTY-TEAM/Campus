@@ -6,13 +6,13 @@
 #include "AlpinistMapEntity.h"
 #include "Components/SceneComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
+#include "Campus/Libraries/MiniGames/Alpinist/AlpinistGameHelper.h"
 
 UAlpinistViewComponent::UAlpinistViewComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
 	InnerPlayersNiagaraComponent = nullptr;
-	InnerWeatherNiagaraComponent = nullptr;
 }
 
 void UAlpinistViewComponent::BeginPlay()
@@ -73,6 +73,8 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const USceneComponent* MapViewSceneComponent, UNiagaraComponent* PlayersNiagaraComponent)
 {
+	UAlpinistGameHelper::bInitializeViewMapProcess = true;
+	
 	ToStartPosition(nullptr);
 
 	if (!MapViewSceneComponent || !PlayersNiagaraComponent) return false;
@@ -91,6 +93,19 @@ bool UAlpinistViewComponent::InitializeLevel(const TArray<FString>& Map, const U
 		SpawnLineDelegate.BindUFunction(this, FName("SpawnLine"), Map, PlayersNiagaraComponent);
 		GetWorld()->GetTimerManager().SetTimer(SpawnLineTimerHandle, SpawnLineDelegate, BatchInterval, true, InitialDelay);
 
+		return true;
+	}
+
+	return false;
+}
+
+bool UAlpinistViewComponent::InitializeWeather(UNiagaraComponent* WeatherNiagaraComponent)
+{
+	if (WeatherNiagaraComponent && bShouldInitializeWeather)
+	{
+		WeatherNiagaraComponent->Activate(true);
+		bShouldInitializeWeather = false;
+		
 		return true;
 	}
 
@@ -134,6 +149,21 @@ bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentA
 	}
 
 	return true;
+}
+
+bool UAlpinistViewComponent::DestroyWeather(UNiagaraComponent* WeatherNiagaraComponent)
+{
+	bShouldInitializeWeather = true;
+	
+	if (WeatherNiagaraComponent && WeatherNiagaraComponent->GetAsset())
+	{
+		WeatherNiagaraComponent->Deactivate();
+		WeatherNiagaraComponent->DestroyInstance();
+		
+		return true;
+	}
+
+	return false;
 }
 
 void UAlpinistViewComponent::StartPlayByHistory(const TArray<TPair<int32, TPair<int32, int32>>>& InCoordinateHistory)
@@ -229,6 +259,8 @@ void UAlpinistViewComponent::SpawnLine(const TArray<FString>& Map, UNiagaraCompo
 	if (SpawnLineIndex == Map.Num())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(SpawnLineTimerHandle);
+		UAlpinistGameHelper::bInitializeViewMapProcess = false;
 		OnMapOpen.Broadcast(true);
 	}
 }
+

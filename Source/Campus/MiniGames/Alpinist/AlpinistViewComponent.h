@@ -35,7 +35,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	bool InitializeLevel(const TArray<FString>& Map, const USceneComponent* MapViewSceneComponent, UNiagaraComponent* PlayersNiagaraComponent);
+	bool InitializeWeather(UNiagaraComponent* WeatherNiagaraComponent);
 	bool DestroyLevel(const USceneComponent* SceneComponentAround, UNiagaraComponent* PlayersNiagaraComponent);
+	bool DestroyWeather(UNiagaraComponent* WeatherNiagaraComponent);
 	void StartPlayByHistory(const TArray<TPair<int32, TPair<int32, int32>>>& InCoordinateHistory);
 	void ToStartPosition(UNiagaraComponent* PlayersNiagaraComponent);
 
@@ -55,9 +57,10 @@ private:
 	TArray<TPair<int32, TPair<int32, int32>>> CoordinateHistory;
 	FVector PlayerPosition;
 	FVector CurrentLocation;
+	UPROPERTY()
 	UNiagaraComponent* InnerPlayersNiagaraComponent;
-	UNiagaraComponent* InnerWeatherNiagaraComponent;
 	int32 CurrentSnapshot = 0;
 	bool bShouldPlay = false;
+	bool bShouldInitializeWeather = true;
 	bool bOnEntity = true;
 };

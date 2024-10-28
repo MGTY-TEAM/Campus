@@ -8,6 +8,7 @@ namespace AlpinistGame
 class UAlpinistGameHelper
 {
 public:
+	inline static bool bInitializeViewMapProcess = false;
 	static int32 DetermineNumberOfLevels(const FString& DirectoryPath)
 	{
 		if (FPaths::DirectoryExists(DirectoryPath))

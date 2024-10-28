@@ -5,6 +5,7 @@
 #include "HighlightStyles/AlpinistSlateStyles.h"
 #include "SAlpinistHighlightedOutputLogWidget.h"
 #include "Campus/MiniGames/Alpinist/AlpinistIDEController.h"
+#include "Campus/Libraries/MiniGames/Alpinist/AlpinistGameHelper.h"
 
 SAlpinistIDEWidget::SAlpinistIDEWidget()
 {
@@ -90,6 +91,10 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 						SNew(SButton)
 						.HAlign(HAlign_Center)
 						.VAlign(VAlign_Center)
+						.IsEnabled(TAttribute<bool>::Create([]() -> bool
+						{
+							return !UAlpinistGameHelper::bInitializeViewMapProcess;
+						}))
 						.ButtonColorAndOpacity(FSlateColor(FLinearColor(0.f, 6.f, 220.f, 0.27f)))
 						.OnClicked(this, &SAlpinistIDEWidget::OnBuildButtonClicked)
 						[
@@ -107,6 +112,10 @@ void SAlpinistIDEWidget::Construct(const FArguments& InArgs)
 						SNew(SButton)
 						.HAlign(HAlign_Center)
 						.VAlign(VAlign_Center)
+						.IsEnabled(TAttribute<bool>::Create([]() -> bool
+						{
+							return !UAlpinistGameHelper::bInitializeViewMapProcess;
+						}))
 						.ButtonColorAndOpacity(FSlateColor(FLinearColor(0.f, 220.f, 6.f, 0.27f)))
 						.OnClicked(this, &SAlpinistIDEWidget::OnRunButtonClicked)
 						[

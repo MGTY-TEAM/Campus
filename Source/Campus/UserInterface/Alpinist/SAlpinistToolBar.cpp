@@ -32,6 +32,10 @@ void SAlpinistToolBar::Construct(const FArguments& InArgs)
 						SNew(SButton)
 						.HAlign(HAlign_Center)
 						.VAlign(VAlign_Center)
+						.IsEnabled(TAttribute<bool>::Create([]() -> bool
+						{
+							return !UAlpinistGameHelper::bInitializeViewMapProcess;
+						}))
 						.ButtonColorAndOpacity(FSlateColor(FLinearColor(3.f, 3.f, 3.f, 0.1f)))
 						.OnClicked(this, &SAlpinistToolBar::OnPopupButtonClick)
 						[
@@ -51,6 +55,10 @@ void SAlpinistToolBar::Construct(const FArguments& InArgs)
 					SNew(SButton)
 					.HAlign(HAlign_Center)
 					.VAlign(VAlign_Center)
+					.IsEnabled(TAttribute<bool>::Create([]() -> bool
+					{
+						return !UAlpinistGameHelper::bInitializeViewMapProcess;
+					}))
 					.ButtonColorAndOpacity(FSlateColor(FLinearColor(3.f, 3.f, 3.f, 0.1f)))
 					.OnClicked(this, &SAlpinistToolBar::OnToStartPositionButtonClicked)
 					[
@@ -78,6 +86,10 @@ void SAlpinistToolBar::Construct(const FArguments& InArgs)
 				.HAlign(HAlign_Center)
 				.VAlign(VAlign_Center)
 				.ButtonColorAndOpacity(FSlateColor(FLinearColor(3.f, 3.f, 3.f, 0.1f)))
+				.IsEnabled(TAttribute<bool>::Create([]() -> bool
+				{
+					return !UAlpinistGameHelper::bInitializeViewMapProcess;
+				}))
 				.OnClicked(this, &SAlpinistToolBar::OnQuitGameButtonClicked)
 				[
 					SNew(STextBlock)
@@ -153,7 +165,7 @@ TSharedRef<SWidget> SAlpinistToolBar::CreatePopupMenu()
 						.VAlign(VAlign_Center)
 						.IsEnabled(TAttribute<bool>::Create([this, ButtonIndex]() -> bool
 						{
-							return GetButtonLevelEnable(ButtonIndex);	
+							return !UAlpinistGameHelper::bInitializeViewMapProcess && GetButtonLevelEnable(ButtonIndex);
 						}))
 						.ButtonColorAndOpacity(TAttribute<FSlateColor>::Create([this, ButtonIndex]() -> FSlateColor
 						{
