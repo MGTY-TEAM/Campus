@@ -44,10 +44,21 @@ void UQuestManager::UpdateState(const FString& QuestPath)
 	// Реализация метода обновления состояния квеста
 }
 
-void UQuestManager::FillQuests(const TArray<TWeakObjectPtr<UQuest>> NewQuests)
+void UQuestManager::FillQuests(TArray<UQuest*> NewQuests)
 {
 	ClearQuestList();
-	Quests = NewQuests;
+
+	if(!NewQuests.IsEmpty())
+	{
+		for(UQuest* Quest : NewQuests)
+		{
+			if(Quest)
+			{
+				TWeakObjectPtr<UQuest> WeakQuest = Quest;
+				Quests.Add(WeakQuest);
+			}
+		}
+	}
 	
 	if(OnQuestsUpdated.IsBound())
 	{

@@ -12,18 +12,36 @@
 void UUserGameInstance::Init()
 {
 	Super::Init();
+	Quests = TArray<UQuest*>();
 }
 
 void UUserGameInstance::LoadComplete(const float LoadTime, const FString& MapName)
 {
 	Super::LoadComplete(LoadTime, MapName);
-	
-	if(QuestTable)
-	{
-		TArray<FQuestRowBase*> QuestRows;
-		QuestTable->GetAllRows("", QuestRows);
 
-		UQuestManager::FillQuestsByData(QuestRows);
+	if(Quests.IsEmpty())
+	{
+		if(QuestTable)
+		{
+			TArray<FQuestRowBase*> QuestRows;
+			QuestTable->GetAllRows("", QuestRows);
+
+			UQuestManager::FillQuestsByData(QuestRows);
+
+			TArray<TWeakObjectPtr<UQuest>> WeakQuests = UQuestManager::GetQuests();
+
+			for(TWeakObjectPtr<UQuest> WeakQuest : WeakQuests)
+			{
+				if(WeakQuest.IsValid())
+				{
+					Quests.Add(WeakQuest.Get());
+				}
+			}
+		}
+	}
+	else
+	{
+		UQuestManager::FillQuests(Quests);
 	}
 }
 

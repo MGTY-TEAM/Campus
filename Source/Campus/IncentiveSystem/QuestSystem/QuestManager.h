@@ -14,7 +14,6 @@ UCLASS()
 class CAMPUS_API UQuestManager : public UObject
 {
 	GENERATED_BODY()
-
 	
 	static TArray<TWeakObjectPtr<UQuest>> Quests;
 
@@ -26,7 +25,7 @@ public:
 	static void CompleteQuest(const FString& QuestPath);
 	static void UpdateState(const FString& QuestPath);
 
-	static void FillQuests(TArray<TWeakObjectPtr<UQuest>> NewQuests);
+	static void FillQuests(TArray<UQuest*> NewQuests);
 	static void FillQuestsByData(const TArray<FQuestRowBase*> QuestRowBases);
 		
 	static TArray<TWeakObjectPtr<UQuest>> GetQuests();

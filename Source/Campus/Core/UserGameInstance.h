@@ -13,6 +13,8 @@ DEFINE_LOG_CATEGORY_STATIC(LogUserGameInstance, Log, Log);
 /**
  * Represents user-specific information.
  */
+class UQuest;
+
 USTRUCT(BlueprintType)
 struct FUserInfo
 {
@@ -38,6 +40,9 @@ class CAMPUS_API UUserGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<UQuest*> Quests;
 	/**
 	 * Retrieves the user's ID.
 	 *
@@ -81,6 +86,7 @@ public:
 	bool TryToGetAndFillUserInfoAndTransitToMainMenu();
 
 protected:
+	
 	virtual void Init() override;
 
 	virtual void LoadComplete(const float LoadTime, const FString& MapName) override;
@@ -94,4 +100,5 @@ private:
 	FUserInfo M_UserInfo; // User information
 	FString M_UserToken; // User authentication token
 	FString M_GameServerPort; // Port for the game server
+
 };
