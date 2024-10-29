@@ -56,7 +56,12 @@ bool AlpinistGame::Lexer::DivideStr(std::string str, std::vector<std::string>& a
 		return false;
 
 	size_t pos;
-	while ((pos = str.find("\r\n")) != std::string::npos)
+	while ((pos = str.find("\r")) != std::string::npos)
+	{
+		str.erase(pos, 1);
+		str.insert(pos, " ");
+	}
+	while ((pos = str.find("\n")) != std::string::npos)
 	{
 		str.erase(pos, 1);
 		str.insert(pos, " ");
