@@ -279,7 +279,7 @@ void AAlpinistGame::OpenLevel(int32 Level)
 
 		if (m_AlpinistLog.IsValid() && AlpinistIDEController)
 		{
-			m_AlpinistLog->PushMessageLog("Level Opening: " + std::to_string(SelectedLevel), AlpinistGame::DisplayMes);
+			m_AlpinistLog->PushMessageLog("Level Opening: " + std::string(TCHAR_TO_UTF8(*UAlpinistGameHelper::GetSelectedLevelName(UKismetSystemLibrary::GetProjectDirectory() /= "Alpinist/Levels", SelectedLevel))), AlpinistGame::DisplayMes);
 			AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
 		}
 	}
