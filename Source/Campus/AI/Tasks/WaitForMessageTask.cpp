@@ -6,11 +6,10 @@
 #include "Campus/AI/AIDroneController.h"
 #include "Campus/AI/AIDrone/CoreDrone/AIAnimDrone.h"
 #include "Campus/AI/Services/CatchMessageService.h"
-#include "Campus/Chat/ChatManager.h"
 #include "Campus/Chat/Components/ChatUserComponent.h"
+#include "Campus/Libraries/Gameplay/BotMessageHandler.h"
 #include "Campus/UserInterface/ChatBox.h"
 #include "Engine/Engine.h"
-#include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Microsoft/AllowMicrosoftPlatformTypes.h"
 
 UWaitForMessageTask::UWaitForMessageTask()
@@ -62,27 +61,20 @@ void UWaitForMessageTask::MessageSent(UMessageInstance* MessageInstance)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Message to bot : %s "), *MessageInstance->GetMessageInfo().Get<2>().ToString());
 	
-	if (MessageInstance->GetMessageInfo().Get<2>().IsNumeric())
-	{
-		ActionPlace = FCString::Atoi(*MessageInstance->GetMessageInfo().Get<2>().ToString());
-	}
+	TPair<int, FString>	HandlerResult = UBotMessageHandler::HandleMessage(MessageInstance->GetMessageInfo().Get<2>().ToString());
+		
+	ActionPlace = HandlerResult.Key;
+	
 	if (Drone)
 	{
-		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
-			[this](const FString& Message, const FString& ActionType, const int& ActionID)
-			{
-				if (!Message.IsEmpty())
-				{
-					UE_LOG(LogTemp, Warning,TEXT("API Message : %s"), *Message);
-					DroneController->GetChatComponent()->SendMessage("DefaultCharacterName", FText::FromString(Message));
-					if (ActionType == "Teleport")
-					{
-						Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Leading));
-						SActionType = EActionType::Leading;
-						
-						Blackboard->SetValueAsInt(ActionPlaceKey.SelectedKeyName, ActionPlace);
-					}
-				}
-			}, MessageInstance->GetMessageInfo().Get<2>().ToString(), Drone->BotURL);
+		DroneController->GetChatComponent()->SendMessage("DefaultCharacterName", FText::FromString(HandlerResult.Value));
+		
+		if (ActionPlace > 0)
+		{
+			Blackboard->SetValueAsEnum(ActionTypeKey.SelectedKeyName, static_cast<uint8>(EActionType::Leading));
+			SActionType = EActionType::Leading;
+					
+			Blackboard->SetValueAsInt(ActionPlaceKey.SelectedKeyName, ActionPlace);
+		}
 	}
 }

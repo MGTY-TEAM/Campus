@@ -7,6 +7,7 @@
 #include "Chat_Message.h"
 #include "Campus/Chat/ChatManager.h"
 #include "Campus/Chat/Components/ChatUserComponent.h"
+#include "Campus/Libraries/Gameplay/BotMessageHandler.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"
@@ -54,12 +55,7 @@ bool UChatBox::Initialize()
 	if (Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass()))) {
 		Drone = Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass()));
 
-		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(
-			[this](const FString& Message, const FString& ActionType, const int ActionID)
-			{
-				UpdateChatMessages(FText::FromString(Message), FText::FromString("Bot"));
-				UE_LOG(LogTemp, Warning, TEXT("SetRequest"));
-			}, "/start", Drone->BotURL);
+		UpdateChatMessages(FText::FromString(UBotMessageHandler::HandleMessage("Start").Value), FText::FromString("Bot"));
 	}
 	return true;
 }
@@ -80,6 +76,8 @@ void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type Commi
 {
 	if (CommitMethod == ETextCommit::OnEnter && !Text.IsEmpty())
 	{
+		UpdateChatMessages(Text, FText::FromString("DefaultCharacterName"));
+		
 		if (OwnerChatUserComponent)
 		{
 			OwnerChatUserComponent->SendMessage("Bot", Text);
@@ -88,7 +86,6 @@ void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type Commi
 		{
 			UE_LOG(LogTemp, Error, TEXT("PlayerChatBox IS DEAD"));
 		}
-		UpdateChatMessages(Text, FText::FromString("DefaultCharacterName"));
 	}
 
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
@@ -102,7 +99,6 @@ void UChatBox::UpdateChatMessages(FText Message, FText Sender)
 		
 		UChat_Message* WidgetInstance = CreateWidget<UChat_Message>(PlayerController,
 	                                                            BlueprintWidgetClass);
-		Chat_ScrollBox->ScrollToEnd();
 	
 		if (WidgetInstance)
 		{
@@ -114,6 +110,8 @@ void UChatBox::UpdateChatMessages(FText Message, FText Sender)
 			WidgetInstance->Sender->SetText(Sender);
 			SendMessage_TextBox->SetText(FText::GetEmpty());
 		}
+		
+		Chat_ScrollBox->ScrollToEnd();
 	}
 }
 
