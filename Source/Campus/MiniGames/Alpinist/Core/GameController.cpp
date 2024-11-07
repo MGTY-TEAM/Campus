@@ -39,13 +39,8 @@ bool GameController::MoveForward()
     {
         const AlpinistGame::MoveResult result = m_world->SwapPlayerMove();
         m_world->LogWorld();
-
-        if (result == AlpinistGame::MoveResult::MR_FINISH)
-        {
-            SaveCopyOfWorld(nullptr);
-            return true;
-        }
-        if (result == AlpinistGame::MoveResult::MR_SUCCESS)
+        
+        if (result == AlpinistGame::MoveResult::MR_SUCCESS || result == AlpinistGame::MoveResult::MR_FINISH)
         {
             return true;
         }

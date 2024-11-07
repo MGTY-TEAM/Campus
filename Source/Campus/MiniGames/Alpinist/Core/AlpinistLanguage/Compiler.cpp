@@ -42,7 +42,12 @@ bool AlpinistGame::Compiler::Run(AlpinistLog& AlpLog)
     {
 	    return false;
     }
-	
-	return Commands->Execute(&AlpLog);
+
+	const bool result = Commands->Execute(&AlpLog);
+	if (result)
+	{
+		Controller->SaveCopyOfWorld(nullptr);
+	}
+	return result;
 }
 #endif

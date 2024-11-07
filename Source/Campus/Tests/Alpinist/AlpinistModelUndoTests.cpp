@@ -81,7 +81,7 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	SecondCommand->Unexecute();
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected UNEXECUTE Move Command UP second", (StartedPos.first - 1) == CurrentPos.first && StartedPos.second == CurrentPos.second);
-
+	
 	FirstCommand->Unexecute();
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected UNEXECUTE Move Command UP first", StartedPos.first == CurrentPos.first && StartedPos.second == CurrentPos.second);
@@ -112,9 +112,7 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	
 	bool IsHeFinished = controller->GetWorld()->IsPlayerFinished();
 	TestTrue("Player Should Be On Finish", IsHeFinished);
-
-	controller->GetAlpinistCaretaker().Pin().Get()->UndoEmptyLastCommandAfterFinished();
-
+	
 	FifthCommand->Unexecute();
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected UNEXECUTE Move Command RIGHT first", (StartedPos.first - 2) == CurrentPos.first && (StartedPos.second + 1) == CurrentPos.second);
@@ -125,15 +123,14 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	FifthCommand->Execute(&Log);
 	IsHeFinished = controller->GetWorld()->IsPlayerFinished();
 	TestTrue("Player Should Be On Finish", IsHeFinished);
-
-	controller->GetAlpinistCaretaker().Pin().Get()->UndoEmptyLastCommandAfterFinished();
-
+	
 	FifthCommand->Unexecute();
 	FourthCommand->Unexecute();
 	ThirdCommand->Unexecute();
 	SecondCommand->Unexecute();
 	FirstCommand->Unexecute();
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
+	
 	TestTrue("Expected UNEXECUTE Move Command UP second", StartedPos.first == CurrentPos.first && StartedPos.second == CurrentPos.second);
 	
 	return true;

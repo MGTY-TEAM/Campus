@@ -67,7 +67,10 @@ void SAlpinistHighlightedTextWidget::Construct(const FArguments& InArgs)
 
 	const FTextBlockStyle* EmptyStyle = &FEmptySlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("EmptySlateStyle.Empty");
 	if (TextBoxStyle) TextBoxStyle->TextStyle = *EmptyStyle;
-	
+
+	// Цвета выбирала Екатерина Кузнецова Павловна, 14 февраля 2005 г. рождения. P.S. 
+	// Эти цвета посвященны пауку, которого мы убивали ночью у меня дома и нечаянно оторвали ему лапу, и он убежал от нас.
+	// Это послание его детям, потому что мы были злые и лишили детей отца.
 	const FTextBlockStyle* MainTextStyle = &FMainCodeSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("MainCodeSlateStyle.MainText");
 	const FTextBlockStyle* SimpleCommandStyle = &FSimpleCommandSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("FSimpleCommandSlateStyle.SimpleCommand");
 	const FTextBlockStyle* ConditionCommandStyle = &FConditionCommandSlateStyle::Get().GetWidgetStyle<FTextBlockStyle>("FConditionCommandSlateStyle.ConditionCommand");
