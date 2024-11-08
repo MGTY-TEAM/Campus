@@ -109,7 +109,7 @@ bool AAlpinistGame::InitializeAlpinistGame()
 	{
 		if (m_gameController.IsValid())
 		{
-			m_Compiler = MakeShared<AlpinistGame::Compiler>(m_gameController.Get(), "");
+			m_Compiler = MakeShared<AlpinistGame::Compiler>(m_gameController.ToWeakPtr(), "");
 			m_AlpinistLog = MakeShared<AlpinistGame::AlpinistLog>();
 				
 			if (m_Compiler.IsValid() && m_AlpinistLog.IsValid())
@@ -156,7 +156,8 @@ void AAlpinistGame::BuildGame()
 {
 	if (m_Compiler.IsValid() && m_AlpinistLog.IsValid()  && AlpinistIDEController)
 	{
-		m_Compiler->Compile(*m_AlpinistLog);
+		TWeakPtr<AlpinistGame::AlpinistLog> AlpLog = m_AlpinistLog.ToWeakPtr();
+		m_Compiler->Compile(AlpLog);
 		m_AlpinistLog->PushMessageLog("Build Processing Finished...", AlpinistGame::DisplayMes);
 		AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
 	}
@@ -167,7 +168,8 @@ void AAlpinistGame::RunGame()
 	ToStartPosition();
 	if (m_Compiler.IsValid() && m_AlpinistLog.IsValid() && AlpinistIDEController && AlpinistViewComponent)
 	{
-		m_Compiler->Run(*m_AlpinistLog);
+		TWeakPtr<AlpinistGame::AlpinistLog> AlpLog = m_AlpinistLog.ToWeakPtr();
+		m_Compiler->Run(AlpLog);
 		m_AlpinistLog->PushMessageLog("Run Processing Finished...", AlpinistGame::DisplayMes);
 		AlpinistViewComponent->StartPlayByHistory(UAlpinistGameHelper::GetAlpinistCoordinateHistory(m_gameController->GetAlpinistCaretaker()));
 		

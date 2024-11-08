@@ -40,13 +40,14 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 
 	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller.Get(), "-.- -.- .- -.- -.-");
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller, "-.- -.- .- -.- -.-");
 
-	AlpinistGame::AlpinistLog Log;
-	const bool CompileSuccess = compiler->Compile(Log);
+	TSharedPtr<AlpinistGame::AlpinistLog> Log = MakeShared<AlpinistGame::AlpinistLog>();
+	TWeakPtr<AlpinistGame::AlpinistLog> WeakLog = Log.ToWeakPtr();
+	const bool CompileSuccess = compiler->Compile(WeakLog);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (const AlpinistGame::MessageLog ErrorMessage : *Log->GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);
@@ -57,20 +58,20 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	const TSharedPtr<AlpinistGame::MacroCommand> Commands = compiler->GetListOfCommands();
 	TestNotNull("Commands is nullptr", Commands.Get());
 	
-	const std::list<AlpinistGame::PlayerCommand*> m_commandList = Commands->GetList();
-	TestNotNull("0 item of m_commandList is nullptr", m_commandList.front());
+	const std::list<TSharedPtr<AlpinistGame::PlayerCommand>> m_commandList = Commands->GetList();
+	TestNotNull("0 item of m_commandList is nullptr", m_commandList.front().Get());
 
 	const std::pair<int8_t, int8_t> StartedPos = controller->GetWorld()->GetPlayer()->GetPos();
 	auto FirstIt = m_commandList.begin();
 	const auto FirstCommand = *FirstIt;
-	FirstCommand->Execute(&Log);
+	FirstCommand->Execute(WeakLog);
 	std::pair<int8_t, int8_t> CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Move Command UP first", (StartedPos.first - 1) == CurrentPos.first && StartedPos.second == CurrentPos.second);
 
 	auto SecondIt = ++FirstIt;
 	const auto SecondCommand = *SecondIt;
-	TestNotNull("1 item of m_commandList is nullptr", SecondCommand);
-	SecondCommand->Execute(&Log);
+	TestNotNull("1 item of m_commandList is nullptr", SecondCommand.Get());
+	SecondCommand->Execute(WeakLog);
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Move Command UP second", (StartedPos.first - 2) == CurrentPos.first && StartedPos.second == CurrentPos.second);
 
@@ -86,27 +87,27 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected UNEXECUTE Move Command UP first", StartedPos.first == CurrentPos.first && StartedPos.second == CurrentPos.second);
 
-	FirstCommand->Execute(&Log);
-	SecondCommand->Execute(&Log);
+	FirstCommand->Execute(WeakLog);
+	SecondCommand->Execute(WeakLog);
 
 	auto ThirdIt = ++SecondIt;
 	const auto ThirdCommand = *ThirdIt;
-	TestNotNull("2 item of m_commandList is nullptr", ThirdCommand);
-	ThirdCommand->Execute(&Log);
+	TestNotNull("2 item of m_commandList is nullptr", ThirdCommand.Get());
+	ThirdCommand->Execute(WeakLog);
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Right Command", (StartedPos.first - 2) == CurrentPos.first && StartedPos.second == CurrentPos.second);
 
 	auto FourthIt = ++ThirdIt;
 	const auto FourthCommand = *FourthIt;
-	TestNotNull("3 item of m_commandList is nullptr", FourthCommand);
-	FourthCommand->Execute(&Log);
+	TestNotNull("3 item of m_commandList is nullptr", FourthCommand.Get());
+	FourthCommand->Execute(WeakLog);
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Move Command RIGHT first", (StartedPos.first - 2) == CurrentPos.first && (StartedPos.second + 1) == CurrentPos.second);
 
 	const auto FifthIt = ++FourthIt;
 	const auto FifthCommand = *FifthIt;
-	TestNotNull("4 item of m_commandList is nullptr", FifthCommand);
-	FifthCommand->Execute(&Log);
+	TestNotNull("4 item of m_commandList is nullptr", FifthCommand.Get());
+	FifthCommand->Execute(WeakLog);
 	CurrentPos = controller->GetWorld()->GetPlayer()->GetPos();
 	TestTrue("Expected Move Command RIGHT second", (StartedPos.first - 2) == CurrentPos.first && (StartedPos.second + 2) == CurrentPos.second);
 	
@@ -120,7 +121,7 @@ bool FExpectUndoCommands::RunTest(const FString& Parameters)
 	IsHeFinished = controller->GetWorld()->IsPlayerFinished();
 	TestFalse("Player Shouldn't Be On Finish", IsHeFinished);
 
-	FifthCommand->Execute(&Log);
+	FifthCommand->Execute(WeakLog);
 	IsHeFinished = controller->GetWorld()->IsPlayerFinished();
 	TestTrue("Player Should Be On Finish", IsHeFinished);
 	

@@ -5,60 +5,60 @@
 
 using namespace AlpinistGame;
 
-bool RotateRightCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
+bool RotateRightCommand::Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog)
 {
-	if (!m_gameController)
+	if (!m_gameController.IsValid())
 		return false;
 
-	m_gameController->SaveCopyOfWorld(this);
-	return m_gameController->RotateRight();
+	m_gameController.Pin()->SaveCopyOfWorld(this);
+	return m_gameController.Pin()->RotateRight();
 }
 
 bool RotateRightCommand::Unexecute()
 {
-	if (!m_gameController)
+	if (!m_gameController.IsValid())
 		return false;
 
-	return m_gameController->RestoreOfWorld(this);
+	return m_gameController.Pin()->RestoreOfWorld(this);
 }
 
-bool RotateLeftCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
+bool RotateLeftCommand::Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog)
 {
-	if (!m_gameController)
+	if (!m_gameController.IsValid())
 		return false;
 
-	m_gameController->SaveCopyOfWorld(this);
-	return m_gameController->RotateLeft();
+	m_gameController.Pin()->SaveCopyOfWorld(this);
+	return m_gameController.Pin()->RotateLeft();
 }
 
 bool RotateLeftCommand::Unexecute()
 {
-	if (!m_gameController)
+	if (!m_gameController.IsValid())
 		return false;
 
-	return m_gameController->RestoreOfWorld(this);
+	return m_gameController.Pin()->RestoreOfWorld(this);
 }
 
-bool MoveCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
+bool MoveCommand::Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog)
 {
-	if (!m_gameController)
+	if (!m_gameController.IsValid())
 		return false;
 	
-	m_gameController->SaveCopyOfWorld(this);
-	return m_gameController->MoveForward();
+	m_gameController.Pin()->SaveCopyOfWorld(this);
+	return m_gameController.Pin()->MoveForward();
 }
 
 bool MoveCommand::Unexecute()
 {
-	if (!m_gameController)
+	if (!m_gameController.IsValid())
 		return false;
 
-	return m_gameController->RestoreOfWorld(this);
+	return m_gameController.Pin()->RestoreOfWorld(this);
 }
 
-bool MacroCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
+bool MacroCommand::Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog)
 {
-	for (PlayerCommand* playerCommand : m_commandList)
+	for (TSharedPtr<PlayerCommand>& playerCommand : m_commandList)
 	{
 		if (!playerCommand->Execute(AlpLog))
 			return false;
@@ -66,7 +66,7 @@ bool MacroCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
 	return true;
 }
 
-void MacroCommand::PushCommand(PlayerCommand* playerCommand)
+void MacroCommand::PushCommand(const TSharedPtr<PlayerCommand>& playerCommand)
 {
 	m_commandList.push_back(playerCommand);
 }
@@ -76,31 +76,31 @@ void ConditionCommand::ToggleResult()
 	m_shouldBeNegation = !m_shouldBeNegation;
 }
 
-bool ConditionCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
+bool ConditionCommand::Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog)
 {
-	if (!m_gameController)
+	if (!m_gameController.IsValid())
 		return false;
 
-	m_bResult = m_gameController->WallInDirection(m_definition);
+	m_bResult = m_gameController.Pin()->WallInDirection(m_definition);
 	return true;
 }
 
-bool NotEndCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
+bool NotEndCommand::Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog)
 {
-	if (!m_gameController)
+	if (!m_gameController.IsValid())
 		return false;
 
-	m_bResult = m_gameController->PlayerNotOnFinish();
+	m_bResult = m_gameController.Pin()->PlayerNotOnFinish();
 	return true;
 }
 
-bool IfCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
+bool IfCommand::Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog)
 {
-	if (!m_conditionCommand) return false;
+	if (!m_conditionCommand.IsValid()) return false;
 	m_conditionCommand->Execute(AlpLog);
 	if (m_conditionCommand->GetResult())
 	{
-		for (PlayerCommand* playerCommand : m_commandListIfTrue)
+		for (TSharedPtr<PlayerCommand>& playerCommand : m_commandListIfTrue)
 		{
 			if (!playerCommand->Execute(AlpLog))
 				return false;
@@ -108,7 +108,7 @@ bool IfCommand::Execute(AlpinistGame::AlpinistLog* AlpLog)
 	}
 	else
 	{
-		for (PlayerCommand* playerCommand : m_commandListIfFalse)
+		for (TSharedPtr<PlayerCommand>& playerCommand : m_commandListIfFalse)
 		{
 			if (!playerCommand->Execute(AlpLog))
 				return false;

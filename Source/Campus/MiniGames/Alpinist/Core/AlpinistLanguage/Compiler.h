@@ -10,16 +10,16 @@ namespace AlpinistGame
 	
 	class Compiler
 	{
-		GameController* Controller;
+		TWeakPtr<GameController> Controller;
 		std::string Code;
 
 		TSharedPtr<MacroCommand> Commands = nullptr;
 	public:
-		Compiler(GameController* controller, const std::string& code) : Controller(controller), Code(code) {}
+		Compiler(const TWeakPtr<GameController>& controller, const std::string& code) : Controller(controller), Code(code) {}
 
 		void SetCode(const std::string& NewCode);
-		bool Compile(AlpinistLog& AlpLog);
-		bool Run(AlpinistLog& AlpLog);
+		bool Compile(TWeakPtr<AlpinistLog>& AlpLog);
+		bool Run(TWeakPtr<AlpinistLog>& AlpLog);
 
 		TSharedPtr<MacroCommand> GetListOfCommands() { return Commands; };
 	};

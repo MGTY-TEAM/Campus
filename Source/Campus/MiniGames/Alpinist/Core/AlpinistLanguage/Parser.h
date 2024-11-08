@@ -3,9 +3,9 @@
 #include <string>
 #include <stack>
 #include "Token.h"
-// #include "../Commands.h"
-// #include "../GameController.h"
+
 #ifdef ALPINIST_GAME
+
 namespace AlpinistGame
 {
 	class Parser
@@ -13,34 +13,34 @@ namespace AlpinistGame
 		std::stack<int8_t> StackScope;
 		std::vector<TSharedPtr<Token>> Tokens;
 		size_t Pos = 0;
-		GameController* Controller;
+		TWeakPtr<GameController> Controller;
 		TSharedPtr<MacroCommand> CommandList;
 		TSharedPtr<Creator> creator;
-
-		AlpinistLog* Log = nullptr;
+		
+		TWeakPtr<AlpinistLog> Log = nullptr;
 	public:
-		Parser(const std::vector<TSharedPtr<Token>>& ListOfTokens, GameController* controller) : Tokens(ListOfTokens), Controller(controller)
+		Parser(const std::vector<TSharedPtr<Token>>& ListOfTokens, const TWeakPtr<GameController>& controller) : Tokens(ListOfTokens), Controller(controller)
 		{
 			CommandList = MakeShared<MacroCommand>();
 			creator = MakeShared<Creator>();
 		}
 		~Parser();
 
-		TSharedPtr<MacroCommand> SynAnalysis(AlpinistLog& AlpLog);
+		TSharedPtr<MacroCommand> SynAnalysis(TWeakPtr<AlpinistLog>& AlpLog);
 	private:
-		bool ContinueSynAnal(MacroCommand* commandList);
+		bool ContinueSynAnal(TWeakPtr<MacroCommand> commandList);
 
-		bool AddSimpleCommand(const std::string& Command, MacroCommand* commandList);
-		bool AddWhileLoop(const std::string& Command, MacroCommand* commandList);
-		bool AddIfElseConditional(const std::string& Command, MacroCommand* commandList);
-
-		template<typename CommandType>
-		CommandType* CreateCommandWithCondition(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition);
-		WhileCommand* CreateWhileCommandWithKeyword(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition);
+		bool AddSimpleCommand(const std::string& Command, TWeakPtr<MacroCommand> commandList);
+		bool AddWhileLoop(const std::string& Command, TWeakPtr<MacroCommand> commandList);
+		bool AddIfElseConditional(const std::string& Command, TWeakPtr<MacroCommand> commandList);
 
 		template<typename CommandType>
-		bool FillScope(CommandType* Command, void(CommandType::* PushCommand)(PlayerCommand*), const bool HasCondition = true);
-		bool FillCommandListScope(MacroCommand* macroCommandList);
+		TSharedPtr<CommandType> CreateCommandWithCondition(const std::string& Command, TWeakPtr<MacroCommand> commandList, bool& CommandHasCondition);
+		TSharedPtr<AlpinistGame::WhileCommand> CreateWhileCommandWithKeyword(const std::string& Command, TWeakPtr<MacroCommand> commandList, bool& CommandHasCondition);
+
+		template<typename CommandType>
+		bool FillScope(TSharedPtr<CommandType> Command, void(CommandType::* PushCommand)(const TSharedPtr<PlayerCommand>&), const bool HasCondition = true);
+		bool FillCommandListScope(TWeakPtr<MacroCommand> macroCommandList);
 
 		bool DeleteTokenFront();
 		bool CheckStackScope();
@@ -51,7 +51,7 @@ namespace AlpinistGame
 	};
 
 	template<typename CommandT>
-	CommandT* Parser::CreateCommandWithCondition(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition)
+	TSharedPtr<CommandT> Parser::CreateCommandWithCondition(const std::string& Command, TWeakPtr<MacroCommand> commandList, bool& CommandHasCondition)
 	{
 		bool NeedToBeNegate = false;
 		Token* NegateToken = Tokens.front().Get();
@@ -62,17 +62,17 @@ namespace AlpinistGame
 		}
 
 		Token* conditionToken = Tokens.front().Get();
-		CommandT* instanceCommand = nullptr;
+		TSharedPtr<CommandT> instanceCommand = nullptr;
 		if (conditionToken && conditionToken->GetCommandType() == CT_ConditionType)
 		{
-			if (PlayerCommand* newConditionCommand = creator->Create(conditionToken->GetText(), Controller))
+			if (const TSharedPtr<PlayerCommand> newConditionCommand = creator->Create(conditionToken->GetText(), Controller))
 			{
-				if (ConditionCommand* condCommand = dynamic_cast<ConditionCommand*>(newConditionCommand))
+				if (const TSharedPtr<ConditionCommand> condCommand = StaticCastSharedPtr<ConditionCommand>(newConditionCommand))
 				{
-					instanceCommand = dynamic_cast<CommandT*>(creator->Create(Command, Controller, condCommand));
+					instanceCommand = StaticCastSharedPtr<CommandT>(creator->Create(Command, Controller, condCommand));
 					if (instanceCommand)
 					{
-						commandList->PushCommand(instanceCommand);
+						commandList.Pin()->PushCommand(instanceCommand);
 						DeleteTokenFront();
 						CommandHasCondition = true;
 
@@ -86,7 +86,7 @@ namespace AlpinistGame
 		}
 		else if (conditionToken && conditionToken->GetCommandType() == CT_NotEnd)
 		{
-			Log->PushMessageLog("Keyword \"NotEnd\" doesn't expect negating...", WarningMes);
+			Log.Pin()->PushMessageLog("Keyword \"NotEnd\" doesn't expect negating...", WarningMes);
 		}
 		else
 		{
@@ -94,30 +94,30 @@ namespace AlpinistGame
 			const std::string Exactly = " expects ConditionCommand...";
 			const std::string WhatExactly = What + Exactly;
 			
-			Log->PushMessageLog(WhatExactly, ErrorMes);
+			Log.Pin()->PushMessageLog(WhatExactly, ErrorMes);
 		}
 		return instanceCommand;
 	}
 
 	template<typename CommandType>
-	bool Parser::FillScope(CommandType* Command, void(CommandType::* PushCommand)(PlayerCommand*), const bool HasCondition)
+	bool Parser::FillScope(TSharedPtr<CommandType> Command, void(CommandType::* PushCommand)(const TSharedPtr<PlayerCommand>&), const bool HasCondition)
 	{
 		Token* beginToken = Tokens.front().Get();
-		MacroCommand* macroElseCommandList = new MacroCommand();
+		const TSharedPtr<MacroCommand> macroElseCommandList = MakeShared<MacroCommand>();
 		if (beginToken->GetCommandType() == CT_BeginScope && HasCondition)
 		{
-			if (!FillCommandListScope(macroElseCommandList))
+			if (!FillCommandListScope(macroElseCommandList.ToWeakPtr()))
 			{
 				return false;
 			}
-			for (PlayerCommand* commandToAdd : macroElseCommandList->GetList())
+			for (TSharedPtr<PlayerCommand>& commandToAdd : macroElseCommandList->GetList())
 			{
-				(Command->*PushCommand)(commandToAdd);
+				(Command.Get()->*PushCommand)(commandToAdd);
 			}
 		}
 		else
 		{
-			Log->PushMessageLog("While/IfCommand hasn't Scope...", ErrorMes);
+			Log.Pin()->PushMessageLog("While/IfCommand hasn't Scope...", ErrorMes);
 			return false;
 		}
 		return true;

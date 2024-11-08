@@ -41,12 +41,12 @@ namespace AlpinistGame
 
 	class AlpinistCaretaker
 	{
-		std::vector<std::pair<PlayerCommand*, BaseMemento*>> m_vectorMementos;
+		std::vector<std::pair<PlayerCommand*, TSharedPtr<BaseMemento>>> m_vectorMementos;
 	public:
 		AlpinistCaretaker() {};
 	
-		void Backup(AlpinistMemento*& NewMemento, PlayerCommand*& Command);
-		AlpinistMemento* Undo(PlayerCommand*& Command);
+		void Backup(const TSharedPtr<AlpinistMemento>& NewMemento, PlayerCommand*& Command);
+		TSharedPtr<AlpinistMemento> Undo(PlayerCommand*& Command);
 		void UndoEmptyLastCommandAfterFinished();
 
 		void ClearHistory();

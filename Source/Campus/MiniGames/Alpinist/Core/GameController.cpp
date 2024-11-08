@@ -38,7 +38,7 @@ bool GameController::MoveForward()
     if (m_world.Get())
     {
         const AlpinistGame::MoveResult result = m_world->SwapPlayerMove();
-        m_world->LogWorld();
+        // m_world->LogWorld();
         
         if (result == AlpinistGame::MoveResult::MR_SUCCESS || result == AlpinistGame::MoveResult::MR_FINISH)
         {
@@ -55,7 +55,7 @@ bool GameController::RotateRight()
         if(Player* player = m_world->GetPlayer().Get())
         {
             player->RotateRight();
-            m_world->LogWorld();
+            // m_world->LogWorld();
             return true;
         }
     }
@@ -69,7 +69,7 @@ bool GameController::RotateLeft()
         if(Player* player = m_world->GetPlayer().Get())
         {
             player->RotateLeft();
-            m_world->LogWorld();
+            // m_world->LogWorld();
             return true;
         }
     }
@@ -95,15 +95,15 @@ bool GameController::PlayerNotOnFinish()
 void GameController::ToStartPositions()
 {
     m_world = MakeShared<World>(m_initialWorld);
-    if (m_world.Get())
+    /*if (m_world.Get())
     {
         m_world->LogWorld();
-    }
+    }*/
 }
 
 bool GameController::SaveCopyOfWorld(PlayerCommand* Command)
 {
-    AlpinistMemento* NewMemento = new AlpinistMemento();
+    const TSharedPtr<AlpinistMemento> NewMemento = MakeShareable(new AlpinistMemento());
     if (NewMemento && m_world.Get())
     {
         NewMemento->SetState(m_world->GetCopyOfGrid());
@@ -121,7 +121,7 @@ bool GameController::RestoreOfWorld(PlayerCommand* Command)
 {
     if (m_alpinistCaretaker.Get())
     {
-        if (AlpinistMemento* Memento = m_alpinistCaretaker->Undo(Command))
+        if (const TSharedPtr<AlpinistMemento>& Memento = m_alpinistCaretaker->Undo(Command))
         {
             if (m_world.Get())
             {

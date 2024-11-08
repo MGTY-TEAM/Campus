@@ -1,9 +1,10 @@
 #include "Lexer.h"
-// #include "../GameController.h"
+
 #ifdef ALPINIST_GAME
-std::vector<TSharedPtr<AlpinistGame::Token>>* AlpinistGame::Lexer::LexAnalysis(AlpinistLog& AlpLog)
+
+std::vector<TSharedPtr<AlpinistGame::Token>>* AlpinistGame::Lexer::LexAnalysis(TWeakPtr<AlpinistLog>& AlpLog)
 {
-	Log = &AlpLog;
+	Log = AlpLog;
 	while (ContinueLexAnal())
 	{
 
@@ -36,9 +37,9 @@ bool AlpinistGame::Lexer::ContinueLexAnal()
 	const std::string WhatExactly = What + Exactly;
 	const std::string InPos = std::to_string(currentPos);
 	
-	Log->PushMessageLog(InPos + ": " + WhatExactly, AlpinistGame::ErrorMes);
+	Log.Pin()->PushMessageLog(InPos + ": " + WhatExactly, AlpinistGame::ErrorMes);
 	
-	Log->PushMessageLog(InPos + ": " + "Incorrect Command", AlpinistGame::ErrorMes);
+	Log.Pin()->PushMessageLog(InPos + ": " + "Incorrect Command", AlpinistGame::ErrorMes);
 	return false;
 }
 
@@ -95,4 +96,5 @@ void AlpinistGame::Lexer::PushAndAdjustment(std::string str, std::vector<std::st
 		arrToFill.push_back(str);
 	}
 }
+
 #endif

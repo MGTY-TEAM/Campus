@@ -2,8 +2,9 @@
 
 #include <string>
 #include "Token.h"
-// #include "../GameController.h"
+
 #ifdef ALPINIST_GAME
+
 namespace AlpinistGame
 {
 	class Lexer
@@ -13,7 +14,7 @@ namespace AlpinistGame
 		std::vector<TSharedPtr<Token>> Tokens = {};
 		std::vector<std::string> arr;
 
-		AlpinistLog* Log = nullptr;
+		TWeakPtr<AlpinistLog> Log = nullptr;
 	public:
 		Lexer(const std::string& code) : Code(code)
 		{
@@ -27,7 +28,7 @@ namespace AlpinistGame
 			} 
 		}
 
-		std::vector<TSharedPtr<Token>>* LexAnalysis(AlpinistLog& AlpLog);
+		std::vector<TSharedPtr<Token>>* LexAnalysis(TWeakPtr<AlpinistLog>& AlpLog);
 
 		void GetNamesOfTokens() const;
 	private:

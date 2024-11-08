@@ -13,18 +13,18 @@ namespace AlpinistGame
 		m_grid = StateGrid;
 	}
 
-	void AlpinistCaretaker::Backup(AlpinistMemento*& NewMemento, PlayerCommand*& Command)
+	void AlpinistCaretaker::Backup(const TSharedPtr<AlpinistMemento>& NewMemento, PlayerCommand*& Command)
 	{
 		m_vectorMementos.push_back(std::make_pair(Command, NewMemento));
 	}
 
-	AlpinistMemento* AlpinistCaretaker::Undo(PlayerCommand*& Command)
+	TSharedPtr<AlpinistMemento> AlpinistCaretaker::Undo(PlayerCommand*& Command)
 	{
-		const std::pair<PlayerCommand*, BaseMemento*> Pair = m_vectorMementos.back();
+		const std::pair<PlayerCommand*, TSharedPtr<BaseMemento>> Pair = m_vectorMementos.back();
 		if (Command != Pair.first)
 			return nullptr;
 		
-		AlpinistMemento* Memento = dynamic_cast<AlpinistMemento*>(m_vectorMementos.back().second);
+		TSharedPtr<AlpinistMemento> Memento = StaticCastSharedPtr<AlpinistMemento>(m_vectorMementos.back().second);
 		m_vectorMementos.pop_back();
 		
 		return Memento;
