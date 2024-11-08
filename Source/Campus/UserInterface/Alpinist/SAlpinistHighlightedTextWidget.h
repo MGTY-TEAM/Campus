@@ -31,6 +31,8 @@ private:
 	FString ReplaceCommand(const FString& SourceText, const FString& CommandToFind, const FString& CommandWithTags);
 	TMap<FString, FString> CommandsTags;
 
+	FString PreviousString = "";
+
 	TSharedPtr<SRichTextBlock> RichTextBlock;
 	TSharedPtr<SMultiLineEditableTextBox> EditableTextBox;
 

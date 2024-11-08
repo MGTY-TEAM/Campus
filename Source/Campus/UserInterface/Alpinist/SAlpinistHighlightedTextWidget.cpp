@@ -137,18 +137,26 @@ void SAlpinistHighlightedTextWidget::Construct(const FArguments& InArgs)
 
 void SAlpinistHighlightedTextWidget::OnTextChanged(const FText& NewText)
 {
-	if (RichTextBlock.IsValid())
+	if (RichTextBlock.IsValid() && EditableTextBox.IsValid())
 	{
-		RichTextBlock->SetText(ApplyHighlighting(NewText.ToString()));
-		// UE_LOG(LogTemp, Warning, TEXT("TEXT: %s"), *RichTextBlock->GetText().ToString());
+		const FString NewTextString = NewText.ToString();
+
+		TArray<FString> Lines;
+		NewTextString.ParseIntoArrayLines(Lines, false);
 		
-		if (EditableTextBox.IsValid())
+		if (Lines.Num() > 5)
 		{
-			// UE_LOG(LogTemp, Warning, TEXT("TEXT: %s"), *EditableTextBox->GetText().ToString());
-			if (AlpinistWidgetOwner.IsValid())
-			{
-				AlpinistWidgetOwner->OnChangeCode(*EditableTextBox->GetText().ToString());
-			}
+			EditableTextBox->SetText(FText::FromString(PreviousString));
+		}
+		else
+		{
+			PreviousString = NewTextString;
+			RichTextBlock->SetText(ApplyHighlighting(NewTextString));
+		}
+
+		if (AlpinistWidgetOwner.IsValid())
+		{
+			AlpinistWidgetOwner->OnChangeCode(*EditableTextBox->GetText().ToString());
 		}
 	}
 }

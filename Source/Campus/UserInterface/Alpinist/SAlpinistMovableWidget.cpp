@@ -22,7 +22,7 @@ void SAlpinistMovableWidget::Construct(const FArguments& InArgs)
 	CurveSequence = InArgs._CurveSequence;
 
 	const FSlateFontInfo ButtonTextStyle = FCoreStyle::GetDefaultFontStyle("Regular", 16);
-	const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 24);
+	const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
 
 	FMovableSlateBrush::Initialize(BackTexture);
 	BackSlateBrush = &FMovableSlateBrush::Get();
@@ -37,7 +37,7 @@ void SAlpinistMovableWidget::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			SNew(SImage)
-			.ColorAndOpacity(FSlateColor(FLinearColor(0.f, 255.f, 200.f, 1.f)))
+			.ColorAndOpacity(FSlateColor(FLinearColor(220.f, 255.f, 220.f, 1.f)))
 			.Image(BackSlateBrush)
 		]
 		// ----- Movable Widget -----
@@ -46,7 +46,7 @@ void SAlpinistMovableWidget::Construct(const FArguments& InArgs)
 			SNew(SHorizontalBox)
 			// ----- Content -----
 			+ SHorizontalBox::Slot()
-			.FillWidth(9.f)
+			.FillWidth(15.f)
 			[
 				// SNew(STextBlock)
 				// .Text(FText::FromString("Left Widget -----------------------------------------------------------------"))
@@ -84,10 +84,10 @@ void SAlpinistMovableWidget::Construct(const FArguments& InArgs)
 					.HAlign(HAlign_Center)
 					.VAlign(VAlign_Center)
 					.OnClicked(this, &SAlpinistMovableWidget::OnClueClicked)
-					.ButtonColorAndOpacity(FSlateColor(FLinearColor(0.f, 10.f, 0.01f, 0.5f)))
+					.ButtonColorAndOpacity(FSlateColor(FLinearColor(0.f, 5.f, 10.f, 0.2f)))
 					[
 						SNew(STextBlock)
-						.Text(FText::FromString("  ?"))
+						.Text(FText::FromString("?"))
 						.Font(RobotoBoldFont)
 					]
 				]
