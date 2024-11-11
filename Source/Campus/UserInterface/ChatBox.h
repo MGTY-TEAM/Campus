@@ -57,7 +57,7 @@ public:
     class UEditableTextBox* SendMessage_TextBox;
     UPROPERTY(meta = (BindWidget))
     class UButton* SendMessage_Button;
-    UPROPERTY(meta = (BindWidget))
+    UPROPERTY(meta = (BindWidget), BlueprintReadWrite, EditAnywhere)
     class UScrollBox* Chat_ScrollBox;
 
     // Delegates
