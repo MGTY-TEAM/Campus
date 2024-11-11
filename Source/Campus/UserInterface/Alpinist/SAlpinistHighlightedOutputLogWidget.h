@@ -24,9 +24,9 @@ private:
 	TSharedPtr<SRichTextBlock> RichTextBlock;
 	
 	void OnAlpinistLogUpdate(void* InAlpinistLog);
-	FSlateStyleSet* StyleSet;
-	FTextBlockStyle* DisplayTextBlock;
-	FTextBlockStyle* WarningTextBlock;
-	FTextBlockStyle* ErrorTextBlock;
-	FTextBlockStyle* SuccessTextBlock;
+	TUniquePtr<FSlateStyleSet> StyleSet;
+	TUniquePtr<FTextBlockStyle> DisplayTextBlock;
+	TUniquePtr<FTextBlockStyle> WarningTextBlock;
+	TUniquePtr<FTextBlockStyle> ErrorTextBlock;
+	TUniquePtr<FTextBlockStyle> SuccessTextBlock;
 };

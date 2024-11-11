@@ -1,31 +1,29 @@
 #include "SAlpinistHighlightedOutputLogWidget.h"
 
-#include "BehaviorTree/Decorators/BTDecorator_SetTagCooldown.h"
 #include "Widgets/Text/SRichTextBlock.h"
 #include "HighlightStyles/AlpinistTextDecorators.h"
 #include "Framework/Text/RichTextLayoutMarshaller.h"
-#include "HighlightStyles/FAlpinistMarkupProcessing.h"
 #include "Campus/MiniGames/Alpinist/Core/GameController.h"
 #include "Campus/MiniGames/Alpinist/AlpinistIDEController.h"
 #include "Framework/Text/RichTextMarkupProcessing.h"
 
 SAlpinistHighlightedOutputLogWidget::SAlpinistHighlightedOutputLogWidget()
 {
-	StyleSet = new FSlateStyleSet("OutputLogStyleSet");
+	StyleSet = MakeUnique<FSlateStyleSet>("OutputLogStyleSet");
 
-	DisplayTextBlock = new FTextBlockStyle();
+	DisplayTextBlock = MakeUnique<FTextBlockStyle>();
 	DisplayTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 12));
 	DisplayTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
 
-	WarningTextBlock = new FTextBlockStyle();
+	WarningTextBlock = MakeUnique<FTextBlockStyle>();
 	WarningTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 12));
 	WarningTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Yellow));
 
-	ErrorTextBlock = new FTextBlockStyle();
+	ErrorTextBlock = MakeUnique<FTextBlockStyle>();
 	ErrorTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 12));
 	ErrorTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Red));
 	
-	SuccessTextBlock = new FTextBlockStyle();
+	SuccessTextBlock = MakeUnique<FTextBlockStyle>();
 	SuccessTextBlock->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", 12));
 	SuccessTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
 }
@@ -38,7 +36,7 @@ void SAlpinistHighlightedOutputLogWidget::Construct(const FArguments& InArgs)
 	{
 		AlpinistWidgetOwner->OnAlpinistLogUpdate.AddRaw(this, &SAlpinistHighlightedOutputLogWidget::OnAlpinistLogUpdate);
 	}
-
+	
 	if (StyleSet)
 	{
 		StyleSet->Set("DisplayText", *DisplayTextBlock);
@@ -76,8 +74,8 @@ void SAlpinistHighlightedOutputLogWidget::Construct(const FArguments& InArgs)
 			[
 				SAssignNew(RichTextBlock, SRichTextBlock)
 				.Text(FText::FromString("<SuccessText>Log Message...</>"))
-				.TextStyle(DisplayTextBlock)
-				.Marshaller(FRichTextLayoutMarshaller::Create(FDefaultRichTextMarkupParser::Create(), nullptr, Decorators, StyleSet))
+				.TextStyle(DisplayTextBlock.Get())
+				.Marshaller(FRichTextLayoutMarshaller::Create(FDefaultRichTextMarkupParser::Create(), nullptr, Decorators, StyleSet.Get()))
 			]
 		]
 	];

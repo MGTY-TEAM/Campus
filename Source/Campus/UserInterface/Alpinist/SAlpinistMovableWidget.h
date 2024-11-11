@@ -19,8 +19,11 @@ public:
 	TWeakPtr<SWidget> WidgetOwner;
 	FCurveSequence* CurveSequence;
 private:
+	FScrollBarStyle ScrollBarStyle;
+	TUniquePtr<FSlateStyleSet> StyleSet;
 	UTexture2D* BackTexture;
 	FSlateBrush* BackSlateBrush;
+	FSlateBrush* ContentSlateBrush;
 
 	FReply OnClueClicked();
 	bool bIsOpen = false;

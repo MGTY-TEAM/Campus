@@ -10,10 +10,10 @@
 
 SAlpinistHighlightedTextWidget::SAlpinistHighlightedTextWidget()
 {
-	TextBoxStyle = new FEditableTextBoxStyle();
+	TextBoxStyle = MakeUnique<FEditableTextBoxStyle>();
 	TextBoxStyle->BackgroundColor = FSlateColor(FLinearColor(0.01f, 0.012f, 0.015f, 1.0f));
 	
-	StyleSet = new FSlateStyleSet("MyStyleSet");
+	StyleSet = MakeUnique<FSlateStyleSet>("MyStyleSet");
 	BackTexture = UTexture2D::CreateTransient(1000, 1000);
 	BackSlateBrush = nullptr;
 
@@ -117,7 +117,7 @@ void SAlpinistHighlightedTextWidget::Construct(const FArguments& InArgs)
 			SAssignNew(RichTextBlock, SRichTextBlock)
 			.TextStyle(MainTextStyle)
 			.Text(ApplyHighlighting(""))
-			.Marshaller(FRichTextLayoutMarshaller::Create(FAlpinistMarkupParser::Create(), nullptr, Decorators, StyleSet))
+			.Marshaller(FRichTextLayoutMarshaller::Create(FAlpinistMarkupParser::Create(), nullptr, Decorators, StyleSet.Get()))
 			.AutoWrapText(true)
 		]
 		+ SOverlay::Slot()
@@ -128,7 +128,7 @@ void SAlpinistHighlightedTextWidget::Construct(const FArguments& InArgs)
 			SAssignNew(EditableTextBox, SMultiLineEditableTextBox)
 			.OnTextChanged(this, &SAlpinistHighlightedTextWidget::OnTextChanged)
 			.Text(FText::FromString(""))
-			.Style(TextBoxStyle)
+			.Style(TextBoxStyle.Get())
 			.BackgroundColor(FLinearColor::Transparent)
 			.AutoWrapText(true)
 		]

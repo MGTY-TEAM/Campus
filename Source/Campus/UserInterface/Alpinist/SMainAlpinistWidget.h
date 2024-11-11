@@ -9,6 +9,7 @@ class UAlpinistIDEController;
 class CAMPUS_API SMainAlpinistWidget : public SCompoundWidget
 {
 public:
+	virtual ~SMainAlpinistWidget() override;
 	SLATE_BEGIN_ARGS(SMainAlpinistWidget) {}
 		SLATE_ARGUMENT(TWeakObjectPtr<UAlpinistIDEController>, AlpinistWidgetOwner)
 	SLATE_END_ARGS()

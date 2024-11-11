@@ -36,8 +36,8 @@ private:
 	TSharedPtr<SRichTextBlock> RichTextBlock;
 	TSharedPtr<SMultiLineEditableTextBox> EditableTextBox;
 
-	FEditableTextBoxStyle* TextBoxStyle;
-	FSlateStyleSet* StyleSet;
+	TUniquePtr<FEditableTextBoxStyle> TextBoxStyle;
+	TUniquePtr<FSlateStyleSet> StyleSet;
 	UTexture2D* BackTexture;
 	FSlateBrush* BackSlateBrush;
 };

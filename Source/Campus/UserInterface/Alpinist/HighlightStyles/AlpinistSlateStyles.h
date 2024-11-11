@@ -218,6 +218,192 @@ private:
 	static TSharedPtr<FSlateStyleSet> StyleSet;
 };
 
+// ------------------------------------ Small
+
+class FMainCodeSlateStyleSmall
+{
+public:
+	static void Initialize()
+	{
+		if (!StyleSet.IsValid())
+		{
+			StyleSet = MakeShareable(new FSlateStyleSet("MainCodeStyleSmall"));
+
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+			StyleSet->Set("MainCodeSlateStyleSmall.MainText", FTextBlockStyle()
+				.SetFont(RobotoBoldFont)
+				.SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 1.0f))));
+			FSlateStyleRegistry::RegisterSlateStyle(*StyleSet);
+		}
+	}
+
+	static const ISlateStyle& Get() { return *StyleSet; }
+	static void Delete()
+	{
+		if (StyleSet.IsValid())
+		{
+			FSlateStyleRegistry::UnRegisterSlateStyle(*StyleSet);
+			StyleSet.Reset();
+		}
+	}
+private:
+	static TSharedPtr<FSlateStyleSet> StyleSet;
+};
+
+class FSimpleCommandSlateStyleSmall
+{
+public:
+	static void Initialize()
+	{
+		if (!StyleSet.IsValid())
+		{
+			StyleSet = MakeShareable(new FSlateStyleSet("SimpleCommandSmall"));
+
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+			StyleSet->Set("FSimpleCommandSlateStyleSmall.SimpleCommand", FTextBlockStyle()
+				.SetFont(RobotoBoldFont)
+				//.SetColorAndOpacity(FSlateColor(FLinearColor(0.4f, 0.9f, 0.9f, 1.0f))));
+				.SetColorAndOpacity(FSlateColor(FLinearColor(0.05f, 0.7f, 0.05f, 1.0f))));
+			FSlateStyleRegistry::RegisterSlateStyle(*StyleSet);
+		}
+	}
+
+	static const ISlateStyle& Get() { return *StyleSet; }
+	static void Delete()
+	{
+		if (StyleSet.IsValid())
+		{
+			FSlateStyleRegistry::UnRegisterSlateStyle(*StyleSet);
+			StyleSet.Reset();
+		}
+	}
+private:
+	static TSharedPtr<FSlateStyleSet> StyleSet;
+};
+
+class FConditionCommandSlateStyleSmall
+{
+public:
+	static void Initialize()
+	{
+		if (!StyleSet.IsValid())
+		{
+			StyleSet = MakeShareable(new FSlateStyleSet("ConditionCommandSmall"));
+
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+			StyleSet->Set("FConditionCommandSlateStyleSmall.ConditionCommand", FTextBlockStyle()
+				.SetFont(RobotoBoldFont)
+				.SetColorAndOpacity(FSlateColor(FLinearColor(0.87f, 0.1f, 0.87f, 1.0f))));
+			FSlateStyleRegistry::RegisterSlateStyle(*StyleSet);
+		}
+	}
+
+	static const ISlateStyle& Get() { return *StyleSet; }
+	static void Delete()
+	{
+		if (StyleSet.IsValid())
+		{
+			FSlateStyleRegistry::UnRegisterSlateStyle(*StyleSet);
+			StyleSet.Reset();
+		}
+	}
+private:
+	static TSharedPtr<FSlateStyleSet> StyleSet;
+};
+
+class FCheckCommandSlateStyleSmall
+{
+public:
+	static void Initialize()
+	{
+		if (!StyleSet.IsValid())
+		{
+			StyleSet = MakeShareable(new FSlateStyleSet("CheckCommandSmall"));
+
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+			StyleSet->Set("FCheckCommandSlateStyleSmall.CheckCommand", FTextBlockStyle()
+				.SetFont(RobotoBoldFont)
+				//.SetColorAndOpacity(FSlateColor(FLinearColor(0.4f, 0.9f, 0.9f, 1.0f))));
+				.SetColorAndOpacity(FSlateColor(FLinearColor(0.2f, 0.15f, 1.f, 1.0f))));
+			FSlateStyleRegistry::RegisterSlateStyle(*StyleSet);
+		}
+	}
+
+	static const ISlateStyle& Get() { return *StyleSet; }
+	static void Delete()
+	{
+		if (StyleSet.IsValid())
+		{
+			FSlateStyleRegistry::UnRegisterSlateStyle(*StyleSet);
+			StyleSet.Reset();
+		}
+	}
+private:
+	static TSharedPtr<FSlateStyleSet> StyleSet;
+};
+
+class FScopeCommandSlateStyleSmall
+{
+public:
+	static void Initialize()
+	{
+		if (!StyleSet.IsValid())
+		{
+			StyleSet = MakeShareable(new FSlateStyleSet("ScopeCommandSmall"));
+
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+			StyleSet->Set("FScopeCommandSlateStyleSmall.ScopeCommand", FTextBlockStyle()
+				.SetFont(RobotoBoldFont)
+				//.SetColorAndOpacity(FSlateColor(FLinearColor(0.4f, 0.9f, 0.9f, 1.0f))));
+				.SetColorAndOpacity(FSlateColor(FLinearColor(0.8f, 0.8f, 0.8f, 1.0f))));
+			FSlateStyleRegistry::RegisterSlateStyle(*StyleSet);
+		}
+	}
+
+	static const ISlateStyle& Get() { return *StyleSet; }
+	static void Delete()
+	{
+		if (StyleSet.IsValid())
+		{
+			FSlateStyleRegistry::UnRegisterSlateStyle(*StyleSet);
+			StyleSet.Reset();
+		}
+	}
+private:
+	static TSharedPtr<FSlateStyleSet> StyleSet;
+};
+
+class FNegateCommandSlateStyleSmall
+{
+public:
+	static void Initialize()
+	{
+		if (!StyleSet.IsValid())
+		{
+			StyleSet = MakeShareable(new FSlateStyleSet("NegateCommandSmall"));
+
+			const FSlateFontInfo RobotoBoldFont = FCoreStyle::GetDefaultFontStyle("Regular", 16);
+			StyleSet->Set("FNegateCommandSlateStyleSmall.NegateCommand", FTextBlockStyle()
+				.SetFont(RobotoBoldFont)
+				//.SetColorAndOpacity(FSlateColor(FLinearColor(0.4f, 0.9f, 0.9f, 1.0f))));
+				.SetColorAndOpacity(FSlateColor(FLinearColor(0.8f, 0.05f, 0.05f, 1.0f))));
+			FSlateStyleRegistry::RegisterSlateStyle(*StyleSet);
+		}
+	}
+
+	static const ISlateStyle& Get() { return *StyleSet; }
+	static void Delete()
+	{
+		if (StyleSet.IsValid())
+		{
+			FSlateStyleRegistry::UnRegisterSlateStyle(*StyleSet);
+			StyleSet.Reset();
+		}
+	}
+private:
+	static TSharedPtr<FSlateStyleSet> StyleSet;
+};
+
 // -------------------------------------------------------------------------------------
 class FMySlateBrush
 {

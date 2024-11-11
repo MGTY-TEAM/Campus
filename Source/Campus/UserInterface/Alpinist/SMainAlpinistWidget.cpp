@@ -3,7 +3,20 @@
 #include "SAlpinistIDEWidget.h"
 #include "SAlpinistMovableWidget.h"
 #include "Widgets/Layout/SConstraintCanvas.h"
+#include "HighlightStyles/AlpinistSlateStyles.h"
 #include "Campus/MiniGames/Alpinist/AlpinistIDEController.h"
+
+SMainAlpinistWidget::~SMainAlpinistWidget()
+{
+	FMySlateBrush::Delete();
+	FEmptySlateStyle::Delete();
+	FMainCodeSlateStyle::Delete();
+	FSimpleCommandSlateStyle::Delete();
+	FConditionCommandSlateStyle::Delete();
+	FCheckCommandSlateStyle::Delete();
+	FScopeCommandSlateStyle::Delete();
+	FNegateCommandSlateStyle::Delete();
+}
 
 void SMainAlpinistWidget::Construct(const FArguments& InArgs)
 {

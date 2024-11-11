@@ -70,7 +70,7 @@ void FAlpinistMarkupParser::Process(TArray<FTextLineParseResults>& Results, cons
 }
 
 FAlpinistMarkupParser::FAlpinistMarkupParser() : EscapeSequenceRegexPattern(FRegexPattern(FEscapeSequenceRegexPatternString::Get(UnescapeHelper.EscapeSequences)))
-	, ElementRegexPattern( FRegexPattern(TEXT("<([\\w\\d\\.-]+)((?: (?:[\\w\\d\\.-]+=(?>\"[^\"]*\")))+)?>([-.]+)</\\1>") ))
+	, ElementRegexPattern( FRegexPattern(TEXT("<([\\w\\d\\.-]+)((?: (?:[\\w\\d\\.-]+=\"[^\"]*\"))*)>(.+?)</\\1>") ))
 	, AttributeRegexPattern( FRegexPattern(TEXT("([\\w\\d\\.]+)=(?>\"(.*?)\")")) )
 {
 	
