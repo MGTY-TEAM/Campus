@@ -22,7 +22,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category= "VR")
 	bool bPositionalHeadTracking;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UCameraComponent* CameraComponent;
 
 

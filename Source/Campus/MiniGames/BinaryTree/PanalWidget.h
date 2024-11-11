@@ -45,6 +45,8 @@ public:
 	int32 Minuts;
 
 
+	UFUNCTION(BlueprintCallable)
+	void StartWork();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

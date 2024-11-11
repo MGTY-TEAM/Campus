@@ -60,6 +60,53 @@ FString APanalWidget::ToBinary(int32 num)
 	return stringbin;
 }
 
+void APanalWidget::StartWork()
+{
+	
+#ifdef BINARY_TREE_DEBUG
+		UE_LOG(FBinaryTree, Warning, TEXT("Generate Numbers"));
+#endif
+
+		FirstAnsw =  FMath::RandRange(0, 7);
+		SecondAnsw =  FMath::RandRange(0, 7);
+		ThirdAnsw =  FMath::RandRange(0, 7);
+	
+		while (FirstAnsw == SecondAnsw)
+		{
+			SecondAnsw =  FMath::RandRange(0, 7);
+		}
+		while (SecondAnsw == ThirdAnsw || FirstAnsw == ThirdAnsw)
+		{
+			ThirdAnsw =  FMath::RandRange(0, 7);
+		}
+	
+		FirstAnswMesh =  FMath::RandRange(0, 7);
+		SecondAnswMesh =  FMath::RandRange(0, 7);
+		ThirdAnswMesh =  FMath::RandRange(0, 7);
+	
+		while (FirstAnswMesh == SecondAnswMesh)
+		{
+			SecondAnswMesh =  FMath::RandRange(0, 7);
+		}
+		while (SecondAnswMesh == ThirdAnswMesh || FirstAnswMesh == ThirdAnswMesh)
+		{
+			ThirdAnswMesh =  FMath::RandRange(0, 7);
+		}
+	
+		ABinaryTree* Tree = Cast<ABinaryTree>(UGameplayStatics::GetActorOfClass(GetWorld(), ABinaryTree::StaticClass()));
+	
+		Tree->BinaryTreeI(FirstAnsw,SecondAnsw,ThirdAnsw ,FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
+		PanalI(FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
+		RandomWorkStart.Broadcast();
+
+#ifdef BINARY_TREE_DEBUG
+		UE_LOG(FBinaryTree, Warning, TEXT("Номера ответов  %d , %d , %d") , FirstAnswMesh ,SecondAnswMesh ,ThirdAnswMesh);
+#endif
+		
+		Answerss->SetText(FText::FromString(ToBinary(FirstAnsw)  + " " + ToBinary(SecondAnsw) + " " + ToBinary(ThirdAnsw) ));
+		CollisionMesh->DestroyComponent();
+}
+
 // Called when the game starts or when spawned
 void APanalWidget::BeginPlay()
 {

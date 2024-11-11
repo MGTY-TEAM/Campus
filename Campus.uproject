@@ -57,6 +57,19 @@
 				"Mac",
 				"Linux"
 			]
+		},
+		{
+			"Name": "OpenXR",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Linux",
+				"Android"
+			]
+		},
+		{
+			"Name": "XRBase",
+			"Enabled": true
 		}
 	]
 }
