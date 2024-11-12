@@ -33,6 +33,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AlpinistsProperties")
+	FDataTableRowHandle AlpinistDataTable;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* TelegraphBaseMeshComponent;
 

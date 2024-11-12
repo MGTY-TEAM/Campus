@@ -177,13 +177,20 @@ void AAlpinistGame::RunGame()
 		{
 			if (!PassedLevels.Contains(SelectedLevel))
 			{
-				m_AlpinistLog->PushMessageLog("Player finished, Successful completion of level " + std::to_string(SelectedLevel), AlpinistGame::SuccessMes);
+				if (UAlpinistGameHelper::CheckingLevelCompletion(AlpinistDataTable, UAlpinistGameHelper::GetSelectedLevelName(UKismetSystemLibrary::GetProjectDirectory() /= "Alpinist/Levels", SelectedLevel), m_Compiler->CountTokens()))
+				{
+					PassedLevels.Add(SelectedLevel);
+					m_AlpinistLog->PushMessageLog("Player finished, Successful completion of level " + std::to_string(SelectedLevel), AlpinistGame::SuccessMes);
+				}
+				else
+				{
+					m_AlpinistLog->PushMessageLog("Player finished, But To Pass this Level you must use fewer commands...", AlpinistGame::WarningMes);
+				}
 			}
 			else
 			{
 				m_AlpinistLog->PushMessageLog("Player finished!", AlpinistGame::SuccessMes);
 			}
-			PassedLevels.Add(SelectedLevel);
 			
 			UE_LOG(LogAlpinistGame, Warning, TEXT("Player finished!"));
 		}

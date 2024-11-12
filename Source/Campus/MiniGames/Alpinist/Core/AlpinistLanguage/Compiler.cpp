@@ -1,3 +1,4 @@
+#include "NiagaraValidationRule.h"
 #ifdef ALPINIST_GAME
 
 #include "Compiler.h"
@@ -25,7 +26,7 @@ bool AlpinistGame::Compiler::Compile(TWeakPtr<AlpinistLog>& AlpLog)
 	{
 		return false;
 	}
-
+	
 	Parser parser(Tokens, Controller);
 	Commands = parser.SynAnalysis(AlpLog);
 	if (AlpLog.Pin()->bHasErrors || AlpLog.Pin()->bHasWarnings || !Commands)
@@ -49,5 +50,16 @@ bool AlpinistGame::Compiler::Run(TWeakPtr<AlpinistLog>& AlpLog)
 		Controller.Pin()->SaveCopyOfWorld(nullptr);
 	}
 	return result;
+}
+
+int32 AlpinistGame::Compiler::CountTokens()
+{
+	const TSharedPtr<AlpinistLog> PlugLog = MakeShared<AlpinistLog>();
+	TWeakPtr<AlpinistLog> WeakPlugLog = PlugLog.ToWeakPtr();
+	
+	Lexer lexer = Lexer(Code);
+	const std::vector<TSharedPtr<Token>> Tokens = *lexer.LexAnalysis(WeakPlugLog);
+
+	return Tokens.size();
 }
 #endif

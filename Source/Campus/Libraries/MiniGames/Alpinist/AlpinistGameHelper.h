@@ -79,4 +79,6 @@ public:
 	}
 
 	static TArray<TPair<int32, TPair<int32, int32>>> GetAlpinistCoordinateHistory(const TWeakPtr<AlpinistGame::AlpinistCaretaker>& AlpMemento);
+
+	static bool CheckingLevelCompletion(const FDataTableRowHandle& AlpinistDataTable, const FString& LevelName, int32 NumOfTokensForCurrentLevel);
 };

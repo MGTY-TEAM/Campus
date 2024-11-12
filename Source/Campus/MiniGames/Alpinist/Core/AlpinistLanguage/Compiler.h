@@ -22,6 +22,8 @@ namespace AlpinistGame
 		bool Run(TWeakPtr<AlpinistLog>& AlpLog);
 
 		TSharedPtr<MacroCommand> GetListOfCommands() { return Commands; };
+
+		int32 CountTokens();
 	};
 }
 
