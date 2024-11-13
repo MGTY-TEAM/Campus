@@ -4,7 +4,6 @@
 #include "NiagaraComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "NiagaraFunctionLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Campus/Libraries/CampusUtils.h"
 #include "Components/StaticMeshcomponent.h"
@@ -12,6 +11,7 @@
 #include "Campus/MiniGames/Alpinist/Core/GameController.h"
 #include "Campus/MiniGames/Alpinist/AlpinistIDEController.h"
 #include "Campus/MiniGames/Alpinist/AlpinistViewComponent.h"
+#include "Campus/MiniGames/Alpinist/AlpinistAudioComponent.h"
 #include "Campus/Tests/Alpinist/UHelperReaderJsonForAlpinist.h"
 #include "Campus/Libraries/MiniGames/Alpinist/AlpinistGameHelper.h"
 #include "Campus/MiniGames/Alpinist/Core/AlpinistLanguage/Compiler.h"
@@ -48,6 +48,7 @@ AAlpinistGame::AAlpinistGame()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	AlpinistIDEController = CreateDefaultSubobject<UAlpinistIDEController>("AlpinistIDEController");
 	AlpinistViewComponent = CreateDefaultSubobject<UAlpinistViewComponent>("AlpinistViewComponent");
+	AlpinistAudioComponent = CreateDefaultSubobject<UAlpinistAudioComponent>("AlpinistAudioComponent");
 }
 
 void AAlpinistGame::BeginPlay()
@@ -100,6 +101,22 @@ void AAlpinistGame::SetCode(const FString& NewCode)
 	if (m_Compiler.IsValid())
 	{
 		m_Compiler->SetCode(TCHAR_TO_UTF8(*NewCode));
+	}
+}
+
+void AAlpinistGame::PressShoulder()
+{
+	if (TelegraphShoulderMeshComponent && TelegraphShoulderMeshComponent->GetRelativeRotation().Equals(FRotator(0.f, 0.f, 0.f)))
+	{
+		TelegraphShoulderMeshComponent->SetRelativeRotation(FRotator(5.f, 0.f, 0.f));
+	}
+}
+
+void AAlpinistGame::RepressShoulder()
+{
+	if (TelegraphShoulderMeshComponent && TelegraphShoulderMeshComponent->GetRelativeRotation().Equals(FRotator(5.f, 0.f, 0.f)))
+	{
+		TelegraphShoulderMeshComponent->SetRelativeRotation(FRotator(0.f, .0f, 0.f));
 	}
 }
 
@@ -199,6 +216,14 @@ void AAlpinistGame::RunGame()
 			UE_LOG(LogAlpinistGame, Warning, TEXT("Player didn't finish!"));
 		}
 		AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
+
+		if (!m_AlpinistLog->bHasErrors)
+		{
+			if (AlpinistAudioComponent)
+			{
+				AlpinistAudioComponent->StartTelegraphSound(m_Compiler->GetCode());
+			}
+		}
 	}
 
 	if (!bAlpinistGameCompleted && PassedLevels.Num() == UAlpinistGameHelper::DetermineNumberOfLevels(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels"))
@@ -213,7 +238,6 @@ void AAlpinistGame::RunGame()
 			AlpinistIDEController->OnAlpinistLogUpdate.Broadcast(m_AlpinistLog.Get());
 		}
 	}
-	// Получить сформированные команды для работы с видом или написать код для связи с видом внутри написанного кода игры
 }
 
 void AAlpinistGame::ClearLog()
@@ -242,7 +266,11 @@ void AAlpinistGame::ToStartPosition()
 	{
 		AlpinistViewComponent->ToStartPosition(PlayersNiagaraComponent);
 	}
-	// Как возвращать пешку обратно?
+	
+	if (AlpinistAudioComponent)
+	{
+		AlpinistAudioComponent->StopTelegraphSound();
+	}
 }
 
 void AAlpinistGame::CloseGame()
@@ -259,6 +287,10 @@ void AAlpinistGame::CloseGame()
 	{
 		AlpinistViewComponent->DestroyLevel(MapViewSceneComponent, PlayersNiagaraComponent);
 		AlpinistViewComponent->DestroyWeather(WeatherNiagaraComponent);
+	}
+	if (AlpinistAudioComponent)
+	{
+		AlpinistAudioComponent->StopTelegraphSound();
 	}
 	
 	// Возвращение камеры персонажу, удаление карты
@@ -311,6 +343,11 @@ void AAlpinistGame::OpenLevel(int32 Level)
 				AlpinistViewComponent->InitializeLevel(Map, MapViewSceneComponent, PlayersNiagaraComponent);
 			}
 		}
+	}
+
+	if (AlpinistAudioComponent)
+	{
+		AlpinistAudioComponent->StopTelegraphSound();
 	}
 }
 

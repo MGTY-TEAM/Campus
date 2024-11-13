@@ -41,9 +41,9 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		}
 
 		const TPair<int32, int32> CurrentCoordinate = CoordinateHistory[CurrentSnapshot].Value;
-		UE_LOG(LogTemp, Warning, TEXT("%i, %i"), CurrentCoordinate.Key, CurrentCoordinate.Value);
+		// UE_LOG(LogTemp, Warning, TEXT("%i, %i"), CurrentCoordinate.Key, CurrentCoordinate.Value);
 		const TPair<int32, int32> NextCoordinate = CoordinateHistory[CurrentSnapshot + 1].Value;
-		UE_LOG(LogTemp, Warning, TEXT("%i, %i"), NextCoordinate.Key, NextCoordinate.Value);
+		// UE_LOG(LogTemp, Warning, TEXT("%i, %i"), NextCoordinate.Key, NextCoordinate.Value);
 
 		const AAlpinistMapEntity* CurrentEntity = AlpinistMapEntities[CurrentCoordinate.Key][CurrentCoordinate.Value];
 		const AAlpinistMapEntity* NextEntity = AlpinistMapEntities[NextCoordinate.Key][NextCoordinate.Value];

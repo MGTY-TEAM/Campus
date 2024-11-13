@@ -24,6 +24,7 @@ namespace AlpinistGame
 		TSharedPtr<MacroCommand> GetListOfCommands() { return Commands; };
 
 		int32 CountTokens();
+		FString GetCode() const;
 	};
 }
 

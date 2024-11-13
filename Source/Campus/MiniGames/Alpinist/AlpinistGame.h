@@ -14,6 +14,7 @@ class UNiagaraComponent;
 class UStaticMeshComponent;
 class UAlpinistIDEController;
 class UAlpinistViewComponent;
+class UAlpinistAudioComponent;
 
 namespace AlpinistGame
 {
@@ -47,6 +48,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UAlpinistViewComponent* AlpinistViewComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UAlpinistAudioComponent* AlpinistAudioComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	USceneComponent* MapViewSceneComponent;
@@ -102,6 +106,9 @@ public:
 	UInstancedStaticMeshComponent* GetSecondMountainMeshComponent() const { return SecondMountainMeshComponent; }
 	UInstancedStaticMeshComponent* GetMainSnowMeshComponent() const { return MainSnowMeshComponent; }
 	UInstancedStaticMeshComponent* GetSecondSnowMeshComponent() const { return SecondSnowMeshComponent; }
+
+	void PressShoulder();
+	void RepressShoulder();
 private:
 	TSharedPtr<AlpinistGame::GameController> m_gameController;
 	TSharedPtr<AlpinistGame::Compiler> m_Compiler;

@@ -1,4 +1,4 @@
-#include "NiagaraValidationRule.h"
+
 #ifdef ALPINIST_GAME
 
 #include "Compiler.h"
@@ -61,5 +61,10 @@ int32 AlpinistGame::Compiler::CountTokens()
 	const std::vector<TSharedPtr<Token>> Tokens = *lexer.LexAnalysis(WeakPlugLog);
 
 	return Tokens.size();
+}
+
+FString AlpinistGame::Compiler::GetCode() const
+{
+	return FString(Code.c_str());
 }
 #endif
