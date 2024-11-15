@@ -44,6 +44,9 @@ protected:
 	UStaticMeshComponent* TelegraphShoulderMeshComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* AlpinistFlagMeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UAlpinistIDEController* AlpinistIDEController;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
@@ -109,6 +112,10 @@ public:
 
 	void PressShoulder();
 	void RepressShoulder();
+
+	void SetFlagVisible(bool bCondition);
+	void SetFlagLocation(const FVector& NewLocation);
+	bool IsCurrentLevelPassed() const { return PassedLevels.Contains(SelectedLevel); }
 private:
 	TSharedPtr<AlpinistGame::GameController> m_gameController;
 	TSharedPtr<AlpinistGame::Compiler> m_Compiler;

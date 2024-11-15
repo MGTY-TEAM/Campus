@@ -37,6 +37,12 @@ void UAlpinistViewComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		if (CurrentSnapshot == CoordinateHistory.Num() - 1 || CoordinateHistory.Num() - 1 == -1)
 		{
 			bShouldPlay = false;
+
+			if (AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
+			{
+				AlpinistGame->SetFlagVisible(true);
+			}
+			
 			return;
 		}
 
@@ -114,6 +120,11 @@ bool UAlpinistViewComponent::InitializeWeather(UNiagaraComponent* WeatherNiagara
 
 bool UAlpinistViewComponent::DestroyLevel(const USceneComponent* SceneComponentAround, UNiagaraComponent* PlayersNiagaraComponent)
 {
+	if (AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
+	{
+		AlpinistGame->SetFlagVisible(false);
+	}
+	
 	bShouldPlay = false;
 	CurrentSnapshot = 0;
 	CoordinateHistory = TArray<TPair<int32, TPair<int32, int32>>>();
@@ -229,6 +240,20 @@ void UAlpinistViewComponent::SpawnLine(const TArray<FString>& Map, UNiagaraCompo
 				if (EntityType == 'f' && PlayersNiagaraComponent && PlayersNiagaraComponent->GetAsset())
 				{
 					PlayersNiagaraComponent->SetVariablePosition("FinishPosition", Entity->GetMarkLocation());
+
+					if (AAlpinistGame* AlpinistGame = Cast<AAlpinistGame>(GetOwner()))
+					{
+						AlpinistGame->SetFlagLocation(AnchorLocation + FVector(5.f, Density * 0.4f, Density * 0.3f));
+
+						if (AlpinistGame->IsCurrentLevelPassed())
+						{
+							AlpinistGame->SetFlagVisible(true);
+						}
+						else
+						{
+							AlpinistGame->SetFlagVisible(false);
+						}
+					}
 				}
 				if (EntityType == 'p' && PlayersNiagaraComponent && PlayersNiagaraComponent->GetAsset())
 				{

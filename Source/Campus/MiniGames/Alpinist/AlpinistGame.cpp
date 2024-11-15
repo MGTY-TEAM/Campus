@@ -28,6 +28,9 @@ AAlpinistGame::AAlpinistGame()
 	TelegraphShoulderMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("TelegraphShoulderMeshComponent");
 	TelegraphShoulderMeshComponent->SetupAttachment(TelegraphBaseMeshComponent);
 
+	AlpinistFlagMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("AlpinistFlagStaticMeshComponent");
+	AlpinistFlagMeshComponent->SetupAttachment(GetRootComponent());
+
 	MapViewSceneComponent = CreateDefaultSubobject<USceneComponent>("MapViewSceneComponent");
 	MapViewSceneComponent->SetupAttachment(GetRootComponent());
 
@@ -54,6 +57,8 @@ AAlpinistGame::AAlpinistGame()
 void AAlpinistGame::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetFlagVisible(false);
 
 	if (PlayersNiagaraComponent)
 	{
@@ -117,6 +122,22 @@ void AAlpinistGame::RepressShoulder()
 	if (TelegraphShoulderMeshComponent && TelegraphShoulderMeshComponent->GetRelativeRotation().Equals(FRotator(5.f, 0.f, 0.f)))
 	{
 		TelegraphShoulderMeshComponent->SetRelativeRotation(FRotator(0.f, .0f, 0.f));
+	}
+}
+
+void AAlpinistGame::SetFlagVisible(bool bCondition)
+{
+	if (AlpinistFlagMeshComponent)
+	{
+		AlpinistFlagMeshComponent->SetVisibility(bCondition, true);
+	}
+}
+
+void AAlpinistGame::SetFlagLocation(const FVector& NewLocation)
+{
+	if (AlpinistFlagMeshComponent)
+	{
+		AlpinistFlagMeshComponent->SetWorldLocation(NewLocation);
 	}
 }
 
@@ -275,6 +296,8 @@ void AAlpinistGame::ToStartPosition()
 
 void AAlpinistGame::CloseGame()
 {
+	SetFlagVisible(false);
+	
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (PlayerController && CameraComponent)
 	{
