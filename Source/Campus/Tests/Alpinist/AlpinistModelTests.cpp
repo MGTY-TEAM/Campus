@@ -27,7 +27,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCorrectResponseNotEndBigTest, "Campus.Alpinist
 
 bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ZigZag.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/ZigZag.json";
 	bool SucceededDeserialize = false;
 	FString OutInfoMessage;
 
@@ -49,7 +49,7 @@ bool FCorrectUsingJsonMaps::RunTest(const FString& Parameters)
 
 bool FCorrectResponseZigZag::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/ZigZag.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/ZigZag.json";
 	bool SucceededDeserialize = false;
 	
 	FString OutInfoMessage;
@@ -69,16 +69,17 @@ bool FCorrectResponseZigZag::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".-. --- . .- -.- -. -.- -"); // - ZigZag
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller, ".-. --- . .- -.- -. -.- -"); // - ZigZag
 	// AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".-. -..- . .- -.- -. -.- -");
 
-	AlpinistGame::AlpinistLog Log;
-	const bool CompileSuccess = compiler->Compile(Log);
+	TSharedPtr<AlpinistGame::AlpinistLog> Log = MakeShared<AlpinistGame::AlpinistLog>();
+	TWeakPtr<AlpinistGame::AlpinistLog> WeakLog = Log.ToWeakPtr();
+	const bool CompileSuccess = compiler->Compile(WeakLog);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (const AlpinistGame::MessageLog ErrorMessage : *Log->GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);
@@ -86,7 +87,7 @@ bool FCorrectResponseZigZag::RunTest(const FString& Parameters)
 	}
 	TestTrue("Compile Fail", CompileSuccess);
 
-	const bool RunSuccess = compiler->Run(Log);
+	const bool RunSuccess = compiler->Run(WeakLog);
 	TestTrue("Run Fail", RunSuccess);
 
 	const bool IsHeFinished = controller->GetWorld()->IsPlayerFinished();
@@ -97,7 +98,7 @@ bool FCorrectResponseZigZag::RunTest(const FString& Parameters)
 
 bool FCorrectResponseBigMapTest::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/BigMapTest.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/BigMapTest.json";
 	bool SucceededDeserialize = false;
 	FString OutInfoMessage;
 
@@ -116,15 +117,16 @@ bool FCorrectResponseBigMapTest::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, "-. -. .-. --. . -.- - .. --- . -. - .-. ... --- . -.- - -. .-. ... --. . -.- - .- -.-"); // - BigMapTest
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller, "-. -. .-. --. . -.- - .. --- . -. - .-. ... --- . -.- - -. .-. ... --. . -.- - .- -.-"); // - BigMapTest
 
-	AlpinistGame::AlpinistLog Log;
-	const bool CompileSuccess = compiler->Compile(Log);
+	TSharedPtr<AlpinistGame::AlpinistLog> Log = MakeShared<AlpinistGame::AlpinistLog>();
+	TWeakPtr<AlpinistGame::AlpinistLog> WeakLog = Log.ToWeakPtr();
+	const bool CompileSuccess = compiler->Compile(WeakLog);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (const AlpinistGame::MessageLog ErrorMessage : *Log->GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);
@@ -132,7 +134,7 @@ bool FCorrectResponseBigMapTest::RunTest(const FString& Parameters)
 	}
 	TestTrue("Compile Fail", CompileSuccess);
 
-	const bool RunSuccess = compiler->Run(Log);
+	const bool RunSuccess = compiler->Run(WeakLog);
 	TestTrue("Run Fail", RunSuccess);
 
 	const bool IsHeFinished = controller->GetWorld()->IsPlayerFinished();
@@ -143,7 +145,7 @@ bool FCorrectResponseBigMapTest::RunTest(const FString& Parameters)
 
 bool FCorrectResponseNotEndMiniTest::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/NotEndMiniTest.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/NotEndMiniTest.json";
 	bool SucceededDeserialize = false;
 	FString OutInfoMessage;
 
@@ -162,15 +164,16 @@ bool FCorrectResponseNotEndMiniTest::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".- .-. -..- . -.- -"); // - BigMapTest
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller, ".- .-. -..- . -.- -"); // - BigMapTest
 
-	AlpinistGame::AlpinistLog Log;
-	const bool CompileSuccess = compiler->Compile(Log);
+	TSharedPtr<AlpinistGame::AlpinistLog> Log = MakeShared<AlpinistGame::AlpinistLog>();
+	TWeakPtr<AlpinistGame::AlpinistLog> WeakLog = Log.ToWeakPtr();
+	const bool CompileSuccess = compiler->Compile(WeakLog);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (const AlpinistGame::MessageLog ErrorMessage : *Log->GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);
@@ -178,7 +181,7 @@ bool FCorrectResponseNotEndMiniTest::RunTest(const FString& Parameters)
 	}
 	TestTrue("Compile Fail", CompileSuccess);
 
-	const bool RunSuccess = compiler->Run(Log);
+	const bool RunSuccess = compiler->Run(WeakLog);
 	TestTrue("Run Fail", RunSuccess);
 
 	const bool IsHeFinished = controller->GetWorld()->IsPlayerFinished();
@@ -189,7 +192,7 @@ bool FCorrectResponseNotEndMiniTest::RunTest(const FString& Parameters)
 
 bool FCorrectResponseNotEndBigTest::RunTest(const FString& Parameters)
 {
-	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/NotEndBigTest.json";
+	const FString PathToJson = UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels/Tests/NotEndBigTest.json";
 	bool SucceededDeserialize = false;
 	FString OutInfoMessage;
 
@@ -208,15 +211,16 @@ bool FCorrectResponseNotEndBigTest::RunTest(const FString& Parameters)
 
 	const std::vector<std::string> TestMap = CampusUtils::TArrayOfStringToVectorOfString(Map);
 
-	AlpinistGame::GameController* controller = new AlpinistGame::GameController(TestMap);
+	TSharedPtr<AlpinistGame::GameController> controller = MakeShared<AlpinistGame::GameController>(TestMap);
 	
-	AlpinistGame::Compiler* compiler = new AlpinistGame::Compiler(controller, ".- .-. -..- . .. ... --. . -. -.- - -- . .. ... --- . -.- - -- . .- - - -"); // - BigMapTest
+	TSharedPtr<AlpinistGame::Compiler> compiler = MakeShared<AlpinistGame::Compiler>(controller, ".- .-. -..- . .. ... --. . -. -.- - -- . .. ... --- . -.- - -- . .- - - -"); // - BigMapTest
 
-	AlpinistGame::AlpinistLog Log;
-	const bool CompileSuccess = compiler->Compile(Log);
+	TSharedPtr<AlpinistGame::AlpinistLog> Log = MakeShared<AlpinistGame::AlpinistLog>();
+	TWeakPtr<AlpinistGame::AlpinistLog> WeakLog = Log.ToWeakPtr();
+	const bool CompileSuccess = compiler->Compile(WeakLog);
 	if (!CompileSuccess)
 	{
-		for (const AlpinistGame::MessageLog ErrorMessage : *Log.GetListOfLog())
+		for (const AlpinistGame::MessageLog ErrorMessage : *Log->GetListOfLog())
 		{
 			FString Info = FString(ErrorMessage.Message.c_str());
 			AddInfo(Info);
@@ -224,7 +228,7 @@ bool FCorrectResponseNotEndBigTest::RunTest(const FString& Parameters)
 	}
 	TestTrue("Compile Fail", CompileSuccess);
 
-	const bool RunSuccess = compiler->Run(Log);
+	const bool RunSuccess = compiler->Run(WeakLog);
 	TestTrue("Run Fail", RunSuccess);
 
 	const bool IsHeFinished = controller->GetWorld()->IsPlayerFinished();

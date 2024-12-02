@@ -1,9 +1,10 @@
 #include "Lexer.h"
-// #include "../GameController.h"
+
 #ifdef ALPINIST_GAME
-std::vector<AlpinistGame::Token*>* AlpinistGame::Lexer::LexAnalysis(AlpinistLog& AlpLog)
+
+std::vector<TSharedPtr<AlpinistGame::Token>>* AlpinistGame::Lexer::LexAnalysis(TWeakPtr<AlpinistLog>& AlpLog)
 {
-	Log = &AlpLog;
+	Log = AlpLog;
 	while (ContinueLexAnal())
 	{
 
@@ -20,11 +21,11 @@ bool AlpinistGame::Lexer::ContinueLexAnal()
 	std::cmatch result;
 
 	const char* ch = &arr.front()[0];
-	for (TokenType* TokenTypeValue : TokenList)
+	for (TSharedPtr<TokenType> TokenTypeValue : TokenList)
 	{
-		if (std::regex_match(ch, result, *TokenTypeValue->GetRegular()))
+		if (std::regex_match(ch, result, TokenTypeValue->GetRegular()))
 		{
-			Token* token = new Token(TokenTypeValue, TokenTypeValue->GetName(), currentPos++);
+			TSharedPtr<Token> token = MakeShared<Token>(TokenTypeValue, TokenTypeValue->GetName(), currentPos++);
 			Tokens.push_back(token);
 			arr.erase(arr.begin());
 			return true;
@@ -34,10 +35,11 @@ bool AlpinistGame::Lexer::ContinueLexAnal()
 	const std::string What = "Undefined Command: ";
 	const std::string Exactly = arr.front();
 	const std::string WhatExactly = What + Exactly;
+	const std::string InPos = std::to_string(currentPos);
 	
-	Log->PushMessageLog(WhatExactly, ErrorMes);
+	Log.Pin()->PushMessageLog(InPos + ": " + WhatExactly, AlpinistGame::ErrorMes);
 	
-	Log->PushMessageLog("Incorrect Command", ErrorMes);
+	Log.Pin()->PushMessageLog(InPos + ": " + "Incorrect Command", AlpinistGame::ErrorMes);
 	return false;
 }
 
@@ -55,7 +57,12 @@ bool AlpinistGame::Lexer::DivideStr(std::string str, std::vector<std::string>& a
 		return false;
 
 	size_t pos;
-	while ((pos = str.find("\r\n")) != std::string::npos)
+	while ((pos = str.find("\r")) != std::string::npos)
+	{
+		str.erase(pos, 1);
+		str.insert(pos, " ");
+	}
+	while ((pos = str.find("\n")) != std::string::npos)
 	{
 		str.erase(pos, 1);
 		str.insert(pos, " ");
@@ -89,4 +96,5 @@ void AlpinistGame::Lexer::PushAndAdjustment(std::string str, std::vector<std::st
 		arrToFill.push_back(str);
 	}
 }
+
 #endif

@@ -16,7 +16,8 @@ namespace AlpinistGame
 	{
 		DisplayMes = 0,
 		WarningMes = 1,
-		ErrorMes = 2
+		ErrorMes = 2,
+		SuccessMes = 3
 	};
 
 	struct MessageLog
@@ -42,6 +43,16 @@ namespace AlpinistGame
 			ListOfLog.push_back(Log);
 		}
 
+		void ClearLog()
+		{
+			ListOfLog.clear();
+			ListOfLog.shrink_to_fit();
+
+			bHasErrors = false;
+			bHasWarnings = false;
+			CountOfLog = 0;
+		}
+
 		std::vector<MessageLog>* GetListOfLog() { return &ListOfLog; }
 		
 		bool bHasWarnings = false;
@@ -50,9 +61,10 @@ namespace AlpinistGame
 	
 	class GameController
 	{
-		World* m_world;
+		TSharedPtr<World> m_world;
+		std::vector<std::string> m_initialWorld;
 
-		AlpinistGame::AlpinistCaretaker* m_alpinistCaretaker;
+		TSharedPtr<AlpinistGame::AlpinistCaretaker> m_alpinistCaretaker;
 	public:
 		GameController();
 		GameController(const std::vector<std::string>& map);
@@ -64,10 +76,14 @@ namespace AlpinistGame
 		bool WallInDirection(const Condition& condition);
 		bool PlayerNotOnFinish();
 
-		World* GetWorld() { return m_world; }
+		void SetNewMap(const std::vector<std::string>& map);
+		TSharedPtr<World> GetWorld() { return m_world; }
 
+		void ToStartPositions();
 		bool SaveCopyOfWorld(PlayerCommand* Command);
 		bool RestoreOfWorld(PlayerCommand* Command);
+		void ClearHistory();
+		TWeakPtr<AlpinistGame::AlpinistCaretaker> GetAlpinistCaretaker() const { return m_alpinistCaretaker.ToWeakPtr(); }
 		// bool ExecuteMacroCommand(MacroCommand* macroCommand);
 	};
 }

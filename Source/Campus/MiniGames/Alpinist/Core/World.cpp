@@ -5,6 +5,8 @@
 
 using namespace AlpinistGame;
 
+DEFINE_LOG_CATEGORY_STATIC(LogWorldAlpinist, All, All);
+
 bool World::IsValidPosition(std::pair<int8_t, int8_t> position) const
 {
 	if (m_grid.empty())
@@ -15,7 +17,7 @@ bool World::IsValidPosition(std::pair<int8_t, int8_t> position) const
 
 World::World(const std::vector<std::string>& grid)
 {
-	m_grid.resize(grid.size(), std::vector<Entity*>());
+	m_grid.resize(grid.size(), std::vector<TSharedPtr<Entity>>());
 	for (size_t i = 0; i < grid.size(); ++i)
 	{
 		m_grid[i].resize(grid[i].size(), nullptr);
@@ -27,14 +29,14 @@ World::World(const std::vector<std::string>& grid)
 				m_grid[i][j] = nullptr;
 				break;
 			case('p'):
-				m_player = new Player(std::make_pair(i, j), PlayerDirection::PD_UP); // TO DO: DIRECTION FIX
+				m_player = MakeShared<Player>(std::make_pair(i, j), PlayerDirection::PD_UP); // TO DO: DIRECTION FIX
 				m_grid[i][j] = m_player;
 				break;
 			case('w'):
-				m_grid[i][j] = new Wall(std::make_pair(i, j));
+				m_grid[i][j] = MakeShared<Wall>(std::make_pair(i, j));
 				break;
 			case('f'):
-				m_grid[i][j] = new Finish(std::make_pair(i, j));
+				m_grid[i][j] = MakeShared<Finish>(std::make_pair(i, j));
 				break;
 			default: break;
 			}
@@ -53,7 +55,7 @@ MoveResult World::SwapPlayerMove()
 
 	if (IsValidPosition(nextPosition))
 	{
-		Entity* entity = m_grid[nextPosition.first][nextPosition.second];
+		Entity* entity = m_grid[nextPosition.first][nextPosition.second].Get();
 
 		if (!entity)
 		{
@@ -75,6 +77,47 @@ MoveResult World::SwapPlayerMove()
 		}
 	}
 	return MR_ERROR;
+}
+
+void World::LogWorld()
+{
+	if (m_grid.empty())
+		return;
+
+	UE_LOG(LogWorldAlpinist, Display, TEXT("--------------------------------------------------"));
+	TArray<FString> OutArray = TArray<FString>();
+	for (size_t i = 0; i < m_grid.size(); ++i)
+	{
+		FString OutString = FString();
+		for (size_t j = 0; j < m_grid[i].size(); ++j)
+		{
+			if (m_grid[i][j].Get())
+			{
+				if (dynamic_cast<Player*>(m_grid[i][j].Get()))
+				{
+					OutString.Append("p");
+				}
+				else if (dynamic_cast<Wall*>(m_grid[i][j].Get()))
+				{
+					OutString.Append("w");
+				}
+				else if (dynamic_cast<Finish*>(m_grid[i][j].Get()))
+				{
+					OutString.Append("f");
+				}
+			}
+			else
+			{
+				OutString.Append(".");
+			}
+		}
+		OutArray.Add(OutString);
+	}
+
+	for (const FString& Out : OutArray)
+	{
+		UE_LOG(LogWorldAlpinist, Display, TEXT("%s"), *Out);
+	}
 }
 
 bool World::WallInDirection(const Condition& condition)
@@ -99,7 +142,7 @@ bool World::WallInDirection(const Condition& condition)
 	checkedCellPos = std::make_pair(m_player->GetPos().first + direction.first, m_player->GetPos().second + direction.second);
 	if (IsValidPosition(checkedCellPos))
 	{
-		if (Wall* wall = dynamic_cast<Wall*>(m_grid[checkedCellPos.first][checkedCellPos.second]))
+		if (Wall* wall = dynamic_cast<Wall*>(m_grid[checkedCellPos.first][checkedCellPos.second].Get()))
 		{
 			return true;
 		}
@@ -107,7 +150,7 @@ bool World::WallInDirection(const Condition& condition)
 	return false;
 }
 
-void World::SetGrid(const std::vector<std::vector<Entity*>>& OldGrid)
+void World::SetGrid(const std::vector<std::vector<TSharedPtr<Entity>>>& OldGrid)
 {
 	if (OldGrid.empty() || m_grid.empty() || OldGrid.size() != m_grid.size() || OldGrid[0].size() != m_grid[0].size())
 		return;
@@ -116,9 +159,9 @@ void World::SetGrid(const std::vector<std::vector<Entity*>>& OldGrid)
 	{
 		for (size_t j = 0; j < OldGrid[i].size(); ++j)
 		{
-			if (OldGrid[i][j])
+			if (OldGrid[i][j].Get())
 			{
-				if (const Player* MementoPlayer = dynamic_cast<Player*>(OldGrid[i][j]))
+				if (const Player* MementoPlayer = dynamic_cast<Player*>(OldGrid[i][j].Get()))
 				{
 					m_grid[m_player->GetPos().first][m_player->GetPos().second] = nullptr;
 					
@@ -126,9 +169,9 @@ void World::SetGrid(const std::vector<std::vector<Entity*>>& OldGrid)
 					m_player->SetPos(MementoPlayer->GetPos());
 					m_player->SetDirection(MementoPlayer->GetDirection());
 				}
-				else if (Finish* MementoFinish = dynamic_cast<Finish*>(OldGrid[i][j]))
+				else if (Finish* MementoFinish = dynamic_cast<Finish*>(OldGrid[i][j].Get()))
 				{
-					m_grid[i][j] = MementoFinish;
+					m_grid[i][j] = OldGrid[i][j];
 			
 					bFinished = false;
 				}
@@ -137,31 +180,31 @@ void World::SetGrid(const std::vector<std::vector<Entity*>>& OldGrid)
 	}
 }
 
-std::vector<std::vector<Entity*>> World::GetCopyOfGrid() const
+std::vector<std::vector<TSharedPtr<Entity>>> World::GetCopyOfGrid() const
 {
-	std::vector<std::vector<Entity*>> SnapshotOfWorld;
-	SnapshotOfWorld.resize(m_grid.size(), std::vector<Entity*>());
+	std::vector<std::vector<TSharedPtr<Entity>>> SnapshotOfWorld;
+	SnapshotOfWorld.resize(m_grid.size(), std::vector<TSharedPtr<Entity>>());
 	
 	for (size_t i = 0; i < m_grid.size(); ++i)
 	{
 		SnapshotOfWorld[i].resize(m_grid[i].size(), nullptr);
 		for (size_t j = 0; j < m_grid[i].size(); ++j)
 		{
-			if (m_grid[i][j])
+			if (m_grid[i][j].Get())
 			{
-				if (const Player* PlayerToSave = dynamic_cast<Player*>(m_grid[i][j]))
+				if (const Player* PlayerToSave = dynamic_cast<Player*>(m_grid[i][j].Get()))
 				{
-					Player* MementoPlayer = new Player(PlayerToSave->GetPos(), PlayerToSave->GetDirection());
+					TSharedPtr<Player> MementoPlayer = MakeShared<Player>(PlayerToSave->GetPos(), PlayerToSave->GetDirection());
 					SnapshotOfWorld[i][j] = MementoPlayer;
 				}
-				else if (const Wall* WallToSave = dynamic_cast<Wall*>(m_grid[i][j]))
+				else if (const Wall* WallToSave = dynamic_cast<Wall*>(m_grid[i][j].Get()))
 				{
-					Wall* MementoWall = new Wall(WallToSave->GetPos());
+					TSharedPtr<Wall> MementoWall = MakeShared<Wall>(WallToSave->GetPos());
 					SnapshotOfWorld[i][j] = MementoWall;
 				}
-				else if (const Finish* FinishToSave = dynamic_cast<Finish*>(m_grid[i][j]))
+				else if (const Finish* FinishToSave = dynamic_cast<Finish*>(m_grid[i][j].Get()))
 				{
-					Finish* MementoFinish = new Finish(FinishToSave->GetPos());
+					TSharedPtr<Finish> MementoFinish = MakeShared<Finish>(FinishToSave->GetPos());
 					SnapshotOfWorld[i][j] = MementoFinish;
 				}
 			}
@@ -185,15 +228,15 @@ std::ostream& AlpinistGame::operator<<(std::ostream& os, World* world)
 		{
 			if (world->m_grid[i][j])
 			{
-				if (dynamic_cast<Player*>(world->m_grid[i][j]))
+				if (dynamic_cast<Player*>(world->m_grid[i][j].Get()))
 				{
 					os << "p";
 				}
-				else if (dynamic_cast<Wall*>(world->m_grid[i][j]))
+				else if (dynamic_cast<Wall*>(world->m_grid[i][j].Get()))
 				{
 					os << "w";
 				}
-				else if (dynamic_cast<Finish*>(world->m_grid[i][j]))
+				else if (dynamic_cast<Finish*>(world->m_grid[i][j].Get()))
 				{
 					os << "f";
 				}

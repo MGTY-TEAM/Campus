@@ -1,5 +1,26 @@
 ﻿#pragma once
+
+#include "CoreMinimal.h"
+#include "Engine/DataTable.h"
+#include "UObject/Object.h"
+#include "GameTypes.generated.h"
+
+USTRUCT(BlueprintType)
+struct FAlpinistLevelRowBase : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    // Title of Alpinist Level
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    FName Title;
+
+    // Maximum number of commands
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    int32 MaxNumCommands;
+};
+
 #ifdef ALPINIST_GAME
+
 namespace AlpinistGame
 {
     enum Condition

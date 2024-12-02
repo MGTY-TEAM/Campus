@@ -3,6 +3,13 @@
 #ifdef ALPINIST_GAME
 
 #include "GameTypes.h"
+#include "GameController.h"
+
+namespace AlpinistGame
+{
+	class AlpinistLog;
+}
+
 
 namespace AlpinistGame
 {
@@ -20,7 +27,7 @@ namespace AlpinistGame
 		{
 		}
 
-		virtual bool Execute()
+		virtual bool Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog)
 		{
 			return false;
 		}
@@ -32,63 +39,63 @@ namespace AlpinistGame
 
 	class RotateRightCommand : public PlayerCommand
 	{
-		GameController* m_gameController;
+		TWeakPtr<GameController> m_gameController;
 
 	public:
-		RotateRightCommand(GameController* gameController) : m_gameController(gameController)
+		RotateRightCommand(const TWeakPtr<GameController>& gameController) : m_gameController(gameController)
 		{
 		}
 
-		virtual bool Execute() override;
+		virtual bool Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog) override;
 		virtual bool Unexecute() override;
 	};
 
 	class RotateLeftCommand : public PlayerCommand
 	{
-		GameController* m_gameController;
+		TWeakPtr<GameController> m_gameController;
 
 	public:
-		RotateLeftCommand(GameController* gameController) : m_gameController(gameController)
+		RotateLeftCommand(const TWeakPtr<GameController>& gameController) : m_gameController(gameController)
 		{
 		}
 
-		virtual bool Execute() override;
+		virtual bool Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog) override;
 		virtual bool Unexecute() override;
 	};
 
 	class MoveCommand : public PlayerCommand
 	{
-		GameController* m_gameController;
+		TWeakPtr<GameController> m_gameController;
 
 	public:
-		MoveCommand(GameController* gameController) : m_gameController(gameController)
+		MoveCommand(const TWeakPtr<GameController>& gameController) : m_gameController(gameController)
 		{
 		}
 
-		virtual bool Execute() override;
+		virtual bool Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog) override;
 		virtual bool Unexecute() override;
 	};
 
 	class MacroCommand : public PlayerCommand
 	{
 	protected:
-		std::list<PlayerCommand*> m_commandList;
+		std::list<TSharedPtr<PlayerCommand>> m_commandList;
 
 	public:
 		MacroCommand()
 		{
 		}
 
-		virtual bool Execute() override;
+		virtual bool Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog) override;
 
-		void PushCommand(PlayerCommand* playerCommand);
+		void PushCommand(const TSharedPtr<PlayerCommand>& playerCommand);
 
-		std::list<PlayerCommand*> GetList() const { return m_commandList; }
+		std::list<TSharedPtr<PlayerCommand>> GetList() const { return m_commandList; }
 	};
 
 	class ConditionCommand : public PlayerCommand
 	{
-		GameController* m_gameController;
+		TWeakPtr<GameController> m_gameController;
 
 		Condition m_definition;
 
@@ -96,7 +103,7 @@ namespace AlpinistGame
 		bool m_shouldBeNegation = false;
 
 	public:
-		ConditionCommand(GameController* gameController, Condition definition) : m_gameController(gameController),
+		ConditionCommand(const TWeakPtr<GameController>& gameController, Condition definition) : m_gameController(gameController),
 			m_definition(definition)
 		{
 		}
@@ -104,11 +111,11 @@ namespace AlpinistGame
 		bool GetResult() const { return m_shouldBeNegation ? !m_bResult : m_bResult; }
 		void ToggleResult();
 
-		virtual bool Execute() override;
+		virtual bool Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog) override;
 
-		ConditionCommand* operator!()
+		TSharedPtr<ConditionCommand> operator!()
 		{
-			ConditionCommand* NewCommand = new ConditionCommand(this->m_gameController, this->m_definition);
+			TSharedPtr<ConditionCommand> NewCommand = MakeShared<ConditionCommand>(this->m_gameController, this->m_definition);
 			NewCommand->ToggleResult();
 
 			return NewCommand;
@@ -117,104 +124,107 @@ namespace AlpinistGame
 
 	class NotEndCommand : public PlayerCommand
 	{
-		GameController* m_gameController;
+		TWeakPtr<GameController> m_gameController;
 		bool m_bResult = false;
 
 	public:
-		NotEndCommand(GameController* gameController) : m_gameController(gameController)
+		NotEndCommand(const TWeakPtr<GameController>& gameController) : m_gameController(gameController)
 		{
 		}
 
 		bool GetResult() const { return m_bResult; }
 		
-		virtual bool Execute() override;
+		virtual bool Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog) override;
 	};
 	
 	class IfCommand : public PlayerCommand
 	{
-		std::list<PlayerCommand*> m_commandListIfTrue;
-		std::list<PlayerCommand*> m_commandListIfFalse;
+		std::list<TSharedPtr<PlayerCommand>> m_commandListIfTrue;
+		std::list<TSharedPtr<PlayerCommand>> m_commandListIfFalse;
 
-		ConditionCommand* m_conditionCommand;
+		TSharedPtr<ConditionCommand> m_conditionCommand;
 
 	public:
 		IfCommand()
 		{
 		}
 
-		IfCommand(ConditionCommand* ConditionCommand) : m_conditionCommand(ConditionCommand)
+		IfCommand(const TSharedPtr<ConditionCommand>& ConditionCommand) : m_conditionCommand(ConditionCommand)
 		{
 		}
 
-		void PushCommandInTrueIf(PlayerCommand* playerCommand)
+		void PushCommandInTrueIf(const TSharedPtr<PlayerCommand>& playerCommand)
 		{
 			m_commandListIfTrue.push_back(playerCommand);
-			
 		}
 
-		void PushCommandInFalseIf(PlayerCommand* playerCommand)
+		void PushCommandInFalseIf(const TSharedPtr<PlayerCommand>& playerCommand)
 		{
 			m_commandListIfFalse.push_back(playerCommand);
 		}
 
 		// void SetCondition(bool Condition) { m_bConditon = Condition; }
 
-		virtual bool Execute() override;
+		virtual bool Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog) override;
 	};
 	
 	class WhileCommand : public MacroCommand
 	{
-		ConditionCommand* m_conditionCommand;
-		NotEndCommand* m_notEndCommand;
+		TSharedPtr<ConditionCommand> m_conditionCommand;
+		TSharedPtr<NotEndCommand> m_notEndCommand;
 
 		size_t CountOfExecution = 0;
 	public:
 		WhileCommand() {}
 
-		WhileCommand(ConditionCommand* conditionCommand) : m_conditionCommand(conditionCommand)
+		WhileCommand(const TSharedPtr<ConditionCommand>& conditionCommand) : m_conditionCommand(conditionCommand)
 		{
 			m_notEndCommand = nullptr;
 		}
-		WhileCommand(NotEndCommand* notEndCommand) : m_notEndCommand(notEndCommand)
+		WhileCommand(const TSharedPtr<NotEndCommand>& notEndCommand) : m_notEndCommand(notEndCommand)
 		{
 			m_conditionCommand = nullptr;
 		}
 
-		virtual bool Execute() override
+		virtual bool Execute(TWeakPtr<AlpinistGame::AlpinistLog>& AlpLog) override
 		{
-			if (m_conditionCommand)
+			if (m_conditionCommand.IsValid())
 			{
-				return ExecuteCondition(m_conditionCommand, &ConditionCommand::Execute, &ConditionCommand::GetResult);
+				return ExecuteCondition(m_conditionCommand, &ConditionCommand::Execute, AlpLog, &ConditionCommand::GetResult);
 			}
-			if (m_notEndCommand)
+			if (m_notEndCommand.IsValid())
 			{
-				return ExecuteCondition(m_notEndCommand, &NotEndCommand::Execute, &NotEndCommand::GetResult);
+				return ExecuteCondition(m_notEndCommand, &NotEndCommand::Execute, AlpLog, &NotEndCommand::GetResult);
 			} 
 			return false;
 		}
 
 	private:
 		template<typename TypeOfConditionCommand>
-		bool ExecuteCondition(TypeOfConditionCommand* Command, bool(TypeOfConditionCommand::* Execute)(), bool(TypeOfConditionCommand::* GetResult)() const);
+		bool ExecuteCondition(const TSharedPtr<TypeOfConditionCommand>& Command, bool(TypeOfConditionCommand::* Execute)(TWeakPtr<AlpinistGame::AlpinistLog>&), TWeakPtr<AlpinistGame::AlpinistLog> AlpLog, bool(TypeOfConditionCommand::* GetResult)() const);
 	};
 
 	template <typename TypeOfConditionCommand>
-	bool WhileCommand::ExecuteCondition(TypeOfConditionCommand* Command, bool(TypeOfConditionCommand::* Execute)(), bool(TypeOfConditionCommand::* GetResult)() const)
+	bool WhileCommand::ExecuteCondition(const TSharedPtr<TypeOfConditionCommand>& Command, bool(TypeOfConditionCommand::* Execute)(TWeakPtr<AlpinistGame::AlpinistLog>&), TWeakPtr<AlpinistGame::AlpinistLog> AlpLog, bool(TypeOfConditionCommand::* GetResult)() const)
 	{
-		if (Command)
+		if (Command.IsValid())
 		{
-			(Command->*Execute)();
-			while ((Command->*GetResult)())
+			(Command.Get()->*Execute)(AlpLog);
+			while ((Command.Get()->*GetResult)())
 			{
-				for (PlayerCommand* playerCommand : m_commandList)
+				for (TSharedPtr<PlayerCommand>& playerCommand : m_commandList)
 				{
-					if (!playerCommand->Execute())
+					if (!playerCommand->Execute(AlpLog))
 						return false;
 				}
-				(Command->*Execute)();
+				(Command.Get()->*Execute)(AlpLog);
 
 				if (CountOfExecution++ == 100)
 				{
+					if (AlpLog.IsValid())
+					{
+						AlpLog.Pin()->PushMessageLog("Warning: Infinite Circle in WhileLoop...", AlpinistGame::WarningMes);
+					}
 					return false;
 				}
 			}
@@ -227,23 +237,23 @@ namespace AlpinistGame
 	class Creator
 	{
 	public:
-		virtual PlayerCommand* Create(std::string Command, GameController* controller, ConditionCommand* conditionCommand = nullptr)
+		virtual TSharedPtr<PlayerCommand> Create(std::string Command, TWeakPtr<GameController> controller, TSharedPtr<ConditionCommand> conditionCommand = nullptr)
 		{
-			if (Command == "move") return new MoveCommand(controller);
-			if (Command == "right") return new RotateRightCommand(controller);
-			if (Command == "left") return new RotateLeftCommand(controller);
-			if (Command == "wallAhead") return new ConditionCommand(controller, C_WALL_FORWARD);
-			if (Command == "wallRight") return new ConditionCommand(controller, C_WALL_RIGHT);
-			if (Command == "wallLeft") return new ConditionCommand(controller, C_WALL_LEFT);
-			if (Command == "while") return new WhileCommand(conditionCommand);
-			if (Command == "if") return new IfCommand(conditionCommand);
-			if (Command == "NotEnd") return new NotEndCommand(controller);
+			if (Command == "move") return MakeShared<MoveCommand>(controller);
+			if (Command == "right") return MakeShared<RotateRightCommand>(controller);
+			if (Command == "left") return MakeShared<RotateLeftCommand>(controller);
+			if (Command == "wallAhead") return MakeShared<ConditionCommand>(controller, C_WALL_FORWARD);
+			if (Command == "wallRight") return MakeShared<ConditionCommand>(controller, C_WALL_RIGHT);
+			if (Command == "wallLeft") return MakeShared<ConditionCommand>(controller, C_WALL_LEFT);
+			if (Command == "while") return MakeShared<WhileCommand>(conditionCommand);
+			if (Command == "if") return MakeShared<IfCommand>(conditionCommand);
+			if (Command == "NotEnd") return MakeShared<NotEndCommand>(controller);
 
 			return nullptr;
 		}
-		virtual PlayerCommand* CreateWhileNotEnd(std::string Command, GameController* controller, NotEndCommand* notEndCommand = nullptr)
+		virtual TSharedPtr<PlayerCommand> CreateWhileNotEnd(std::string Command, TWeakPtr<GameController> controller, TSharedPtr<NotEndCommand> notEndCommand = nullptr)
 		{
-			if (Command == "while" && notEndCommand) return new WhileCommand(notEndCommand);
+			if (Command == "while" && notEndCommand.IsValid()) return MakeShared<WhileCommand>(notEndCommand);
 
 			return nullptr;
 		}

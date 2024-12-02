@@ -8,15 +8,15 @@ namespace AlpinistGame
 {
 	class Token
 	{
-		TokenType* Type;
+		TSharedPtr<TokenType> Type;
 		std::string Text;
 		size_t Pos;
 
 	public:
-		Token(TokenType* type, std::string text, size_t pos) : Type(type), Text(text), Pos(pos) {}
+		Token(TSharedPtr<TokenType> type, std::string text, size_t pos) : Type(type), Text(text), Pos(pos) {}
 		~Token()
 		{
-			// delete Type;
+			// Type.reset();
 		}
 
 		std::string GetText() const { return Text; }

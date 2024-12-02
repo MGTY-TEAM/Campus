@@ -12,10 +12,10 @@ AlpinistGame::Parser::~Parser()
 	delete creator; */
 }
 
-AlpinistGame::MacroCommand* AlpinistGame::Parser::SynAnalysis(AlpinistLog& AlpLog)
+TSharedPtr<AlpinistGame::MacroCommand> AlpinistGame::Parser::SynAnalysis(TWeakPtr<AlpinistLog>& AlpLog)
 {
-	Log = &AlpLog;
-	while (ContinueSynAnal(CommandList))
+	Log = AlpLog;
+	while (ContinueSynAnal(CommandList.ToWeakPtr()))
 	{
 
 	}
@@ -27,14 +27,14 @@ AlpinistGame::MacroCommand* AlpinistGame::Parser::SynAnalysis(AlpinistLog& AlpLo
 	return nullptr;
 }
 
-bool AlpinistGame::Parser::ContinueSynAnal(MacroCommand* commandList)
+bool AlpinistGame::Parser::ContinueSynAnal(TWeakPtr<MacroCommand> commandList)
 {
 	if (Tokens.size() == 0)
 	{
 		return false;
 	}
 
-	Token* token = Tokens.front();
+	Token* token = Tokens.front().Get();
 	switch (token->GetCommandType())
 	{
 	case CT_SimpleCommand:
@@ -42,58 +42,58 @@ bool AlpinistGame::Parser::ContinueSynAnal(MacroCommand* commandList)
 		{
 			return true;
 		}
-		Log->PushMessageLog("Undefined Command: Can't create command.", ErrorMes);
+		Log.Pin()->PushMessageLog("Undefined Command: Can't create command...", ErrorMes);
 		break;
 	case CT_WhileLoop:
 		if (AddWhileLoop(token->GetText(), commandList))
 		{
 			return true;
 		}
-		Log->PushMessageLog("Incorrect WhileLoop.", ErrorMes);
+		Log.Pin()->PushMessageLog("Incorrect WhileLoop...", ErrorMes);
 		break;
 	case CT_IfElseConditional:
 		if (AddIfElseConditional(token->GetText(), commandList))
 		{
 			return true;
 		}
-		Log->PushMessageLog("Incorrect IfElseConditional.", ErrorMes);
+		Log.Pin()->PushMessageLog("Incorrect IfElseConditional...", ErrorMes);
 		break;
 	case CT_ConditionType:
-		Log->PushMessageLog("Expected while Or if Command.", ErrorMes);
+		Log.Pin()->PushMessageLog("Expected while Or if Command...", ErrorMes);
 		break;
 	case CT_BeginScope:
-		Log->PushMessageLog("Expected while Or if Command.", ErrorMes);
+		Log.Pin()->PushMessageLog("Expected while Or if Command...", ErrorMes);
 		break;
 	case CT_EndScope:
-		Log->PushMessageLog("Expected while Or if Command.", ErrorMes);
+		Log.Pin()->PushMessageLog("Expected while Or if Command...", ErrorMes);
 		break;
 	case CT_Space:
 		Tokens.erase(Tokens.begin());
 		return true;
 	case CT_NotEnd:
-		Log->PushMessageLog("Expected while Command.", ErrorMes);
+		Log.Pin()->PushMessageLog("Expected while Command...", ErrorMes);
 		break;
 	default:
-		Log->PushMessageLog("Undefined Type: Can't create command.", ErrorMes);
+		Log.Pin()->PushMessageLog("Undefined Type: Can't create command...", ErrorMes);
 		break;
 	}
 	return false;
 }
 
-bool AlpinistGame::Parser::AddSimpleCommand(const std::string& Command, MacroCommand* commandList)
+bool AlpinistGame::Parser::AddSimpleCommand(const std::string& Command, TWeakPtr<MacroCommand> commandList)
 {
-	if (PlayerCommand* newCommand = creator->Create(Command, Controller))
+	if (const TSharedPtr<PlayerCommand> newCommand = creator->Create(Command, Controller))
 	{
-		commandList->PushCommand(newCommand);
+		commandList.Pin()->PushCommand(newCommand);
 		Tokens.erase(Tokens.begin());
 		return true;
 	}
 	
-	Log->PushMessageLog(std::string("Creator can't create Command: ") + Command ,ErrorMes);
+	Log.Pin()->PushMessageLog(std::string("Creator can't create Command: ") + Command ,ErrorMes);
 	return false;
 }
 
-bool AlpinistGame::Parser::AddWhileLoop(const std::string& Command, MacroCommand* commandList)
+bool AlpinistGame::Parser::AddWhileLoop(const std::string& Command, TWeakPtr<MacroCommand> commandList)
 {
 	if (!DeleteTokenFront())
 	{
@@ -101,7 +101,7 @@ bool AlpinistGame::Parser::AddWhileLoop(const std::string& Command, MacroCommand
 	}
 
 	bool whileShouldBeFill = false;
-	WhileCommand* whileCommand = nullptr;
+	TSharedPtr<AlpinistGame::WhileCommand> whileCommand = nullptr;
 	
 	// Check keywords
 	if (CheckKeywords())
@@ -116,7 +116,7 @@ bool AlpinistGame::Parser::AddWhileLoop(const std::string& Command, MacroCommand
 	
 	if (!whileCommand)
 	{
-		Log->PushMessageLog("Can't create WhileCommand", ErrorMes);
+		Log.Pin()->PushMessageLog("Can't create WhileCommand...", ErrorMes);
 		return false;
 	}
 
@@ -129,7 +129,7 @@ bool AlpinistGame::Parser::AddWhileLoop(const std::string& Command, MacroCommand
 	return false;
 }
 
-bool AlpinistGame::Parser::AddIfElseConditional(const std::string& Command, MacroCommand* commandList)
+bool AlpinistGame::Parser::AddIfElseConditional(const std::string& Command, TWeakPtr<MacroCommand> commandList)
 {
 	if (!DeleteTokenFront())
 	{
@@ -137,10 +137,10 @@ bool AlpinistGame::Parser::AddIfElseConditional(const std::string& Command, Macr
 	}
 
 	bool ifHasCondition = false;
-	IfCommand* ifCommand = CreateCommandWithCondition<IfCommand>(Command, commandList, ifHasCondition);
-	if (!ifCommand)
+	const TSharedPtr<IfCommand> ifCommand = CreateCommandWithCondition<IfCommand>(Command, commandList, ifHasCondition);
+	if (!ifCommand.IsValid())
 	{
-		Log->PushMessageLog("Can't create IfCommand.", ErrorMes);
+		Log.Pin()->PushMessageLog("Can't create IfCommand...", ErrorMes);
 		return false;
 	}
 
@@ -152,7 +152,7 @@ bool AlpinistGame::Parser::AddIfElseConditional(const std::string& Command, Macr
 
 	if (Tokens.size() != 0)
 	{
-		if (Token* elseToken = Tokens.front())
+		if (Token* elseToken = Tokens.front().Get())
 		{
 			if (elseToken->GetText() == "else")
 			{
@@ -181,21 +181,21 @@ bool AlpinistGame::Parser::AddIfElseConditional(const std::string& Command, Macr
 	return false;
 }
 
-AlpinistGame::WhileCommand* AlpinistGame::Parser::CreateWhileCommandWithKeyword(const std::string& Command, MacroCommand* commandList, bool& CommandHasCondition)
+TSharedPtr<AlpinistGame::WhileCommand> AlpinistGame::Parser::CreateWhileCommandWithKeyword(const std::string& Command, TWeakPtr<MacroCommand> commandList, bool& CommandHasCondition)
 {
-	WhileCommand* whileCommand = nullptr;
+	TSharedPtr<WhileCommand> whileCommand = nullptr;
 	
-	Token* nextToken = Tokens.front();
+	Token* nextToken = Tokens.front().Get();
 	if (nextToken->GetCommandType() == CT_NotEnd)
 	{
-		if (PlayerCommand* newNotEndCommand = creator->Create(nextToken->GetText(), Controller))
+		if (const TSharedPtr<PlayerCommand> newNotEndCommand = creator->Create(nextToken->GetText(), Controller))
 		{
-			if (NotEndCommand* notEndCommand = dynamic_cast<NotEndCommand*>(newNotEndCommand))
+			if (const TSharedPtr<NotEndCommand> notEndCommand = StaticCastSharedPtr<NotEndCommand>(newNotEndCommand))
 			{
-				whileCommand = dynamic_cast<WhileCommand*>(creator->CreateWhileNotEnd(Command, Controller, notEndCommand));
+				whileCommand = StaticCastSharedPtr<WhileCommand>(creator->CreateWhileNotEnd(Command, Controller, notEndCommand));
 				if (whileCommand)
 				{
-					commandList->PushCommand(whileCommand);
+					commandList.Pin()->PushCommand(whileCommand);
 					DeleteTokenFront();
 
 					CommandHasCondition = true;
@@ -206,7 +206,7 @@ AlpinistGame::WhileCommand* AlpinistGame::Parser::CreateWhileCommandWithKeyword(
 
 	if (!whileCommand)
 	{
-		Log->PushMessageLog("Can't create NotEndCommand", ErrorMes);
+		Log.Pin()->PushMessageLog("Can't create NotEndCommand...", ErrorMes);
 	}
 
 	return whileCommand;
@@ -222,11 +222,11 @@ bool AlpinistGame::Parser::DeleteTokenFront()
 	{
 		return false;
 	}
-	SkipSpaceTokenIfThereItIs(Tokens.front());
+	SkipSpaceTokenIfThereItIs(Tokens.front().Get());
 	return true;
 }
 
-bool AlpinistGame::Parser::FillCommandListScope(MacroCommand* macroCommandList)
+bool AlpinistGame::Parser::FillCommandListScope(TWeakPtr<MacroCommand> macroCommandList)
 {
 	if (!DeleteTokenFront())
 	{
@@ -234,14 +234,14 @@ bool AlpinistGame::Parser::FillCommandListScope(MacroCommand* macroCommandList)
 	}
 	StackScope.push(0);
 
-	Token* endToken = Tokens.front();
+	Token* endToken = Tokens.front().Get();
 	while (endToken->GetCommandType() != CT_EndScope)
 	{
 		if (!ContinueSynAnal(macroCommandList))
 		{
 			return false;
 		}
-		endToken = Tokens.front();
+		endToken = Tokens.front().Get();
 	}
 	if (!DeleteTokenFront())
 	{
@@ -284,7 +284,7 @@ void AlpinistGame::Parser::SkipSpaceTokenIfThereItIs(Token* token)
 
 bool AlpinistGame::Parser::CheckKeywords()
 {
-	Token* token = Tokens.front();
+	Token* token = Tokens.front().Get();
 	if (token && token->GetCommandType() == CT_NotEnd)
 	{
 		return true;

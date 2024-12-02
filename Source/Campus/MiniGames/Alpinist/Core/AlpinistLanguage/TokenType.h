@@ -26,17 +26,17 @@ namespace AlpinistGame
 	protected:
 		std::string Name;
 		ECommandType CommandType;
-		std::regex* Regular;
+		std::regex Regular;
 
 	public:
-		TokenType(const std::string name, ECommandType commandType, std::regex* regularexpr) : Name(name), CommandType(commandType), Regular(regularexpr) {}
+		TokenType(const std::string& name, ECommandType commandType, const std::regex& regularexpr) : Name(name), CommandType(commandType), Regular(regularexpr) {}
 		~TokenType()
 		{
-			// delete Regular;
+			// Regular.reset();
 		}
 
 		std::string GetName() const { return Name; };
-		std::regex* GetRegular() const { return Regular; };
+		std::regex GetRegular() const { return Regular; };
 		ECommandType GetCommandType() const { return CommandType; }
 	};
 }

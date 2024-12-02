@@ -19,9 +19,10 @@ namespace AlpinistGame
 		virtual ~BaseMemento() {};
 	protected:
 		BaseMemento() {};
+	public:
+		virtual void SetState(const std::vector<std::vector<TSharedPtr<Entity>>>& StateGrid) = 0;
+		virtual const std::vector<std::vector<TSharedPtr<Entity>>>& GetState() = 0;
 	private:
-		virtual void SetState(const std::vector<std::vector<Entity*>>& StateGrid) = 0;
-		virtual const std::vector<std::vector<Entity*>>& GetState() = 0;
 	};
 
 	class AlpinistMemento : public BaseMemento
@@ -32,20 +33,24 @@ namespace AlpinistGame
 	private:
 		AlpinistMemento() {};
 
-		virtual void SetState(const std::vector<std::vector<Entity*>>& StateGrid) override;
-		virtual const std::vector<std::vector<Entity*>>& GetState() override { return m_grid; };
+		virtual void SetState(const std::vector<std::vector<TSharedPtr<Entity>>>& StateGrid) override;
+		virtual const std::vector<std::vector<TSharedPtr<Entity>>>& GetState() override { return m_grid; }
 
-		std::vector<std::vector<Entity*>> m_grid;
+		std::vector<std::vector<TSharedPtr<Entity>>> m_grid;
 	};
 
 	class AlpinistCaretaker
 	{
-		std::vector<std::pair<PlayerCommand*, BaseMemento*>> m_vectorMementos;
+		std::vector<std::pair<PlayerCommand*, TSharedPtr<BaseMemento>>> m_vectorMementos;
 	public:
 		AlpinistCaretaker() {};
 	
-		void Backup(AlpinistMemento*& NewMemento, PlayerCommand*& Command);
-		AlpinistMemento* Undo(PlayerCommand*& Command);
+		void Backup(const TSharedPtr<AlpinistMemento>& NewMemento, PlayerCommand*& Command);
+		TSharedPtr<AlpinistMemento> Undo(PlayerCommand*& Command);
+		void UndoEmptyLastCommandAfterFinished();
+
+		void ClearHistory();
+		std::vector<std::pair<AlpinistGame::PlayerDirection, std::pair<int8_t, int8_t>>> GetPlayersHistory() const;
 	};
 }
 #endif
