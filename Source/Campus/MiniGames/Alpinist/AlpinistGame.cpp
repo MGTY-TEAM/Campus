@@ -249,7 +249,7 @@ void AAlpinistGame::RunGame()
 
 	if (!bAlpinistGameCompleted && PassedLevels.Num() == UAlpinistGameHelper::DetermineNumberOfLevels(UKismetSystemLibrary::GetProjectDirectory() + "Alpinist/Levels"))
 	{
-		ExecuteMiniGameCompleted.Broadcast();
+		ExecuteMiniGameCompleted.Broadcast(nullptr);
 		bAlpinistGameCompleted = true;
 		UE_LOG(LogAlpinistGame, Warning, TEXT("Alpinist Game Completed!"));
 
