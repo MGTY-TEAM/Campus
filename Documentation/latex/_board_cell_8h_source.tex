@@ -1,0 +1,44 @@
+\doxysection{Board\+Cell.\+h}
+\hypertarget{_board_cell_8h_source}{}\label{_board_cell_8h_source}\index{Source/Campus/MiniGames/Chess/Core/BoardCell.h@{Source/Campus/MiniGames/Chess/Core/BoardCell.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}GameFramework/Actor.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}BoardCell.generated.h"{}}}
+\DoxyCodeLine{00008\ DECLARE\_MULTICAST\_DELEGATE\_TwoParams(FOnCellClicked,\ \textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int});}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_a_base_piece}{ABasePiece}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ UCLASS()}
+\DoxyCodeLine{00012\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_a_board_cell}{ABoardCell}}\ :\ public\ AActor}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00015\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Mesh"{}})}
+\DoxyCodeLine{00016\ \ \ \ \ UStaticMeshComponent*\ StaticMeshComponent;}
+\DoxyCodeLine{00017\ \ \ \ \ }
+\DoxyCodeLine{00018\ \ \ \ \ TPair<int,\ int>\ CellPos;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ UFUNCTION()}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ OnClicked(UPrimitiveComponent*\ TouchedComponent,\ FKey\ ButtonPressed);}
+\DoxyCodeLine{00022\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ UPROPERTY(EditDefaultsOnly)}
+\DoxyCodeLine{00024\ \ \ \ \ USceneComponent*\ SceneComponent;}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{class_a_board_cell}{ABoardCell}}();}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SetUpCell(TPair<int,\ int>\ Pos,\ \mbox{\hyperlink{class_a_base_piece}{ABasePiece}}*\ =\ \textcolor{keyword}{nullptr},\ UMaterialInstance*\ PieceMaterial\ =\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SetUpColor(UMaterialInstance*\ MaterialInstance,\ \textcolor{keywordtype}{bool}\ bColorWhite);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ Click();}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{class_a_base_piece}{ABasePiece}}*\ Piece;}
+\DoxyCodeLine{00030\ \ \ \ \ FOnCellClicked\ OnCellClicked;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{bool}\ bWhite;\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ BeginPlay()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ PlacePiece(\mbox{\hyperlink{class_a_base_piece}{ABasePiece}}*\ NewPiece);}
+\DoxyCodeLine{00038\ \};}
+
+\end{DoxyCode}

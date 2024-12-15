@@ -1,0 +1,172 @@
+\doxysection{UForm\+Fields\+Validator\+Lib Class Reference}
+\hypertarget{class_u_form_fields_validator_lib}{}\label{class_u_form_fields_validator_lib}\index{UFormFieldsValidatorLib@{UFormFieldsValidatorLib}}
+Inheritance diagram for UForm\+Fields\+Validator\+Lib\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_u_form_fields_validator_lib}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{class_u_form_fields_validator_lib_ace8c31b6b52be57911692adf3e7ea95f}{Is\+Register\+Fields\+Valid}} (const FText \&Login, const FText \&Nickname, const FText \&Email, const FText \&Password, const FText \&Confirm\+Password)
+\begin{DoxyCompactList}\small\item\em Validates all registration fields. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{class_u_form_fields_validator_lib_ada2adc4819e2f01521dfaaf8dc2b996e}{Is\+Login\+Fields\+Valid}} (const FText \&Login, const FText \&Password)
+\begin{DoxyCompactList}\small\item\em Validates the login and password fields. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{class_u_form_fields_validator_lib_ac1e789e800089be05b433fa37d2b9f8d}{Is\+Valid\+Nickname}} (const FText \&Nickname)
+\begin{DoxyCompactList}\small\item\em Checks if the provided text field is a valid nickname. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{class_u_form_fields_validator_lib_a63867d9fc88866b45d9c71bf1dd5b6ca}{Is\+Valid\+Email}} (const FText \&Email)
+\begin{DoxyCompactList}\small\item\em Checks if the provided text field contains a valid email format. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{class_u_form_fields_validator_lib_ae62809adfc1cafa3094a991f3612dfe2}{Is\+Valid\+Password}} (const FText \&Password)
+\begin{DoxyCompactList}\small\item\em Checks if the provided text field contains a valid password. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{class_u_form_fields_validator_lib_a4b8fea435a75cf0194009d746fcb3578}{Is\+Confirm\+Password\+Equal\+Password}} (const FText \&Password, const FText \&Confirm\+Password)
+\begin{DoxyCompactList}\small\item\em Checks if the confirmed password matches the original password. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{class_u_form_fields_validator_lib_a3da0b8a0b9ef80945874f67b39b6776b}{Is\+Valid\+Login}} (const FText \&Login)
+\begin{DoxyCompactList}\small\item\em Checks if the provided text field contains a valid login format. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_u_form_fields_validator_lib_a4b8fea435a75cf0194009d746fcb3578}\label{class_u_form_fields_validator_lib_a4b8fea435a75cf0194009d746fcb3578} 
+\index{UFormFieldsValidatorLib@{UFormFieldsValidatorLib}!IsConfirmPasswordEqualPassword@{IsConfirmPasswordEqualPassword}}
+\index{IsConfirmPasswordEqualPassword@{IsConfirmPasswordEqualPassword}!UFormFieldsValidatorLib@{UFormFieldsValidatorLib}}
+\doxysubsubsection{\texorpdfstring{IsConfirmPasswordEqualPassword()}{IsConfirmPasswordEqualPassword()}}
+{\footnotesize\ttfamily bool UForm\+Fields\+Validator\+Lib\+::\+Is\+Confirm\+Password\+Equal\+Password (\begin{DoxyParamCaption}\item[{const FText \&}]{Password,  }\item[{const FText \&}]{Confirm\+Password }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Checks if the confirmed password matches the original password. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Password} & The original password. \\
+\hline
+{\em Confirm\+Password} & The confirmed password. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the confirmed password matches the original; otherwise, false. 
+\end{DoxyReturn}
+\Hypertarget{class_u_form_fields_validator_lib_ada2adc4819e2f01521dfaaf8dc2b996e}\label{class_u_form_fields_validator_lib_ada2adc4819e2f01521dfaaf8dc2b996e} 
+\index{UFormFieldsValidatorLib@{UFormFieldsValidatorLib}!IsLoginFieldsValid@{IsLoginFieldsValid}}
+\index{IsLoginFieldsValid@{IsLoginFieldsValid}!UFormFieldsValidatorLib@{UFormFieldsValidatorLib}}
+\doxysubsubsection{\texorpdfstring{IsLoginFieldsValid()}{IsLoginFieldsValid()}}
+{\footnotesize\ttfamily bool UForm\+Fields\+Validator\+Lib\+::\+Is\+Login\+Fields\+Valid (\begin{DoxyParamCaption}\item[{const FText \&}]{Login,  }\item[{const FText \&}]{Password }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Validates the login and password fields. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Login} & The login to be validated. \\
+\hline
+{\em Password} & The password to be validated. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if both the login and password fields are valid; otherwise, false. 
+\end{DoxyReturn}
+\Hypertarget{class_u_form_fields_validator_lib_ace8c31b6b52be57911692adf3e7ea95f}\label{class_u_form_fields_validator_lib_ace8c31b6b52be57911692adf3e7ea95f} 
+\index{UFormFieldsValidatorLib@{UFormFieldsValidatorLib}!IsRegisterFieldsValid@{IsRegisterFieldsValid}}
+\index{IsRegisterFieldsValid@{IsRegisterFieldsValid}!UFormFieldsValidatorLib@{UFormFieldsValidatorLib}}
+\doxysubsubsection{\texorpdfstring{IsRegisterFieldsValid()}{IsRegisterFieldsValid()}}
+{\footnotesize\ttfamily bool UForm\+Fields\+Validator\+Lib\+::\+Is\+Register\+Fields\+Valid (\begin{DoxyParamCaption}\item[{const FText \&}]{Login,  }\item[{const FText \&}]{Nickname,  }\item[{const FText \&}]{Email,  }\item[{const FText \&}]{Password,  }\item[{const FText \&}]{Confirm\+Password }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Validates all registration fields. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Login} & The login to be validated. \\
+\hline
+{\em Nickname} & The nickname to be validated. \\
+\hline
+{\em Email} & The email address to be validated. \\
+\hline
+{\em Password} & The password to be validated. \\
+\hline
+{\em Confirm\+Password} & The password confirmation to be checked against the original password. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if all fields are valid and the confirmed password matches the original; otherwise, false. 
+\end{DoxyReturn}
+\Hypertarget{class_u_form_fields_validator_lib_a63867d9fc88866b45d9c71bf1dd5b6ca}\label{class_u_form_fields_validator_lib_a63867d9fc88866b45d9c71bf1dd5b6ca} 
+\index{UFormFieldsValidatorLib@{UFormFieldsValidatorLib}!IsValidEmail@{IsValidEmail}}
+\index{IsValidEmail@{IsValidEmail}!UFormFieldsValidatorLib@{UFormFieldsValidatorLib}}
+\doxysubsubsection{\texorpdfstring{IsValidEmail()}{IsValidEmail()}}
+{\footnotesize\ttfamily bool UForm\+Fields\+Validator\+Lib\+::\+Is\+Valid\+Email (\begin{DoxyParamCaption}\item[{const FText \&}]{Email }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Checks if the provided text field contains a valid email format. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Email} & The email address to be validated. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the email format is valid; otherwise, false. 
+\end{DoxyReturn}
+\Hypertarget{class_u_form_fields_validator_lib_a3da0b8a0b9ef80945874f67b39b6776b}\label{class_u_form_fields_validator_lib_a3da0b8a0b9ef80945874f67b39b6776b} 
+\index{UFormFieldsValidatorLib@{UFormFieldsValidatorLib}!IsValidLogin@{IsValidLogin}}
+\index{IsValidLogin@{IsValidLogin}!UFormFieldsValidatorLib@{UFormFieldsValidatorLib}}
+\doxysubsubsection{\texorpdfstring{IsValidLogin()}{IsValidLogin()}}
+{\footnotesize\ttfamily bool UForm\+Fields\+Validator\+Lib\+::\+Is\+Valid\+Login (\begin{DoxyParamCaption}\item[{const FText \&}]{Login }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Checks if the provided text field contains a valid login format. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Login} & The login information to be validated. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the login format is valid; otherwise, false. 
+\end{DoxyReturn}
+\Hypertarget{class_u_form_fields_validator_lib_ac1e789e800089be05b433fa37d2b9f8d}\label{class_u_form_fields_validator_lib_ac1e789e800089be05b433fa37d2b9f8d} 
+\index{UFormFieldsValidatorLib@{UFormFieldsValidatorLib}!IsValidNickname@{IsValidNickname}}
+\index{IsValidNickname@{IsValidNickname}!UFormFieldsValidatorLib@{UFormFieldsValidatorLib}}
+\doxysubsubsection{\texorpdfstring{IsValidNickname()}{IsValidNickname()}}
+{\footnotesize\ttfamily bool UForm\+Fields\+Validator\+Lib\+::\+Is\+Valid\+Nickname (\begin{DoxyParamCaption}\item[{const FText \&}]{Nickname }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Checks if the provided text field is a valid nickname. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Nickname} & The nickname to be validated. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the nickname is valid; otherwise, false. 
+\end{DoxyReturn}
+\Hypertarget{class_u_form_fields_validator_lib_ae62809adfc1cafa3094a991f3612dfe2}\label{class_u_form_fields_validator_lib_ae62809adfc1cafa3094a991f3612dfe2} 
+\index{UFormFieldsValidatorLib@{UFormFieldsValidatorLib}!IsValidPassword@{IsValidPassword}}
+\index{IsValidPassword@{IsValidPassword}!UFormFieldsValidatorLib@{UFormFieldsValidatorLib}}
+\doxysubsubsection{\texorpdfstring{IsValidPassword()}{IsValidPassword()}}
+{\footnotesize\ttfamily bool UForm\+Fields\+Validator\+Lib\+::\+Is\+Valid\+Password (\begin{DoxyParamCaption}\item[{const FText \&}]{Password }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Checks if the provided text field contains a valid password. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Password} & The password to be validated. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the password is valid; otherwise, false. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Source/\+Campus/\+Libraries/\+Validation/Form\+Fields\+Validator\+Lib.\+h\item 
+Source/\+Campus/\+Libraries/\+Validation/Form\+Fields\+Validator\+Lib.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,38 @@
+\doxysection{Define\+Action\+Task.\+h}
+\hypertarget{_define_action_task_8h_source}{}\label{_define_action_task_8h_source}\index{Source/Campus/AI/Tasks/DefineActionTask.h@{Source/Campus/AI/Tasks/DefineActionTask.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}BehaviorTree/BTTaskNode.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Campus/AI/AIDrone/CampusCoreTypes.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}DefineActionTask.generated.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ UCLASS()}
+\DoxyCodeLine{00011\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_u_define_action_task}{UDefineActionTask}}\ :\ public\ UBTTaskNode}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00014\ \ \ \ \ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{class_u_define_action_task}{UDefineActionTask}}();}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00019\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00020\ \ \ \ \ EActionType\ ActionType\ =\ EActionType::Teleport;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00023\ \ \ \ \ FBlackboardKeySelector\ ActionTypeKey;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00026\ \ \ \ \ FBlackboardKeySelector\ StartLocationKey;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00029\ \ \ \ \ FBlackboardKeySelector\ BoolNotTheFirstKey;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ EBTNodeResult::Type\ ExecuteTask(UBehaviorTreeComponent\&\ OwnerComp,\ uint8*\ NodeMemory)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00032\ \};}
+
+\end{DoxyCode}

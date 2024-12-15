@@ -1,0 +1,162 @@
+\doxysection{ADrone\+Guide Class Reference}
+\hypertarget{class_a_drone_guide}{}\label{class_a_drone_guide}\index{ADroneGuide@{ADroneGuide}}
+Inheritance diagram for ADrone\+Guide\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{class_a_drone_guide}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_a_drone_guide_a125cc9c3092df5a1dccff0242ffb966e}\label{class_a_drone_guide_a125cc9c3092df5a1dccff0242ffb966e} 
+void {\bfseries Teleport\+To\+Location} (int index)
+\item 
+\Hypertarget{class_a_drone_guide_a6d2970cf105cbb6c3b20e6ea16810f1f}\label{class_a_drone_guide_a6d2970cf105cbb6c3b20e6ea16810f1f} 
+void {\bfseries Darkening\+Screen} ()
+\item 
+\Hypertarget{class_a_drone_guide_adc34ec17c5c2ae31b563de2bda673cb1}\label{class_a_drone_guide_adc34ec17c5c2ae31b563de2bda673cb1} 
+void {\bfseries End\+Darkening\+Screen} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_a_a_i_entity}{AAIEntity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Tick} (float Delta\+Time) override
+\item 
+virtual void {\bfseries Setup\+Player\+Input\+Component} (class UInput\+Component \texorpdfstring{$\ast$}{*}Player\+Input\+Component) override
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_a_drone_guide_a6f31d65f950a1fe8aebc0da4d306799d}\label{class_a_drone_guide_a6f31d65f950a1fe8aebc0da4d306799d} 
+TSubclass\+Of$<$ UUser\+Widget $>$ {\bfseries Blueprint\+Chat\+Class}
+\item 
+\Hypertarget{class_a_drone_guide_a18e52dd222dc4e655f193e455abfc79a}\label{class_a_drone_guide_a18e52dd222dc4e655f193e455abfc79a} 
+\mbox{\hyperlink{class_u_chat_box}{UChat\+Box}} \texorpdfstring{$\ast$}{*} {\bfseries Chat\+Widget}
+\item 
+\Hypertarget{class_a_drone_guide_a4f057df33240b38422d606adcf69405c}\label{class_a_drone_guide_a4f057df33240b38422d606adcf69405c} 
+TSubclass\+Of$<$ UUser\+Widget $>$ {\bfseries Blueprint\+Darkening\+Class}
+\item 
+\Hypertarget{class_a_drone_guide_aa642658d3810e89049c6aad5cd2a1b23}\label{class_a_drone_guide_aa642658d3810e89049c6aad5cd2a1b23} 
+\mbox{\hyperlink{class_u_darkening_screen}{UDarkening\+Screen}} \texorpdfstring{$\ast$}{*} {\bfseries Dark\+Widget}
+\item 
+\Hypertarget{class_a_drone_guide_a524d9fd1edfd973a92deaca4f87eee0b}\label{class_a_drone_guide_a524d9fd1edfd973a92deaca4f87eee0b} 
+FString {\bfseries Bot\+URL}
+\item 
+\Hypertarget{class_a_drone_guide_a35a15da66544d3aca04d50dd8c644ce0}\label{class_a_drone_guide_a35a15da66544d3aca04d50dd8c644ce0} 
+TArray$<$ AActor \texorpdfstring{$\ast$}{*} $>$ {\bfseries Teleportation\+Places}
+\item 
+\Hypertarget{class_a_drone_guide_aa98f2c515188b6c10068256078422f27}\label{class_a_drone_guide_aa98f2c515188b6c10068256078422f27} 
+\mbox{\hyperlink{class_a_teleportation_plane}{ATeleportation\+Plane}} \texorpdfstring{$\ast$}{*} {\bfseries Teleportation\+Place}
+\item 
+\Hypertarget{class_a_drone_guide_ad4b463e4bc4f05446447c6753007998f}\label{class_a_drone_guide_ad4b463e4bc4f05446447c6753007998f} 
+float {\bfseries Character\+Rotation\+Speed} = 2.f
+\item 
+\Hypertarget{class_a_drone_guide_adc0a6120d5697ea9e9997cb2a8985b04}\label{class_a_drone_guide_adc0a6120d5697ea9e9997cb2a8985b04} 
+float {\bfseries Character\+Step\+Speed} = 0.\+5f
+\item 
+\Hypertarget{class_a_drone_guide_a52ada70164e99f15bd5ba04c072cbc79}\label{class_a_drone_guide_a52ada70164e99f15bd5ba04c072cbc79} 
+AActor \texorpdfstring{$\ast$}{*} {\bfseries Interact\+Character}
+\item 
+\Hypertarget{class_a_drone_guide_a524da3470f9530f57713f0a850d3e43f}\label{class_a_drone_guide_a524da3470f9530f57713f0a850d3e43f} 
+FTimer\+Handle {\bfseries End\+Darkening\+Timer}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{class_a_core_drone}{ACore\+Drone}}}
+\begin{DoxyCompactItemize}
+\item 
+UStatic\+Mesh\+Component \texorpdfstring{$\ast$}{*} {\bfseries Body}
+\item 
+UStatic\+Mesh\+Component \texorpdfstring{$\ast$}{*} {\bfseries Screen}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_a_drone_guide_a070866f4bed57fd0ef303403f20c1e3e}{Begin\+Play}} () override
+\item 
+\Hypertarget{class_a_drone_guide_a25100b4a187040d44429054620df5c06}\label{class_a_drone_guide_a25100b4a187040d44429054620df5c06} 
+void {\bfseries Change\+State} (EDrone\+Guide State, float Duration=0)
+\item 
+\Hypertarget{class_a_drone_guide_a9b925e0da3b9dda3d2ce4544d799ae53}\label{class_a_drone_guide_a9b925e0da3b9dda3d2ce4544d799ae53} 
+void {\bfseries Start\+Rotate\+Character} (ACharacter \texorpdfstring{$\ast$}{*}Interacted\+Character)
+\item 
+virtual void \mbox{\hyperlink{class_a_drone_guide_a1e530429ffd496b5aa06ac51e6716abf}{Start\+Idle\+Anim}} () override
+\item 
+virtual void \mbox{\hyperlink{class_a_drone_guide_a0aaa34346d66a214e4feaf5eedc199bd}{Stop\+Idle\+Anim}} () override
+\item 
+virtual void \mbox{\hyperlink{class_a_drone_guide_a169caa4f9bdd9753500fc6c65ead70f7}{Start\+Rotate\+To\+Player\+Anim}} () override
+\item 
+virtual void \mbox{\hyperlink{class_a_drone_guide_afc1ebcfe8ef15c153ae115cb0e69519f}{Stop\+Rotate\+To\+Player\+Anim}} () override
+\item 
+\Hypertarget{class_a_drone_guide_a5b7b2dd5bb773811a5a15d92906efa13}\label{class_a_drone_guide_a5b7b2dd5bb773811a5a15d92906efa13} 
+void {\bfseries Open\+Chat} ()
+\item 
+\Hypertarget{class_a_drone_guide_a3b07ec3e6862d4ad77b9de2bfb31912a}\label{class_a_drone_guide_a3b07ec3e6862d4ad77b9de2bfb31912a} 
+void {\bfseries Close\+Chat} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_a_default_anim_drone}{ADefault\+Anim\+Drone}}}
+\begin{DoxyCompactItemize}
+\item 
+FTimer\+Handle {\bfseries Idle\+Anim\+Timer}
+\item 
+FTimer\+Handle {\bfseries Rotate\+To\+Player\+Timer}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_a_drone_guide_a070866f4bed57fd0ef303403f20c1e3e}\label{class_a_drone_guide_a070866f4bed57fd0ef303403f20c1e3e} 
+\index{ADroneGuide@{ADroneGuide}!BeginPlay@{BeginPlay}}
+\index{BeginPlay@{BeginPlay}!ADroneGuide@{ADroneGuide}}
+\doxysubsubsection{\texorpdfstring{BeginPlay()}{BeginPlay()}}
+{\footnotesize\ttfamily void ADrone\+Guide\+::\+Begin\+Play (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_default_anim_drone}{ADefault\+Anim\+Drone}}.
+
+\Hypertarget{class_a_drone_guide_a1e530429ffd496b5aa06ac51e6716abf}\label{class_a_drone_guide_a1e530429ffd496b5aa06ac51e6716abf} 
+\index{ADroneGuide@{ADroneGuide}!StartIdleAnim@{StartIdleAnim}}
+\index{StartIdleAnim@{StartIdleAnim}!ADroneGuide@{ADroneGuide}}
+\doxysubsubsection{\texorpdfstring{StartIdleAnim()}{StartIdleAnim()}}
+{\footnotesize\ttfamily void ADrone\+Guide\+::\+Start\+Idle\+Anim (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_default_anim_drone}{ADefault\+Anim\+Drone}}.
+
+\Hypertarget{class_a_drone_guide_a169caa4f9bdd9753500fc6c65ead70f7}\label{class_a_drone_guide_a169caa4f9bdd9753500fc6c65ead70f7} 
+\index{ADroneGuide@{ADroneGuide}!StartRotateToPlayerAnim@{StartRotateToPlayerAnim}}
+\index{StartRotateToPlayerAnim@{StartRotateToPlayerAnim}!ADroneGuide@{ADroneGuide}}
+\doxysubsubsection{\texorpdfstring{StartRotateToPlayerAnim()}{StartRotateToPlayerAnim()}}
+{\footnotesize\ttfamily void ADrone\+Guide\+::\+Start\+Rotate\+To\+Player\+Anim (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_default_anim_drone}{ADefault\+Anim\+Drone}}.
+
+\Hypertarget{class_a_drone_guide_a0aaa34346d66a214e4feaf5eedc199bd}\label{class_a_drone_guide_a0aaa34346d66a214e4feaf5eedc199bd} 
+\index{ADroneGuide@{ADroneGuide}!StopIdleAnim@{StopIdleAnim}}
+\index{StopIdleAnim@{StopIdleAnim}!ADroneGuide@{ADroneGuide}}
+\doxysubsubsection{\texorpdfstring{StopIdleAnim()}{StopIdleAnim()}}
+{\footnotesize\ttfamily void ADrone\+Guide\+::\+Stop\+Idle\+Anim (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_default_anim_drone}{ADefault\+Anim\+Drone}}.
+
+\Hypertarget{class_a_drone_guide_afc1ebcfe8ef15c153ae115cb0e69519f}\label{class_a_drone_guide_afc1ebcfe8ef15c153ae115cb0e69519f} 
+\index{ADroneGuide@{ADroneGuide}!StopRotateToPlayerAnim@{StopRotateToPlayerAnim}}
+\index{StopRotateToPlayerAnim@{StopRotateToPlayerAnim}!ADroneGuide@{ADroneGuide}}
+\doxysubsubsection{\texorpdfstring{StopRotateToPlayerAnim()}{StopRotateToPlayerAnim()}}
+{\footnotesize\ttfamily void ADrone\+Guide\+::\+Stop\+Rotate\+To\+Player\+Anim (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_default_anim_drone}{ADefault\+Anim\+Drone}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Source/\+Campus/\+AI/\+AIDrone/Drone\+Guide.\+h\item 
+Source/\+Campus/\+AI/\+AIDrone/Drone\+Guide.\+cpp\end{DoxyCompactItemize}

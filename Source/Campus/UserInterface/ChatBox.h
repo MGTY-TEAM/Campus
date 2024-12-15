@@ -1,86 +1,93 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// ChatBox.h
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "TimerManager.h"
-#include "../AI/AIDrone/DroneGuide.h"
+#include "Types/SlateEnums.h"
 #include "Blueprint/UserWidget.h"
-#include "Kismet/GameplayStatics.h"
+#include "Campus/Chat/MessageInstance.h"
 #include "ChatBox.generated.h"
 
-/**
- * 
- */
+// Forward declarations
+class UChatUserComponent;
+class AAIAnimDrone;
+class UMessageInstance;
 
+
+// Declare delegates
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTeleportationDelegate, int, index);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDarkeningDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageDelegate, int, index);
 
-
+/**
+ * Represents the chat box widget.
+ */
 UCLASS()
 class CAMPUS_API UChatBox : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
-	TSubclassOf<UUserWidget> BlueprintWidgetClass;
+    UChatUserComponent* OwnerChatUserComponent; // Pointer to the owner chat user component
 
-	ADroneGuide* Drone;
+    void ReceiveMessage(UMessageInstance* MessageInstance); // Receive a message from the chat
 
-	bool bCanRobotMoveToLocation = false;
-	
-	UPROPERTY(meta = (BindWidget))
-	class UCanvasPanel* ParentPanel;
-	UPROPERTY(meta = (BindWidget))
-	class UCanvasPanel* ChatBox_Panel;
-	
-	UPROPERTY(meta = (BindWidget))
-	class UImage* ChatBar_BG;
-	UPROPERTY(meta = (BindWidget))
-	class UImage* ChatIcon;
-	UPROPERTY(meta = (BindWidget))
-	class UImage* Chat_BG;
+    void ConnectChatComponent(UChatUserComponent* ChatUserComponent); // Connect the chat component to the chat box
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
+    TSubclassOf<UUserWidget> BlueprintWidgetClass; // Class of the chat widget
 
-	UPROPERTY(meta = (BindWidget))
-	class UEditableTextBox* SendMessage_TextBox;
-	
-	UPROPERTY(meta = (BindWidget))
-	class UButton* SendMessage_Button;
+    AAIAnimDrone* Drone; // Pointer to the drone actor
 
-	UPROPERTY(meta = (BindWidget))
-	class UScrollBox* Chat_ScrollBox;
+    bool bCanRobotMoveToLocation = false; // Flag indicating whether the robot can move to a location
 
-	UPROPERTY(BlueprintAssignable, Category="Dispatcher")
-	FTeleportationDelegate TeleportationEvent;
+    // Widgets
+    UPROPERTY(meta = (BindWidget))
+    class UCanvasPanel* ParentPanel;
+    UPROPERTY(meta = (BindWidget))
+    class UCanvasPanel* ChatBox_Panel;
+    UPROPERTY(meta = (BindWidget))
+    class UImage* ChatBar_BG;
+    UPROPERTY(meta = (BindWidget))
+    class UImage* ChatIcon;
+    UPROPERTY(meta = (BindWidget))
+    class UImage* Chat_BG;
+    UPROPERTY(meta = (BindWidget))
+    class UEditableTextBox* SendMessage_TextBox;
+    UPROPERTY(meta = (BindWidget))
+    class UButton* SendMessage_Button;
+    UPROPERTY(meta = (BindWidget), BlueprintReadWrite, EditAnywhere)
+    class UScrollBox* Chat_ScrollBox;
 
-	UPROPERTY(BlueprintAssignable, Category="Dispatcher")
-	FDarkeningDelegate DarkeningEvent;
+    // Delegates
+    UPROPERTY(BlueprintAssignable, Category = "Dispatcher")
+    FTeleportationDelegate TeleportationEvent;
+    UPROPERTY(BlueprintAssignable, Category = "Dispatcher")
+    FDarkeningDelegate DarkeningEvent;
+    UPROPERTY(BlueprintAssignable, Category = "Dispatcher")
+    FMessageDelegate SendMessageEvent;
 
-	FTimerHandle TeleportTimer;
-	FTimerDelegate TimerDel;
-
-	void StartTeleport(int index);
-	
 protected:
-	UFUNCTION()
-	virtual bool Initialize();
+    // Initializes the widget
+    virtual bool Initialize() override;
 
-	UFUNCTION()
-	virtual void NativeConstruct() override;
+    // Native construct method
+    virtual void NativeConstruct() override;
 
-	UFUNCTION()
+    // Native destruct method
+    virtual void NativeDestruct() override;
 
-	
-	void SendMessageButtonClicked();
+    // Callback for text box text committed event
+    UFUNCTION()
+    void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 
-	//UFUNCTION()
-	//void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+    // Start teleportation process
+    void StartTeleport(int index);
 
-	void SendMessage(FText Message, FText Sender);
+    // Set focus on text input
+    void SetFocusOnTextInput();
 
-	void BotResponse(const FString& Message, const FString& ActionType, const int& ActionID);
-
-	
+    // Update chat messages
+    void UpdateChatMessages(FText Message, FText Sender);
 };
-
