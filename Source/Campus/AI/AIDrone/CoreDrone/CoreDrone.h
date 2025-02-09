@@ -22,4 +22,5 @@ public:
 	UStaticMeshComponent* Body;
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	UStaticMeshComponent* Screen;
+	
 };

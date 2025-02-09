@@ -1,0 +1,115 @@
+\doxysection{Generative\+Board.\+h}
+\hypertarget{_generative_board_8h_source}{}\label{_generative_board_8h_source}\index{Source/Campus/MiniGames/Chess/Core/GenerativeBoard.h@{Source/Campus/MiniGames/Chess/Core/GenerativeBoard.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}BoardCell.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Templates/Tuple.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}GameFramework/Actor.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}GenerativeBoard.generated.h"{}}}
+\DoxyCodeLine{00010\ DECLARE\_MULTICAST\_DELEGATE(FOnPlayerMoveCompleted)}
+\DoxyCodeLine{00011\ DECLARE\_MULTICAST\_DELEGATE(FOnAIMoveCompleted)}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ UCLASS()}
+\DoxyCodeLine{00014\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_a_generative_board}{AGenerativeBoard}}\ :\ public\ AActor}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ TArray<TArray<ABoardCell*>>\ Board;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ TMap<int32,\ FString>\ HorisontalUCI\ =}
+\DoxyCodeLine{00021\ \ \ \ \ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \{0,\ \textcolor{stringliteral}{"{}a"{}}\},}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \{1,\ \textcolor{stringliteral}{"{}b"{}}\},}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \{2,\ \textcolor{stringliteral}{"{}c"{}}\},}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \{3,\ \textcolor{stringliteral}{"{}d"{}}\},}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \{4,\ \textcolor{stringliteral}{"{}e"{}}\},}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \{5,\ \textcolor{stringliteral}{"{}f"{}}\},}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \{6,\ \textcolor{stringliteral}{"{}g"{}}\},}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \{7,\ \textcolor{stringliteral}{"{}h"{}}\},}
+\DoxyCodeLine{00030\ \ \ \ \ \};}
+\DoxyCodeLine{00031\ \ \ \ \ TMap<FString,\ int32>\ RverseHorisontalUCI\ =}
+\DoxyCodeLine{00032\ \ \ \ \ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}a"{}},\ 0\},}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}b"{}},\ 1\},}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}c"{}},\ 2\},}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}d"{}},\ 3\},}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}e"{}},\ 4\},}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}f"{}},\ 5\},}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}g"{}},\ 6\},}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}h"{}},\ 7\},}
+\DoxyCodeLine{00041\ \ \ \ \ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ FOnPlayerMoveCompleted\ OnPlayerMoveCompleted;}
+\DoxyCodeLine{00044\ \ \ \ \ FOnAIMoveCompleted\ OnAIMoveCompleted;}
+\DoxyCodeLine{00045\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ Sets\ default\ values\ for\ this\ actor's\ properties}}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{class_a_generative_board}{AGenerativeBoard}}();}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Classes"{}})}
+\DoxyCodeLine{00050\ \ \ \ \ TSubclassOf<ABoardCell>\ BoardCellClass;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{bool}\ bPlayerTurn\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00053\ \ \ \ \ }
+\DoxyCodeLine{00054\ \ \ \ \ UPROPERTY(EditAnywhere)}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{float}\ Padding\ =\ 100.f;}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Piece\ Animation\ Settings"{}},\ meta=(ClampMin=\textcolor{stringliteral}{"{}0.3"{}},\ ClampMax=\textcolor{stringliteral}{"{}2.0"{}}))}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{float}\ PieceAnimationSeconds\ =\ 1.0f;}
+\DoxyCodeLine{00059\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Piece\ Animation\ Settings"{}},\ meta=(ClampMin=\textcolor{stringliteral}{"{}0.01"{}},\ ClampMax=\textcolor{stringliteral}{"{}0.2"{}})\ )}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{float}\ PieceAnimationFrequency\ =\ 0.01f;}
+\DoxyCodeLine{00061\ \ \ \ \ }
+\DoxyCodeLine{00062\ \ \ \ \ UPROPERTY(EditAnywhere,\ Category=\textcolor{stringliteral}{"{}Cell\ Material"{}})}
+\DoxyCodeLine{00063\ \ \ \ \ UMaterialInstance*\ BlackCellMaterial;}
+\DoxyCodeLine{00064\ \ \ \ \ UPROPERTY(EditAnywhere,\ Category=\textcolor{stringliteral}{"{}Cell\ Material"{}})}
+\DoxyCodeLine{00065\ \ \ \ \ UMaterialInstance*\ WhiteCellMaterial;}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ UPROPERTY(EditAnywhere,\ Category=\textcolor{stringliteral}{"{}Cell\ Material"{}})}
+\DoxyCodeLine{00068\ \ \ \ \ UMaterialInstance*\ BlackPieceMaterial;}
+\DoxyCodeLine{00069\ \ \ \ \ UPROPERTY(EditAnywhere,\ Category=\textcolor{stringliteral}{"{}Cell\ Material"{}})}
+\DoxyCodeLine{00070\ \ \ \ \ UMaterialInstance*\ WhitePieceMaterial;}
+\DoxyCodeLine{00071\ \ \ \ \ UFUNCTION()}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ OnCellClicked(\textcolor{keywordtype}{int}\ X,\ \textcolor{keywordtype}{int}\ Y);}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ TryToPlayerMove(\textcolor{keyword}{const}\ FString\&\ UCI);}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ TryToAIMove(\textcolor{keyword}{const}\ FString\&\ UCI);}
+\DoxyCodeLine{00076\ \ \ \ \ UFUNCTION()}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ OnBoardUpdated(\textcolor{keyword}{const}\ FString\&\ Fen);}
+\DoxyCodeLine{00078\ \ \ \ \ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ ExecutePlayerMove(\textcolor{keyword}{const}\ FString\&\ UCI,\ \textcolor{keyword}{const}\ FString\&\ CastleStatus,\ \textcolor{keyword}{const}\ FString\&\ New\_Fen);}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ ExecuteAIMove(\textcolor{keyword}{const}\ FString\&\ UCI,\ \textcolor{keyword}{const}\ FString\&\ CastleStatus,\ \textcolor{keyword}{const}\ FString\&\ New\_Fen);}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ FString\ CurrentGameID;}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ TPair<FString,\ FString>\ SelectedCells;}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}PiecesClasses"{}})}
+\DoxyCodeLine{00087\ \ \ \ \ TSubclassOf<ABasePiece>\ PawnClass;}
+\DoxyCodeLine{00088\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}PiecesClasses"{}})}
+\DoxyCodeLine{00089\ \ \ \ \ TSubclassOf<ABasePiece>\ KnightClass;}
+\DoxyCodeLine{00090\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}PiecesClasses"{}})}
+\DoxyCodeLine{00091\ \ \ \ \ TSubclassOf<ABasePiece>\ BishopClass;}
+\DoxyCodeLine{00092\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}PiecesClasses"{}})}
+\DoxyCodeLine{00093\ \ \ \ \ TSubclassOf<ABasePiece>\ RookClass;}
+\DoxyCodeLine{00094\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}PiecesClasses"{}})}
+\DoxyCodeLine{00095\ \ \ \ \ TSubclassOf<ABasePiece>\ QuinClass;}
+\DoxyCodeLine{00096\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}PiecesClasses"{}})}
+\DoxyCodeLine{00097\ \ \ \ \ TSubclassOf<ABasePiece>\ KingClass;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00100\ \ \ \ \ }
+\DoxyCodeLine{00101\ \ \ \ \ FTimerHandle\ PieceAnimationTimerHandle;}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{float}\ CurrentPieceAnimationPoint\ =\ 1.0f;}
+\DoxyCodeLine{00104\ \ \ \ \ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{//\ Called\ when\ the\ game\ starts\ or\ when\ spawned}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ BeginPlay()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ GenerateBoard();}
+\DoxyCodeLine{00109\ \};}
+
+\end{DoxyCode}

@@ -1,0 +1,107 @@
+\doxysection{UUser\+Game\+Instance Class Reference}
+\hypertarget{class_u_user_game_instance}{}\label{class_u_user_game_instance}\index{UUserGameInstance@{UUserGameInstance}}
+
+
+{\ttfamily \#include $<$User\+Game\+Instance.\+h$>$}
+
+Inheritance diagram for UUser\+Game\+Instance\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_u_user_game_instance}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const FString \& \mbox{\hyperlink{class_u_user_game_instance_ac941761ee356c909e8ac366cad4b63b4}{Get\+User\+ID}} () const
+\item 
+const FString \& \mbox{\hyperlink{class_u_user_game_instance_a6ce6d1be5f3cd34278268a8a4afc4cb7}{Get\+User\+Token}} () const
+\item 
+const FString \& \mbox{\hyperlink{class_u_user_game_instance_ad72772bdd3862f6f2c54e57aa148ba1e}{Get\+Nickname}} () const
+\item 
+const FString \& \mbox{\hyperlink{class_u_user_game_instance_af1bd1a3ea356df15edb0b1ce61623da0}{Get\+Email}} () const
+\item 
+void \mbox{\hyperlink{class_u_user_game_instance_a38b21199c84148935ed454c189889b4f}{Set\+User\+Token}} (const FString \&Token)
+\item 
+bool \mbox{\hyperlink{class_u_user_game_instance_ae2f94bcfe003fa8f134141bd3102876e}{Try\+To\+Get\+And\+Fill\+User\+Info\+And\+Transit\+To\+Main\+Menu}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages user-\/specific data and transitions between game states. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_u_user_game_instance_af1bd1a3ea356df15edb0b1ce61623da0}\label{class_u_user_game_instance_af1bd1a3ea356df15edb0b1ce61623da0} 
+\index{UUserGameInstance@{UUserGameInstance}!GetEmail@{GetEmail}}
+\index{GetEmail@{GetEmail}!UUserGameInstance@{UUserGameInstance}}
+\doxysubsubsection{\texorpdfstring{GetEmail()}{GetEmail()}}
+{\footnotesize\ttfamily const FString \& UUser\+Game\+Instance\+::\+Get\+Email (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Retrieves the user\textquotesingle{}s email address.
+
+\begin{DoxyReturn}{Returns}
+The user\textquotesingle{}s email address. 
+\end{DoxyReturn}
+\Hypertarget{class_u_user_game_instance_ad72772bdd3862f6f2c54e57aa148ba1e}\label{class_u_user_game_instance_ad72772bdd3862f6f2c54e57aa148ba1e} 
+\index{UUserGameInstance@{UUserGameInstance}!GetNickname@{GetNickname}}
+\index{GetNickname@{GetNickname}!UUserGameInstance@{UUserGameInstance}}
+\doxysubsubsection{\texorpdfstring{GetNickname()}{GetNickname()}}
+{\footnotesize\ttfamily const FString \& UUser\+Game\+Instance\+::\+Get\+Nickname (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Retrieves the user\textquotesingle{}s nickname.
+
+\begin{DoxyReturn}{Returns}
+The user\textquotesingle{}s nickname. 
+\end{DoxyReturn}
+\Hypertarget{class_u_user_game_instance_ac941761ee356c909e8ac366cad4b63b4}\label{class_u_user_game_instance_ac941761ee356c909e8ac366cad4b63b4} 
+\index{UUserGameInstance@{UUserGameInstance}!GetUserID@{GetUserID}}
+\index{GetUserID@{GetUserID}!UUserGameInstance@{UUserGameInstance}}
+\doxysubsubsection{\texorpdfstring{GetUserID()}{GetUserID()}}
+{\footnotesize\ttfamily const FString \& UUser\+Game\+Instance\+::\+Get\+User\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Retrieves the user\textquotesingle{}s ID.
+
+\begin{DoxyReturn}{Returns}
+The user\textquotesingle{}s ID. 
+\end{DoxyReturn}
+\Hypertarget{class_u_user_game_instance_a6ce6d1be5f3cd34278268a8a4afc4cb7}\label{class_u_user_game_instance_a6ce6d1be5f3cd34278268a8a4afc4cb7} 
+\index{UUserGameInstance@{UUserGameInstance}!GetUserToken@{GetUserToken}}
+\index{GetUserToken@{GetUserToken}!UUserGameInstance@{UUserGameInstance}}
+\doxysubsubsection{\texorpdfstring{GetUserToken()}{GetUserToken()}}
+{\footnotesize\ttfamily const FString \& UUser\+Game\+Instance\+::\+Get\+User\+Token (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Retrieves the user\textquotesingle{}s authentication token.
+
+\begin{DoxyReturn}{Returns}
+The user\textquotesingle{}s authentication token. 
+\end{DoxyReturn}
+\Hypertarget{class_u_user_game_instance_a38b21199c84148935ed454c189889b4f}\label{class_u_user_game_instance_a38b21199c84148935ed454c189889b4f} 
+\index{UUserGameInstance@{UUserGameInstance}!SetUserToken@{SetUserToken}}
+\index{SetUserToken@{SetUserToken}!UUserGameInstance@{UUserGameInstance}}
+\doxysubsubsection{\texorpdfstring{SetUserToken()}{SetUserToken()}}
+{\footnotesize\ttfamily void UUser\+Game\+Instance\+::\+Set\+User\+Token (\begin{DoxyParamCaption}\item[{const FString \&}]{Token }\end{DoxyParamCaption})}
+
+Sets the user\textquotesingle{}s authentication token.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Token} & The authentication token to set. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_u_user_game_instance_ae2f94bcfe003fa8f134141bd3102876e}\label{class_u_user_game_instance_ae2f94bcfe003fa8f134141bd3102876e} 
+\index{UUserGameInstance@{UUserGameInstance}!TryToGetAndFillUserInfoAndTransitToMainMenu@{TryToGetAndFillUserInfoAndTransitToMainMenu}}
+\index{TryToGetAndFillUserInfoAndTransitToMainMenu@{TryToGetAndFillUserInfoAndTransitToMainMenu}!UUserGameInstance@{UUserGameInstance}}
+\doxysubsubsection{\texorpdfstring{TryToGetAndFillUserInfoAndTransitToMainMenu()}{TryToGetAndFillUserInfoAndTransitToMainMenu()}}
+{\footnotesize\ttfamily bool UUser\+Game\+Instance\+::\+Try\+To\+Get\+And\+Fill\+User\+Info\+And\+Transit\+To\+Main\+Menu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Attempts to retrieve user information and transition to the main menu.
+
+\begin{DoxyReturn}{Returns}
+True if the attempt was successful, false otherwise. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Source/\+Campus/\+Core/User\+Game\+Instance.\+h\item 
+Source/\+Campus/\+Core/User\+Game\+Instance.\+cpp\end{DoxyCompactItemize}

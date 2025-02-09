@@ -1,0 +1,59 @@
+\doxysection{UMessage\+Instance Class Reference}
+\hypertarget{class_u_message_instance}{}\label{class_u_message_instance}\index{UMessageInstance@{UMessageInstance}}
+
+
+{\ttfamily \#include $<$Message\+Instance.\+h$>$}
+
+Inheritance diagram for UMessage\+Instance\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_u_message_instance}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+TTuple$<$ FName, FName, FText $>$ \mbox{\hyperlink{class_u_message_instance_a1defcefbf91abc7e9e95629bb78ff946}{Get\+Message\+Info}} ()
+\item 
+void \mbox{\hyperlink{class_u_message_instance_a9810bad18e2c9411a9680e2a68c79e1f}{Setup\+Message}} (const FName \&New\+Sender\+ID, const FName \&New\+Receiver\+ID, const FText \&New\+Message)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents an instance of a chat message. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_u_message_instance_a1defcefbf91abc7e9e95629bb78ff946}\label{class_u_message_instance_a1defcefbf91abc7e9e95629bb78ff946} 
+\index{UMessageInstance@{UMessageInstance}!GetMessageInfo@{GetMessageInfo}}
+\index{GetMessageInfo@{GetMessageInfo}!UMessageInstance@{UMessageInstance}}
+\doxysubsubsection{\texorpdfstring{GetMessageInfo()}{GetMessageInfo()}}
+{\footnotesize\ttfamily TTuple$<$ FName, FName, FText $>$ UMessage\+Instance\+::\+Get\+Message\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Retrieves information about the message.
+
+\begin{DoxyReturn}{Returns}
+A tuple containing the sender ID, receiver ID, and message content. 
+\end{DoxyReturn}
+\Hypertarget{class_u_message_instance_a9810bad18e2c9411a9680e2a68c79e1f}\label{class_u_message_instance_a9810bad18e2c9411a9680e2a68c79e1f} 
+\index{UMessageInstance@{UMessageInstance}!SetupMessage@{SetupMessage}}
+\index{SetupMessage@{SetupMessage}!UMessageInstance@{UMessageInstance}}
+\doxysubsubsection{\texorpdfstring{SetupMessage()}{SetupMessage()}}
+{\footnotesize\ttfamily void UMessage\+Instance\+::\+Setup\+Message (\begin{DoxyParamCaption}\item[{const FName \&}]{New\+Sender\+ID,  }\item[{const FName \&}]{New\+Receiver\+ID,  }\item[{const FText \&}]{New\+Message }\end{DoxyParamCaption})}
+
+Sets up the message with the provided details.
+
+
+\begin{DoxyParams}{Parameters}
+{\em New\+Sender\+ID} & The unique identifier of the message sender. \\
+\hline
+{\em New\+Receiver\+ID} & The unique identifier of the message receiver. \\
+\hline
+{\em New\+Message} & The content of the message. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Source/\+Campus/\+Chat/Message\+Instance.\+h\item 
+Source/\+Campus/\+Chat/Message\+Instance.\+cpp\end{DoxyCompactItemize}

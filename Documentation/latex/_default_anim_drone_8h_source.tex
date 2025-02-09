@@ -1,0 +1,39 @@
+\doxysection{Default\+Anim\+Drone.\+h}
+\hypertarget{_default_anim_drone_8h_source}{}\label{_default_anim_drone_8h_source}\index{Source/Campus/AI/AIDrone/CoreDrone/DefaultAnimDrone.h@{Source/Campus/AI/AIDrone/CoreDrone/DefaultAnimDrone.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}PlayerInteractionDrone.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}DefaultAnimDrone.generated.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00012\ UCLASS()}
+\DoxyCodeLine{00013\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_a_default_anim_drone}{ADefaultAnimDrone}}\ :\ public\ \mbox{\hyperlink{class_a_player_interaction_drone}{APlayerInteractionDrone}}}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00018\ \ \ \ \ UPROPERTY(EditAnywhere,\ Category\ =\ \textcolor{stringliteral}{"{}RobotAnimation"{}})}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{float}\ RotationSpeed\ =\ 1;}
+\DoxyCodeLine{00020\ \ \ \ \ UPROPERTY(EditAnywhere,\ Category=\textcolor{stringliteral}{"{}RobotAnimation"{}})}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{float}\ Frequency\ =\ 1;}
+\DoxyCodeLine{00022\ \ \ \ \ UPROPERTY(EditAnywhere,\ Category=\textcolor{stringliteral}{"{}RobotAnimation"{}})}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{float}\ Amplitude\ =\ 0.1;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00026\ \ \ \ \ FTimerHandle\ IdleAnimTimer;}
+\DoxyCodeLine{00027\ \ \ \ \ FTimerHandle\ RotateToPlayerTimer;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ BeginPlay()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StartIdleAnim();}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StopIdleAnim();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StartRotateToPlayerAnim();}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StopRotateToPlayerAnim();}
+\DoxyCodeLine{00036\ \};}
+
+\end{DoxyCode}

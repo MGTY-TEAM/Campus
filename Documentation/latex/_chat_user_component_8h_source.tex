@@ -1,0 +1,42 @@
+\doxysection{Chat\+User\+Component.\+h}
+\hypertarget{_chat_user_component_8h_source}{}\label{_chat_user_component_8h_source}\index{Source/Campus/Chat/ChatUserComponent.h@{Source/Campus/Chat/ChatUserComponent.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ ChatUserComponent.h}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#define\ CHAT\_USER\_COMPONENT\_DEBUG\ false;}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Components/ActorComponent.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}ChatUserComponent.generated.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_u_message_instance}{UMessageInstance}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ DECLARE\_MULTICAST\_DELEGATE\_OneParam(FOnMessageReceived,\ \mbox{\hyperlink{class_u_message_instance}{UMessageInstance}}*)}
+\DoxyCodeLine{00015\ DEFINE\_LOG\_CATEGORY\_STATIC(LogChatUserComponent,\ Log,\ Log);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00020\ UCLASS(ClassGroup=(Custom),\ meta=(BlueprintSpawnableComponent))}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }CAMPUS\_API\ UChatUserComponent\ :\ \textcolor{keyword}{public}\ UActorComponent}
+\DoxyCodeLine{00022\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ public:}
+\DoxyCodeLine{00026\ \ \ \ \ UChatUserComponent();\ \textcolor{comment}{//\ Default\ constructor}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ SetUserID(const\ FName\&\ UserID);}
+\DoxyCodeLine{00034\ \ \ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ virtual\ \textcolor{keywordtype}{void}\ ReceiveMessage(\mbox{\hyperlink{class_u_message_instance}{UMessageInstance}}*\ MessageInstance);}
+\DoxyCodeLine{00041\ \ \ \ \ }
+\DoxyCodeLine{00048\ \ \ \ \ virtual\ \textcolor{keywordtype}{void}\ SendMessage(const\ FName\&\ ReceiverID,\ const\ FText\&\ Message);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Event\ delegate\ triggered\ when\ a\ message\ is\ received}}
+\DoxyCodeLine{00051\ \ \ \ \ FOnMessageReceived\ OnMessageReceived;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ private:}
+\DoxyCodeLine{00054\ \ \ \ \ FName\ M\_UserID;\ \textcolor{comment}{//\ Unique\ identifier\ of\ the\ user}}
+\DoxyCodeLine{00055\ \};}
+
+\end{DoxyCode}

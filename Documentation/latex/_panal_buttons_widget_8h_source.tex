@@ -1,0 +1,151 @@
+\doxysection{Panal\+Buttons\+Widget.\+h}
+\hypertarget{_panal_buttons_widget_8h_source}{}\label{_panal_buttons_widget_8h_source}\index{Source/Campus/MiniGames/BinaryTree/PanalButtonsWidget.h@{Source/Campus/MiniGames/BinaryTree/PanalButtonsWidget.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}PanalWidget.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Blueprint/UserWidget.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}Campus/Interfaces/MiniGames/BinaryFruit/BinaryFruit.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}Components/Button.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}Kismet/GameplayStatics.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}PanalButtonsWidget.generated.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00016\ UCLASS()}
+\DoxyCodeLine{00017\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_u_panal_buttons_widget}{UPanalButtonsWidget}}\ :\ public\ UUserWidget\ ,\ public\ \mbox{\hyperlink{class_i_binary_fruit}{IBinaryFruit}}\ ,\ public\ \ \mbox{\hyperlink{class_i_mini_games}{IMiniGames}}}
+\DoxyCodeLine{00018\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ ZeroClick();}
+\DoxyCodeLine{00023\ \ \ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ OneClick();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ TwoClick();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ ThreeClick();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ FourClick();}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ FiveClick();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ SixClick();}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ SevenClick();}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ EightClick();}
+\DoxyCodeLine{00047\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ CheckAnswers();}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00051\ \ \ \ \ UButton*\ Zero;}
+\DoxyCodeLine{00052\ \ \ \ \ }
+\DoxyCodeLine{00053\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00054\ \ \ \ \ UButton*\ One;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00057\ \ \ \ \ UButton*\ Two;}
+\DoxyCodeLine{00058\ \ \ \ \ }
+\DoxyCodeLine{00059\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00060\ \ \ \ \ UButton*\ Three;}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00063\ \ \ \ \ UButton*\ Four;}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00066\ \ \ \ \ UButton*\ Five;}
+\DoxyCodeLine{00067\ \ \ \ \ }
+\DoxyCodeLine{00068\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00069\ \ \ \ \ UButton*\ Six;}
+\DoxyCodeLine{00070\ \ \ \ \ }
+\DoxyCodeLine{00071\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00072\ \ \ \ \ UButton*\ Seven;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00075\ \ \ \ \ UButton*\ Eight;}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{class_a_panal_widget}{APanalWidget}}*\ Panel\ =\ Cast<APanalWidget>(UGameplayStatics::GetActorOfClass(GetWorld(),\ APanalWidget::StaticClass()));}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ NativeConstruct()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00081\ \ \ \ \ }
+\DoxyCodeLine{00082\ \ \ \ \ TArray<UObject*>\ Images;}
+\DoxyCodeLine{00083\ \ \ \ \ TArray<UObject*>\ ImagesYes;}
+\DoxyCodeLine{00084\ \ \ \ \ TArray<UButton*>\ Buttons;}
+\DoxyCodeLine{00085\ \ \ \ \ TArray<int32>\ MyButtonsInt\ \{0,1,2,3,4,5,6,7,8\};}
+\DoxyCodeLine{00086\ \ \ \ \ UObject*\ ImageOld;}
+\DoxyCodeLine{00087\ \ \ \ \ int32\ R=0;}
+\DoxyCodeLine{00088\ \ \ \ \ int32\ OldN=0;}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ SyncImg();}
+\DoxyCodeLine{00090\ \ \ \ \ }
+\DoxyCodeLine{00091\ \ \ \ \ UFUNCTION(BlueprintCallable)}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{void}\ RandomMyImages();}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{void}\ ButtonClick(int32\ N);}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ SetToOriginalImage();}
+\DoxyCodeLine{00097\ \ \ \ \ }
+\DoxyCodeLine{00098\ \ \ \ \ USoundBase*\ ClickButton\ =\ LoadObject<USoundBase>(\textcolor{keyword}{nullptr},\ TEXT(\textcolor{stringliteral}{"{}/Script/Engine.SoundWave'/Game/Sounds/MiniGames/BinaryTree/najatie-\/na-\/kompyuternuyu-\/knopku1.najatie-\/na-\/kompyuternuyu-\/knopku1'"{}}));}
+\DoxyCodeLine{00099\ \ \ \ \ USoundBase*\ GameEndRight\ =\ LoadObject<USoundBase>(\textcolor{keyword}{nullptr},\ TEXT(\textcolor{stringliteral}{"{}/Script/Engine.SoundWave'/Game/Sounds/MiniGames/BinaryTree/GameEndRight.GameEndRight'"{}}));}
+\DoxyCodeLine{00100\ \ \ \ \ USoundBase*\ GameNotEnd\ =\ LoadObject<USoundBase>(\textcolor{keyword}{nullptr},\ TEXT(\textcolor{stringliteral}{"{}/Script/Engine.SoundWave'/Game/Sounds/MiniGames/BinaryTree/GameNotEnd.GameNotEnd'"{}}));}
+\DoxyCodeLine{00101\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00102\ \ \ \ \ UPROPERTY(BlueprintAssignable\ ,\ BlueprintCallable\ ,\ BlueprintReadWrite)}
+\DoxyCodeLine{00103\ \ \ \ \ FRandom\ RandomWorkEnd;}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ UPROPERTY(BlueprintReadWrite)}
+\DoxyCodeLine{00106\ \ \ \ \ int32\ AnswerNumber\ =\ 0;}
+\DoxyCodeLine{00107\ \ \ \ \ UPROPERTY(BlueprintReadWrite)}
+\DoxyCodeLine{00108\ \ \ \ \ int32\ RightAnswers\ =\ 0;}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00111\ \ \ \ \ FSlateBrush\ UAppleBrush;}
+\DoxyCodeLine{00112\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00113\ \ \ \ \ FSlateBrush\ BananaBrush;}
+\DoxyCodeLine{00114\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00115\ \ \ \ \ FSlateBrush\ BlueBrush;}
+\DoxyCodeLine{00116\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00117\ \ \ \ \ FSlateBrush\ CherryBrush;}
+\DoxyCodeLine{00118\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00119\ \ \ \ \ FSlateBrush\ GrapeBrush;}
+\DoxyCodeLine{00120\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00121\ \ \ \ \ FSlateBrush\ OrangeBrush;}
+\DoxyCodeLine{00122\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00123\ \ \ \ \ FSlateBrush\ PineBrush;}
+\DoxyCodeLine{00124\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00125\ \ \ \ \ FSlateBrush\ StrawberryBrush;}
+\DoxyCodeLine{00126\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00127\ \ \ \ \ FSlateBrush\ PearBrush;}
+\DoxyCodeLine{00128\ \ \ \ \ }
+\DoxyCodeLine{00129\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00130\ \ \ \ \ FSlateBrush\ YesUAppleBrush;}
+\DoxyCodeLine{00131\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00132\ \ \ \ \ FSlateBrush\ YesBananaBrush;}
+\DoxyCodeLine{00133\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00134\ \ \ \ \ FSlateBrush\ YesBlueBrush;}
+\DoxyCodeLine{00135\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00136\ \ \ \ \ FSlateBrush\ YesCherryBrush;}
+\DoxyCodeLine{00137\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00138\ \ \ \ \ FSlateBrush\ YesGrapeBrush;}
+\DoxyCodeLine{00139\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00140\ \ \ \ \ FSlateBrush\ YesOrangeBrush;}
+\DoxyCodeLine{00141\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00142\ \ \ \ \ FSlateBrush\ YesPineBrush;}
+\DoxyCodeLine{00143\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00144\ \ \ \ \ FSlateBrush\ YesStrawberryBrush;}
+\DoxyCodeLine{00145\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category=\textcolor{stringliteral}{"{}Images"{}})}
+\DoxyCodeLine{00146\ \ \ \ \ FSlateBrush\ YesPearBrush;}
+\DoxyCodeLine{00147\ \ \ \ \ }
+\DoxyCodeLine{00148\ \};}
+
+\end{DoxyCode}

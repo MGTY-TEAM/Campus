@@ -1,0 +1,38 @@
+\doxysection{AIDrone\+Controller.\+h}
+\hypertarget{_a_i_drone_controller_8h_source}{}\label{_a_i_drone_controller_8h_source}\index{Source/Campus/AI/AIDroneController.h@{Source/Campus/AI/AIDroneController.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}AIController.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Campus/Chat/ChatUserComponent.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}AIDroneController.generated.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_u_a_i_drone_perception_component}{UAIDronePerceptionComponent}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ UCLASS()}
+\DoxyCodeLine{00013\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_a_a_i_drone_controller}{AAIDroneController}}\ :\ public\ AAIController}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00016\ \ \ \ \ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_a_a_i_drone_controller}{AAIDroneController}}();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ UChatUserComponent*\ GetChatComponent();}
+\DoxyCodeLine{00021\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ OnPossess(APawn*\ InPawn)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Tick(\textcolor{keywordtype}{float}\ DeltaTime)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ BeginPlay()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ UPROPERTY(VisibleAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}Components"{}})}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{class_u_a_i_drone_perception_component}{UAIDronePerceptionComponent}}*\ AIDronePerceptionComponent;}
+\DoxyCodeLine{00030\ \ \ \ \ }
+\DoxyCodeLine{00031\ \ \ \ \ UChatUserComponent*\ ChatUserComponent;}
+\DoxyCodeLine{00032\ \};}
+
+\end{DoxyCode}

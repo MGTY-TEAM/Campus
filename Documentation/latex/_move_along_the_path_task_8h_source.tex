@@ -1,0 +1,76 @@
+\doxysection{Move\+Along\+The\+Path\+Task.\+h}
+\hypertarget{_move_along_the_path_task_8h_source}{}\label{_move_along_the_path_task_8h_source}\index{Source/Campus/AI/Tasks/MoveAlongThePathTask.h@{Source/Campus/AI/Tasks/MoveAlongThePathTask.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}BehaviorTree/BTTaskNode.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Navigation/PathFollowingComponent.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}MoveAlongThePathTask.generated.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }UNavigationSystemV1;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ UCLASS()}
+\DoxyCodeLine{00013\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_u_move_along_the_path_task}{UMoveAlongThePathTask}}\ :\ public\ UBTTaskNode}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_u_move_along_the_path_task}{UMoveAlongThePathTask}}();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ EBTNodeResult::Type\ ExecuteTask(UBehaviorTreeComponent\&\ OwnerComp,\ uint8*\ NodeMemory)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ TickTask(UBehaviorTreeComponent\&\ OwnerComp,\ uint8*\ NodeMemory,\ \textcolor{keywordtype}{float}\ DeltaSeconds)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00025\ \ \ \ \ FBlackboardKeySelector\ SelfActorKey;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00028\ \ \ \ \ FBlackboardKeySelector\ CharacterActorKey;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00031\ \ \ \ \ FBlackboardKeySelector\ DestinationPointKey;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00034\ \ \ \ \ FBlackboardKeySelector\ ISeeYouKey;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00037\ \ \ \ \ FBlackboardKeySelector\ IsHeStandingKey;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00040\ \ \ \ \ FBlackboardKeySelector\ IsThereObstacleKey;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00043\ \ \ \ \ FBlackboardKeySelector\ ActionTypeKey;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00046\ \ \ \ \ FTimerHandle\ RequestMoveHandle;}
+\DoxyCodeLine{00047\ \ \ \ \ }
+\DoxyCodeLine{00048\ \ \ \ \ ANavigationData*\ FindNavigationData(UNavigationSystemV1\&\ NavSys,\ UObject*\ Owner)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ UPROPERTY(EditDefaultsOnly,\ Category\ =\ Pathfinding)}
+\DoxyCodeLine{00051\ \ \ \ \ TSubclassOf<UNavigationQueryFilter>\ FilterClass;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ FAIRequestID\ MainRequestID;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsMove\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{bool}\ SetTimer\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsMoving()\textcolor{keyword}{\ const\ \ }\{\ \textcolor{keywordflow}{return}\ IsMove;\ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ FinishMove(\textcolor{keyword}{const}\ FAIRequestID\ RequestID,\ \textcolor{keyword}{const}\ FPathFollowingResult\&\ Result);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ ClearTimer();}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ OnRequsetMove();}
+\DoxyCodeLine{00062\ \ \ \ \ EBTNodeResult::Type\ RequestMove(UBehaviorTreeComponent\&\ OwnerComp,\ uint8*\ NodeMemory);}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ PauseMove(\textcolor{keyword}{const}\ UBehaviorTreeComponent\&\ OwnerComp,\ uint8*\ NodeMemory)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ UBehaviorTreeComponent*\ MyOwnerComp;}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ TArray<FVector>\ PathPoints;}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{bool}\ CheckCapabilityOfStopping();}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ FillNavPoints(\textcolor{keyword}{const}\ TArray<FNavPathPoint>\&\ Points);}
+\DoxyCodeLine{00070\ \};}
+
+\end{DoxyCode}

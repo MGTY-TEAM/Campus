@@ -11,8 +11,7 @@ void UUserInfoWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	UUserGameInstance* GameInstance = Cast<UUserGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (GameInstance)
+	if (UUserGameInstance* GameInstance = Cast<UUserGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		NicknameText->SetText(FText::FromString(GameInstance->GetNickname()));
 		EmailText->SetText(FText::FromString(GameInstance->GetEmail()));

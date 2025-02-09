@@ -1,0 +1,31 @@
+\doxysection{Chat\+\_\+\+Message.\+h}
+\hypertarget{_chat___message_8h_source}{}\label{_chat___message_8h_source}\index{Source/Campus/UserInterface/Chat\_Message.h@{Source/Campus/UserInterface/Chat\_Message.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Blueprint/UserWidget.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Chat\_Message.generated.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00012\ UCLASS()}
+\DoxyCodeLine{00013\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_u_chat___message}{UChat\_Message}}\ :\ public\ UUserWidget}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00016\ \ \ \ \ }
+\DoxyCodeLine{00017\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{class\ }UCanvasPanel*\ ParentPanel;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget))}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{class\ }UHorizontalBox*\ ChatMessage\_Box;}
+\DoxyCodeLine{00022\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget),\ EditAnywhere)}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{class\ }UTextBlock*\ Sender;}
+\DoxyCodeLine{00026\ \ \ \ \ UPROPERTY(meta\ =\ (BindWidget),\ EditAnywhere)}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{class\ }UTextBlock*\ Message;}
+\DoxyCodeLine{00028\ \};}
+
+\end{DoxyCode}

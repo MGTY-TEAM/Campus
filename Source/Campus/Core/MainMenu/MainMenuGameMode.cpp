@@ -16,18 +16,23 @@ AMainMenuGameMode::AMainMenuGameMode()
 void AMainMenuGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UWorld * World = GetWorld();
-	World->GetFirstPlayerController()->bShowMouseCursor = true;
-	World->GetFirstPlayerController()->SetInputMode(FInputModeUIOnly());
-
-	UGameplayStatics::GetGameInstance(World);
-
-	MainMenuWidget = CreateWidget<UUserWidget>(World, MainMenuWidgetClass);
-
-	if (MainMenuWidget)
+	
+	if (UWorld * World = GetWorld())
 	{
-		MainMenuWidget->AddToViewport();
+		World->GetFirstPlayerController()->bShowMouseCursor = true;
+		World->GetFirstPlayerController()->SetInputMode(FInputModeUIOnly());
+
+		UGameplayStatics::GetGameInstance(World);
+#ifdef MAIN_MENU_GAME_MODE_DEBUG
+		UE_LOG(LogMainMenuGameMode, Log, TEXT("Create main menu widget"));
+#endif
+		
+		M_MainMenuWidget = CreateWidget<UUserWidget>(World, M_MainMenuWidgetClass);
+
+		if (M_MainMenuWidget)
+		{
+			M_MainMenuWidget->AddToViewport();
+		}
 	}
 }
 
