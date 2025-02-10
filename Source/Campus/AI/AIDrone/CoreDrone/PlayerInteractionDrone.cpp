@@ -3,14 +3,18 @@
 
 #include "PlayerInteractionDrone.h"
 
-APlayerInteractionDrone::APlayerInteractionDrone()
-{
-}
-
 void APlayerInteractionDrone::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
+void APlayerInteractionDrone::Interact()
+{
+	UE_LOG(LogTemp, Warning, TEXT("NewInteract"));
+}
 
+void APlayerInteractionDrone::EndInteract()
+{
+	UE_LOG(LogTemp, Warning, TEXT("NewEndInteract"));
+}
 

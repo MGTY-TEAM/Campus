@@ -79,7 +79,17 @@ struct FUserInfoResponse
 	FString Email;
 };
 
+///SERVERS_INFO_STRUCTURES
 
+USTRUCT(BlueprintTYpe)
+struct FServerInfo
+{
+	GENERATED_BODY()
+	UPROPERTY()
+	FString Port;
+	UPROPERTY()
+	int32 ConnectedClients;
+};
 
 
 /////////////ERROR_STRUCT 

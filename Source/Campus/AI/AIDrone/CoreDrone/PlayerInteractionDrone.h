@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CoreDrone.h"
+#include "../../../Interfaces/Interaction/Interactable.h"
 #include "PlayerInteractionDrone.generated.h"
 
 /**
@@ -11,11 +12,13 @@
  */
 
 UCLASS()
-class CAMPUS_API APlayerInteractionDrone : public ACoreDrone
+class CAMPUS_API APlayerInteractionDrone : public ACoreDrone, public IInteractable
 {
 	GENERATED_BODY()
-public:
-	APlayerInteractionDrone();
+
 protected:
 	virtual void BeginPlay() override;
+	virtual void Interact() override;
+	virtual void EndInteract() override;
+	
 };

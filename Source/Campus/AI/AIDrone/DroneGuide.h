@@ -11,7 +11,7 @@
 /**
  * 
  */
-class ABaseFirstPersonCharacter;
+
 class UChatBox;
 
 UENUM(BlueprintType)
@@ -45,15 +45,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="KeyWords")
 	ATeleportationPlane* TeleportationPlace;
 
-	UPROPERTY(EditDefaultsOnly, Category="CharacterAnimation")
-	float CharacterRotationSpeed = 2.f;
-	UPROPERTY(EditDefaultsOnly, Category="CharacterAnimation")
-	float CharacterStepSpeed = 0.5f;
-
-	AActor* InteractCharacter;
-
 	FTimerHandle EndDarkeningTimer;
-	
 
 	UFUNCTION()
 	void TeleportToLocation(int index);
@@ -65,9 +57,9 @@ protected:
 
 	virtual void BeginPlay() override;
 	
+	virtual void Interact() override;
+	virtual void EndInteract() override;
 	void ChangeState(EDroneGuide State, float Duration = 0);
-
-	void StartRotateCharacter(ACharacter* InteractedCharacter);
 
 	virtual void StartIdleAnim() override;
 	virtual void StopIdleAnim() override;

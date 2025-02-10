@@ -15,11 +15,11 @@ class CAMPUS_API ADefaultAnimDrone : public APlayerInteractionDrone
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(EditAnywhere, Category = "RobotAnimation")
+	UPROPERTY(EditAnywhere, Category = "Animation")
 	float RotationSpeed = 1;
-	UPROPERTY(EditAnywhere, Category="RobotAnimation")
+	UPROPERTY(EditAnywhere, Category="Animation")
 	float Frequency = 1;
-	UPROPERTY(EditAnywhere, Category="RobotAnimation")
+	UPROPERTY(EditAnywhere, Category="Animation")
 	float Amplitude = 0.1;
 
 protected:
