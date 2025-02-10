@@ -1,0 +1,45 @@
+\doxysection{Catch\+Message\+Service.\+h}
+\hypertarget{_catch_message_service_8h_source}{}\label{_catch_message_service_8h_source}\index{Source/Campus/AI/Services/CatchMessageService.h@{Source/Campus/AI/Services/CatchMessageService.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}BehaviorTree/BTService.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Campus/AI/AIDrone/CampusCoreTypes.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}CatchMessageService.generated.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_a_a_i_anim_drone}{AAIAnimDrone}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_u_message_instance}{UMessageInstance}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ UCLASS()}
+\DoxyCodeLine{00014\ class\ CAMPUS\_API\ \mbox{\hyperlink{class_u_catch_message_service}{UCatchMessageService}}\ :\ public\ UBTService}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00017\ \ \ \ \ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ OnSearchStart(FBehaviorTreeSearchData\&\ SearchData)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00022\ \ \ \ \ EActionType\ SActionType\ =\ EActionType::Walk;}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00025\ \ \ \ \ FBlackboardKeySelector\ SelfActorKey;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ \textcolor{stringliteral}{"{}AI"{}})}
+\DoxyCodeLine{00028\ \ \ \ \ FBlackboardKeySelector\ ActionTypeKey;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{bool}\ FirstTick\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ UFUNCTION()}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ MessageSent(\mbox{\hyperlink{class_u_message_instance}{UMessageInstance}}*\ MessageInstance);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{class_a_a_i_anim_drone}{AAIAnimDrone}}*\ Drone;}
+\DoxyCodeLine{00038\ \ \ \ \ UBlackboardComponent*\ Blackboard;}
+\DoxyCodeLine{00039\ \};}
+
+\end{DoxyCode}

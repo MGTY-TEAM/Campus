@@ -2,113 +2,116 @@
 
 
 #include "ChatBox.h"
+
+#include "AIAnimDrone.h"
 #include "Chat_Message.h"
-#include "TimerManager.h"
+#include "Campus/Chat/ChatManager.h"
+#include "Campus/Chat/Components/ChatUserComponent.h"
+#include "Campus/Libraries/Gameplay/BotMessageHandler.h"
 #include "Campus/Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "Types/SlateEnums.h"
 
+/////////////////////
+void UChatBox::ConnectChatComponent(UChatUserComponent* ChatUserComponent)
+{
+	ChatUserComponent->OnMessageReceived.AddUObject(this, &UChatBox::ReceiveMessage);
 
+	OwnerChatUserComponent = ChatUserComponent;
+}
 
+void UChatBox::ReceiveMessage(UMessageInstance* MessageInstance)
+{
+	if(GetWorld())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Catch Chat from bot message : %s"), *MessageInstance->GetMessageInfo().Get<2>().ToString());
+	
+		TTuple<FName, FName, FText> MessageInfo = MessageInstance->GetMessageInfo();
+
+		UpdateChatMessages(MessageInfo.Get<2>(),FText::FromName(MessageInfo.Get<0>()));
+	}
+	
+}
+////////////////////
 void UChatBox::StartTeleport(int index)
 {
 	TeleportationEvent.Broadcast(index);
 }
 
+void UChatBox::SetFocusOnTextInput()
+{
+	SendMessage_TextBox->SetKeyboardFocus();
+}
+
 bool UChatBox::Initialize()
 {
 	Super::Initialize();
+	SendMessage_TextBox->SetClearKeyboardFocusOnCommit(true);
 	
-	
-	if(Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass())))
-	{
-		Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
+	if (Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass()))) {
+		Drone = Cast<AAIAnimDrone>(UGameplayStatics::GetActorOfClass(GetWorld(), AAIAnimDrone::StaticClass()));
+
+		UpdateChatMessages(FText::FromString(UBotMessageHandler::HandleMessage("Start").Value), FText::FromString("Bot"));
 	}
-	
-		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest([this](const FString& Message, const FString& ActionType, const int ActionID)
-		{
-			SendMessage(FText::FromString(Message), FText::FromString("AI"));
-			UE_LOG(LogTemp, Warning, TEXT("SetRequest"));
-		}, "/start", Drone->BotURL);
-	
 	return true;
 }
 
 void UChatBox::NativeConstruct()
 {
-	//SendMessage_TextBox->OnTextCommitted.AddDynamic(this, &UChatBox::OnTextBoxTextCommitted);
-	SendMessage_Button->OnClicked.AddDynamic(this, &UChatBox::SendMessageButtonClicked);
-
+	SendMessage_TextBox->OnTextCommitted.AddDynamic(this, &UChatBox::OnTextBoxTextCommitted);
 	Super::NativeConstruct();
 }
 
-void UChatBox::SendMessageButtonClicked()
+void UChatBox::NativeDestruct()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Button pressed"));
-	
-	FString StringRequest = SendMessage_TextBox->GetText().ToString();
-	if (StringRequest == "")
-	{
-		
-	}
-	else
-	{
-		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest([this](const FString& Message, const FString& ActionType, const int& ActionID)
-		{
-			BotResponse(Message, ActionType, ActionID);//кал!!!
-		}, StringRequest, Drone->BotURL);
-			SendMessage(SendMessage_TextBox->GetText(), FText::FromString("User"));
-			SendMessage_Button->SetIsEnabled(false);
-	}
-		
-;}
-
-/*void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
-{
-	if (CommitMethod == ETextCommit::OnEnter)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Enter Pressed"));
-	}
-}*/
-
-void UChatBox::SendMessage(FText Message, FText Sender)
-{
-	UChat_Message* WidgetInstance = CreateWidget<UChat_Message>(GetWorld()->GetFirstPlayerController(), BlueprintWidgetClass);
-	
-	if (WidgetInstance)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SendMessage"));
-		WidgetInstance->AddToViewport();
-		Chat_ScrollBox->AddChild(WidgetInstance);
-		WidgetInstance->Message->SetText(Message);
-		WidgetInstance->Sender->SetText(Sender);
-		SendMessage_TextBox->SetText(FText::GetEmpty());
-	}
+	Super::NativeDestruct();
+	UE_LOG(LogTemp, Warning, TEXT("WidgetDestroyed"));
 }
 
-void UChatBox::BotResponse(const FString& Message, const FString& ActionType, const int& ActionID)
+void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
-	UE_LOG(LogRequests, Log, TEXT("GET Request Result: %s"), *Message);
+	if (CommitMethod == ETextCommit::OnEnter && !Text.IsEmpty())
+	{
+		UpdateChatMessages(Text, FText::FromString("DefaultCharacterName"));
+		
+		if (OwnerChatUserComponent)
+		{
+			OwnerChatUserComponent->SendMessage("Bot", Text);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("PlayerChatBox IS DEAD"));
+		}
+	}
+
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
+	PlayerController->SetInputMode(FInputModeGameOnly());
+}
+
+void UChatBox::UpdateChatMessages(FText Message, FText Sender)
+{
+	if(APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	{
+		
+		UChat_Message* WidgetInstance = CreateWidget<UChat_Message>(PlayerController,
+	                                                            BlueprintWidgetClass);
 	
-	SendMessage(FText::FromString(Message), FText::FromString("AI"));
-	Chat_ScrollBox->ScrollToEnd();
-	SendMessage_Button->SetIsEnabled(true);
-	if(ActionType == "Teleport")
-	{
-		TimerDel.BindUObject(this, &UChatBox::StartTeleport, ActionID);
-		GetWorld()->GetTimerManager().SetTimer(TeleportTimer, TimerDel, 1.f, false);
-		DarkeningEvent.Broadcast();
-	}
-	else if(ActionType == "Walk")
-	{
+		if (WidgetInstance)
+		{
+			WidgetInstance->AddToViewport();
+			
+			Chat_ScrollBox->AddChild(WidgetInstance);
 		
-	}
-	else if(ActionType == "ViewInfo")
-	{
+			WidgetInstance->Message->SetText(Message);
+			WidgetInstance->Sender->SetText(Sender);
+			SendMessage_TextBox->SetText(FText::GetEmpty());
+		}
 		
+		Chat_ScrollBox->ScrollToEnd();
 	}
 }
 

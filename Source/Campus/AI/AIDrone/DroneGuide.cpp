@@ -6,6 +6,7 @@
 #include "TimerManager.h"
 #include "../../UserInterface/ChatBox.h"
 #include "Blueprint/UserWidget.h"
+#include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 
 
@@ -15,7 +16,11 @@ void ADroneGuide::TeleportToLocation(int index)
 	UE_LOG(LogTemp, Warning, TEXT("DroneTeleport"));
 	if (TeleportationPlace)
 	{
-		SetActorLocation(TeleportationPlace->RobotPlane->GetComponentLocation());
+		if (InteractCharacter)
+		{
+			InteractCharacter->SetActorLocation(TeleportationPlace->PlayerPlane->GetComponentLocation());
+			SetActorLocation(TeleportationPlace->RobotPlane->GetComponentLocation());
+		}
 	}
 }
 
@@ -47,19 +52,6 @@ void ADroneGuide::BeginPlay()
 	
 }
 
-void ADroneGuide::Interact()
-{
-	Super::Interact();
-	ChangeState(EDroneGuide::Drone_PlayerInteract);
-	OpenChat();
-}
-
-void ADroneGuide::EndInteract()
-{
-	Super::EndInteract();
-	ChangeState(EDroneGuide::Drone_Idle);
-	CloseChat();
-}
 
 void ADroneGuide::ChangeState(EDroneGuide State, float Duration)
 {
@@ -73,7 +65,6 @@ void ADroneGuide::ChangeState(EDroneGuide State, float Duration)
 		StartRotateToPlayerAnim();
 		break;
 	}
-	
 }
 
 void ADroneGuide::StartIdleAnim()
